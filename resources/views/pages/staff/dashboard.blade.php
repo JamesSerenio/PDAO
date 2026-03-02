@@ -31,6 +31,12 @@
           <span>Dashboard</span>
         </a>
 
+        <a class="dash-link {{ request()->routeIs('staff.local_profile_form') ? 'active' : '' }}"
+        href="{{ route('staff.local_profile_form') }}">
+        <span class="dash-ico">🧾</span>
+        <span>Local Profile Form</span>
+        </a>
+
         <a class="dash-link {{ request()->routeIs('staff.mapping') ? 'active' : '' }}"
            href="{{ route('staff.mapping') }}">
           <span class="dash-ico">🗺️</span>
