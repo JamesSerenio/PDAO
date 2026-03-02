@@ -211,11 +211,3 @@
   .lpf-page .lpf-actions{ flex-direction:column; }
   .lpf-page .lpf-btn{ width:100%; }
 }
-/* prevent caret appearing on labels/text */
-.lpf-page .lpf-label,
-.lpf-page .lpf-title,
-.lpf-page .lpf-sub{
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
