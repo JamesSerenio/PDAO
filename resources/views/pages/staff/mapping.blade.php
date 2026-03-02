@@ -55,11 +55,10 @@
     <!-- MAIN -->
     <main class="dash-main">
 
-      <!-- TOPBAR -->
       <header class="dash-topbar">
         <div class="topbar-title">
           <h1>Mapping</h1>
-          <p>Mark locations and view records</p>
+          <p>Click the map to add a marker</p>
         </div>
 
         <div class="topbar-right">
@@ -73,7 +72,7 @@
       <section class="dash-content">
         <div class="panel">
           <div class="panel-head">
-            <h2>Map View</h2>
+            <h2>Map</h2>
             <span class="panel-pill">Live</span>
           </div>
 
@@ -84,7 +83,6 @@
       </section>
 
     </main>
-
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -96,7 +94,7 @@
       attribution: '&copy; OpenStreetMap'
     }).addTo(map);
 
-    // click to add marker
+    // Click-to-drop marker (sample)
     map.on('click', function(e) {
       const { lat, lng } = e.latlng;
       L.marker([lat, lng]).addTo(map)

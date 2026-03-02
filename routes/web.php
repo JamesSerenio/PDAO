@@ -17,9 +17,6 @@ Route::get('/admin', function () {
     return view('pages.dashboard_admin');
 })->middleware(['auth', 'role:admin'])->name('admin.dashboard');
 
-Route::get('/staff', function () {
-    return view('pages.dashboard_staff');
-})->middleware(['auth', 'role:staff'])->name('staff.dashboard');
 
 Route::get('/staff', [StaffDashboardController::class, 'index'])
   ->middleware(['auth', 'role:staff'])

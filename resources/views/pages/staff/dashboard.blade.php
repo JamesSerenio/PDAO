@@ -25,9 +25,16 @@
       </div>
 
       <nav class="dash-nav">
-        <a class="dash-link active" href="{{ route('staff.dashboard') }}">
+        <a class="dash-link {{ request()->routeIs('staff.dashboard') ? 'active' : '' }}"
+           href="{{ route('staff.dashboard') }}">
           <span class="dash-ico">🏠</span>
           <span>Dashboard</span>
+        </a>
+
+        <a class="dash-link {{ request()->routeIs('staff.mapping') ? 'active' : '' }}"
+           href="{{ route('staff.mapping') }}">
+          <span class="dash-ico">🗺️</span>
+          <span>Mapping</span>
         </a>
       </nav>
 
@@ -90,25 +97,25 @@
           </div>
         </div>
 
-        <!-- OPTIONAL PANELS (no map here) -->
+        <!-- PANELS -->
         <div class="dash-panels">
           <div class="panel">
             <div class="panel-head">
-              <h2>Overview</h2>
+              <h2>My Overview</h2>
               <span class="panel-pill">Today</span>
             </div>
             <div class="panel-body panel-empty">
-              No data yet.
+              No activity yet.
             </div>
           </div>
 
           <div class="panel">
             <div class="panel-head">
-              <h2>Recent Activity</h2>
+              <h2>Recent Actions</h2>
               <span class="panel-pill">Latest</span>
             </div>
             <div class="panel-body panel-empty">
-              No recent activity.
+              No recent records.
             </div>
           </div>
         </div>
