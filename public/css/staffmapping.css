@@ -1,15 +1,15 @@
 /* =========================================
-   Staff Mapping Page (scoped)
+   Staff Mapping Page
 ========================================= */
 
-.staffmapping .map-wrap{
+.map-wrap{
   display:flex;
   flex-direction:column;
   gap:14px;
 }
 
 /* Entrance */
-.staffmapping .anim-in{
+.anim-in{
   opacity:0;
   transform: translateY(10px);
   animation: staffIn .55s cubic-bezier(.2,.9,.2,1) forwards;
@@ -18,15 +18,14 @@
   to{ opacity:1; transform: translateY(0); }
 }
 
-/* ✅ IMPORTANT: layering fix
-   Make topbar always above cards/map */
-.staffmapping .map-topbar{
+/* layering fix */
+.map-topbar{
   position: relative;
-  z-index: 5000;           /* ✅ higher than coords-card & map */
+  z-index: 5000;
 }
 
 /* Topbar card */
-.staffmapping .map-topbar{
+.map-topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -38,25 +37,25 @@
   box-shadow: 0 10px 34px rgba(15,23,42,.10);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.staffmapping .map-topbar:hover{
+.map-topbar:hover{
   transform: translateY(-2px);
   box-shadow: 0 16px 46px rgba(15,23,42,.14);
 }
 
-.staffmapping .map-topbar .left h2{
+.map-topbar .left h2{
   margin:0;
   font-size:18px;
   font-weight:800;
   color:#0f172a;
 }
-.staffmapping .map-topbar .left p{
+.map-topbar .left p{
   margin:4px 0 0;
   font-size:12px;
   color:#64748b;
 }
 
 /* Right actions */
-.staffmapping .map-topbar .right{
+.map-topbar .right{
   display:flex;
   align-items:center;
   gap:10px;
@@ -64,20 +63,20 @@
   justify-content:flex-end;
 }
 
-.staffmapping .search-mini{
+.search-mini{
   display:flex;
   gap:8px;
   align-items:center;
 }
 
-/* ✅ Search box wrapper for dropdown positioning + layering */
-.staffmapping .search-box{
+/* Search box wrapper */
+.search-box{
   position:relative;
-  z-index: 6000;          /* ✅ ensure dropdown is above everything */
+  z-index: 6000;
 }
 
 /* Input */
-.staffmapping .search-input{
+.search-input{
   width:260px;
   max-width:65vw;
   padding:10px 12px;
@@ -88,14 +87,14 @@
   background: linear-gradient(180deg,#ffffff,#fbfbff);
   transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
 }
-.staffmapping .search-input:focus{
+.search-input:focus{
   border-color: rgba(106,90,205,.60);
   box-shadow: 0 0 0 4px rgba(106,90,205,.15);
   transform: translateY(-1px);
 }
 
 /* Button */
-.staffmapping .btn{
+.btn{
   position:relative;
   overflow:hidden;
   border:0;
@@ -109,17 +108,17 @@
   box-shadow: 0 12px 30px rgba(106,90,205,.25);
   transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
 }
-.staffmapping .btn:hover{
+.btn:hover{
   transform: translateY(-1px);
   box-shadow: 0 18px 44px rgba(106,90,205,.30);
   filter: brightness(1.02);
 }
-.staffmapping .btn:active{
+.btn:active{
   transform: translateY(1px) scale(.99);
 }
-.staffmapping .btn .btn-txt{ position:relative; z-index:2; }
+.btn .btn-txt{ position:relative; z-index:2; }
 
-.staffmapping .btn .btn-glow{
+.btn .btn-glow{
   position:absolute;
   inset:-40%;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.28), transparent 45%);
@@ -127,12 +126,12 @@
   opacity:.7;
   transition: transform .45s ease;
 }
-.staffmapping .btn:hover .btn-glow{ transform: translateX(30%); }
+.btn:hover .btn-glow{ transform: translateX(30%); }
 
 /* Loading */
-.staffmapping .btn.loading{ pointer-events:none; opacity:.92; }
-.staffmapping .btn.loading .btn-txt{ opacity:0; }
-.staffmapping .btn.loading::after{
+.btn.loading{ pointer-events:none; opacity:.92; }
+.btn.loading .btn-txt{ opacity:0; }
+.btn.loading::after{
   content:"";
   position:absolute;
   inset:0;
@@ -147,9 +146,9 @@
 @keyframes spin{ to{ transform: rotate(360deg); } }
 
 /* Coords card */
-.staffmapping .coords-card{
+.coords-card{
   position: relative;
-  z-index: 1;  /* ✅ stays below dropdown */
+  z-index: 1;
   padding:12px 14px;
   border:1px solid rgba(15,23,42,.10);
   border-radius:18px;
@@ -157,22 +156,22 @@
   box-shadow: 0 10px 34px rgba(15,23,42,.10);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.staffmapping .coords-card:hover{
+.coords-card:hover{
   transform: translateY(-2px);
   box-shadow: 0 16px 46px rgba(15,23,42,.14);
 }
-.staffmapping .coords{
+.coords{
   font-weight:900;
   color:#0f172a;
   font-size:14px;
 }
-.staffmapping .hint{
+.hint{
   margin-top:6px;
   font-size:12px;
   color:#64748b;
   min-height:16px;
 }
-.staffmapping .micro{
+.micro{
   margin-top:8px;
   font-size:12px;
   color:#475569;
@@ -180,7 +179,7 @@
 }
 
 /* Pulse */
-.staffmapping .pulse{ animation: pulsePop .35s ease; }
+.pulse{ animation: pulsePop .35s ease; }
 @keyframes pulsePop{
   0%{ transform: translateY(0); }
   45%{ transform: translateY(-2px); }
@@ -188,14 +187,16 @@
 }
 
 /* Map panel */
-.staffmapping .map-panel{
+.map-panel{
   position:relative;
   z-index: 0;
   padding:0 !important;
   overflow:hidden;
   border-radius:18px;
 }
-.staffmapping #map{
+
+/* ✅ IMPORTANT: map height */
+#map{
   width:100%;
   height:560px;
   border-radius:18px;
@@ -203,7 +204,7 @@
 }
 
 /* Shimmer entrance */
-.staffmapping .map-panel::before{
+.map-panel::before{
   content:"";
   position:absolute;
   inset:0;
@@ -217,8 +218,8 @@
   to{ transform: translateX(120%); opacity:0; }
 }
 
-/* ✅ SUGGESTIONS DROPDOWN (SUPER TOP) */
-.staffmapping .suggestions{
+/* Suggestions */
+.suggestions{
   position:absolute;
   top: calc(100% + 8px);
   left:0;
@@ -228,18 +229,16 @@
   border-radius:14px;
   box-shadow: 0 18px 50px rgba(15,23,42,.14);
   overflow:hidden;
-  z-index: 999999;   /* ✅ always on top */
+  z-index: 999999;
 }
-
-.staffmapping .suggestions.hidden{ display:none; }
-
-.staffmapping .suggestions.pop{ animation: popIn .2s ease; }
+.suggestions.hidden{ display:none; }
+.suggestions.pop{ animation: popIn .2s ease; }
 @keyframes popIn{
   from{ opacity:0; transform: translateY(-6px) scale(.98); }
   to{ opacity:1; transform: translateY(0) scale(1); }
 }
 
-.staffmapping .sug-item{
+.sug-item{
   width:100%;
   border:0;
   background:transparent;
@@ -252,41 +251,18 @@
   text-align:left;
   transition: background .15s ease;
 }
-.staffmapping .sug-item:hover{
-  background: rgba(106,90,205,.08);
-}
-.staffmapping .sug-pin{ font-size:14px; opacity:.9; }
-.staffmapping .sug-name{
-  font-weight:800;
-  color:#0f172a;
-  font-size:13px;
-}
-.staffmapping .sug-sub{
-  font-size:11px;
-  color:#64748b;
-  white-space:nowrap;
-}
-.staffmapping .sug-item + .sug-item{
-  border-top: 1px solid rgba(15,23,42,.06);
-}
+.sug-item:hover{ background: rgba(106,90,205,.08); }
+.sug-pin{ font-size:14px; opacity:.9; }
+.sug-name{ font-weight:800; color:#0f172a; font-size:13px; }
+.sug-sub{ font-size:11px; color:#64748b; white-space:nowrap; }
+.sug-item + .sug-item{ border-top: 1px solid rgba(15,23,42,.06); }
 
 /* Responsive */
 @media (max-width: 640px){
-  .staffmapping .search-input{ width: 100%; max-width: 100%; }
-  .staffmapping .search-mini{ width: 100%; }
-  .staffmapping .map-topbar .right{ width: 100%; justify-content: stretch; }
-  .staffmapping .btn{ width: 100%; }
-  .staffmapping #map{ height: 520px; }
-  .staffmapping .suggestions{ width: 100%; }
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce){
-  .staffmapping .anim-in{ animation:none; opacity:1; transform:none; }
-  .staffmapping .btn,
-  .staffmapping .search-input,
-  .staffmapping .map-topbar,
-  .staffmapping .coords-card{ transition:none; }
-  .staffmapping .map-panel::before{ animation:none; display:none; }
-  .staffmapping .suggestions.pop{ animation:none; }
+  .search-input{ width: 100%; max-width: 100%; }
+  .search-mini{ width: 100%; }
+  .map-topbar .right{ width: 100%; justify-content: stretch; }
+  .btn{ width: 100%; }
+  #map{ height: 520px; }
+  .suggestions{ width: 100%; }
 }

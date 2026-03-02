@@ -1,210 +1,143 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Local Profile Form</title>
+@extends('pages.staff.staff_dashboard')
 
-  <link rel="icon" type="image/png" href="{{ asset('img/LOGOP.png') }}">
-  <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}">
-</head>
+@section('title', 'Local Profile Form')
+@section('page_title', 'Local Profile Form')
+@section('page_subtitle', 'Fill up details for local profiling.')
 
-<body class="dash-admin">
-  <div class="dash-layout">
+@section('body_class', 'lpf-page')
 
-    <!-- SIDEBAR -->
-    <aside class="dash-sidebar">
-      <div class="dash-brand">
-        <div class="brand-badge">
-          <img src="{{ asset('img/LOGOP.png') }}" alt="Logo">
-        </div>
-        <div class="brand-text">
-          <div class="brand-name">PDAO</div>
-          <div class="brand-sub">Staff Panel</div>
-        </div>
-      </div>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/local_profile_form.css') }}">
+@endpush
 
-      <nav class="dash-nav">
-        <a class="dash-link {{ request()->routeIs('staff.dashboard') ? 'active' : '' }}"
-           href="{{ route('staff.dashboard') }}">
-          <span class="dash-ico">🏠</span>
-          <span>Dashboard</span>
-        </a>
+@section('content')
 
-        <a class="dash-link {{ request()->routeIs('staff.local_profile_form') ? 'active' : '' }}"
-           href="{{ route('staff.local_profile_form') }}">
-          <span class="dash-ico">🧾</span>
-          <span>Local Profile Form</span>
-        </a>
-
-        <a class="dash-link {{ request()->routeIs('staff.mapping') ? 'active' : '' }}"
-           href="{{ route('staff.mapping') }}">
-          <span class="dash-ico">🗺️</span>
-          <span>Mapping</span>
-        </a>
-      </nav>
-
-      <div class="dash-sidebar-footer">
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <button class="dash-logout" type="submit">
-            <span class="dash-ico">↩️</span>
-            Logout
-          </button>
-        </form>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="dash-main">
-
-      <!-- TOPBAR -->
-      <header class="dash-topbar">
-        <div class="topbar-title">
-          <h1>Local Profile Form</h1>
-          <p>Fill up details for local profiling.</p>
-        </div>
-
-        <div class="topbar-right">
-          <div class="topbar-chip">
-            <span class="chip-dot"></span>
-            Staff
-          </div>
-        </div>
-      </header>
-
-      <!-- CONTENT -->
-      <section class="dash-content">
-
-        @if (session('success'))
-          <div class="panel" style="margin-bottom:16px;">
-            <div class="panel-body">
-              <b>{{ session('success') }}</b>
-            </div>
-          </div>
-        @endif
-
-        @if ($errors->any())
-          <div class="panel" style="margin-bottom:16px;">
-            <div class="panel-body">
-              <b>Please fix the errors:</b>
-              <ul style="margin:10px 0 0 18px;">
-                @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-                @endforeach
-              </ul>
-            </div>
-          </div>
-        @endif
-
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Local Profile Form</h2>
-            <span class="panel-pill">Form</span>
-          </div>
-
-          <div class="panel-body">
-            <form method="POST" action="{{ route('staff.local_profile_form.store') }}">
-              @csrf
-
-              <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:14px;">
-                <div>
-                  <label style="display:block; margin-bottom:6px;">Full Name</label>
-                  <input
-                    type="text"
-                    name="full_name"
-                    value="{{ old('full_name') }}"
-                    placeholder="Juan Dela Cruz"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12);"
-                  >
-                </div>
-
-                <div>
-                  <label style="display:block; margin-bottom:6px;">Contact Number</label>
-                  <input
-                    type="text"
-                    name="contact_number"
-                    value="{{ old('contact_number') }}"
-                    placeholder="09xxxxxxxxx"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12);"
-                  >
-                </div>
-
-                <div>
-                  <label style="display:block; margin-bottom:6px;">Address</label>
-                  <input
-                    type="text"
-                    name="address"
-                    value="{{ old('address') }}"
-                    placeholder="Complete address"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12);"
-                  >
-                </div>
-
-                <div>
-                  <label style="display:block; margin-bottom:6px;">Date of Birth</label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value="{{ old('dob') }}"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12);"
-                  >
-                </div>
-
-                <div>
-                  <label style="display:block; margin-bottom:6px;">Gender</label>
-                  <select
-                    name="gender"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12); background:#fff;"
-                  >
-                    <option value="">-- Select --</option>
-                    <option value="Male"   {{ old('gender') === 'Male' ? 'selected' : '' }}>Male</option>
-                    <option value="Female" {{ old('gender') === 'Female' ? 'selected' : '' }}>Female</option>
-                    <option value="Other"  {{ old('gender') === 'Other' ? 'selected' : '' }}>Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label style="display:block; margin-bottom:6px;">PWD ID No.</label>
-                  <input
-                    type="text"
-                    name="pwd_id_no"
-                    value="{{ old('pwd_id_no') }}"
-                    placeholder="Optional"
-                    style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12);"
-                  >
-                </div>
-              </div>
-
-              <div style="margin-top:14px;">
-                <label style="display:block; margin-bottom:6px;">Notes / Remarks</label>
-                <textarea
-                  name="remarks"
-                  rows="4"
-                  placeholder="Optional notes..."
-                  style="width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(15,23,42,.12); resize:vertical;"
-                >{{ old('remarks') }}</textarea>
-              </div>
-
-              <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end;">
-                <a href="{{ route('staff.dashboard') }}"
-                   class="dash-logout"
-                   style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
-                  Cancel
-                </a>
-
-                <button type="submit" class="dash-logout">
-                  Save Form
-                </button>
-              </div>
-
-            </form>
-          </div>
-        </div>
-
-      </section>
-    </main>
-
+@if (session('success'))
+  <div class="lpf-alert lpf-alert-success lpf-animate-in" role="alert">
+    <b>{{ session('success') }}</b>
   </div>
-</body>
-</html>
+@endif
+
+@if ($errors->any())
+  <div class="lpf-alert lpf-alert-error lpf-animate-in" role="alert">
+    <b>Please fix the errors:</b>
+    <ul class="lpf-error-list">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
+<div class="lpf-card lpf-animate-in">
+  <div class="lpf-card-head">
+    <div>
+      <h2 class="lpf-title">Local Profile Form</h2>
+      <p class="lpf-sub">Provide the basic details below.</p>
+    </div>
+    <span class="lpf-pill">Form</span>
+  </div>
+
+  <div class="lpf-card-body">
+    <form class="lpf-form" method="POST" action="{{ route('staff.local_profile_form.store') }}">
+      @csrf
+
+      <div class="lpf-grid">
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="full_name">Full Name</label>
+          <input
+            id="full_name"
+            class="lpf-input"
+            type="text"
+            name="full_name"
+            value="{{ old('full_name') }}"
+            placeholder="Juan Dela Cruz"
+          >
+        </div>
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="contact_number">Contact Number</label>
+          <input
+            id="contact_number"
+            class="lpf-input"
+            type="text"
+            name="contact_number"
+            value="{{ old('contact_number') }}"
+            placeholder="09xxxxxxxxx"
+          >
+        </div>
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="address">Address</label>
+          <input
+            id="address"
+            class="lpf-input"
+            type="text"
+            name="address"
+            value="{{ old('address') }}"
+            placeholder="Complete address"
+          >
+        </div>
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="dob">Date of Birth</label>
+          <input
+            id="dob"
+            class="lpf-input"
+            type="date"
+            name="dob"
+            value="{{ old('dob') }}"
+          >
+        </div>
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="gender">Gender</label>
+          <select id="gender" class="lpf-select" name="gender">
+            <option value="">-- Select --</option>
+            <option value="Male"   {{ old('gender') === 'Male' ? 'selected' : '' }}>Male</option>
+            <option value="Female" {{ old('gender') === 'Female' ? 'selected' : '' }}>Female</option>
+            <option value="Other"  {{ old('gender') === 'Other' ? 'selected' : '' }}>Other</option>
+          </select>
+        </div>
+
+        <div class="lpf-field">
+          <label class="lpf-label" for="pwd_id_no">PWD ID No.</label>
+          <input
+            id="pwd_id_no"
+            class="lpf-input"
+            type="text"
+            name="pwd_id_no"
+            value="{{ old('pwd_id_no') }}"
+            placeholder="Optional"
+          >
+        </div>
+
+      </div>
+
+      <div class="lpf-field lpf-field-full">
+        <label class="lpf-label" for="remarks">Notes / Remarks</label>
+        <textarea
+          id="remarks"
+          class="lpf-textarea"
+          name="remarks"
+          rows="4"
+          placeholder="Optional notes..."
+        >{{ old('remarks') }}</textarea>
+      </div>
+
+      <div class="lpf-actions">
+        <a href="{{ route('staff.dashboard') }}" class="lpf-btn lpf-btn-ghost">
+          Cancel
+        </a>
+
+        <button type="submit" class="lpf-btn lpf-btn-primary">
+          Save Form
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+@endsection

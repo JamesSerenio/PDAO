@@ -1,7 +1,9 @@
 /* ===========================
    DASHBOARD (dash-admin)
    =========================== */
+/* Helps prevent layout shifts while animating */
 
+   
 body.dash-admin{
   margin:0;
   font-family: Inter, system-ui, -apple-system, sans-serif;
@@ -308,5 +310,74 @@ body.dash-admin{
   .dash-sidebar{
     position:relative;
     height:auto;
+  }
+}
+
+/* ===========================
+   ANIMATIONS (FADE / SLIDE)
+   Add this at the bottom of admin_dashboard.css
+   =========================== */
+
+/* Keyframes */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Global animated items */
+.dash-sidebar,
+.dash-topbar,
+.dash-content{
+  animation: fadeUp .45s ease both;
+}
+
+/* Stagger effect: cards fade one by one */
+.dash-card{
+  opacity: 0;
+  animation: fadeUp .45s ease both;
+}
+
+/* 1..4 cards delay (works for staff/admin cards) */
+.dash-card:nth-child(1){ animation-delay: .06s; }
+.dash-card:nth-child(2){ animation-delay: .12s; }
+.dash-card:nth-child(3){ animation-delay: .18s; }
+.dash-card:nth-child(4){ animation-delay: .24s; }
+
+/* Panels fade after cards */
+.dash-panels .panel{
+  opacity: 0;
+  animation: fadeUp .50s ease both;
+}
+
+.dash-panels .panel:nth-child(1){ animation-delay: .30s; }
+.dash-panels .panel:nth-child(2){ animation-delay: .36s; }
+
+/* Subtle hover micro-animations (optional) */
+.dash-card:hover{
+  transform: translateY(-2px);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.panel:hover{
+  transform: translateY(-1px);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce){
+  .dash-sidebar,
+  .dash-topbar,
+  .dash-content,
+  .dash-card,
+  .dash-panels .panel{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }

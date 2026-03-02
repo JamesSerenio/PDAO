@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}">
 </head>
 
-<body class="dash-admin">
+<body class="dash-admin anim-wrap">
   <div class="dash-layout">
 
     <!-- SIDEBAR -->
