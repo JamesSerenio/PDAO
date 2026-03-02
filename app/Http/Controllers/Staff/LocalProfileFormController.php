@@ -9,31 +9,20 @@ class LocalProfileFormController extends Controller
 {
     public function index()
     {
-        // shows the form page
-        return view('staff.Local_Profile_Form');
+        return view('pages.staff.Local_Profile_Form');
     }
 
     public function store(Request $request)
     {
-        // validate basic inputs
-        $validated = $request->validate([
-            'full_name'       => ['required', 'string', 'max:120'],
-            'contact_number'  => ['required', 'string', 'max:30'],
-            'address'         => ['required', 'string', 'max:255'],
-            'dob'             => ['required', 'date'],
-            'gender'          => ['required', 'string', 'max:20'],
-            'pwd_id_no'       => ['nullable', 'string', 'max:60'],
-            'remarks'         => ['nullable', 'string', 'max:1000'],
+        $request->validate([
+            'full_name'      => 'required|string|max:120',
+            'contact_number' => 'required|string|max:30',
+            'address'        => 'required|string|max:255',
+            'dob'            => 'required|date',
+            'gender'         => 'required|string|max:20',
+            'pwd_id_no'      => 'nullable|string|max:60',
+            'remarks'        => 'nullable|string|max:1000',
         ]);
-
-        /**
-         * ✅ DITO MO ILALAGAY ang saving to DB kapag ready ka na.
-         * Example:
-         * LocalProfile::create([
-         *   ...$validated,
-         *   'created_by' => auth()->id(),
-         * ]);
-         */
 
         return back()->with('success', 'Local Profile Form saved successfully!');
     }
