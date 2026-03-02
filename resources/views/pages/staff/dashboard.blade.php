@@ -25,16 +25,9 @@
       </div>
 
       <nav class="dash-nav">
-        <a class="dash-link {{ request()->routeIs('staff.dashboard') ? 'active' : '' }}"
-           href="{{ route('staff.dashboard') }}">
+        <a class="dash-link active" href="{{ route('staff.dashboard') }}">
           <span class="dash-ico">🏠</span>
           <span>Dashboard</span>
-        </a>
-
-        <a class="dash-link {{ request()->routeIs('staff.mapping') ? 'active' : '' }}"
-           href="{{ route('staff.mapping') }}">
-          <span class="dash-ico">🗺️</span>
-          <span>Mapping</span>
         </a>
       </nav>
 
@@ -97,17 +90,25 @@
           </div>
         </div>
 
-        <!-- ✅ MAP PREVIEW UNDER DASHBOARD -->
-        <div class="dash-panels" style="grid-template-columns: 1fr;">
+        <!-- OPTIONAL PANELS (no map here) -->
+        <div class="dash-panels">
           <div class="panel">
             <div class="panel-head">
-              <h2>Mapping</h2>
-              <a class="panel-pill" href="{{ route('staff.mapping') }}" style="text-decoration:none;">
-                Open Map
-              </a>
+              <h2>Overview</h2>
+              <span class="panel-pill">Today</span>
             </div>
-            <div class="panel-body" style="padding:0;">
-              <div id="map" style="height: 420px; width:100%; border-radius: 18px;"></div>
+            <div class="panel-body panel-empty">
+              No data yet.
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Recent Activity</h2>
+              <span class="panel-pill">Latest</span>
+            </div>
+            <div class="panel-body panel-empty">
+              No recent activity.
             </div>
           </div>
         </div>
@@ -116,22 +117,5 @@
     </main>
 
   </div>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <script>
-    // Default location (change mo kung gusto mo)
-    const map = L.map('map').setView([8.1486, 123.8445], 13); // Ozamiz-ish
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-
-    // sample marker
-    L.marker([8.1486, 123.8445]).addTo(map).bindPopup("PDAO Area").openPopup();
-  </script>
 </body>
 </html>
