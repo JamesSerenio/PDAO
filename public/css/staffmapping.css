@@ -1,7 +1,83 @@
 /* =========================================
    Staff Mapping Page
 ========================================= */
+/* =========================================
+   GLOBAL PAGE FADE IN (SMOOTH MODERN)
+========================================= */
 
+@keyframes pageFadeIn {
+  0%{
+    opacity: 0;
+    transform: translateY(20px) scale(.98);
+    filter: blur(6px);
+  }
+  60%{
+    opacity: .9;
+    transform: translateY(-2px) scale(1.01);
+    filter: blur(2px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Whole mapping wrapper */
+.staffmapping .map-wrap{
+  opacity: 0;
+  animation: pageFadeIn .7s cubic-bezier(.22,.9,.2,1) forwards;
+}
+
+/* Smooth stagger animation */
+.staffmapping .map-topbar{
+  opacity: 0;
+  animation: pageFadeIn .7s cubic-bezier(.22,.9,.2,1) .08s forwards;
+}
+
+.staffmapping .coords-card{
+  opacity: 0;
+  animation: pageFadeIn .7s cubic-bezier(.22,.9,.2,1) .16s forwards;
+}
+
+.staffmapping .map-panel{
+  opacity: 0;
+  animation: pageFadeIn .7s cubic-bezier(.22,.9,.2,1) .24s forwards;
+}
+
+/* Suggestions fade */
+@keyframes suggestionFade {
+  from{ opacity:0; transform: translateY(-6px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+
+.staffmapping .suggestions{
+  animation: suggestionFade .18s ease;
+}
+
+/* Map smooth reveal */
+#map{
+  opacity: 0;
+  animation: mapReveal .8s ease .3s forwards;
+}
+
+@keyframes mapReveal{
+  to{ opacity:1; }
+}
+
+/* Reduce motion support */
+@media (prefers-reduced-motion: reduce){
+  .staffmapping .map-wrap,
+  .staffmapping .map-topbar,
+  .staffmapping .coords-card,
+  .staffmapping .map-panel,
+  #map{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
 .map-wrap{
   display:flex;
   flex-direction:column;
@@ -266,3 +342,4 @@
   #map{ height: 520px; }
   .suggestions{ width: 100%; }
 }
+
