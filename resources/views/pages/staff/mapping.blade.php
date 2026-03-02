@@ -86,13 +86,19 @@
 
             <div class="right">
               <div class="search-mini">
-                <input
-                  id="searchInput"
-                  class="search-input"
-                  type="text"
-                  placeholder="Search place..."
-                  autocomplete="off"
-                />
+                <div class="search-box">
+                  <input
+                    id="searchInput"
+                    class="search-input"
+                    type="text"
+                    placeholder="Search place..."
+                    autocomplete="off"
+                  />
+
+                  <!-- ✅ Suggestion dropdown -->
+                  <div id="suggestions" class="suggestions hidden"></div>
+                </div>
+
                 <button id="searchBtn" class="btn" type="button">
                   <span class="btn-txt">Search</span>
                   <span class="btn-glow"></span>
@@ -105,8 +111,6 @@
           <div class="coords-card anim-in" style="animation-delay:.06s">
             <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
             <div class="hint" id="hint"></div>
-
-            <!-- optional small helper line -->
             <div class="micro" id="microTip">Tip: Use Enter to search faster.</div>
           </div>
 
@@ -125,6 +129,13 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    const barangays = [
+      "Agusan Canyon","Alae","Dahilayan","Dalirig","Damilag","Diclum",
+      "Guilang-guilang","Kalugmanan","Lindaban","Lingion","Lunocan","Maluko",
+      "Mambatangan","Mampayag","Mantibugao","Minsuro","San Miguel","Sankanan",
+      "Santiago","Santo Niño","Tankulan","Ticala"
+    ];
+
     const defaultLat = 8.3132;
     const defaultLng = 124.8613;
 
@@ -142,10 +153,11 @@
     const microTip = document.getElementById("microTip");
     const searchInput = document.getElementById("searchInput");
     const searchBtn = document.getElementById("searchBtn");
+    const suggestionsEl = document.getElementById("suggestions");
 
     function pulse(el) {
       el.classList.remove("pulse");
-      void el.offsetWidth; // restart animation
+      void el.offsetWidth;
       el.classList.add("pulse");
     }
 
@@ -158,6 +170,71 @@
       hintEl.textContent = msg || "";
       if (msg) pulse(hintEl);
     }
+
+    function showSuggestions(items) {
+      if (!items.length) {
+        suggestionsEl.innerHTML = "";
+        suggestionsEl.classList.add("hidden");
+        return;
+      }
+
+      suggestionsEl.innerHTML = items.map(name => `
+        <button type="button" class="sug-item" data-value="${name}">
+          <span class="sug-pin">📍</span>
+          <span class="sug-name">${name}</span>
+          <span class="sug-sub">Manolo Fortich</span>
+        </button>
+      `).join("");
+
+      suggestionsEl.classList.remove("hidden");
+      suggestionsEl.classList.add("pop");
+      setTimeout(() => suggestionsEl.classList.remove("pop"), 250);
+    }
+
+    function hideSuggestions() {
+      suggestionsEl.classList.add("hidden");
+    }
+
+    function handleTyping() {
+      const q = (searchInput.value || "").trim().toLowerCase();
+
+      if (!q) {
+        showSuggestions(barangays.slice(0, 8));
+        return;
+      }
+
+      const matches = barangays
+        .filter(b => b.toLowerCase().includes(q))
+        .slice(0, 8);
+
+      showSuggestions(matches);
+    }
+
+    suggestionsEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".sug-item");
+      if (!btn) return;
+
+      const value = btn.getAttribute("data-value");
+      searchInput.value = value;
+      hideSuggestions();
+      searchPlace();
+    });
+
+    document.addEventListener("click", (e) => {
+      const isInside = e.target.closest(".search-box") || e.target.closest(".search-mini");
+      if (!isInside) hideSuggestions();
+    });
+
+    searchInput.addEventListener("focus", handleTyping);
+    searchInput.addEventListener("input", handleTyping);
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hideSuggestions();
+      if (e.key === "Enter") {
+        hideSuggestions();
+        searchPlace();
+      }
+    });
 
     setCoords(defaultLat, defaultLng);
 
@@ -184,6 +261,7 @@
         microTip.textContent = "⚠️ Please enter a place to search.";
         pulse(microTip);
         searchInput.focus();
+        showSuggestions(barangays.slice(0, 8));
         return;
       }
 
@@ -193,7 +271,8 @@
       pulse(microTip);
 
       try {
-        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`;
+        const query = `${q}, Manolo Fortich, Bukidnon, Philippines`;
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
         const res = await fetch(url, { headers: { "Accept": "application/json" } });
         if (!res.ok) throw new Error("Search failed");
 
@@ -224,10 +303,9 @@
       }
     }
 
-    searchBtn.addEventListener("click", searchPlace);
-
-    searchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") searchPlace();
+    searchBtn.addEventListener("click", () => {
+      hideSuggestions();
+      searchPlace();
     });
   </script>
 </body>
