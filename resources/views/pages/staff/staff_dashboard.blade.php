@@ -8,11 +8,13 @@
   <link rel="icon" type="image/png" href="{{ asset('img/LOGOP.png') }}">
 
   {{-- MAIN DASHBOARD CSS --}}
-  <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ filemtime(public_path('css/admin_dashboard.css')) }}">
 
-  {{-- ✅ IMPORTANT: FORCE REFRESH CSS (no cache issue) --}}
+  {{-- ✅ 1) SUPPORT PER-PAGE CSS VIA @section('styles') --}}
+  @yield('styles')
+
+  {{-- ✅ 2) SUPPORT PER-PAGE CSS VIA @push('styles') --}}
   @stack('styles')
-
 </head>
 
 @php
@@ -25,7 +27,8 @@
   $activeRoute = request()->route() ? request()->route()->getName() : '';
 @endphp
 
-<body class="dash-admin staff-shell">
+{{-- ✅ IMPORTANT: body_class so page-scoped CSS works --}}
+<body class="dash-admin staff-shell @yield('body_class')">
 
   <div class="dash-layout">
 
