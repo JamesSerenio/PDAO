@@ -10,7 +10,6 @@ use App\Livewire\Admin\Mapping as AdminMapping;
 // ✅ Livewire Staff Pages
 use App\Livewire\Staff\Dashboard as StaffDashboard;
 use App\Livewire\Staff\Mapping as StaffMapping;
-use App\Livewire\Staff\LocalProfileForm as StaffLocalProfileForm;
 
 Route::get('/', function () {
     return redirect()->route('login.form');
@@ -39,17 +38,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // ======================
-// STAFF (Livewire)
+// STAFF
 // ======================
 Route::middleware(['auth', 'role:staff'])->group(function () {
 
+    // pwede Livewire
     Route::get('/staff', StaffDashboard::class)
         ->name('staff.dashboard');
 
+    // pwede Livewire
     Route::get('/staff/mapping', StaffMapping::class)
         ->name('staff.mapping');
 
-    Route::get('/staff/local-profile-form', StaffLocalProfileForm::class)
-        ->name('staff.local_profile_form');
+    // ✅ IMPORTANT: gamitin BLADE PAGE wrapper para di masira ang Livewire DOM + CSS
+    Route::get('/staff/local-profile-form', function () {
+        return view('pages.staff.local_profile_form');
+    })->name('staff.local_profile_form');
 
 });

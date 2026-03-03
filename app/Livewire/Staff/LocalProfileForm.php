@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class LocalProfileForm extends Component
 {
@@ -37,7 +38,7 @@ class LocalProfileForm extends Component
     public $reporting_unit_office_section;
     public $approved_by;
 
-    // ✅ IMPORTANT: avoid dynamic property crash (PHP 8.2+)
+    // ✅ PHP 8.2 safe
     public $age = '';
 
     // ---------- uploads ----------
@@ -58,17 +59,14 @@ class LocalProfileForm extends Component
 
     public function mount()
     {
-        // ✅ always start with one row
         $this->household_members = [$this->blankHouseholdRow()];
-
-        // Set age initial (if dob already exists)
         $this->age = $this->computeAge($this->date_of_birth);
     }
 
     private function blankHouseholdRow(): array
     {
         return [
-            '_key' => (string) Str::uuid(), // ✅ stable wire:key
+            '_key' => (string) Str::uuid(),
             'name' => '',
             'date_of_birth' => null,
             'civil_status' => '',
@@ -80,7 +78,7 @@ class LocalProfileForm extends Component
         ];
     }
 
-    // ✅ works with wire:model="date_of_birth"
+    // ✅ auto compute age (Livewire-safe naming)
     public function updatedDateOfBirth($value)
     {
         $this->age = $this->computeAge($value);
@@ -89,10 +87,9 @@ class LocalProfileForm extends Component
     private function computeAge($dob)
     {
         if (!$dob) return '';
+
         try {
-            $d = new \DateTime($dob);
-            $t = new \DateTime(date('Y-m-d'));
-            return $t->diff($d)->y;
+            return Carbon::parse($dob)->age;
         } catch (\Throwable $e) {
             return '';
         }
@@ -101,29 +98,18 @@ class LocalProfileForm extends Component
     public function addHouseholdMember()
     {
         $this->household_members[] = $this->blankHouseholdRow();
-
-        // optional safety refresh (helps in some cases)
-        // $this->dispatch('$refresh'); // Livewire v3
     }
 
     public function removeHouseholdMember($index)
     {
-        if (!isset($this->household_members[$index])) {
-            return;
-        }
+        if (!isset($this->household_members[$index])) return;
 
         unset($this->household_members[$index]);
-
-        // ✅ MUST reindex for wire:model household_members.{i}.field
         $this->household_members = array_values($this->household_members);
 
-        // ✅ keep at least 1 row
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
         }
-
-        // optional safety refresh (helps in some cases)
-        // $this->dispatch('$refresh'); // Livewire v3
     }
 
     public function rules()
@@ -193,7 +179,6 @@ class LocalProfileForm extends Component
             'interviewee_signature_thumbmark' => ['nullable','image','max:2048'],
             'approved_signature' => ['nullable','image','max:2048'],
 
-            // ✅ FULL household rules (more consistent)
             'household_members' => ['array'],
             'household_members.*._key' => ['nullable','string'],
             'household_members.*.name' => ['nullable','string','max:150'],
@@ -213,9 +198,9 @@ class LocalProfileForm extends Component
 
         DB::transaction(function () {
 
-            $photoPath = $this->photo_1x1 ? $this->photo_1x1->store('local_profiles/photos', 'public') : null;
-            $signPath  = $this->signature_thumbmark ? $this->signature_thumbmark->store('local_profiles/signatures', 'public') : null;
-            $intSignPath = $this->interviewee_signature_thumbmark ? $this->interviewee_signature_thumbmark->store('local_profiles/interviewee_sign', 'public') : null;
+            $photoPath    = $this->photo_1x1 ? $this->photo_1x1->store('local_profiles/photos', 'public') : null;
+            $signPath     = $this->signature_thumbmark ? $this->signature_thumbmark->store('local_profiles/signatures', 'public') : null;
+            $intSignPath  = $this->interviewee_signature_thumbmark ? $this->interviewee_signature_thumbmark->store('local_profiles/interviewee_sign', 'public') : null;
             $apprSignPath = $this->approved_signature ? $this->approved_signature->store('local_profiles/approved_sign', 'public') : null;
 
             $profileId = DB::table('local_profiles')->insertGetId([
@@ -254,12 +239,12 @@ class LocalProfileForm extends Component
                 'employment_category' => $this->employment_category,
                 'specific_occupation' => $this->specific_occupation,
                 'employment_type' => $this->employment_type,
-                'registered_voter' => ($this->registered_voter === '' || $this->registered_voter === null) ? null : (int)$this->registered_voter,
+                'registered_voter' => ($this->registered_voter === '' || $this->registered_voter === null) ? null : (int) $this->registered_voter,
 
                 'special_skills' => $this->special_skills,
                 'sporting_talent' => $this->sporting_talent,
 
-                'pwd_org_affiliated' => ($this->pwd_org_affiliated === '' || $this->pwd_org_affiliated === null) ? null : (int)$this->pwd_org_affiliated,
+                'pwd_org_affiliated' => ($this->pwd_org_affiliated === '' || $this->pwd_org_affiliated === null) ? null : (int) $this->pwd_org_affiliated,
                 'org_contact_person' => $this->org_contact_person,
                 'org_office_address' => $this->org_office_address,
                 'org_tel_mobile' => $this->org_tel_mobile,
@@ -345,17 +330,15 @@ class LocalProfileForm extends Component
                     'social_pension_affiliation' => $spa ?: null,
                     'monthly_income' => ($income === '' ? null : $income),
                     'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             }
 
-            if ($hmRows) {
-                DB::table('household_members')->insert($hmRows);
-            }
+            if ($hmRows) DB::table('household_members')->insert($hmRows);
         });
 
         session()->flash('success', 'Local Profile Form saved successfully.');
 
-        // reset then restore 1 row
         $this->reset();
         $this->mount();
     }
@@ -399,9 +382,7 @@ class LocalProfileForm extends Component
             }
         }
 
-        if ($rows) {
-            DB::table('local_profile_disability_causes')->insert($rows);
-        }
+        if ($rows) DB::table('local_profile_disability_causes')->insert($rows);
     }
 
     // computed options
@@ -441,13 +422,12 @@ class LocalProfileForm extends Component
         ];
     }
 
-    public function render()
-    {
-        return view('livewire.staff.local_profile_form', [
-            'age' => $this->age,
-            'disabilityTypeOptions' => $this->disabilityTypeOptions,
-            'causeCongenitalOptions' => $this->causeCongenitalOptions,
-            'causeAcquiredOptions' => $this->causeAcquiredOptions,
-        ]);
-    }
+public function render()
+{
+    return view('livewire.staff.local-profile-form', [
+        'disabilityTypeOptions'   => $this->disabilityTypeOptions,
+        'causeCongenitalOptions'  => $this->causeCongenitalOptions,
+        'causeAcquiredOptions'    => $this->causeAcquiredOptions,
+    ]);
+}
 }

@@ -1,17 +1,3 @@
-@extends('layouts.staff_shell')
-
-@section('title', 'Local Profile Form')
-@section('page_title', 'Local Profile Form')
-@section('page_subtitle', 'Fill up details for local profiling.')
-
-@section('body_class', 'lpf-page')
-
-@push('styles')
-  <link rel="stylesheet" href="{{ asset('css/local_profile_form.css') }}?v={{ filemtime(public_path('css/local_profile_form.css')) }}">
-@endpush
-
-@section('content')
-
 @if (session('success'))
   <div class="lpf-alert lpf-alert-success lpf-animate-in" role="alert">
     <b>{{ session('success') }}</b>
@@ -39,7 +25,6 @@
   </div>
 
   <div class="lpf-card-body">
-
     <form class="lpf-form" wire:submit.prevent="save" enctype="multipart/form-data">
 
       {{-- SECTION 1 --}}
@@ -49,7 +34,8 @@
         <div class="lpf-grid lpf-stagger">
           <div class="lpf-field">
             <label class="lpf-label" for="ldr_number">Local Disability Registry No.</label>
-            <input id="ldr_number" class="lpf-input" type="text" wire:model.defer="ldr_number" placeholder="(Filled by office if applicable)">
+            <input id="ldr_number" class="lpf-input" type="text" wire:model.defer="ldr_number"
+                   placeholder="(Filled by office if applicable)">
           </div>
 
           <div class="lpf-field">
@@ -79,14 +65,13 @@
 
           <div class="lpf-field">
             <label class="lpf-label" for="date_of_birth">Date of Birth</label>
-            {{-- ✅ FIX: use wire:model (works v2/v3) --}}
             <input id="date_of_birth" class="lpf-input" type="date" wire:model="date_of_birth">
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="age_display">Age (Auto)</label>
             <input id="age_display" class="lpf-input" type="text" value="{{ $age }}" readonly>
-            <small class="lpf-help">Auto-calculated from birthday (updates yearly).</small>
+            <small class="lpf-help">Auto-calculated from birthday.</small>
           </div>
 
           <div class="lpf-field">
@@ -225,6 +210,7 @@
                   <span>{{ $label }}</span>
                 </label>
               @endforeach
+
               <div class="lpf-field lpf-field-inline">
                 <label class="lpf-label">Others, specify</label>
                 <input class="lpf-input" type="text" wire:model.defer="cause_congenital_other">
@@ -239,6 +225,7 @@
                   <span>{{ $label }}</span>
                 </label>
               @endforeach
+
               <div class="lpf-field lpf-field-inline">
                 <label class="lpf-label">Others, specify</label>
                 <input class="lpf-input" type="text" wire:model.defer="cause_acquired_other">
@@ -413,7 +400,8 @@
 
             <tbody>
               @foreach($household_members as $i => $row)
-                <tr wire:key="household-{{ $row['_key'] ?? $i }}">
+                @php $key = $row['_key'] ?? ('row-'.$i); @endphp
+                <tr wire:key="household-{{ $key }}">
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.name"></td>
                   <td><input class="lpf-input lpf-input-sm" type="date" wire:model.defer="household_members.{{ $i }}.date_of_birth"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.civil_status"></td>
@@ -423,13 +411,7 @@
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.social_pension_affiliation"></td>
                   <td><input class="lpf-input lpf-input-sm" type="number" step="0.01" wire:model.defer="household_members.{{ $i }}.monthly_income"></td>
                   <td>
-                    <button
-                      type="button"
-                      class="lpf-mini lpf-mini-danger"
-                      wire:click="removeHouseholdMember({{ $i }})"
-                      wire:loading.attr="disabled"
-                      wire:target="addHouseholdMember,removeHouseholdMember"
-                    >
+                    <button type="button" class="lpf-mini lpf-mini-danger" wire:click="removeHouseholdMember({{ $i }})">
                       Remove
                     </button>
                   </td>
@@ -440,13 +422,7 @@
         </div>
 
         <div style="margin-top:10px; display:flex; gap:10px; align-items:flex-end;">
-          <button
-            type="button"
-            class="lpf-mini"
-            wire:click="addHouseholdMember"
-            wire:loading.attr="disabled"
-            wire:target="addHouseholdMember,removeHouseholdMember"
-          >
+          <button type="button" class="lpf-mini" wire:click="addHouseholdMember">
             + Add Member
           </button>
 
@@ -506,14 +482,9 @@
 
       <div class="lpf-actions">
         <a href="{{ route('staff.dashboard') }}" class="lpf-btn lpf-btn-ghost">Cancel</a>
-
-        <button type="submit" class="lpf-btn lpf-btn-primary">
-          Save Form
-        </button>
+        <button type="submit" class="lpf-btn lpf-btn-primary">Save Form</button>
       </div>
 
     </form>
   </div>
 </div>
-
-@endsection
