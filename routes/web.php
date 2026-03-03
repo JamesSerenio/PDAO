@@ -56,8 +56,4 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::get('/staff/local-profile-form', StaffLocalProfileForm::class)
         ->name('staff.local_profile_form');
 
-    // ✅ Keep POST route for saving (controller)
-    Route::post('/staff/local-profile-form', [LocalProfileFormController::class, 'store'])
-        ->name('staff.local_profile_form.store');
-
 });

@@ -2,6 +2,7 @@
 
 @section('title', 'Staff Dashboard')
 @section('page_title', 'Staff Dashboard')
+
 @section('page_subtitle')
   Welcome, <b>{{ auth()->user()->name }}</b> ({{ auth()->user()->role }})
 @endsection
