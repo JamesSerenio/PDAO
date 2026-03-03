@@ -145,9 +145,35 @@
             <input id="sitio_purok" class="lpf-input" type="text" wire:model.defer="sitio_purok">
           </div>
 
+          {{-- ✅ UPDATED BARANGAY DROPDOWN --}}
           <div class="lpf-field">
             <label class="lpf-label" for="barangay">Barangay</label>
-            <input id="barangay" class="lpf-input" type="text" wire:model.defer="barangay">
+            <select id="barangay" class="lpf-select" wire:model.defer="barangay">
+              <option value="">-- Select Barangay --</option>
+              <option value="Agusan Canyon">Agusan Canyon</option>
+              <option value="Alae">Alae</option>
+              <option value="Dahilayan">Dahilayan</option>
+              <option value="Dalirig">Dalirig</option>
+              <option value="Damilag">Damilag</option>
+              <option value="Diclum">Diclum</option>
+              <option value="Guilang-guilang">Guilang-guilang</option>
+              <option value="Kalugmanan">Kalugmanan</option>
+              <option value="Lindaban">Lindaban</option>
+              <option value="Lingion">Lingion</option>
+              <option value="Lunocan">Lunocan</option>
+              <option value="Maluko">Maluko</option>
+              <option value="Mambatangan">Mambatangan</option>
+              <option value="Mampayag">Mampayag</option>
+              <option value="Mantibugao">Mantibugao</option>
+              <option value="Minsuro">Minsuro</option>
+              <option value="San Miguel">San Miguel</option>
+              <option value="Sankanan">Sankanan</option>
+              <option value="Santiago">Santiago</option>
+              <option value="Santo Niño">Santo Niño</option>
+              <option value="Tankulan">Tankulan</option>
+              <option value="Ticala">Ticala</option>
+            </select>
+            <small class="lpf-help">Choose from the official barangay list.</small>
           </div>
 
           <div class="lpf-field">

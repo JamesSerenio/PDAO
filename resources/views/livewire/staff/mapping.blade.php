@@ -1,59 +1,45 @@
-{{-- resources/views/pages/staff/mapping.blade.php --}}
-@extends('layouts.staff_shell')
+{{-- resources/views/livewire/staff/mapping.blade.php --}}
 
-@section('title', 'Staff Mapping')
-@section('page_title', 'Mapping')
-@section('page_subtitle', 'Search location and get coordinates')
+<div class="map-wrap">
 
-@section('body_class', 'staffmapping')
+  <div class="map-topbar anim-in">
+    <div class="left">
+      <h2 class="welcome">Welcome, {{ auth()->user()->name }}</h2>
+      <p>Click map / drag marker to get latitude & longitude</p>
+    </div>
 
-@push('styles')
-  <link rel="stylesheet" href="{{ asset('css/staffmapping.css') }}?v={{ filemtime(public_path('css/staffmapping.css')) }}">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-@endpush
-
-@section('content')
-  <div class="map-wrap">
-
-    <div class="map-topbar anim-in">
-      <div class="left">
-        <h2 class="welcome">Welcome, {{ auth()->user()->name }}</h2>
-        <p>Click map / drag marker to get latitude & longitude</p>
-      </div>
-
-      <div class="right">
-        <div class="search-mini">
-          <div class="search-box">
-            <input
-              id="searchInput"
-              class="search-input"
-              type="text"
-              placeholder="Search place..."
-              autocomplete="off"
-            />
-            <div id="suggestions" class="suggestions hidden"></div>
-          </div>
-
-          <button id="searchBtn" class="btn" type="button">
-            <span class="btn-txt">Search</span>
-            <span class="btn-glow"></span>
-          </button>
+    <div class="right">
+      <div class="search-mini">
+        <div class="search-box">
+          <input
+            id="searchInput"
+            class="search-input"
+            type="text"
+            placeholder="Search place..."
+            autocomplete="off"
+          />
+          <div id="suggestions" class="suggestions hidden"></div>
         </div>
+
+        <button id="searchBtn" class="btn" type="button">
+          <span class="btn-txt">Search</span>
+          <span class="btn-glow"></span>
+        </button>
       </div>
     </div>
-
-    <div class="coords-card anim-in" style="animation-delay:.06s">
-      <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
-      <div class="hint" id="hint"></div>
-      <div class="micro" id="microTip">Tip: Use Enter to search faster.</div>
-    </div>
-
-    <div class="panel map-panel anim-in" style="animation-delay:.12s">
-      <div id="map"></div>
-    </div>
-
   </div>
-@endsection
+
+  <div class="coords-card anim-in" style="animation-delay:.06s">
+    <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
+    <div class="hint" id="hint"></div>
+    <div class="micro" id="microTip">Tip: Use Enter to search faster.</div>
+  </div>
+
+  <div class="panel map-panel anim-in" style="animation-delay:.12s">
+    <div id="map"></div>
+  </div>
+
+</div>
 
 @push('scripts')
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -63,7 +49,7 @@
       const mapEl = document.getElementById("map");
       if (!mapEl) return;
 
-      // ✅ prevent re-initialization when navigating back and forth
+      // ✅ prevent re-initialization
       if (mapEl.dataset.inited === "1") {
         if (window.__staffMap) {
           setTimeout(() => window.__staffMap.invalidateSize(true), 60);
@@ -99,7 +85,6 @@
 
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-      // ✅ IMPORTANT: make map visible immediately after navigate
       setTimeout(() => map.invalidateSize(true), 60);
       setTimeout(() => map.invalidateSize(true), 250);
 
@@ -140,19 +125,13 @@
         setTimeout(() => suggestionsEl.classList.remove("pop"), 250);
       }
 
-      function hideSuggestions() {
-        suggestionsEl.classList.add("hidden");
-      }
+      function hideSuggestions() { suggestionsEl.classList.add("hidden"); }
 
       function handleTyping() {
         const q = (searchInput.value || "").trim().toLowerCase();
-
         if (!q) return showSuggestions(barangays.slice(0, 8));
 
-        const matches = barangays
-          .filter(b => b.toLowerCase().includes(q))
-          .slice(0, 8);
-
+        const matches = barangays.filter(b => b.toLowerCase().includes(q)).slice(0, 8);
         showSuggestions(matches);
       }
 
@@ -171,7 +150,6 @@
 
       searchInput.addEventListener("focus", handleTyping);
       searchInput.addEventListener("input", handleTyping);
-
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
         if (e.key === "Enter") { hideSuggestions(); searchPlace(); }
@@ -247,16 +225,16 @@
         }
       }
 
-      searchBtn.addEventListener("click", () => {
-        hideSuggestions();
-        searchPlace();
+      searchBtn.addEventListener("click", () => { hideSuggestions(); searchPlace(); });
+
+      // ✅ SPA navigation support
+      document.addEventListener("livewire:navigated", () => {
+        setTimeout(() => map.invalidateSize(true), 60);
+        setTimeout(() => map.invalidateSize(true), 250);
       });
     }
 
-    // ✅ Normal full refresh
     document.addEventListener("DOMContentLoaded", initStaffMap);
-
-    // ✅ Livewire Navigate (sidebar click / SPA navigation)
     document.addEventListener("livewire:navigated", initStaffMap);
   </script>
 @endpush
