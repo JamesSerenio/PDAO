@@ -3,15 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@yield('title', 'Staff Panel')</title>
 
+  {{-- REQUIRED for Livewire requests --}}
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  <title>@yield('title', 'Staff Panel')</title>
   <link rel="icon" type="image/png" href="{{ asset('img/LOGOP.png') }}">
 
   {{-- Main CSS --}}
   <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ filemtime(public_path('css/admin_dashboard.css')) }}">
 
-  {{-- ✅ Livewire Styles --}}
+  {{-- Livewire Styles --}}
   @livewireStyles
+
+  {{-- Livewire Navigate (IMPORTANT for v3/v4) --}}
+  @livewireScriptConfig
 
   {{-- Per-page styles --}}
   @yield('styles')
@@ -34,7 +40,6 @@
     <!-- SIDEBAR -->
     <aside class="dash-sidebar">
 
-      <!-- Brand -->
       <div class="dash-brand">
         <div class="brand-badge">
           <img src="{{ asset('img/LOGOP.png') }}" alt="Logo">
@@ -45,10 +50,11 @@
         </div>
       </div>
 
-      <!-- Nav -->
       <nav class="dash-nav">
         @foreach($menu as $item)
           <a
+            {{-- optional: navigate support --}}
+            {{-- wire:navigate --}}
             class="dash-link {{ $active === $item['route'] ? 'active' : '' }}"
             href="{{ route($item['route']) }}"
           >
@@ -58,7 +64,6 @@
         @endforeach
       </nav>
 
-      <!-- Footer -->
       <div class="dash-sidebar-footer">
         <form method="POST" action="{{ route('logout') }}">
           @csrf
@@ -96,7 +101,7 @@
 
   </div>
 
-  {{-- ✅ Livewire Scripts --}}
+  {{-- Livewire Scripts --}}
   @livewireScripts
 
   {{-- Per-page scripts --}}

@@ -47,7 +47,6 @@
         <div class="lpf-section-title">Basic Identification</div>
 
         <div class="lpf-grid lpf-stagger">
-
           <div class="lpf-field">
             <label class="lpf-label" for="ldr_number">Local Disability Registry No.</label>
             <input id="ldr_number" class="lpf-input" type="text" wire:model.defer="ldr_number" placeholder="(Filled by office if applicable)">
@@ -142,7 +141,6 @@
             <label class="lpf-label" for="signature_thumbmark">Signature/Thumbmark</label>
             <input id="signature_thumbmark" class="lpf-input" type="file" accept="image/*" wire:model="signature_thumbmark">
           </div>
-
         </div>
       </div>
 
@@ -245,7 +243,6 @@
                 <input class="lpf-input" type="text" wire:model.defer="cause_acquired_other">
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -415,7 +412,7 @@
 
             <tbody>
               @foreach($household_members as $i => $row)
-                <tr wire:key="household-{{ $i }}">
+                <tr wire:key="household-{{ $row['_key'] }}">
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.name"></td>
                   <td><input class="lpf-input lpf-input-sm" type="date" wire:model.defer="household_members.{{ $i }}.date_of_birth"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.civil_status"></td>
@@ -429,7 +426,6 @@
                       type="button"
                       class="lpf-mini lpf-mini-danger"
                       wire:click.prevent="removeHouseholdMember({{ $i }})"
-                      wire:loading.attr="disabled"
                     >
                       Remove
                     </button>
@@ -445,7 +441,6 @@
             type="button"
             class="lpf-mini"
             wire:click.prevent="addHouseholdMember"
-            wire:loading.attr="disabled"
           >
             + Add Member
           </button>
@@ -507,7 +502,7 @@
       <div class="lpf-actions">
         <a href="{{ route('staff.dashboard') }}" class="lpf-btn lpf-btn-ghost">Cancel</a>
 
-        <button type="submit" class="lpf-btn lpf-btn-primary" wire:loading.attr="disabled">
+        <button type="submit" class="lpf-btn lpf-btn-primary">
           Save Form
         </button>
       </div>
