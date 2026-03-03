@@ -79,7 +79,8 @@
 
           <div class="lpf-field">
             <label class="lpf-label" for="date_of_birth">Date of Birth</label>
-            <input id="date_of_birth" class="lpf-input" type="date" wire:model.live="date_of_birth">
+            {{-- ✅ FIX: use wire:model (works v2/v3) --}}
+            <input id="date_of_birth" class="lpf-input" type="date" wire:model="date_of_birth">
           </div>
 
           <div class="lpf-field">
@@ -412,7 +413,7 @@
 
             <tbody>
               @foreach($household_members as $i => $row)
-                <tr wire:key="household-{{ $row['_key'] }}">
+                <tr wire:key="household-{{ $row['_key'] ?? $i }}">
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.name"></td>
                   <td><input class="lpf-input lpf-input-sm" type="date" wire:model.defer="household_members.{{ $i }}.date_of_birth"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.civil_status"></td>
@@ -425,7 +426,9 @@
                     <button
                       type="button"
                       class="lpf-mini lpf-mini-danger"
-                      wire:click.prevent="removeHouseholdMember({{ $i }})"
+                      wire:click="removeHouseholdMember({{ $i }})"
+                      wire:loading.attr="disabled"
+                      wire:target="addHouseholdMember,removeHouseholdMember"
                     >
                       Remove
                     </button>
@@ -440,7 +443,9 @@
           <button
             type="button"
             class="lpf-mini"
-            wire:click.prevent="addHouseholdMember"
+            wire:click="addHouseholdMember"
+            wire:loading.attr="disabled"
+            wire:target="addHouseholdMember,removeHouseholdMember"
           >
             + Add Member
           </button>

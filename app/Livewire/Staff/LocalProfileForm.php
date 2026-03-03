@@ -37,7 +37,7 @@ class LocalProfileForm extends Component
     public $reporting_unit_office_section;
     public $approved_by;
 
-    // ✅ IMPORTANT: declare age to avoid dynamic property crash (PHP 8.2+)
+    // ✅ IMPORTANT: avoid dynamic property crash (PHP 8.2+)
     public $age = '';
 
     // ---------- uploads ----------
@@ -58,9 +58,8 @@ class LocalProfileForm extends Component
 
     public function mount()
     {
-        $this->household_members = [
-            $this->blankHouseholdRow()
-        ];
+        // ✅ always start with one row
+        $this->household_members = [$this->blankHouseholdRow()];
 
         // Set age initial (if dob already exists)
         $this->age = $this->computeAge($this->date_of_birth);
@@ -81,7 +80,7 @@ class LocalProfileForm extends Component
         ];
     }
 
-    // ✅ if your blade uses wire:model.live="date_of_birth"
+    // ✅ works with wire:model="date_of_birth"
     public function updatedDateOfBirth($value)
     {
         $this->age = $this->computeAge($value);
@@ -102,21 +101,29 @@ class LocalProfileForm extends Component
     public function addHouseholdMember()
     {
         $this->household_members[] = $this->blankHouseholdRow();
+
+        // optional safety refresh (helps in some cases)
+        // $this->dispatch('$refresh'); // Livewire v3
     }
 
     public function removeHouseholdMember($index)
     {
-        if (!isset($this->household_members[$index])) return;
+        if (!isset($this->household_members[$index])) {
+            return;
+        }
 
         unset($this->household_members[$index]);
 
         // ✅ MUST reindex for wire:model household_members.{i}.field
         $this->household_members = array_values($this->household_members);
 
-        // optional: keep at least 1 row
+        // ✅ keep at least 1 row
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
         }
+
+        // optional safety refresh (helps in some cases)
+        // $this->dispatch('$refresh'); // Livewire v3
     }
 
     public function rules()
@@ -186,9 +193,16 @@ class LocalProfileForm extends Component
             'interviewee_signature_thumbmark' => ['nullable','image','max:2048'],
             'approved_signature' => ['nullable','image','max:2048'],
 
+            // ✅ FULL household rules (more consistent)
             'household_members' => ['array'],
+            'household_members.*._key' => ['nullable','string'],
             'household_members.*.name' => ['nullable','string','max:150'],
             'household_members.*.date_of_birth' => ['nullable','date'],
+            'household_members.*.civil_status' => ['nullable','string','max:80'],
+            'household_members.*.educational_attainment' => ['nullable','string','max:120'],
+            'household_members.*.relationship_to_pwd' => ['nullable','string','max:120'],
+            'household_members.*.occupation' => ['nullable','string','max:150'],
+            'household_members.*.social_pension_affiliation' => ['nullable','string','max:120'],
             'household_members.*.monthly_income' => ['nullable','numeric','min:0'],
         ];
     }
@@ -299,6 +313,7 @@ class LocalProfileForm extends Component
             // household members
             $hmRows = [];
             foreach ($this->household_members as $row) {
+
                 $name = trim((string)($row['name'] ?? ''));
                 $dob = $row['date_of_birth'] ?? null;
                 $civil = trim((string)($row['civil_status'] ?? ''));
@@ -429,10 +444,7 @@ class LocalProfileForm extends Component
     public function render()
     {
         return view('livewire.staff.local_profile_form', [
-            // ✅ now guaranteed defined
             'age' => $this->age,
-
-            // ✅ computed options
             'disabilityTypeOptions' => $this->disabilityTypeOptions,
             'causeCongenitalOptions' => $this->causeCongenitalOptions,
             'causeAcquiredOptions' => $this->causeAcquiredOptions,
