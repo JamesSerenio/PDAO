@@ -17,6 +17,7 @@ class LocalProfileForm extends Component
 
     public $last_name, $first_name, $middle_name, $suffix;
     public $date_of_birth;
+
     public $blood_type, $religion, $ethnic_group, $sex, $civil_status;
 
     public $house_no_street, $sitio_purok, $barangay, $municipality, $province, $region;
@@ -35,6 +36,9 @@ class LocalProfileForm extends Component
     public $accomplished_by_name, $accomplished_by_position;
     public $reporting_unit_office_section;
     public $approved_by;
+
+    // ✅ IMPORTANT: declare age to avoid dynamic property crash (PHP 8.2+)
+    public $age = '';
 
     // ---------- uploads ----------
     public $photo_1x1;
@@ -57,12 +61,15 @@ class LocalProfileForm extends Component
         $this->household_members = [
             $this->blankHouseholdRow()
         ];
+
+        // Set age initial (if dob already exists)
+        $this->age = $this->computeAge($this->date_of_birth);
     }
 
     private function blankHouseholdRow(): array
     {
         return [
-            '_key' => (string) Str::uuid(), // ✅ important for stable wire:key
+            '_key' => (string) Str::uuid(), // ✅ stable wire:key
             'name' => '',
             'date_of_birth' => null,
             'civil_status' => '',
@@ -74,6 +81,24 @@ class LocalProfileForm extends Component
         ];
     }
 
+    // ✅ if your blade uses wire:model.live="date_of_birth"
+    public function updatedDateOfBirth($value)
+    {
+        $this->age = $this->computeAge($value);
+    }
+
+    private function computeAge($dob)
+    {
+        if (!$dob) return '';
+        try {
+            $d = new \DateTime($dob);
+            $t = new \DateTime(date('Y-m-d'));
+            return $t->diff($d)->y;
+        } catch (\Throwable $e) {
+            return '';
+        }
+    }
+
     public function addHouseholdMember()
     {
         $this->household_members[] = $this->blankHouseholdRow();
@@ -81,37 +106,23 @@ class LocalProfileForm extends Component
 
     public function removeHouseholdMember($index)
     {
-        if (!isset($this->household_members[$index])) {
-            return;
-        }
+        if (!isset($this->household_members[$index])) return;
 
         unset($this->household_members[$index]);
+
+        // ✅ MUST reindex for wire:model household_members.{i}.field
         $this->household_members = array_values($this->household_members);
 
+        // optional: keep at least 1 row
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
-        }
-    }
-
-    // ✅ Auto age (display only)
-    public function getAgeProperty()
-    {
-        if (!$this->date_of_birth) return '';
-        try {
-            $dob = new \DateTime($this->date_of_birth);
-            $today = new \DateTime(date('Y-m-d'));
-            return $today->diff($dob)->y;
-        } catch (\Throwable $e) {
-            return '';
         }
     }
 
     public function rules()
     {
         return [
-            // ✅ unique only matters if may value
             'ldr_number' => ['nullable','string','max:50', Rule::unique('local_profiles','ldr_number')],
-
             'profiling_date' => ['nullable','date'],
 
             'last_name' => ['required','string','max:100'],
@@ -138,12 +149,10 @@ class LocalProfileForm extends Component
             'email' => ['nullable','email','max:150'],
 
             'education_level' => ['nullable', Rule::in(['None','Kindergarten','Elementary','Junior High School','Senior High','College','Vocational','Post Graduate'])],
-
             'employment_status' => ['nullable', Rule::in(['Employed','Unemployed','Self-employed'])],
             'employment_category' => ['nullable', Rule::in(['Government','Private'])],
             'specific_occupation' => ['nullable','string','max:150'],
             'employment_type' => ['nullable', Rule::in(['Permanent','Seasonal','Contractual','Job Order','On Call'])],
-
             'registered_voter' => ['nullable', Rule::in(['1','0',1,0])],
 
             'special_skills' => ['nullable','string'],
@@ -172,13 +181,11 @@ class LocalProfileForm extends Component
             'reporting_unit_office_section' => ['nullable','string','max:150'],
             'approved_by' => ['nullable','string','max:150'],
 
-            // uploads
             'photo_1x1' => ['nullable','image','max:2048'],
             'signature_thumbmark' => ['nullable','image','max:2048'],
             'interviewee_signature_thumbmark' => ['nullable','image','max:2048'],
             'approved_signature' => ['nullable','image','max:2048'],
 
-            // household
             'household_members' => ['array'],
             'household_members.*.name' => ['nullable','string','max:150'],
             'household_members.*.date_of_birth' => ['nullable','date'],
@@ -192,13 +199,11 @@ class LocalProfileForm extends Component
 
         DB::transaction(function () {
 
-            // store uploads
             $photoPath = $this->photo_1x1 ? $this->photo_1x1->store('local_profiles/photos', 'public') : null;
             $signPath  = $this->signature_thumbmark ? $this->signature_thumbmark->store('local_profiles/signatures', 'public') : null;
             $intSignPath = $this->interviewee_signature_thumbmark ? $this->interviewee_signature_thumbmark->store('local_profiles/interviewee_sign', 'public') : null;
             $apprSignPath = $this->approved_signature ? $this->approved_signature->store('local_profiles/approved_sign', 'public') : null;
 
-            // insert profile
             $profileId = DB::table('local_profiles')->insertGetId([
                 'ldr_number' => $this->ldr_number,
                 'profiling_date' => $this->profiling_date,
@@ -335,7 +340,7 @@ class LocalProfileForm extends Component
 
         session()->flash('success', 'Local Profile Form saved successfully.');
 
-        // ✅ reset clean, then restore 1 row
+        // reset then restore 1 row
         $this->reset();
         $this->mount();
     }
@@ -384,7 +389,7 @@ class LocalProfileForm extends Component
         }
     }
 
-    // options for blade
+    // computed options
     public function getDisabilityTypeOptionsProperty()
     {
         return [
@@ -424,7 +429,10 @@ class LocalProfileForm extends Component
     public function render()
     {
         return view('livewire.staff.local_profile_form', [
+            // ✅ now guaranteed defined
             'age' => $this->age,
+
+            // ✅ computed options
             'disabilityTypeOptions' => $this->disabilityTypeOptions,
             'causeCongenitalOptions' => $this->causeCongenitalOptions,
             'causeAcquiredOptions' => $this->causeAcquiredOptions,

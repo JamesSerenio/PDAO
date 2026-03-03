@@ -1,11 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Auth\LoginController;
-
-// ✅ Keep this controller ONLY for POST submit (saving)
-use App\Http\Controllers\Staff\LocalProfileFormController;
 
 // ✅ Livewire Admin Pages
 use App\Livewire\Admin\Dashboard as AdminDashboard;
@@ -43,7 +39,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // ======================
-// STAFF (Livewire Navigate)
+// STAFF (Livewire)
 // ======================
 Route::middleware(['auth', 'role:staff'])->group(function () {
 
