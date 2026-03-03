@@ -10,6 +10,9 @@
   {{-- MAIN DASHBOARD CSS --}}
   <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ filemtime(public_path('css/admin_dashboard.css')) }}">
 
+  {{-- ✅ Livewire Styles (REQUIRED for navigate) --}}
+  @livewireStyles
+
   {{-- ✅ 1) SUPPORT PER-PAGE CSS VIA @section('styles') --}}
   @yield('styles')
 
@@ -27,7 +30,6 @@
   $activeRoute = request()->route() ? request()->route()->getName() : '';
 @endphp
 
-{{-- ✅ IMPORTANT: body_class so page-scoped CSS works --}}
 <body class="dash-admin staff-shell @yield('body_class')">
 
   <div class="dash-layout">
@@ -48,6 +50,7 @@
       <nav class="dash-nav">
         @foreach ($menuItems as $item)
           <a
+            wire:navigate
             class="dash-link {{ $activeRoute === $item['route'] ? 'active' : '' }}"
             href="{{ route($item['route']) }}"
           >
@@ -93,6 +96,9 @@
     </main>
 
   </div>
+
+  {{-- ✅ Livewire Scripts (REQUIRED for navigate) --}}
+  @livewireScripts
 
   {{-- ✅ Scripts --}}
   @stack('scripts')
