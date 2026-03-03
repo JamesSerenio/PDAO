@@ -1,11 +1,10 @@
 {{-- resources/views/pages/staff/mapping.blade.php --}}
-@extends('pages.staff.staff_dashboard')
+@extends('layouts.staff_shell')
 
 @section('title', 'Staff Mapping')
 @section('page_title', 'Mapping')
 @section('page_subtitle', 'Search location and get coordinates')
 
-{{-- ✅ This adds class to BODY in the layout --}}
 @section('body_class', 'staffmapping')
 
 @push('styles')
@@ -60,7 +59,20 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    function initStaffMap() {
+      const mapEl = document.getElementById("map");
+      if (!mapEl) return;
+
+      // ✅ prevent re-initialization when navigating back and forth
+      if (mapEl.dataset.inited === "1") {
+        if (window.__staffMap) {
+          setTimeout(() => window.__staffMap.invalidateSize(true), 60);
+          setTimeout(() => window.__staffMap.invalidateSize(true), 250);
+        }
+        return;
+      }
+      mapEl.dataset.inited = "1";
+
       const barangays = [
         "Agusan Canyon","Alae","Dahilayan","Dalirig","Damilag","Diclum",
         "Guilang-guilang","Kalugmanan","Lindaban","Lingion","Lunocan","Maluko",
@@ -78,10 +90,8 @@
       const searchBtn = document.getElementById("searchBtn");
       const suggestionsEl = document.getElementById("suggestions");
 
-      const mapEl = document.getElementById("map");
-      if (!mapEl) return;
-
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
+      window.__staffMap = map;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
@@ -89,8 +99,9 @@
 
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-      // ✅ fix blank map inside layout
-      setTimeout(() => map.invalidateSize(), 300);
+      // ✅ IMPORTANT: make map visible immediately after navigate
+      setTimeout(() => map.invalidateSize(true), 60);
+      setTimeout(() => map.invalidateSize(true), 250);
 
       function pulse(el) {
         if (!el) return;
@@ -225,7 +236,7 @@
           microTip.textContent = "✅ Location found and marker moved.";
           pulse(microTip);
 
-          setTimeout(() => map.invalidateSize(), 150);
+          setTimeout(() => map.invalidateSize(true), 120);
 
         } catch (err) {
           setHint("Error searching. Check internet connection and try again.");
@@ -240,6 +251,12 @@
         hideSuggestions();
         searchPlace();
       });
-    });
+    }
+
+    // ✅ Normal full refresh
+    document.addEventListener("DOMContentLoaded", initStaffMap);
+
+    // ✅ Livewire Navigate (sidebar click / SPA navigation)
+    document.addEventListener("livewire:navigated", initStaffMap);
   </script>
 @endpush
