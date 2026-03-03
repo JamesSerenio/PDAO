@@ -10,7 +10,7 @@
   {{-- Main CSS --}}
   <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ filemtime(public_path('css/admin_dashboard.css')) }}">
 
-  {{-- Livewire v4 --}}
+  {{-- ✅ Livewire Styles --}}
   @livewireStyles
 
   {{-- Per-page styles --}}
@@ -49,7 +49,6 @@
       <nav class="dash-nav">
         @foreach($menu as $item)
           <a
-            wire:navigate
             class="dash-link {{ $active === $item['route'] ? 'active' : '' }}"
             href="{{ route($item['route']) }}"
           >
@@ -97,7 +96,7 @@
 
   </div>
 
-  {{-- Livewire v4 --}}
+  {{-- ✅ Livewire Scripts --}}
   @livewireScripts
 
   {{-- Per-page scripts --}}

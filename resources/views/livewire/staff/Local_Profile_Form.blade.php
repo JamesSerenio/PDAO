@@ -390,7 +390,6 @@
             <label class="lpf-label">PhilHealth No.</label>
             <input class="lpf-input" type="text" wire:model.defer="philhealth_no">
           </div>
-
         </div>
       </div>
 
@@ -413,9 +412,10 @@
                 <th></th>
               </tr>
             </thead>
+
             <tbody>
               @foreach($household_members as $i => $row)
-                <tr>
+                <tr wire:key="household-{{ $i }}">
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.name"></td>
                   <td><input class="lpf-input lpf-input-sm" type="date" wire:model.defer="household_members.{{ $i }}.date_of_birth"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.civil_status"></td>
@@ -425,7 +425,14 @@
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.social_pension_affiliation"></td>
                   <td><input class="lpf-input lpf-input-sm" type="number" step="0.01" wire:model.defer="household_members.{{ $i }}.monthly_income"></td>
                   <td>
-                    <button type="button" class="lpf-mini lpf-mini-danger" wire:click="removeHouseholdMember({{ $i }})">Remove</button>
+                    <button
+                      type="button"
+                      class="lpf-mini lpf-mini-danger"
+                      wire:click.prevent="removeHouseholdMember({{ $i }})"
+                      wire:loading.attr="disabled"
+                    >
+                      Remove
+                    </button>
                   </td>
                 </tr>
               @endforeach
@@ -433,8 +440,15 @@
           </table>
         </div>
 
-        <div style="margin-top:10px; display:flex; gap:10px;">
-          <button type="button" class="lpf-mini" wire:click="addHouseholdMember">+ Add Member</button>
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:flex-end;">
+          <button
+            type="button"
+            class="lpf-mini"
+            wire:click.prevent="addHouseholdMember"
+            wire:loading.attr="disabled"
+          >
+            + Add Member
+          </button>
 
           <div class="lpf-field" style="max-width:260px;">
             <label class="lpf-label">Total Family Income</label>
@@ -493,7 +507,7 @@
       <div class="lpf-actions">
         <a href="{{ route('staff.dashboard') }}" class="lpf-btn lpf-btn-ghost">Cancel</a>
 
-        <button type="submit" class="lpf-btn lpf-btn-primary">
+        <button type="submit" class="lpf-btn lpf-btn-primary" wire:loading.attr="disabled">
           Save Form
         </button>
       </div>

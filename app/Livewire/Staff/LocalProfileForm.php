@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class LocalProfileForm extends Component
 {
@@ -42,9 +43,9 @@ class LocalProfileForm extends Component
     public $approved_signature;
 
     // ---------- disability checkboxes ----------
-    public $disability_types = [];     // values are "name" strings from lookup seed
-    public $cause_congenital = [];     // values are cause "name" strings
-    public $cause_acquired = [];       // values are cause "name" strings
+    public $disability_types = [];
+    public $cause_congenital = [];
+    public $cause_acquired = [];
     public $cause_congenital_other = '';
     public $cause_acquired_other = '';
 
@@ -53,7 +54,6 @@ class LocalProfileForm extends Component
 
     public function mount()
     {
-        // start with 1 row
         $this->household_members = [
             $this->blankHouseholdRow()
         ];
@@ -62,6 +62,7 @@ class LocalProfileForm extends Component
     private function blankHouseholdRow(): array
     {
         return [
+            '_key' => (string) Str::uuid(), // ✅ important for stable wire:key
             'name' => '',
             'date_of_birth' => null,
             'civil_status' => '',
@@ -80,8 +81,13 @@ class LocalProfileForm extends Component
 
     public function removeHouseholdMember($index)
     {
+        if (!isset($this->household_members[$index])) {
+            return;
+        }
+
         unset($this->household_members[$index]);
         $this->household_members = array_values($this->household_members);
+
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
         }
@@ -94,8 +100,7 @@ class LocalProfileForm extends Component
         try {
             $dob = new \DateTime($this->date_of_birth);
             $today = new \DateTime(date('Y-m-d'));
-            $age = $today->diff($dob)->y;
-            return $age;
+            return $today->diff($dob)->y;
         } catch (\Throwable $e) {
             return '';
         }
@@ -104,7 +109,9 @@ class LocalProfileForm extends Component
     public function rules()
     {
         return [
+            // ✅ unique only matters if may value
             'ldr_number' => ['nullable','string','max:50', Rule::unique('local_profiles','ldr_number')],
+
             'profiling_date' => ['nullable','date'],
 
             'last_name' => ['required','string','max:100'],
@@ -263,7 +270,7 @@ class LocalProfileForm extends Component
                 'updated_at' => now(),
             ]);
 
-            // --------- disability types pivot ---------
+            // disability types pivot
             if (!empty($this->disability_types)) {
                 $typeIds = DB::table('disability_types')
                     ->whereIn('name', $this->disability_types)
@@ -280,41 +287,64 @@ class LocalProfileForm extends Component
                 if ($rows) DB::table('local_profile_disability_types')->insert($rows);
             }
 
-            // --------- disability causes pivot ---------
+            // disability causes pivot
             $this->insertCauses($profileId, 'CONGENITAL/INBORN', $this->cause_congenital, $this->cause_congenital_other);
             $this->insertCauses($profileId, 'ACQUIRED', $this->cause_acquired, $this->cause_acquired_other);
 
-            // --------- household members ---------
+            // household members
             $hmRows = [];
             foreach ($this->household_members as $row) {
                 $name = trim((string)($row['name'] ?? ''));
-                $anyFilled = $name !== '' || !empty($row['occupation']) || !empty($row['monthly_income']);
+                $dob = $row['date_of_birth'] ?? null;
+                $civil = trim((string)($row['civil_status'] ?? ''));
+                $edu = trim((string)($row['educational_attainment'] ?? ''));
+                $rel = trim((string)($row['relationship_to_pwd'] ?? ''));
+                $occ = trim((string)($row['occupation'] ?? ''));
+                $spa = trim((string)($row['social_pension_affiliation'] ?? ''));
+                $income = $row['monthly_income'] ?? null;
+
+                $anyFilled = ($name !== '')
+                    || ($dob !== null && $dob !== '')
+                    || ($civil !== '')
+                    || ($edu !== '')
+                    || ($rel !== '')
+                    || ($occ !== '')
+                    || ($spa !== '')
+                    || ($income !== null && $income !== '');
+
                 if (!$anyFilled) continue;
 
                 $hmRows[] = [
                     'local_profile_id' => $profileId,
-                    'name' => $name ?: 'N/A',
-                    'date_of_birth' => $row['date_of_birth'] ?: null,
-                    'civil_status' => $row['civil_status'] ?? null,
-                    'educational_attainment' => $row['educational_attainment'] ?? null,
-                    'relationship_to_pwd' => $row['relationship_to_pwd'] ?? null,
-                    'occupation' => $row['occupation'] ?? null,
-                    'social_pension_affiliation' => $row['social_pension_affiliation'] ?? null,
-                    'monthly_income' => $row['monthly_income'] ?: null,
+                    'name' => $name !== '' ? $name : 'N/A',
+                    'date_of_birth' => $dob ?: null,
+                    'civil_status' => $civil ?: null,
+                    'educational_attainment' => $edu ?: null,
+                    'relationship_to_pwd' => $rel ?: null,
+                    'occupation' => $occ ?: null,
+                    'social_pension_affiliation' => $spa ?: null,
+                    'monthly_income' => ($income === '' ? null : $income),
                     'created_at' => now(),
                 ];
             }
-            if ($hmRows) DB::table('household_members')->insert($hmRows);
+
+            if ($hmRows) {
+                DB::table('household_members')->insert($hmRows);
+            }
         });
 
         session()->flash('success', 'Local Profile Form saved successfully.');
-        $this->resetExcept([]);
-        $this->mount(); // restore 1 household row
+
+        // ✅ reset clean, then restore 1 row
+        $this->reset();
+        $this->mount();
     }
 
     private function insertCauses($profileId, $category, $names, $otherText)
     {
-        if (empty($names) && empty(trim((string)$otherText))) return;
+        $otherText = trim((string)$otherText);
+
+        if (empty($names) && $otherText === '') return;
 
         $causeIds = [];
         if (!empty($names)) {
@@ -334,8 +364,6 @@ class LocalProfileForm extends Component
             ];
         }
 
-        // if user typed "other"
-        $otherText = trim((string)$otherText);
         if ($otherText !== '') {
             $otherId = DB::table('disability_causes')
                 ->where('category', $category)
@@ -351,7 +379,9 @@ class LocalProfileForm extends Component
             }
         }
 
-        if ($rows) DB::table('local_profile_disability_causes')->insert($rows);
+        if ($rows) {
+            DB::table('local_profile_disability_causes')->insert($rows);
+        }
     }
 
     // options for blade
