@@ -9,7 +9,7 @@ class LocalProfileFormController extends Controller
 {
     public function index()
     {
-        return view('pages.staff.Local_Profile_Form');
+        return view('livewire.staff.Local_Profile_Form');
     }
 
     public function store(Request $request)

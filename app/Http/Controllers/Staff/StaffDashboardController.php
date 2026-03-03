@@ -8,6 +8,6 @@ class StaffDashboardController extends Controller
 {
     public function index()
     {
-        return view('pages.staff.dashboard');
+        return view('livewire.staff.dashboard');
     }
 }

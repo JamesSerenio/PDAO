@@ -4,17 +4,17 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 
-// Admin Controllers (stay controller-based)
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminMapController;
-
-// ✅ Keep this controller ONLY for POST submit (temporary)
+// ✅ Keep this controller ONLY for POST submit (saving)
 use App\Http\Controllers\Staff\LocalProfileFormController;
 
+// ✅ Livewire Admin Pages
+use App\Livewire\Admin\Dashboard as AdminDashboard;
+use App\Livewire\Admin\Mapping as AdminMapping;
+
 // ✅ Livewire Staff Pages
-use App\Livewire\Staff\Dashboard;
-use App\Livewire\Staff\Mapping;
-use App\Livewire\Staff\LocalProfileForm;
+use App\Livewire\Staff\Dashboard as StaffDashboard;
+use App\Livewire\Staff\Mapping as StaffMapping;
+use App\Livewire\Staff\LocalProfileForm as StaffLocalProfileForm;
 
 Route::get('/', function () {
     return redirect()->route('login.form');
@@ -29,15 +29,17 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // ======================
-// ADMIN (Controllers)
+// ADMIN (Livewire)
 // ======================
-Route::get('/admin', [AdminDashboardController::class, 'index'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::get('/admin/mapping', [AdminMapController::class, 'index'])
-    ->middleware(['auth', 'role:admin'])
-    ->name('admin.mapping');
+    Route::get('/admin', AdminDashboard::class)
+        ->name('admin.dashboard');
+
+    Route::get('/admin/mapping', AdminMapping::class)
+        ->name('admin.mapping');
+
+});
 
 
 // ======================
@@ -45,13 +47,17 @@ Route::get('/admin/mapping', [AdminMapController::class, 'index'])
 // ======================
 Route::middleware(['auth', 'role:staff'])->group(function () {
 
-    // ✅ Livewire pages (NO FULL REFRESH, works with wire:navigate)
-    Route::get('/staff', Dashboard::class)->name('staff.dashboard');
-    Route::get('/staff/mapping', Mapping::class)->name('staff.mapping');
-    Route::get('/staff/local-profile-form', LocalProfileForm::class)->name('staff.local_profile_form');
+    Route::get('/staff', StaffDashboard::class)
+        ->name('staff.dashboard');
+
+    Route::get('/staff/mapping', StaffMapping::class)
+        ->name('staff.mapping');
+
+    Route::get('/staff/local-profile-form', StaffLocalProfileForm::class)
+        ->name('staff.local_profile_form');
 
     // ✅ Keep POST route for saving (controller)
     Route::post('/staff/local-profile-form', [LocalProfileFormController::class, 'store'])
         ->name('staff.local_profile_form.store');
 
-}); // ✅ IMPORTANT: close group
+});

@@ -8,6 +8,6 @@ class StaffMapController extends Controller
 {
     public function index()
     {
-        return view('pages.staff.mapping');
+        return view('livewire.staff.mapping');
     }
 }

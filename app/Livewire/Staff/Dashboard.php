@@ -9,6 +9,6 @@ class Dashboard extends Component
     public function render()
     {
         // since your view is in resources/views/components/staff/dashboard.blade.php
-        return view('components.staff.dashboard');
+        return view('livewire.staff.dashboard');
     }
 }

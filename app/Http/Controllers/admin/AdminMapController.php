@@ -8,6 +8,6 @@ class AdminMapController extends Controller
 {
     public function index()
     {
-        return view('pages.admin.mapping');
+        return view('livewire.admin.mapping');
     }
 }

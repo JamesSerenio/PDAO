@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Staff;
+namespace App\Livewire\Admin;
 
 use Livewire\Component;
 
@@ -8,6 +8,6 @@ class Mapping extends Component
 {
     public function render()
     {
-        return view('livewire.staff.mapping');
+        return view('livewire.admin.mapping');
     }
 }
