@@ -580,3 +580,23 @@
 .drawer-close:active{
   transform: translateY(1px);
 }
+/* ✅ show only 3 cards then scroll */
+.results-body-scroll{
+  max-height: 420px;       /* ~3 cards */
+  overflow-y: auto;
+  padding-right: 6px;      /* para di dikit sa scrollbar */
+}
+
+/* nice scrollbar */
+.results-body-scroll::-webkit-scrollbar{
+  width: 10px;
+}
+.results-body-scroll::-webkit-scrollbar-thumb{
+  background: rgba(106,90,205,.28);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.65);
+}
+.results-body-scroll::-webkit-scrollbar-track{
+  background: rgba(15,23,42,.06);
+  border-radius: 999px;
+}

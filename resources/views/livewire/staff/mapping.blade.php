@@ -24,6 +24,7 @@
           <div id="suggestions" class="suggestions hidden"></div>
         </div>
 
+        {{-- ✅ Livewire search --}}
         <button
           id="searchBtn"
           class="btn"
@@ -46,15 +47,16 @@
     <div class="micro" id="microTip">Tip: Press Enter to search faster.</div>
   </div>
 
-  {{-- MAP + RESULTS DRAWER (RIGHT SIDE) --}}
+  {{-- MAP --}}
   <div class="map-shell anim-in" style="animation-delay:.12s">
     <div class="map-panel">
       <div wire:ignore id="map"></div>
 
-      {{-- ✅ RIGHT SIDE RESULTS "MODAL" PANEL (HIDDEN by default) --}}
-              <@if($searchBarangay)
-        <aside class="results-drawer" aria-label="Results Panel">
-        @endif
+      {{-- ✅ RESULTS DRAWER (overlay) - Livewire controlled --}}
+      <aside id="resultsDrawer"
+             class="results-drawer {{ $showResults ? '' : 'is-hidden' }}"
+             aria-label="Results Panel">
+
         <div class="results-head">
           <div class="results-title">
             <div>
@@ -67,10 +69,13 @@
               </div>
             </div>
 
-            {{-- ✅ close button --}}
-            <button type="button" id="closeResults" class="drawer-close" aria-label="Close results">
-              ×
-            </button>
+            {{-- ✅ Close button (Livewire) --}}
+            <button
+              type="button"
+              class="drawer-close"
+              aria-label="Close results"
+              wire:click="closeResults"
+            >×</button>
           </div>
 
           <div class="results-sub">
@@ -78,7 +83,8 @@
           </div>
         </div>
 
-        <div class="results-body">
+        {{-- ✅ SCROLL CONTAINER (max 3 cards visible) --}}
+        <div class="results-body results-body-scroll">
           @if (count($profiles) === 0)
             <div class="empty">
               No results. Search a barangay (example: <b>Tankulan</b>).
@@ -97,12 +103,8 @@
                     </div>
 
                     <div class="person">
-                      <div class="name">
-                        {{ $p['last_name'] }}, {{ $p['first_name'] }}
-                      </div>
-                      <div class="age">
-                        Age: <b>{{ $p['age'] ?? '—' }}</b>
-                      </div>
+                      <div class="name">{{ $p['last_name'] }}, {{ $p['first_name'] }}</div>
+                      <div class="age">Age: <b>{{ $p['age'] ?? '—' }}</b></div>
                     </div>
                   </div>
 
@@ -115,6 +117,7 @@
             </div>
           @endif
         </div>
+
       </aside>
 
     </div>
@@ -140,6 +143,7 @@
       }
       mapEl.dataset.inited = "1";
 
+      // ✅ keep names consistent (Title Case) for centers lookup
       const barangays = [
         "Agusan Canyon","Alae","Dahilayan","Dalirig","Damilag","Diclum",
         "Guilang-guilang","Kalugmanan","Lindaban","Lingion","Lunocan","Maluko",
@@ -162,26 +166,6 @@
       const searchInput = document.getElementById("searchInput");
       const searchBtn = document.getElementById("searchBtn");
       const suggestionsEl = document.getElementById("suggestions");
-
-      // ✅ drawer elements
-      const drawerEl = document.getElementById("resultsDrawer");
-      const closeBtn = document.getElementById("closeResults");
-
-      function showDrawer() {
-        if (!drawerEl) return;
-        drawerEl.classList.remove("is-hidden");
-        drawerEl.classList.add("is-shown");
-        setTimeout(() => drawerEl.classList.remove("is-shown"), 260);
-      }
-      function hideDrawer() {
-        if (!drawerEl) return;
-        drawerEl.classList.add("is-hidden");
-      }
-
-      // default hidden on load
-      hideDrawer();
-
-      closeBtn?.addEventListener("click", hideDrawer);
 
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
       window.__staffMap = map;
@@ -239,24 +223,27 @@
       }
 
       function syncToLivewireInput(value) {
-        // ✅ defer = hindi mag request habang typing
         searchInput.value = value;
         searchInput.dispatchEvent(new Event('input', { bubbles: true }));
         searchInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
       async function moveMapToBarangay(value) {
-        if (barangayCenters[value]) {
-          const [lat, lng] = barangayCenters[value];
+        const key = (value || "").trim();
+
+        // prefer manual centers
+        if (barangayCenters[key]) {
+          const [lat, lng] = barangayCenters[key];
           map.setView([lat, lng], 14, { animate: true });
           marker.setLatLng([lat, lng]);
           setCoords(lat, lng);
-          setHint("");
+          setHint(`Centered on ${key}`);
           return;
         }
 
+        // fallback search (still works)
         try {
-          const query = `${value}, Manolo Fortich, Bukidnon, Philippines`;
+          const query = `Barangay ${key}, Manolo Fortich, Bukidnon, Philippines`;
           const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
           const res = await fetch(url, { headers: { "Accept": "application/json" } });
           if (!res.ok) throw new Error("Search failed");
@@ -283,16 +270,14 @@
         const value = (v || "").trim();
         if (!value) return;
 
-        showDrawer();                 // ✅ show modal ONLY when searching
         syncToLivewireInput(value);
-        searchBtn?.click();          // ✅ triggers Livewire search
+        searchBtn?.click();
         await moveMapToBarangay(value);
 
         microTip.textContent = `✅ Showing records for: ${value}`;
         pulse(microTip);
       }
 
-      // Suggestions click = search + move map
       suggestionsEl.addEventListener("click", (e) => {
         const btn = e.target.closest(".sug-item");
         if (!btn) return;
@@ -306,11 +291,9 @@
         if (!isInside) hideSuggestions();
       });
 
-      // Typing = suggestions only
       searchInput.addEventListener("focus", handleTyping);
       searchInput.addEventListener("input", handleTyping);
 
-      // Enter = search (and show drawer)
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
         if (e.key === "Enter") {
@@ -320,7 +303,6 @@
         }
       });
 
-      // Button click: show drawer + move map
       searchBtn.addEventListener("click", () => {
         const v = (searchInput.value || "").trim();
         if (!v) {
@@ -331,7 +313,6 @@
           showSuggestions(barangays.slice(0, 8));
           return;
         }
-        showDrawer();        // ✅ show modal
         moveMapToBarangay(v);
       });
 
