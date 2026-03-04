@@ -301,7 +301,7 @@ class LocalProfileForm extends Component
                 'sporting_talent' => $this->sporting_talent,
 
                 // ✅ FIX: input-only Yes/No -> store 1/0
-                'pwd_org_affiliated' => $this->normalizeYesNoToInt($this->pwd_org_affiliated),
+                'pwd_org_affiliated' => $this->pwd_org_affiliated,
 
                 'org_contact_person' => $this->org_contact_person,
                 'org_office_address' => $this->org_office_address,
