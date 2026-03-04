@@ -51,17 +51,26 @@
     <div class="map-panel">
       <div wire:ignore id="map"></div>
 
-      {{-- ✅ RIGHT SIDE RESULTS "MODAL" PANEL --}}
-      <aside class="results-drawer" aria-label="Results Panel">
+      {{-- ✅ RIGHT SIDE RESULTS "MODAL" PANEL (HIDDEN by default) --}}
+              <@if($searchBarangay)
+        <aside class="results-drawer" aria-label="Results Panel">
+        @endif
         <div class="results-head">
           <div class="results-title">
-            <h3>Results</h3>
-            <div class="results-meta">
-              Barangay: <b>{{ $searchBarangay ?: '—' }}</b>
-              <span class="dot">•</span>
-              Records: <b>{{ count($profiles) }}</b>
-              <span wire:loading class="loading">(Loading...)</span>
+            <div>
+              <h3 style="margin:0;">Results</h3>
+              <div class="results-meta">
+                Barangay: <b>{{ $searchBarangay ?: '—' }}</b>
+                <span class="dot">•</span>
+                Records: <b>{{ count($profiles) }}</b>
+                <span wire:loading class="loading">(Loading...)</span>
+              </div>
             </div>
+
+            {{-- ✅ close button --}}
+            <button type="button" id="closeResults" class="drawer-close" aria-label="Close results">
+              ×
+            </button>
           </div>
 
           <div class="results-sub">
@@ -153,6 +162,26 @@
       const searchInput = document.getElementById("searchInput");
       const searchBtn = document.getElementById("searchBtn");
       const suggestionsEl = document.getElementById("suggestions");
+
+      // ✅ drawer elements
+      const drawerEl = document.getElementById("resultsDrawer");
+      const closeBtn = document.getElementById("closeResults");
+
+      function showDrawer() {
+        if (!drawerEl) return;
+        drawerEl.classList.remove("is-hidden");
+        drawerEl.classList.add("is-shown");
+        setTimeout(() => drawerEl.classList.remove("is-shown"), 260);
+      }
+      function hideDrawer() {
+        if (!drawerEl) return;
+        drawerEl.classList.add("is-hidden");
+      }
+
+      // default hidden on load
+      hideDrawer();
+
+      closeBtn?.addEventListener("click", hideDrawer);
 
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
       window.__staffMap = map;
@@ -254,8 +283,9 @@
         const value = (v || "").trim();
         if (!value) return;
 
+        showDrawer();                 // ✅ show modal ONLY when searching
         syncToLivewireInput(value);
-        searchBtn?.click(); // ✅ dito lang magse-search
+        searchBtn?.click();          // ✅ triggers Livewire search
         await moveMapToBarangay(value);
 
         microTip.textContent = `✅ Showing records for: ${value}`;
@@ -280,7 +310,7 @@
       searchInput.addEventListener("focus", handleTyping);
       searchInput.addEventListener("input", handleTyping);
 
-      // Enter = search
+      // Enter = search (and show drawer)
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
         if (e.key === "Enter") {
@@ -290,7 +320,7 @@
         }
       });
 
-      // Button click: Livewire handles search; JS moves map too
+      // Button click: show drawer + move map
       searchBtn.addEventListener("click", () => {
         const v = (searchInput.value || "").trim();
         if (!v) {
@@ -301,6 +331,7 @@
           showSuggestions(barangays.slice(0, 8));
           return;
         }
+        showDrawer();        // ✅ show modal
         moveMapToBarangay(v);
       });
 

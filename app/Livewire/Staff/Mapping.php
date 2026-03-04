@@ -11,6 +11,9 @@ class Mapping extends Component
     public string $searchBarangay = '';
     public array $profiles = [];
 
+    // ✅ NEW: control kung lalabas ang results modal/drawer
+    public bool $showResults = false;
+
     public array $barangays = [
         "Agusan Canyon","Alae","Dahilayan","Dalirig","Damilag","Diclum",
         "Guilang-guilang","Kalugmanan","Lindaban","Lingion","Lunocan","Maluko",
@@ -21,14 +24,23 @@ class Mapping extends Component
     public function mount(): void
     {
         $this->profiles = [];
+        $this->showResults = false; // ✅ hidden on load
+    }
+
+    // ✅ Close button handler (X)
+    public function closeResults(): void
+    {
+        $this->showResults = false;
     }
 
     public function search(): void
     {
         $b = trim($this->searchBarangay);
 
+        // ✅ if empty: clear + hide modal
         if ($b === '') {
             $this->profiles = [];
+            $this->showResults = false;
             return;
         }
 
@@ -82,6 +94,9 @@ class Mapping extends Component
                 'disability_types' => $p->disability_types ?: '—',
             ];
         })->toArray();
+
+        // ✅ after searching: show modal always (kahit 0 results, lalabas pa rin)
+        $this->showResults = true;
     }
 
     public function render()
