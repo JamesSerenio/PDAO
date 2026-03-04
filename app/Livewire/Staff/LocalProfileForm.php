@@ -38,7 +38,7 @@ class LocalProfileForm extends Component
     public $reporting_unit_office_section;
     public $approved_by;
 
-    // ✅ PHP 8.2 safe
+    // ✅ age UI only
     public $age = '';
 
     // ---------- uploads ----------
@@ -57,9 +57,22 @@ class LocalProfileForm extends Component
     // ---------- household ----------
     public $household_members = [];
 
+    // ✅ options holders (so blade has data)
+    public $disabilityTypeOptions = [];
+    public $causeCongenitalOptions = [];
+    public $causeAcquiredOptions = [];
+
     public function mount()
     {
+        // init household
         $this->household_members = [$this->blankHouseholdRow()];
+
+        // load options
+        $this->disabilityTypeOptions = $this->getDisabilityTypeOptionsProperty();
+        $this->causeCongenitalOptions = $this->getCauseCongenitalOptionsProperty();
+        $this->causeAcquiredOptions = $this->getCauseAcquiredOptionsProperty();
+
+        // init age
         $this->age = $this->computeAge($this->date_of_birth);
     }
 
@@ -78,7 +91,7 @@ class LocalProfileForm extends Component
         ];
     }
 
-    // ✅ auto compute age (Livewire-safe naming)
+    // ✅ auto compute age
     public function updatedDateOfBirth($value)
     {
         $this->age = $this->computeAge($value);
@@ -329,8 +342,8 @@ class LocalProfileForm extends Component
                     'occupation' => $occ ?: null,
                     'social_pension_affiliation' => $spa ?: null,
                     'monthly_income' => ($income === '' ? null : $income),
+                    // ✅ schema mo: household_members has only created_at
                     'created_at' => now(),
-                    'updated_at' => now(),
                 ];
             }
 
@@ -422,12 +435,12 @@ class LocalProfileForm extends Component
         ];
     }
 
-public function render()
-{
-    return view('livewire.staff.local-profile-form', [
-        'disabilityTypeOptions'   => $this->disabilityTypeOptions,
-        'causeCongenitalOptions'  => $this->causeCongenitalOptions,
-        'causeAcquiredOptions'    => $this->causeAcquiredOptions,
-    ]);
-}
+    public function render()
+    {
+        return view('livewire.staff.local-profile-form', [
+            'disabilityTypeOptions'   => $this->disabilityTypeOptions,
+            'causeCongenitalOptions'  => $this->causeCongenitalOptions,
+            'causeAcquiredOptions'    => $this->causeAcquiredOptions,
+        ]);
+    }
 }

@@ -25,7 +25,12 @@
   </div>
 
   <div class="lpf-card-body">
-    <form class="lpf-form" wire:submit.prevent="save" enctype="multipart/form-data">
+    <form
+      class="lpf-form"
+      wire:submit.prevent="save"
+      enctype="multipart/form-data"
+      onkeydown="if(event.key==='Enter' && event.target.tagName!=='TEXTAREA'){ event.preventDefault(); }"
+    >
 
       {{-- SECTION 1 --}}
       <div class="lpf-section">
@@ -65,12 +70,13 @@
 
           <div class="lpf-field">
             <label class="lpf-label" for="date_of_birth">Date of Birth</label>
-            <input id="date_of_birth" class="lpf-input" type="date" wire:model="date_of_birth">
+            {{-- ✅ LIVE para instant age --}}
+            <input id="date_of_birth" class="lpf-input" type="date" wire:model.live="date_of_birth">
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="age_display">Age (Auto)</label>
-            <input id="age_display" class="lpf-input" type="text" value="{{ $age }}" readonly>
+            <input id="age_display" class="lpf-input" type="text" value="{{ $age ?: '—' }}" readonly>
             <small class="lpf-help">Auto-calculated from birthday.</small>
           </div>
 
@@ -145,7 +151,6 @@
             <input id="sitio_purok" class="lpf-input" type="text" wire:model.defer="sitio_purok">
           </div>
 
-          {{-- ✅ UPDATED BARANGAY DROPDOWN --}}
           <div class="lpf-field">
             <label class="lpf-label" for="barangay">Barangay</label>
             <select id="barangay" class="lpf-select" wire:model.defer="barangay">

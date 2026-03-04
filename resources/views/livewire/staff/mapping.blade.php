@@ -5,7 +5,7 @@
   <div class="map-topbar anim-in">
     <div class="left">
       <h2 class="welcome">Welcome, {{ auth()->user()->name }}</h2>
-      <p>Click map / drag marker to get latitude & longitude</p>
+      <p>Search barangay then view PWD profiles under that barangay.</p>
     </div>
 
     <div class="right">
@@ -15,7 +15,7 @@
             id="searchInput"
             class="search-input"
             type="text"
-            placeholder="Search place..."
+            placeholder="Search barangay..."
             autocomplete="off"
           />
           <div id="suggestions" class="suggestions hidden"></div>
@@ -32,11 +32,78 @@
   <div class="coords-card anim-in" style="animation-delay:.06s">
     <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
     <div class="hint" id="hint"></div>
-    <div class="micro" id="microTip">Tip: Use Enter to search faster.</div>
+    <div class="micro" id="microTip">Tip: Press Enter to search faster.</div>
   </div>
 
   <div class="panel map-panel anim-in" style="animation-delay:.12s">
-    <div id="map"></div>
+    <div wire:ignore id="map"></div>
+  </div>
+
+  {{-- ✅ RESULTS --}}
+  <div class="panel anim-in" style="animation-delay:.16s; margin-top:14px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div>
+        <h3 style="margin:0; font-size:16px;">Results</h3>
+        <div style="opacity:.75; font-size:12px;">
+          Barangay: <b>{{ $searchBarangay ?: '—' }}</b> |
+          Records: <b>{{ count($profiles) }}</b>
+        </div>
+      </div>
+
+      <div style="opacity:.75; font-size:12px;">
+        Note: This uses <code>local_profiles.barangay</code>.
+      </div>
+    </div>
+
+    <div style="overflow:auto; margin-top:12px;">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="text-align:left; border-bottom:1px solid rgba(255,255,255,.12);">
+            <th style="padding:10px 8px;">Name</th>
+            <th style="padding:10px 8px;">Sex</th>
+            <th style="padding:10px 8px;">DOB</th>
+            <th style="padding:10px 8px;">Contact</th>
+            <th style="padding:10px 8px;">Barangay</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @forelse($profiles as $p)
+            @php
+              $fullName = trim(
+                ($p->last_name ?? '') . ', ' .
+                ($p->first_name ?? '') . ' ' .
+                (($p->middle_name ?? '') ? substr($p->middle_name, 0, 1).'.' : '') . ' ' .
+                ($p->suffix ?? '')
+              );
+              $contact = $p->mobile ?: ($p->email ?: '—');
+            @endphp
+
+            <tr style="border-bottom:1px solid rgba(255,255,255,.08);">
+              <td style="padding:10px 8px; white-space:nowrap;">
+                <b>{{ $fullName }}</b>
+                <div style="font-size:12px; opacity:.75;">
+                  ID: {{ $p->id }}
+                </div>
+              </td>
+
+              <td style="padding:10px 8px;">{{ $p->sex ?? '—' }}</td>
+              <td style="padding:10px 8px;">
+                {{ $p->date_of_birth ? \Carbon\Carbon::parse($p->date_of_birth)->format('M d, Y') : '—' }}
+              </td>
+              <td style="padding:10px 8px;">{{ $contact }}</td>
+              <td style="padding:10px 8px;">{{ $p->barangay ?? '—' }}</td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="5" style="padding:14px 8px; opacity:.75;">
+                No results. Search a barangay (example: <b>Tankulan</b>).
+              </td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>
@@ -66,6 +133,13 @@
         "Santiago","Santo Niño","Tankulan","Ticala"
       ];
 
+      // ✅ Optional: center points (approx OK)
+      const barangayCenters = {
+        "Tankulan": [8.3280, 124.8630],
+        "Alae": [8.2640, 124.8710],
+        "Dahilayan": [8.2140, 125.0160],
+      };
+
       const defaultLat = 8.3132;
       const defaultLng = 124.8613;
 
@@ -79,9 +153,7 @@
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
       window.__staffMap = map;
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-      }).addTo(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
 
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
@@ -95,6 +167,7 @@
         el.classList.add("pulse");
       }
 
+      // ✅ keep lat/lng UI (front-end only)
       function setCoords(lat, lng) {
         coordsEl.textContent = `Latitude: ${lat.toFixed(6)} | Longitude: ${lng.toFixed(6)}`;
         pulse(coordsEl);
@@ -130,17 +203,80 @@
       function handleTyping() {
         const q = (searchInput.value || "").trim().toLowerCase();
         if (!q) return showSuggestions(barangays.slice(0, 8));
-
         const matches = barangays.filter(b => b.toLowerCase().includes(q)).slice(0, 8);
         showSuggestions(matches);
+      }
+
+      function livewireSearchBarangay(value) {
+        const root = mapEl.closest('[wire\\:id]');
+        if (!root) return;
+
+        const id = root.getAttribute('wire:id');
+        const cmp = Livewire.find(id);
+        if (!cmp) return;
+
+        cmp.set('searchBarangay', value);
+        cmp.call('search');
+      }
+
+      async function moveMapToBarangay(value) {
+        // If may predefined center → use it
+        if (barangayCenters[value]) {
+          const [lat, lng] = barangayCenters[value];
+          map.setView([lat, lng], 14, { animate: true });
+          marker.setLatLng([lat, lng]);
+          setCoords(lat, lng);
+          setHint("");
+          return;
+        }
+
+        // else fallback to nominatim search (barangay location)
+        try {
+          const query = `${value}, Manolo Fortich, Bukidnon, Philippines`;
+          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+          const res = await fetch(url, { headers: { "Accept": "application/json" } });
+          if (!res.ok) throw new Error("Search failed");
+
+          const data = await res.json();
+          if (!data || data.length === 0) {
+            setHint("No location found. Try another barangay.");
+            return;
+          }
+
+          const lat = parseFloat(data[0].lat);
+          const lng = parseFloat(data[0].lon);
+
+          map.setView([lat, lng], 15, { animate: true });
+          marker.setLatLng([lat, lng]);
+          setCoords(lat, lng);
+          setHint(data[0].display_name || "Found!");
+        } catch (e) {
+          setHint("Search error. Check internet connection.");
+        }
+      }
+
+      async function setAndSearchBarangay(value) {
+        const v = (value || '').trim();
+        if (!v) return;
+
+        searchInput.value = v;
+
+        // ✅ DB search
+        livewireSearchBarangay(v);
+
+        // ✅ Move map (front-end)
+        await moveMapToBarangay(v);
+
+        microTip.textContent = `✅ Showing records for: ${v}`;
+        pulse(microTip);
       }
 
       suggestionsEl.addEventListener("click", (e) => {
         const btn = e.target.closest(".sug-item");
         if (!btn) return;
-        searchInput.value = btn.getAttribute("data-value");
+        const v = btn.getAttribute("data-value");
         hideSuggestions();
-        searchPlace();
+        setAndSearchBarangay(v);
       });
 
       document.addEventListener("click", (e) => {
@@ -152,9 +288,15 @@
       searchInput.addEventListener("input", handleTyping);
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
-        if (e.key === "Enter") { hideSuggestions(); searchPlace(); }
+        if (e.key === "Enter") {
+          hideSuggestions();
+          const v = (searchInput.value || '').trim();
+          if (!v) return;
+          setAndSearchBarangay(v);
+        }
       });
 
+      // initial coords
       setCoords(defaultLat, defaultLng);
 
       map.on("click", (e) => {
@@ -173,59 +315,20 @@
         pulse(microTip);
       });
 
-      async function searchPlace() {
-        const q = (searchInput.value || "").trim();
-        if (!q) {
-          setHint("Type a place name first.");
-          microTip.textContent = "⚠️ Please enter a place to search.";
+      // ✅ Button search (barangay)
+      searchBtn.addEventListener("click", () => {
+        hideSuggestions();
+        const v = (searchInput.value || '').trim();
+        if (!v) {
+          setHint("Type a barangay name first.");
+          microTip.textContent = "⚠️ Please enter a barangay to search.";
           pulse(microTip);
           searchInput.focus();
           showSuggestions(barangays.slice(0, 8));
           return;
         }
-
-        setHint("Searching...");
-        searchBtn.classList.add("loading");
-        microTip.textContent = "🔎 Searching location...";
-        pulse(microTip);
-
-        try {
-          const query = `${q}, Manolo Fortich, Bukidnon, Philippines`;
-          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
-          const res = await fetch(url, { headers: { "Accept": "application/json" } });
-          if (!res.ok) throw new Error("Search failed");
-
-          const data = await res.json();
-          if (!data || data.length === 0) {
-            setHint("No results. Try a more specific keyword.");
-            microTip.textContent = "❌ No result. Try adding city/province.";
-            pulse(microTip);
-            return;
-          }
-
-          const lat = parseFloat(data[0].lat);
-          const lng = parseFloat(data[0].lon);
-
-          map.setView([lat, lng], 15, { animate: true });
-          marker.setLatLng([lat, lng]);
-          setCoords(lat, lng);
-
-          setHint(data[0].display_name || "Found!");
-          microTip.textContent = "✅ Location found and marker moved.";
-          pulse(microTip);
-
-          setTimeout(() => map.invalidateSize(true), 120);
-
-        } catch (err) {
-          setHint("Error searching. Check internet connection and try again.");
-          microTip.textContent = "⚠️ Search error. Try again.";
-          pulse(microTip);
-        } finally {
-          searchBtn.classList.remove("loading");
-        }
-      }
-
-      searchBtn.addEventListener("click", () => { hideSuggestions(); searchPlace(); });
+        setAndSearchBarangay(v);
+      });
 
       // ✅ SPA navigation support
       document.addEventListener("livewire:navigated", () => {
