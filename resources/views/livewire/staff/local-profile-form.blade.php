@@ -348,13 +348,11 @@
         <div class="lpf-section-title">Organization & ID References</div>
 
         <div class="lpf-grid lpf-stagger">
+          {{-- ✅ FIX: input-only Yes/No (not dropdown) --}}
           <div class="lpf-field">
             <label class="lpf-label">PWD Organization Affiliated?</label>
-            <select class="lpf-select" wire:model.defer="pwd_org_affiliated">
-              <option value="">-- Select --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
+            <input class="lpf-input" type="text" wire:model.defer="pwd_org_affiliated" placeholder="Yes / No">
+            <small class="lpf-help">Type only: Yes or No</small>
           </div>
 
           <div class="lpf-field">
@@ -440,7 +438,13 @@
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.relationship_to_pwd"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.occupation"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.social_pension_affiliation"></td>
-                  <td><input class="lpf-input lpf-input-sm" type="number" step="0.01" wire:model.defer="household_members.{{ $i }}.monthly_income"></td>
+
+                  {{-- ✅ FIX: LIVE para auto-total agad --}}
+                  <td>
+                    <input class="lpf-input lpf-input-sm" type="number" step="0.01"
+                           wire:model.live="household_members.{{ $i }}.monthly_income">
+                  </td>
+
                   <td>
                     <button type="button" class="lpf-mini lpf-mini-danger" wire:click="removeHouseholdMember({{ $i }})">
                       Remove
@@ -457,9 +461,11 @@
             + Add Member
           </button>
 
+          {{-- ✅ FIX: readonly kasi auto-total from monthly incomes --}}
           <div class="lpf-field" style="max-width:260px;">
             <label class="lpf-label">Total Family Income</label>
-            <input class="lpf-input" type="number" step="0.01" wire:model.defer="total_family_income">
+            <input class="lpf-input" type="text" value="{{ $total_family_income ?? '' }}" readonly>
+            <small class="lpf-help">Auto-total from Household Monthly Income.</small>
           </div>
         </div>
       </div>

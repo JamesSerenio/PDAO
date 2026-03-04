@@ -27,7 +27,7 @@ class LocalProfileForm extends Component
     public $education_level, $employment_status, $employment_category, $specific_occupation, $employment_type, $registered_voter;
     public $special_skills, $sporting_talent;
 
-    // ✅ make this input-only Yes/No (we'll store as 1/0)
+    // ✅ organization / group name
     public $pwd_org_affiliated;
 
     public $org_contact_person, $org_office_address, $org_tel_mobile;
@@ -202,7 +202,7 @@ class LocalProfileForm extends Component
             'sporting_talent' => ['nullable','string'],
 
             // ✅ input only, but still validate allowed values
-            'pwd_org_affiliated' => ['nullable', Rule::in(['Yes','No','YES','NO','1','0',1,0])],
+            'pwd_org_affiliated' => ['nullable','string','max:150'],
             'org_contact_person' => ['nullable','string','max:150'],
             'org_office_address' => ['nullable','string','max:255'],
             'org_tel_mobile' => ['nullable','string','max:80'],
@@ -244,25 +244,6 @@ class LocalProfileForm extends Component
         ];
     }
 
-    // ✅ convert Yes/No input -> 1/0 for DB
-    private function normalizeYesNoToInt($value)
-    {
-        if ($value === null) return null;
-
-        $v = trim((string) $value);
-        if ($v === '') return null;
-
-        $vUpper = strtoupper($v);
-
-        if ($vUpper === 'YES') return 1;
-        if ($vUpper === 'NO') return 0;
-
-        // accept 1/0 string
-        if ($v === '1' || $v === 1) return 1;
-        if ($v === '0' || $v === 0) return 0;
-
-        return null;
-    }
 
     public function save()
     {
