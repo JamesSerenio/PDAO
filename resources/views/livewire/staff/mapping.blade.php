@@ -2,6 +2,7 @@
 
 <div class="map-wrap">
 
+  {{-- TOPBAR --}}
   <div class="map-topbar anim-in">
     <div class="left">
       <h2 class="welcome">Welcome, {{ auth()->user()->name }}</h2>
@@ -11,7 +12,7 @@
     <div class="right">
       <div class="search-mini">
         <div class="search-box">
-          {{-- ✅ FIX: DEFER binding (hindi mag network/search habang nagta-type) --}}
+          {{-- ✅ DEFER = hindi magse-search habang nagta-type --}}
           <input
             id="searchInput"
             class="search-input"
@@ -23,7 +24,6 @@
           <div id="suggestions" class="suggestions hidden"></div>
         </div>
 
-        {{-- ✅ Livewire click (dito lang magse-search) --}}
         <button
           id="searchBtn"
           class="btn"
@@ -39,71 +39,75 @@
     </div>
   </div>
 
+  {{-- COORDS CARD --}}
   <div class="coords-card anim-in" style="animation-delay:.06s">
     <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
     <div class="hint" id="hint"></div>
     <div class="micro" id="microTip">Tip: Press Enter to search faster.</div>
   </div>
 
-  <div class="panel map-panel anim-in" style="animation-delay:.12s">
-    <div wire:ignore id="map"></div>
-  </div>
+  {{-- MAP + RESULTS DRAWER (RIGHT SIDE) --}}
+  <div class="map-shell anim-in" style="animation-delay:.12s">
+    <div class="map-panel">
+      <div wire:ignore id="map"></div>
 
-  {{-- ✅ RESULTS (cards) --}}
-  <div class="panel anim-in" style="animation-delay:.16s; margin-top:14px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-      <div>
-        <h3 style="margin:0; font-size:16px;">Results</h3>
-        <div style="opacity:.75; font-size:12px;">
-          Barangay: <b>{{ $searchBarangay ?: '—' }}</b> |
-          Records: <b>{{ count($profiles) }}</b>
-          <span wire:loading style="margin-left:8px; opacity:.75;">(Loading...)</span>
-        </div>
-      </div>
-
-      <div style="opacity:.75; font-size:12px;">
-        Showing: <code>Photo, Lastname, Firstname, Age, Disability Types</code>
-      </div>
-    </div>
-
-    <div style="margin-top:12px;">
-      @if (count($profiles) === 0)
-        <div style="padding:14px 10px; opacity:.75;">
-          No results. Search a barangay (example: <b>Tankulan</b>).
-        </div>
-      @else
-        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:12px;">
-          @foreach($profiles as $p)
-            <div style="border:1px solid rgba(255,255,255,.10); border-radius:16px; padding:12px; background: rgba(255,255,255,.03);">
-              <div style="display:flex; gap:12px; align-items:center;">
-                <div style="width:64px; height:64px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.12); flex:0 0 auto; background: rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center;">
-                  @if(!empty($p['photo_url']))
-                    <img src="{{ $p['photo_url'] }}" alt="Photo" style="width:100%; height:100%; object-fit:cover;">
-                  @else
-                    <span style="opacity:.6; font-size:12px;">No Photo</span>
-                  @endif
-                </div>
-
-                <div style="min-width:0;">
-                  <div style="font-weight:800; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                    {{ $p['last_name'] }}, {{ $p['first_name'] }}
-                  </div>
-                  <div style="font-size:12px; opacity:.75;">
-                    Age: <b>{{ $p['age'] ?? '—' }}</b>
-                  </div>
-                </div>
-              </div>
-
-              <div style="margin-top:10px; font-size:12px; opacity:.85; line-height:1.35;">
-                <div style="opacity:.7; font-size:11px; margin-bottom:4px;">Types of Disability</div>
-                <div style="font-weight:600;">
-                  {{ $p['disability_types'] }}
-                </div>
-              </div>
+      {{-- ✅ RIGHT SIDE RESULTS "MODAL" PANEL --}}
+      <aside class="results-drawer" aria-label="Results Panel">
+        <div class="results-head">
+          <div class="results-title">
+            <h3>Results</h3>
+            <div class="results-meta">
+              Barangay: <b>{{ $searchBarangay ?: '—' }}</b>
+              <span class="dot">•</span>
+              Records: <b>{{ count($profiles) }}</b>
+              <span wire:loading class="loading">(Loading...)</span>
             </div>
-          @endforeach
+          </div>
+
+          <div class="results-sub">
+            Showing: <code>Photo, Lastname, Firstname, Age, Disability Types</code>
+          </div>
         </div>
-      @endif
+
+        <div class="results-body">
+          @if (count($profiles) === 0)
+            <div class="empty">
+              No results. Search a barangay (example: <b>Tankulan</b>).
+            </div>
+          @else
+            <div class="cards">
+              @foreach($profiles as $p)
+                <div class="card">
+                  <div class="card-top">
+                    <div class="avatar">
+                      @if(!empty($p['photo_url']))
+                        <img src="{{ $p['photo_url'] }}" alt="Photo">
+                      @else
+                        <span>No Photo</span>
+                      @endif
+                    </div>
+
+                    <div class="person">
+                      <div class="name">
+                        {{ $p['last_name'] }}, {{ $p['first_name'] }}
+                      </div>
+                      <div class="age">
+                        Age: <b>{{ $p['age'] ?? '—' }}</b>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-mid">
+                    <div class="label">Types of Disability</div>
+                    <div class="value">{{ $p['disability_types'] }}</div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          @endif
+        </div>
+      </aside>
+
     </div>
   </div>
 
@@ -206,8 +210,7 @@
       }
 
       function syncToLivewireInput(value) {
-        // ✅ With wire:model.defer, this will NOT send request while typing.
-        // It will only be sent on the next Livewire action (wire:click search).
+        // ✅ defer = hindi mag request habang typing
         searchInput.value = value;
         searchInput.dispatchEvent(new Event('input', { bubbles: true }));
         searchInput.dispatchEvent(new Event('change', { bubbles: true }));
@@ -251,20 +254,15 @@
         const value = (v || "").trim();
         if (!value) return;
 
-        // ✅ Update input + Livewire deferred value
         syncToLivewireInput(value);
-
-        // ✅ Only now trigger the real Livewire search
-        searchBtn?.click();
-
-        // ✅ Move map after triggering search
+        searchBtn?.click(); // ✅ dito lang magse-search
         await moveMapToBarangay(value);
 
         microTip.textContent = `✅ Showing records for: ${value}`;
         pulse(microTip);
       }
 
-      // Suggestions click (dito lang magse-search)
+      // Suggestions click = search + move map
       suggestionsEl.addEventListener("click", (e) => {
         const btn = e.target.closest(".sug-item");
         if (!btn) return;
@@ -278,11 +276,11 @@
         if (!isInside) hideSuggestions();
       });
 
-      // Typing: suggestions only (NO search)
+      // Typing = suggestions only
       searchInput.addEventListener("focus", handleTyping);
       searchInput.addEventListener("input", handleTyping);
 
-      // Enter: search (YES)
+      // Enter = search
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
         if (e.key === "Enter") {
@@ -292,7 +290,7 @@
         }
       });
 
-      // Button click: let Livewire run search; we just move map too
+      // Button click: Livewire handles search; JS moves map too
       searchBtn.addEventListener("click", () => {
         const v = (searchInput.value || "").trim();
         if (!v) {
@@ -303,12 +301,9 @@
           showSuggestions(barangays.slice(0, 8));
           return;
         }
-        // NOTE: Livewire search happens via wire:click on the button.
-        // Here we only move the map + keep UI updated.
         moveMapToBarangay(v);
       });
 
-      // initial coords
       setCoords(defaultLat, defaultLng);
 
       map.on("click", (e) => {
