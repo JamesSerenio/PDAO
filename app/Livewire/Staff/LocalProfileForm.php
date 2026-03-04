@@ -38,7 +38,7 @@ class LocalProfileForm extends Component
     public $reporting_unit_office_section;
     public $approved_by;
 
-    // ✅ age UI only
+    // ✅ age display (UI only)
     public $age = '';
 
     // ---------- uploads ----------
@@ -57,22 +57,9 @@ class LocalProfileForm extends Component
     // ---------- household ----------
     public $household_members = [];
 
-    // ✅ options holders (so blade has data)
-    public $disabilityTypeOptions = [];
-    public $causeCongenitalOptions = [];
-    public $causeAcquiredOptions = [];
-
     public function mount()
     {
-        // init household
         $this->household_members = [$this->blankHouseholdRow()];
-
-        // load options
-        $this->disabilityTypeOptions = $this->getDisabilityTypeOptionsProperty();
-        $this->causeCongenitalOptions = $this->getCauseCongenitalOptionsProperty();
-        $this->causeAcquiredOptions = $this->getCauseAcquiredOptionsProperty();
-
-        // init age
         $this->age = $this->computeAge($this->date_of_birth);
     }
 
@@ -123,6 +110,23 @@ class LocalProfileForm extends Component
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
         }
+    }
+
+    // ✅ converts '' -> null, "1,234.50" -> 1234.50
+    private function normalizeDecimal($value)
+    {
+        if ($value === null) return null;
+
+        $v = trim((string) $value);
+        if ($v === '') return null;
+
+        // remove commas
+        $v = str_replace(',', '', $v);
+
+        // if not numeric, treat as null (prevents SQL error)
+        if (!is_numeric($v)) return null;
+
+        return $v;
     }
 
     public function rules()
@@ -177,7 +181,7 @@ class LocalProfileForm extends Component
             'phn_no' => ['nullable','string','max:30'],
             'philhealth_no' => ['nullable','string','max:30'],
 
-            'total_family_income' => ['nullable','numeric','min:0'],
+            'total_family_income' => ['nullable'], // ✅ we normalize it ourselves
 
             'interviewee_name' => ['nullable','string','max:150'],
             'interviewee_relationship' => ['nullable','string','max:100'],
@@ -201,7 +205,7 @@ class LocalProfileForm extends Component
             'household_members.*.relationship_to_pwd' => ['nullable','string','max:120'],
             'household_members.*.occupation' => ['nullable','string','max:150'],
             'household_members.*.social_pension_affiliation' => ['nullable','string','max:120'],
-            'household_members.*.monthly_income' => ['nullable','numeric','min:0'],
+            'household_members.*.monthly_income' => ['nullable'], // ✅ normalize too
         ];
     }
 
@@ -270,7 +274,8 @@ class LocalProfileForm extends Component
                 'phn_no' => $this->phn_no,
                 'philhealth_no' => $this->philhealth_no,
 
-                'total_family_income' => $this->total_family_income,
+                // ✅ FIX: never insert '' to decimal
+                'total_family_income' => $this->normalizeDecimal($this->total_family_income),
 
                 'interviewee_name' => $this->interviewee_name,
                 'interviewee_relationship' => $this->interviewee_relationship,
@@ -319,7 +324,7 @@ class LocalProfileForm extends Component
                 $rel = trim((string)($row['relationship_to_pwd'] ?? ''));
                 $occ = trim((string)($row['occupation'] ?? ''));
                 $spa = trim((string)($row['social_pension_affiliation'] ?? ''));
-                $income = $row['monthly_income'] ?? null;
+                $income = $this->normalizeDecimal($row['monthly_income'] ?? null);
 
                 $anyFilled = ($name !== '')
                     || ($dob !== null && $dob !== '')
@@ -328,7 +333,7 @@ class LocalProfileForm extends Component
                     || ($rel !== '')
                     || ($occ !== '')
                     || ($spa !== '')
-                    || ($income !== null && $income !== '');
+                    || ($income !== null);
 
                 if (!$anyFilled) continue;
 
@@ -341,9 +346,9 @@ class LocalProfileForm extends Component
                     'relationship_to_pwd' => $rel ?: null,
                     'occupation' => $occ ?: null,
                     'social_pension_affiliation' => $spa ?: null,
-                    'monthly_income' => ($income === '' ? null : $income),
-                    // ✅ schema mo: household_members has only created_at
+                    'monthly_income' => $income,
                     'created_at' => now(),
+                    // ✅ FIX: remove updated_at because your schema has only created_at
                 ];
             }
 
