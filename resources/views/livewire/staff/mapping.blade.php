@@ -39,7 +39,7 @@
     <div wire:ignore id="map"></div>
   </div>
 
-  {{-- ✅ RESULTS --}}
+  {{-- ✅ RESULTS (cards / modal-like) --}}
   <div class="panel anim-in" style="animation-delay:.16s; margin-top:14px;">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
       <div>
@@ -51,58 +51,48 @@
       </div>
 
       <div style="opacity:.75; font-size:12px;">
-        Note: This uses <code>local_profiles.barangay</code>.
+        Showing: <code>Photo, Lastname, Firstname, Age, Disability Types</code>
       </div>
     </div>
 
-    <div style="overflow:auto; margin-top:12px;">
-      <table style="width:100%; border-collapse:collapse;">
-        <thead>
-          <tr style="text-align:left; border-bottom:1px solid rgba(255,255,255,.12);">
-            <th style="padding:10px 8px;">Name</th>
-            <th style="padding:10px 8px;">Sex</th>
-            <th style="padding:10px 8px;">DOB</th>
-            <th style="padding:10px 8px;">Contact</th>
-            <th style="padding:10px 8px;">Barangay</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          @forelse($profiles as $p)
-            @php
-              $fullName = trim(
-                ($p->last_name ?? '') . ', ' .
-                ($p->first_name ?? '') . ' ' .
-                (($p->middle_name ?? '') ? substr($p->middle_name, 0, 1).'.' : '') . ' ' .
-                ($p->suffix ?? '')
-              );
-              $contact = $p->mobile ?: ($p->email ?: '—');
-            @endphp
-
-            <tr style="border-bottom:1px solid rgba(255,255,255,.08);">
-              <td style="padding:10px 8px; white-space:nowrap;">
-                <b>{{ $fullName }}</b>
-                <div style="font-size:12px; opacity:.75;">
-                  ID: {{ $p->id }}
+    <div style="margin-top:12px;">
+      @if (count($profiles) === 0)
+        <div style="padding:14px 10px; opacity:.75;">
+          No results. Search a barangay (example: <b>Tankulan</b>).
+        </div>
+      @else
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:12px;">
+          @foreach($profiles as $p)
+            <div style="border:1px solid rgba(255,255,255,.10); border-radius:16px; padding:12px; background: rgba(255,255,255,.03);">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:64px; height:64px; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.12); flex:0 0 auto; background: rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center;">
+                  @if(!empty($p['photo_url']))
+                    <img src="{{ $p['photo_url'] }}" alt="Photo" style="width:100%; height:100%; object-fit:cover;">
+                  @else
+                    <span style="opacity:.6; font-size:12px;">No Photo</span>
+                  @endif
                 </div>
-              </td>
 
-              <td style="padding:10px 8px;">{{ $p->sex ?? '—' }}</td>
-              <td style="padding:10px 8px;">
-                {{ $p->date_of_birth ? \Carbon\Carbon::parse($p->date_of_birth)->format('M d, Y') : '—' }}
-              </td>
-              <td style="padding:10px 8px;">{{ $contact }}</td>
-              <td style="padding:10px 8px;">{{ $p->barangay ?? '—' }}</td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="5" style="padding:14px 8px; opacity:.75;">
-                No results. Search a barangay (example: <b>Tankulan</b>).
-              </td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+                <div style="min-width:0;">
+                  <div style="font-weight:800; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    {{ $p['last_name'] }}, {{ $p['first_name'] }}
+                  </div>
+                  <div style="font-size:12px; opacity:.75;">
+                    Age: <b>{{ $p['age'] ?? '—' }}</b>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top:10px; font-size:12px; opacity:.85; line-height:1.35;">
+                <div style="opacity:.7; font-size:11px; margin-bottom:4px;">Types of Disability</div>
+                <div style="font-weight:600;">
+                  {{ $p['disability_types'] }}
+                </div>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endif
     </div>
   </div>
 
@@ -116,7 +106,6 @@
       const mapEl = document.getElementById("map");
       if (!mapEl) return;
 
-      // ✅ prevent re-initialization
       if (mapEl.dataset.inited === "1") {
         if (window.__staffMap) {
           setTimeout(() => window.__staffMap.invalidateSize(true), 60);
@@ -133,7 +122,6 @@
         "Santiago","Santo Niño","Tankulan","Ticala"
       ];
 
-      // ✅ Optional: center points (approx OK)
       const barangayCenters = {
         "Tankulan": [8.3280, 124.8630],
         "Alae": [8.2640, 124.8710],
@@ -167,7 +155,6 @@
         el.classList.add("pulse");
       }
 
-      // ✅ keep lat/lng UI (front-end only)
       function setCoords(lat, lng) {
         coordsEl.textContent = `Latitude: ${lat.toFixed(6)} | Longitude: ${lng.toFixed(6)}`;
         pulse(coordsEl);
@@ -220,7 +207,6 @@
       }
 
       async function moveMapToBarangay(value) {
-        // If may predefined center → use it
         if (barangayCenters[value]) {
           const [lat, lng] = barangayCenters[value];
           map.setView([lat, lng], 14, { animate: true });
@@ -230,7 +216,6 @@
           return;
         }
 
-        // else fallback to nominatim search (barangay location)
         try {
           const query = `${value}, Manolo Fortich, Bukidnon, Philippines`;
           const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
@@ -264,7 +249,7 @@
         // ✅ DB search
         livewireSearchBarangay(v);
 
-        // ✅ Move map (front-end)
+        // ✅ Move map
         await moveMapToBarangay(v);
 
         microTip.textContent = `✅ Showing records for: ${v}`;
@@ -296,7 +281,6 @@
         }
       });
 
-      // initial coords
       setCoords(defaultLat, defaultLng);
 
       map.on("click", (e) => {
@@ -315,7 +299,6 @@
         pulse(microTip);
       });
 
-      // ✅ Button search (barangay)
       searchBtn.addEventListener("click", () => {
         hideSuggestions();
         const v = (searchInput.value || '').trim();
@@ -330,7 +313,6 @@
         setAndSearchBarangay(v);
       });
 
-      // ✅ SPA navigation support
       document.addEventListener("livewire:navigated", () => {
         setTimeout(() => map.invalidateSize(true), 60);
         setTimeout(() => map.invalidateSize(true), 250);

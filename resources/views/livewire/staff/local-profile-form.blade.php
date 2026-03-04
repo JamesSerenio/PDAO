@@ -350,9 +350,12 @@
         <div class="lpf-grid lpf-stagger">
           {{-- ✅ FIX: input-only Yes/No (not dropdown) --}}
           <div class="lpf-field">
-            <label class="lpf-label">PWD Organization Affiliated?</label>
-            <input class="lpf-input" type="text" wire:model.defer="pwd_org_affiliated" placeholder="Yes / No">
-            <small class="lpf-help">Type only: Yes or No</small>
+          <label class="lpf-label">PWD Organization / Group Name</label>
+          <input class="lpf-input" type="text"
+                wire:model.defer="pwd_org_affiliated"
+                placeholder="Example: PWD Association Tankulan">
+
+          <small class="lpf-help">Enter the name of the PWD organization or group.</small>
           </div>
 
           <div class="lpf-field">
