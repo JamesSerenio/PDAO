@@ -160,7 +160,7 @@
               <option value="Dahilayan">Dahilayan</option>
               <option value="Dalirig">Dalirig</option>
               <option value="Damilag">Damilag</option>
-              <option value="Diclum">Diclum</option>
+              <option value="Dicklum">Dicklum</option>
               <option value="Guilang-guilang">Guilang-guilang</option>
               <option value="Kalugmanan">Kalugmanan</option>
               <option value="Lindaban">Lindaban</option>

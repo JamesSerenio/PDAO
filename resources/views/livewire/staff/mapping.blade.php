@@ -28,7 +28,7 @@
         <button
           id="searchBtn"
           class="btn"
-          type="button"
+          type="button" 
           wire:click="search"
           wire:loading.attr="disabled"
         >
@@ -83,8 +83,7 @@
           </div>
         </div>
 
-        {{-- ✅ SCROLL CONTAINER (max 3 cards visible) --}}
-        <div class="results-body results-body-scroll">
+        <div class="results-body">
           @if (count($profiles) === 0)
             <div class="empty">
               No results. Search a barangay (example: <b>Tankulan</b>).
@@ -143,12 +142,11 @@
       }
       mapEl.dataset.inited = "1";
 
-      // ✅ keep names consistent (Title Case) for centers lookup
       const barangays = [
-        "Agusan Canyon","Alae","Dahilayan","Dalirig","Damilag","Diclum",
-        "Guilang-guilang","Kalugmanan","Lindaban","Lingion","Lunocan","Maluko",
-        "Mambatangan","Mampayag","Mantibugao","Minsuro","San Miguel","Sankanan",
-        "Santiago","Santo Niño","Tankulan","Ticala"
+        "agusan canyon","alae","dahilayan","dalirig","damilag","dicklum",
+        "guilang-guilang","kalugmanan","lindaban","lingion","lunocan","maluko",
+        "mambatangan","mampayag","mantibugao","minsuro","san miguel","sankanan",
+        "santiago","santo niño","tankulan","ticala"
       ];
 
       const barangayCenters = {
@@ -223,27 +221,24 @@
       }
 
       function syncToLivewireInput(value) {
+        // ✅ makes wire:model.defer pick up value before button click
         searchInput.value = value;
         searchInput.dispatchEvent(new Event('input', { bubbles: true }));
         searchInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
       async function moveMapToBarangay(value) {
-        const key = (value || "").trim();
-
-        // prefer manual centers
-        if (barangayCenters[key]) {
-          const [lat, lng] = barangayCenters[key];
+        if (barangayCenters[value]) {
+          const [lat, lng] = barangayCenters[value];
           map.setView([lat, lng], 14, { animate: true });
           marker.setLatLng([lat, lng]);
           setCoords(lat, lng);
-          setHint(`Centered on ${key}`);
+          setHint("");
           return;
         }
 
-        // fallback search (still works)
         try {
-          const query = `Barangay ${key}, Manolo Fortich, Bukidnon, Philippines`;
+          const query = `${value}, Manolo Fortich, Bukidnon, Philippines`;
           const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
           const res = await fetch(url, { headers: { "Accept": "application/json" } });
           if (!res.ok) throw new Error("Search failed");
@@ -270,14 +265,16 @@
         const value = (v || "").trim();
         if (!value) return;
 
+        // ✅ set input for Livewire defer then click real button
         syncToLivewireInput(value);
-        searchBtn?.click();
+        searchBtn?.click();  // Livewire will set showResults=true (from your Mapping.php)
         await moveMapToBarangay(value);
 
         microTip.textContent = `✅ Showing records for: ${value}`;
         pulse(microTip);
       }
 
+      // Suggestions click = search + move map
       suggestionsEl.addEventListener("click", (e) => {
         const btn = e.target.closest(".sug-item");
         if (!btn) return;
@@ -291,9 +288,11 @@
         if (!isInside) hideSuggestions();
       });
 
+      // Typing = suggestions only
       searchInput.addEventListener("focus", handleTyping);
       searchInput.addEventListener("input", handleTyping);
 
+      // Enter = search
       searchInput.addEventListener("keydown", (e) => {
         if (e.key === "Escape") hideSuggestions();
         if (e.key === "Enter") {
@@ -303,6 +302,7 @@
         }
       });
 
+      // Button click: JS moves map only (Livewire already handles search)
       searchBtn.addEventListener("click", () => {
         const v = (searchInput.value || "").trim();
         if (!v) {
@@ -316,6 +316,7 @@
         moveMapToBarangay(v);
       });
 
+      // initial coords
       setCoords(defaultLat, defaultLng);
 
       map.on("click", (e) => {
