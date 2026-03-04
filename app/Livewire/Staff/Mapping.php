@@ -18,25 +18,28 @@ class Mapping extends Component
         "Santiago","Santo Niño","Tankulan","Ticala"
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->profiles = [];
     }
 
-    public function search()
+    public function search(): void
     {
-        $b = trim((string) $this->searchBarangay);
+        $b = trim($this->searchBarangay);
 
         if ($b === '') {
             $this->profiles = [];
             return;
         }
 
-        // ✅ TRIM + LOWER: para kahit may extra spaces / different casing sa DB
+        // ✅ normalize search (case + trim)
+        $bNormalized = mb_strtolower(trim($b));
+
         $rows = DB::table('local_profiles as lp')
             ->leftJoin('local_profile_disability_types as lpdt', 'lpdt.local_profile_id', '=', 'lp.id')
             ->leftJoin('disability_types as dt', 'dt.id', '=', 'lpdt.disability_type_id')
-            ->whereRaw('LOWER(TRIM(lp.barangay)) = LOWER(?)', [$b])
+            // ✅ IMPORTANT: compare normalized values (handles spaces/case)
+            ->whereRaw('LOWER(TRIM(lp.barangay)) = ?', [$bNormalized])
             ->groupBy('lp.id', 'lp.photo_1x1', 'lp.last_name', 'lp.first_name', 'lp.date_of_birth')
             ->orderBy('lp.last_name')
             ->orderBy('lp.first_name')
@@ -51,29 +54,32 @@ class Mapping extends Component
             ->get();
 
         $this->profiles = $rows->map(function ($p) {
-            // ✅ Age compute
-            $age = '—';
+            // ✅ age
+            $age = null;
             if (!empty($p->date_of_birth)) {
                 try {
                     $age = Carbon::parse($p->date_of_birth)->age;
                 } catch (\Throwable $e) {
-                    $age = '—';
+                    $age = null;
                 }
             }
 
-            // ✅ Photo URL (requires: php artisan storage:link)
+            // ✅ photo url
+            // DB example: local_profiles/photos/xxx.jpg
+            // URL should be: http://127.0.0.1:8000/storage/local_profiles/photos/xxx.jpg
             $photoUrl = null;
             if (!empty($p->photo_1x1)) {
-                $photoUrl = asset('storage/' . ltrim($p->photo_1x1, '/'));
+                $path = ltrim($p->photo_1x1, '/'); // remove leading slash
+                $photoUrl = asset('storage/' . $path);
             }
 
             return [
                 'id' => $p->id,
-                'last_name' => $p->last_name ?? '',
-                'first_name' => $p->first_name ?? '',
+                'last_name' => $p->last_name,
+                'first_name' => $p->first_name,
                 'age' => $age,
                 'photo_url' => $photoUrl,
-                'disability_types' => !empty($p->disability_types) ? $p->disability_types : '—',
+                'disability_types' => $p->disability_types ?: '—',
             ];
         })->toArray();
     }
