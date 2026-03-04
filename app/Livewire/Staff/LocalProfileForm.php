@@ -27,11 +27,16 @@ class LocalProfileForm extends Component
     public $education_level, $employment_status, $employment_category, $specific_occupation, $employment_type, $registered_voter;
     public $special_skills, $sporting_talent;
 
-    public $pwd_org_affiliated, $org_contact_person, $org_office_address, $org_tel_mobile;
+    // ✅ make this input-only Yes/No (we'll store as 1/0)
+    public $pwd_org_affiliated;
+
+    public $org_contact_person, $org_office_address, $org_tel_mobile;
 
     public $pwd_id_no, $id_reference_no, $sss_no, $gsis_no, $pagibig_no, $phn_no, $philhealth_no;
 
+    // ✅ will be auto-summed from household monthly incomes
     public $total_family_income;
+
     public $interviewee_name, $interviewee_relationship;
 
     public $accomplished_by_name, $accomplished_by_position;
@@ -61,6 +66,7 @@ class LocalProfileForm extends Component
     {
         $this->household_members = [$this->blankHouseholdRow()];
         $this->age = $this->computeAge($this->date_of_birth);
+        $this->recomputeTotalFamilyIncome(); // ✅ init total
     }
 
     private function blankHouseholdRow(): array
@@ -95,9 +101,51 @@ class LocalProfileForm extends Component
         }
     }
 
+    // ✅ converts '' -> null, "1,234.50" -> 1234.50
+    private function normalizeDecimal($value)
+    {
+        if ($value === null) return null;
+
+        $v = trim((string) $value);
+        if ($v === '') return null;
+
+        $v = str_replace(',', '', $v);
+
+        if (!is_numeric($v)) return null;
+
+        return $v;
+    }
+
+    // ✅ recompute total family income from household monthly_income
+    private function recomputeTotalFamilyIncome(): void
+    {
+        $sum = 0;
+
+        foreach ($this->household_members as $row) {
+            $income = $this->normalizeDecimal($row['monthly_income'] ?? null);
+            if ($income !== null) {
+                $sum += (float) $income;
+            }
+        }
+
+        // if no incomes entered, keep it null (not 0) para clean sa DB
+        $this->total_family_income = ($sum > 0) ? number_format($sum, 2, '.', '') : null;
+    }
+
+    /**
+     * ✅ Livewire hook: any time household_members changes, auto total.
+     * This catches typing, adding rows, removing rows, etc.
+     */
+    public function updatedHouseholdMembers($value = null, $name = null)
+    {
+        // only recompute if monthly_income changed or any row changed (safe to always recompute)
+        $this->recomputeTotalFamilyIncome();
+    }
+
     public function addHouseholdMember()
     {
         $this->household_members[] = $this->blankHouseholdRow();
+        $this->recomputeTotalFamilyIncome();
     }
 
     public function removeHouseholdMember($index)
@@ -110,23 +158,8 @@ class LocalProfileForm extends Component
         if (count($this->household_members) === 0) {
             $this->household_members[] = $this->blankHouseholdRow();
         }
-    }
 
-    // ✅ converts '' -> null, "1,234.50" -> 1234.50
-    private function normalizeDecimal($value)
-    {
-        if ($value === null) return null;
-
-        $v = trim((string) $value);
-        if ($v === '') return null;
-
-        // remove commas
-        $v = str_replace(',', '', $v);
-
-        // if not numeric, treat as null (prevents SQL error)
-        if (!is_numeric($v)) return null;
-
-        return $v;
+        $this->recomputeTotalFamilyIncome();
     }
 
     public function rules()
@@ -168,7 +201,8 @@ class LocalProfileForm extends Component
             'special_skills' => ['nullable','string'],
             'sporting_talent' => ['nullable','string'],
 
-            'pwd_org_affiliated' => ['nullable', Rule::in(['1','0',1,0])],
+            // ✅ input only, but still validate allowed values
+            'pwd_org_affiliated' => ['nullable', Rule::in(['Yes','No','YES','NO','1','0',1,0])],
             'org_contact_person' => ['nullable','string','max:150'],
             'org_office_address' => ['nullable','string','max:255'],
             'org_tel_mobile' => ['nullable','string','max:80'],
@@ -181,7 +215,8 @@ class LocalProfileForm extends Component
             'phn_no' => ['nullable','string','max:30'],
             'philhealth_no' => ['nullable','string','max:30'],
 
-            'total_family_income' => ['nullable'], // ✅ we normalize it ourselves
+            // ✅ auto total, but still allow manual if you want later
+            'total_family_income' => ['nullable'],
 
             'interviewee_name' => ['nullable','string','max:150'],
             'interviewee_relationship' => ['nullable','string','max:100'],
@@ -205,12 +240,35 @@ class LocalProfileForm extends Component
             'household_members.*.relationship_to_pwd' => ['nullable','string','max:120'],
             'household_members.*.occupation' => ['nullable','string','max:150'],
             'household_members.*.social_pension_affiliation' => ['nullable','string','max:120'],
-            'household_members.*.monthly_income' => ['nullable'], // ✅ normalize too
+            'household_members.*.monthly_income' => ['nullable'],
         ];
+    }
+
+    // ✅ convert Yes/No input -> 1/0 for DB
+    private function normalizeYesNoToInt($value)
+    {
+        if ($value === null) return null;
+
+        $v = trim((string) $value);
+        if ($v === '') return null;
+
+        $vUpper = strtoupper($v);
+
+        if ($vUpper === 'YES') return 1;
+        if ($vUpper === 'NO') return 0;
+
+        // accept 1/0 string
+        if ($v === '1' || $v === 1) return 1;
+        if ($v === '0' || $v === 0) return 0;
+
+        return null;
     }
 
     public function save()
     {
+        // ✅ always recompute before saving (final correct total)
+        $this->recomputeTotalFamilyIncome();
+
         $this->validate();
 
         DB::transaction(function () {
@@ -261,7 +319,9 @@ class LocalProfileForm extends Component
                 'special_skills' => $this->special_skills,
                 'sporting_talent' => $this->sporting_talent,
 
-                'pwd_org_affiliated' => ($this->pwd_org_affiliated === '' || $this->pwd_org_affiliated === null) ? null : (int) $this->pwd_org_affiliated,
+                // ✅ FIX: input-only Yes/No -> store 1/0
+                'pwd_org_affiliated' => $this->normalizeYesNoToInt($this->pwd_org_affiliated),
+
                 'org_contact_person' => $this->org_contact_person,
                 'org_office_address' => $this->org_office_address,
                 'org_tel_mobile' => $this->org_tel_mobile,
@@ -274,7 +334,7 @@ class LocalProfileForm extends Component
                 'phn_no' => $this->phn_no,
                 'philhealth_no' => $this->philhealth_no,
 
-                // ✅ FIX: never insert '' to decimal
+                // ✅ FIX: never insert '' to decimal (auto computed)
                 'total_family_income' => $this->normalizeDecimal($this->total_family_income),
 
                 'interviewee_name' => $this->interviewee_name,
@@ -348,7 +408,7 @@ class LocalProfileForm extends Component
                     'social_pension_affiliation' => $spa ?: null,
                     'monthly_income' => $income,
                     'created_at' => now(),
-                    // ✅ FIX: remove updated_at because your schema has only created_at
+                    // no updated_at (schema has only created_at)
                 ];
             }
 
