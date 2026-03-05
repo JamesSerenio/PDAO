@@ -5,7 +5,13 @@ use Carbon\Carbon;
 
 $q = trim((string) request('q', ''));
 $barangay = trim((string) request('barangay', ''));
+
+// view open
 $openId = (int) request('open', 0);
+
+// edit chooser open
+$editId = (int) request('edit', 0);
+
 $perPage = 12;
 
 // ===== LIST QUERY (summary) =====
@@ -115,6 +121,21 @@ $kv = function($label, $value){
   if (trim($v) === '') $v = '—';
   return '<div class="reg-kv"><span>'.e($label).'</span><b>'.e($v).'</b></div>';
 };
+
+// helper: build url with query
+$withQuery = function(array $extra = [], array $remove = []) {
+  $qs = request()->query();
+  foreach($remove as $k){ unset($qs[$k]); }
+  foreach($extra as $k => $v){ $qs[$k] = $v; }
+  $u = url()->current();
+  if(count($qs)) $u .= '?' . http_build_query($qs);
+  return $u;
+};
+
+// close urls
+$closeViewUrl = $withQuery([], ['open']);          // remove open only
+$closeEditUrl = $withQuery([], ['edit']);          // remove edit only
+$closeBothUrl = $withQuery([], ['open','edit']);   // remove both
 @endphp
 
 
@@ -167,7 +188,7 @@ $kv = function($label, $value){
             <th>Types of Disability</th>
             <th>Contact</th>
             <th>Registered</th>
-            <th>Open</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -176,15 +197,16 @@ $kv = function($label, $value){
             @php
               $age = $r->date_of_birth ? Carbon::parse($r->date_of_birth)->age : null;
 
-              // keep query params on open link
-              $qs = request()->query();
-              $qs['open'] = $r->id;
-              $openUrl = url()->current() . '?' . http_build_query($qs);
+              $isViewOpen = ($openId === (int)$r->id);
+              $isEditOpen = ($editId === (int)$r->id);
 
-              $isOpen = ($openId === (int)$r->id);
+              // view url
+              $viewUrl = $withQuery(['open' => $r->id], []);     // keep all, set open
+              // edit chooser url
+              $editChooserUrl = $withQuery(['edit' => $r->id], []); // keep all, set edit
             @endphp
 
-            <tr class="{{ $isOpen ? 'is-open' : '' }}">
+            <tr class="{{ $isViewOpen ? 'is-open' : '' }}">
               <td>
                 @if($r->photo_1x1)
                   <img class="reg-photo" src="{{ Storage::url($r->photo_1x1) }}" alt="Photo">
@@ -211,40 +233,66 @@ $kv = function($label, $value){
 
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
-                    <td>
+              <td class="reg-actions-cell">
+                {{-- VIEW --}}
+                @if($isViewOpen)
+                  <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
+                @else
+                  <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
+                @endif
 
-                    @php
-                        // URL without "open"
-                        $qsClose = request()->query();
-                        unset($qsClose['open']);
-                        $closeUrl = url()->current();
-                        if(count($qsClose)){
-                            $closeUrl .= '?' . http_build_query($qsClose);
-                        }
-                    @endphp
-
-                    @if($isOpen)
-
-                        <a class="reg-btn mini ghost" href="{{ $closeUrl }}">
-                            Close
-                        </a>
-
-                    @else
-
-                        <a class="reg-btn mini" href="{{ $openUrl }}">
-                            View
-                        </a>
-
-                    @endif
-
-</td>
+                {{-- EDIT --}}
+                @if($isEditOpen)
+                  <a class="reg-btn mini ghost" href="{{ $closeEditUrl }}">Close edit</a>
+                @else
+                  <a class="reg-btn mini warn" href="{{ $editChooserUrl }}">Edit</a>
+                @endif
+              </td>
             </tr>
 
+            {{-- ✅ EDIT CHOOSER ROW --}}
+            @if($isEditOpen)
+              @php
+                // base edit url (placeholder)
+                $baseEdit = url('/staff/registered/edit/' . $r->id);
+              @endphp
+              <tr class="reg-edit-row">
+                <td colspan="10">
+                  <div class="reg-edit-box">
+                    <div class="reg-edit-top">
+                      <div>
+                        <h3 class="reg-h3">Choose what to edit</h3>
+                        <div class="reg-mini reg-muted">
+                          This is prepared links. Next step: create the edit pages.
+                        </div>
+                      </div>
+                      <a class="reg-btn mini ghost" href="{{ $closeEditUrl }}">Close</a>
+                    </div>
+
+                    <div class="reg-edit-grid">
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=personal">Personal</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=address">Address</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=contact">Contact</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=education_employment">Education / Employment</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=organization">Organization</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=id_numbers">ID Numbers</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=income_interview">Income / Interview</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=office">Office</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=disability_types">Disability Types</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=disability_causes">Disability Causes</a>
+                      <a class="reg-edit-item" href="{{ $baseEdit }}?section=household_members">Household Members</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            @endif
+
             {{-- ✅ DETAILS ROW (only for selected) --}}
-            @if($isOpen && $open)
+            @if($isViewOpen && $open)
               @php
                 $openAge = $open->date_of_birth ? Carbon::parse($open->date_of_birth)->age : null;
               @endphp
+
               <tr class="reg-details-row">
                 <td colspan="10">
                   <div class="reg-details">
@@ -269,9 +317,10 @@ $kv = function($label, $value){
                     </div>
 
                     <div class="reg-grid">
-
                       <div class="reg-box">
                         <h4>Personal</h4>
+                        {!! $kv('LDR Number', $open->ldr_number) !!}
+                        {!! $kv('Profiling Date', $open->profiling_date) !!}
                         {!! $kv('Last Name', $open->last_name) !!}
                         {!! $kv('First Name', $open->first_name) !!}
                         {!! $kv('Middle Name', $open->middle_name) !!}
