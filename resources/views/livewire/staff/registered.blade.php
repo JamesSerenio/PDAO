@@ -9,8 +9,8 @@ $barangay = trim((string) request('barangay', ''));
 // view open
 $openId = (int) request('open', 0);
 
-// edit mode inside view
-$editOpenId = (int) request('edit_open', 0);
+// edit mode (inside view)
+$editMode = (int) request('editMode', 0);
 
 $perPage = 12;
 
@@ -86,14 +86,24 @@ $fullName = function($r){
 
 // ===== OPEN DETAILS (full data) =====
 $open = null;
-$openTypes = [];
-$openCauses = collect();
+
+$openTypes = [];          // names
+$openTypeIds = [];        // ids
+
+$openCauses = collect();  // view list
+$openCauseIds = [];       // ids for checkbox selected
+
 $openMembers = collect();
 
 if ($openId > 0) {
   $open = DB::table('local_profiles')->where('id', $openId)->first();
 
   if ($open) {
+    $openTypeIds = DB::table('local_profile_disability_types')
+      ->where('local_profile_id', $openId)
+      ->pluck('disability_type_id')
+      ->toArray();
+
     $openTypes = DB::table('local_profile_disability_types as lpdt')
       ->join('disability_types as dt', 'dt.id', '=', 'lpdt.disability_type_id')
       ->where('lpdt.local_profile_id', $openId)
@@ -101,10 +111,15 @@ if ($openId > 0) {
       ->pluck('dt.name')
       ->toArray();
 
+    $openCauseIds = DB::table('local_profile_disability_causes')
+      ->where('local_profile_id', $openId)
+      ->pluck('disability_cause_id')
+      ->toArray();
+
     $openCauses = DB::table('local_profile_disability_causes as lpdc')
       ->join('disability_causes as dc', 'dc.id', '=', 'lpdc.disability_cause_id')
       ->where('lpdc.local_profile_id', $openId)
-      ->select('dc.category', 'dc.name', 'lpdc.other_specify')
+      ->select('dc.id','dc.category', 'dc.name', 'lpdc.other_specify')
       ->orderBy('dc.category')
       ->orderBy('dc.name')
       ->get();
@@ -126,9 +141,8 @@ $withQuery = function(array $extra = [], array $remove = []) {
   return $u;
 };
 
-$closeViewUrl = $withQuery([], ['open','edit_open']);
+$closeViewUrl = $withQuery([], ['open','editMode']);
 @endphp
-
 
 <div class="reg-wrap">
   <div class="reg-card">
@@ -187,12 +201,11 @@ $closeViewUrl = $withQuery([], ['open','edit_open']);
           @forelse($rows as $r)
             @php
               $age = $r->date_of_birth ? Carbon::parse($r->date_of_birth)->age : null;
-              $isViewOpen = ($openId === (int)$r->id);
-
-              $viewUrl = $withQuery(['open' => $r->id], ['edit_open']); // open view, remove edit_open
+              $isOpen = ($openId === (int)$r->id);
+              $viewUrl = $withQuery(['open' => $r->id, 'editMode' => 0], []);
             @endphp
 
-            <tr class="{{ $isViewOpen ? 'is-open' : '' }}">
+            <tr class="{{ $isOpen ? 'is-open' : '' }}">
               <td>
                 @if($r->photo_1x1)
                   <img class="reg-photo" src="{{ Storage::url($r->photo_1x1) }}" alt="Photo">
@@ -220,24 +233,21 @@ $closeViewUrl = $withQuery([], ['open','edit_open']);
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
               <td class="reg-actions-cell">
-                @if($isViewOpen)
+                <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
+                @if($isOpen)
                   <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
-                @else
-                  <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
                 @endif
               </td>
             </tr>
 
-            {{-- ✅ DETAILS ROW --}}
-            @if($isViewOpen && $open)
+            {{-- ✅ DETAILS + EDIT MODE --}}
+            @if($isOpen && $open)
               @php
-                $isEditMode = ($editOpenId === (int)$openId);
-
                 $openAge = $open->date_of_birth ? Carbon::parse($open->date_of_birth)->age : null;
-
-                // edit url (inside view)
-                $startEditUrl = $withQuery(['edit_open' => $openId], []);
-                $cancelEditUrl = $withQuery([], ['edit_open']);
+                $editOnUrl  = $withQuery(['open' => $openId, 'editMode' => 1], []);
+                $editOffUrl = $withQuery(['open' => $openId, 'editMode' => 0], []);
+                $isEditing = ($editMode === 1);
+                $val = fn($x) => (string)($x ?? '');
               @endphp
 
               <tr class="reg-details-row">
@@ -254,359 +264,658 @@ $closeViewUrl = $withQuery([], ['open','edit_open']);
                           <span class="dot">•</span>
                           Age: <b>{{ $openAge ? $openAge.' yrs' : '—' }}</b>
                         </div>
+
+                        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                          @if($isEditing)
+                            <a class="reg-btn mini ghost" href="{{ $editOffUrl }}">Cancel edit</a>
+                          @else
+                            <a class="reg-btn mini" href="{{ $editOnUrl }}">Edit</a>
+                          @endif
+                        </div>
                       </div>
 
-                      <div class="reg-details-actions">
-                        @if(!$isEditMode)
-                          <a class="reg-btn mini edit" href="{{ $startEditUrl }}">Edit</a>
+                      <div class="reg-details-photo">
+                        @if($open->photo_1x1)
+                          <img id="photoPreview" class="reg-photo big" src="{{ Storage::url($open->photo_1x1) }}" alt="Photo">
                         @else
-                          <a class="reg-btn mini ghost" href="{{ $cancelEditUrl }}">Cancel</a>
+                          <img id="photoPreview" class="reg-photo big" src="" alt="Photo" style="display:none;">
                         @endif
                       </div>
                     </div>
 
-                    @if($open->photo_1x1)
-                      <div class="reg-details-photo">
-                        <img class="reg-photo big" src="{{ Storage::url($open->photo_1x1) }}" alt="Photo">
-                      </div>
-                    @endif
+                    <form
+                      method="POST"
+                      action="{{ route('staff.registered.update', $open->id) }}"
+                      enctype="multipart/form-data"
+                      class="reg-form"
+                    >
+                      @csrf
+                      @method('PUT')
 
-                    {{-- ✅ FORM ONLY WHEN EDIT MODE --}}
-                    @if($isEditMode)
-                      <form method="POST" action="{{ route('staff.registered.update', $open->id) }}" class="reg-form">
-                        @csrf
-                        @method('PUT')
-                    @endif
+                      <input type="hidden" name="_redirect" value="{{ $withQuery(['open'=>$openId,'editMode'=>0], []) }}">
 
-                    <div class="reg-grid">
+                      <div class="reg-grid">
 
-                      {{-- PERSONAL --}}
-                      <div class="reg-box">
-                        <h4>Personal</h4>
+                        {{-- PERSONAL --}}
+                        <div class="reg-box">
+                          <h4>Personal</h4>
 
-                        <div class="reg-kv">
-                          <span>LDR Number</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="ldr_number" value="{{ old('ldr_number', $open->ldr_number) }}">
-                          @else
-                            <b>{{ $open->ldr_number ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Profiling Date</span>
-                          @if($isEditMode)
-                            <input class="reg-input" type="date" name="profiling_date" value="{{ old('profiling_date', $open->profiling_date) }}">
-                          @else
-                            <b>{{ $open->profiling_date ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Last Name</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="last_name" value="{{ old('last_name', $open->last_name) }}">
-                          @else
-                            <b>{{ $open->last_name ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>First Name</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="first_name" value="{{ old('first_name', $open->first_name) }}">
-                          @else
-                            <b>{{ $open->first_name ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Middle Name</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="middle_name" value="{{ old('middle_name', $open->middle_name) }}">
-                          @else
-                            <b>{{ $open->middle_name ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Suffix</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="suffix" value="{{ old('suffix', $open->suffix) }}">
-                          @else
-                            <b>{{ $open->suffix ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Date of Birth</span>
-                          @if($isEditMode)
-                            <input class="reg-input" type="date" name="date_of_birth" value="{{ old('date_of_birth', $open->date_of_birth) }}">
-                          @else
-                            <b>{{ $open->date_of_birth ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Sex</span>
-                          @if($isEditMode)
-                            <select class="reg-input" name="sex">
-                              @php $sexVal = old('sex', $open->sex); @endphp
-                              <option value="">—</option>
-                              <option value="MALE" {{ $sexVal === 'MALE' ? 'selected' : '' }}>MALE</option>
-                              <option value="FEMALE" {{ $sexVal === 'FEMALE' ? 'selected' : '' }}>FEMALE</option>
-                            </select>
-                          @else
-                            <b>{{ $open->sex ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Blood Type</span>
-                          @if($isEditMode)
-                            @php $bt = old('blood_type', $open->blood_type); @endphp
-                            <select class="reg-input" name="blood_type">
-                              <option value="">—</option>
-                              @foreach(['A+','A-','B+','B-','AB+','AB-','O+','O-'] as $x)
-                                <option value="{{ $x }}" {{ $bt === $x ? 'selected' : '' }}>{{ $x }}</option>
-                              @endforeach
-                            </select>
-                          @else
-                            <b>{{ $open->blood_type ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Religion</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="religion" value="{{ old('religion', $open->religion) }}">
-                          @else
-                            <b>{{ $open->religion ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Ethnic Group</span>
-                          @if($isEditMode)
-                            <input class="reg-input" name="ethnic_group" value="{{ old('ethnic_group', $open->ethnic_group) }}">
-                          @else
-                            <b>{{ $open->ethnic_group ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Civil Status</span>
-                          @if($isEditMode)
-                            @php $cs = old('civil_status', $open->civil_status); @endphp
-                            <select class="reg-input" name="civil_status">
-                              <option value="">—</option>
-                              @foreach(['Single','Separated','Cohabitation (Live-in)','Married','Widow','Widower'] as $x)
-                                <option value="{{ $x }}" {{ $cs === $x ? 'selected' : '' }}>{{ $x }}</option>
-                              @endforeach
-                            </select>
-                          @else
-                            <b>{{ $open->civil_status ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                      </div>
-
-                      {{-- ADDRESS --}}
-                      <div class="reg-box">
-                        <h4>Address</h4>
-
-                        @foreach([
-                          ['House No./Street','house_no_street'],
-                          ['Sitio/Purok','sitio_purok'],
-                          ['Barangay','barangay'],
-                          ['Municipality','municipality'],
-                          ['Province','province'],
-                          ['Region','region'],
-                        ] as $f)
-                          <div class="reg-kv">
-                            <span>{{ $f[0] }}</span>
-                            @if($isEditMode)
-                              <input class="reg-input" name="{{ $f[1] }}" value="{{ old($f[1], $open->{$f[1]}) }}">
+                          <div class="reg-kv" style="border-bottom:none; padding-bottom:0;">
+                            <span>Photo (1x1)</span>
+                            @if($isEditing)
+                              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+                                <input class="reg-input" type="file" name="photo_1x1" accept="image/*" onchange="previewPhoto(event)">
+                                <small class="reg-muted">Choose new photo (optional)</small>
+                              </div>
                             @else
-                              <b>{{ $open->{$f[1]} ?: '—' }}</b>
+                              <b>{{ $open->photo_1x1 ? 'Uploaded' : '—' }}</b>
                             @endif
                           </div>
-                        @endforeach
-                      </div>
 
-                      {{-- CONTACT --}}
-                      <div class="reg-box">
-                        <h4>Contact</h4>
+                          {{-- Signature/Thumbmark --}}
+                            @php
+                            // smart display: supports 0/1 OR text like "Power Ranger"
+                            $orgVal = (string)($open->pwd_org_affiliated ?? '');
+                            $isBool = in_array($orgVal, ['0','1'], true);
+                            @endphp
 
-                        @foreach([
-                          ['Landline','landline'],
-                          ['Mobile','mobile'],
-                          ['Email','email'],
-                        ] as $f)
+                                <div class="reg-kv">
+                                <span>PWD Organization / Group Name</span>
+                                @if($isEditing)
+                                    <input class="reg-input"
+                                        name="pwd_org_affiliated"
+                                        value="{{ $val($open->pwd_org_affiliated) }}"
+                                        placeholder="e.g. Power Ranger">
+                                @else
+                                    <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
+                                @endif
+                                </div>
+
                           <div class="reg-kv">
-                            <span>{{ $f[0] }}</span>
-                            @if($isEditMode)
-                              <input class="reg-input" name="{{ $f[1] }}" value="{{ old($f[1], $open->{$f[1]}) }}">
+                            <span>LDR Number</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="ldr_number" value="{{ $val($open->ldr_number) }}">
                             @else
-                              <b>{{ $open->{$f[1]} ?: '—' }}</b>
+                              <b>{{ $open->ldr_number ?: '—' }}</b>
                             @endif
                           </div>
-                        @endforeach
-                      </div>
 
-                      {{-- Education / Employment --}}
-                      <div class="reg-box">
-                        <h4>Education / Employment</h4>
-
-                        <div class="reg-kv">
-                          <span>Education Level</span>
-                          @if($isEditMode)
-                            @php $ed = old('education_level', $open->education_level); @endphp
-                            <select class="reg-input" name="education_level">
-                              <option value="">—</option>
-                              @foreach(['None','Kindergarten','Elementary','Junior High School','Senior High','College','Vocational','Post Graduate'] as $x)
-                                <option value="{{ $x }}" {{ $ed === $x ? 'selected' : '' }}>{{ $x }}</option>
-                              @endforeach
-                            </select>
-                          @else
-                            <b>{{ $open->education_level ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Employment Status</span>
-                          @if($isEditMode)
-                            @php $es = old('employment_status', $open->employment_status); @endphp
-                            <select class="reg-input" name="employment_status">
-                              <option value="">—</option>
-                              @foreach(['Employed','Unemployed','Self-employed'] as $x)
-                                <option value="{{ $x }}" {{ $es === $x ? 'selected' : '' }}>{{ $x }}</option>
-                              @endforeach
-                            </select>
-                          @else
-                            <b>{{ $open->employment_status ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        <div class="reg-kv">
-                          <span>Employment Category</span>
-                          @if($isEditMode)
-                            @php $ec = old('employment_category', $open->employment_category); @endphp
-                            <select class="reg-input" name="employment_category">
-                              <option value="">—</option>
-                              @foreach(['Government','Private'] as $x)
-                                <option value="{{ $x }}" {{ $ec === $x ? 'selected' : '' }}>{{ $x }}</option>
-                              @endforeach
-                            </select>
-                          @else
-                            <b>{{ $open->employment_category ?: '—' }}</b>
-                          @endif
-                        </div>
-
-                        @foreach([
-                          ['Specific Occupation','specific_occupation'],
-                          ['Employment Type','employment_type'],
-                          ['Special Skills','special_skills','textarea'],
-                          ['Sporting Talent','sporting_talent','textarea'],
-                        ] as $f)
                           <div class="reg-kv">
-                            <span>{{ $f[0] }}</span>
-                            @if($isEditMode)
-                              @if(($f[2] ?? '') === 'textarea')
-                                <textarea class="reg-input" name="{{ $f[1] }}" rows="3">{{ old($f[1], $open->{$f[1]}) }}</textarea>
+                            <span>Profiling Date</span>
+                            @if($isEditing)
+                              <input class="reg-input" type="date" name="profiling_date" value="{{ $val($open->profiling_date) }}">
+                            @else
+                              <b>{{ $open->profiling_date ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Last Name</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="last_name" value="{{ $val($open->last_name) }}" required>
+                            @else
+                              <b>{{ $open->last_name ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>First Name</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="first_name" value="{{ $val($open->first_name) }}" required>
+                            @else
+                              <b>{{ $open->first_name ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Middle Name</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="middle_name" value="{{ $val($open->middle_name) }}">
+                            @else
+                              <b>{{ $open->middle_name ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Suffix</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="suffix" value="{{ $val($open->suffix) }}">
+                            @else
+                              <b>{{ $open->suffix ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Date of Birth</span>
+                            @if($isEditing)
+                              <input class="reg-input" type="date" name="date_of_birth" value="{{ $val($open->date_of_birth) }}">
+                            @else
+                              <b>{{ $open->date_of_birth ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Sex</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="sex">
+                                <option value="">—</option>
+                                <option value="MALE"   {{ $open->sex === 'MALE' ? 'selected' : '' }}>MALE</option>
+                                <option value="FEMALE" {{ $open->sex === 'FEMALE' ? 'selected' : '' }}>FEMALE</option>
+                              </select>
+                            @else
+                              <b>{{ $open->sex ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Blood Type</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="blood_type">
+                                @php $bts = ['','A+','A-','B+','B-','AB+','AB-','O+','O-']; @endphp
+                                @foreach($bts as $bt)
+                                  <option value="{{ $bt }}" {{ $open->blood_type === $bt ? 'selected' : '' }}>
+                                    {{ $bt === '' ? '—' : $bt }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->blood_type ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Religion</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="religion" value="{{ $val($open->religion) }}">
+                            @else
+                              <b>{{ $open->religion ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Ethnic Group</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="ethnic_group" value="{{ $val($open->ethnic_group) }}">
+                            @else
+                              <b>{{ $open->ethnic_group ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Civil Status</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="civil_status">
+                                @php $cs = ['','Single','Separated','Cohabitation (Live-in)','Married','Widow','Widower']; @endphp
+                                @foreach($cs as $c)
+                                  <option value="{{ $c }}" {{ $open->civil_status === $c ? 'selected' : '' }}>
+                                    {{ $c === '' ? '—' : $c }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->civil_status ?: '—' }}</b>
+                            @endif
+                          </div>
+                        </div>
+
+                        {{-- ADDRESS --}}
+                        <div class="reg-box">
+                          <h4>Address</h4>
+
+                          @foreach([
+                            ['House No./Street','house_no_street'],
+                            ['Sitio/Purok','sitio_purok'],
+                            ['Barangay','barangay'],
+                            ['Municipality','municipality'],
+                            ['Province','province'],
+                            ['Region','region'],
+                          ] as [$label,$key])
+                            <div class="reg-kv">
+                              <span>{{ $label }}</span>
+                              @if($isEditing)
+                                <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
                               @else
-                                <input class="reg-input" name="{{ $f[1] }}" value="{{ old($f[1], $open->{$f[1]}) }}">
+                                <b>{{ $open->$key ?: '—' }}</b>
                               @endif
+                            </div>
+                          @endforeach
+                        </div>
+
+                        {{-- CONTACT --}}
+                        <div class="reg-box">
+                          <h4>Contact</h4>
+
+                          @foreach([
+                            ['Landline','landline','text'],
+                            ['Mobile','mobile','text'],
+                            ['Email','email','email'],
+                          ] as [$label,$key,$type])
+                            <div class="reg-kv">
+                              <span>{{ $label }}</span>
+                              @if($isEditing)
+                                <input class="reg-input" type="{{ $type }}" name="{{ $key }}" value="{{ $val($open->$key) }}">
+                              @else
+                                <b>{{ $open->$key ?: '—' }}</b>
+                              @endif
+                            </div>
+                          @endforeach
+                        </div>
+
+                        {{-- EDUCATION / EMPLOYMENT --}}
+                        <div class="reg-box">
+                          <h4>Education / Employment</h4>
+
+                          <div class="reg-kv">
+                            <span>Education Level</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="education_level">
+                                @php $eds = ['','None','Kindergarten','Elementary','Junior High School','Senior High','College','Vocational','Post Graduate']; @endphp
+                                @foreach($eds as $e)
+                                  <option value="{{ $e }}" {{ $open->education_level === $e ? 'selected' : '' }}>
+                                    {{ $e === '' ? '—' : $e }}
+                                  </option>
+                                @endforeach
+                              </select>
                             @else
-                              <b>{{ $open->{$f[1]} ?: '—' }}</b>
+                              <b>{{ $open->education_level ?: '—' }}</b>
                             @endif
                           </div>
+
+                          <div class="reg-kv">
+                            <span>Employment Status</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="employment_status">
+                                @php $es = ['','Employed','Unemployed','Self-employed']; @endphp
+                                @foreach($es as $e)
+                                  <option value="{{ $e }}" {{ $open->employment_status === $e ? 'selected' : '' }}>
+                                    {{ $e === '' ? '—' : $e }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->employment_status ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Employment Category</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="employment_category">
+                                @php $ec = ['','Government','Private']; @endphp
+                                @foreach($ec as $e)
+                                  <option value="{{ $e }}" {{ $open->employment_category === $e ? 'selected' : '' }}>
+                                    {{ $e === '' ? '—' : $e }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->employment_category ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Specific Occupation</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="specific_occupation" value="{{ $val($open->specific_occupation) }}">
+                            @else
+                              <b>{{ $open->specific_occupation ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Employment Type</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="employment_type">
+                                @php $et = ['','Permanent','Seasonal','Contractual','Job Order','On Call']; @endphp
+                                @foreach($et as $e)
+                                  <option value="{{ $e }}" {{ $open->employment_type === $e ? 'selected' : '' }}>
+                                    {{ $e === '' ? '—' : $e }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->employment_type ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Registered Voter</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="registered_voter">
+                                <option value="">—</option>
+                                <option value="1" {{ (string)$open->registered_voter === '1' ? 'selected' : '' }}>Yes</option>
+                                <option value="0" {{ (string)$open->registered_voter === '0' ? 'selected' : '' }}>No</option>
+                              </select>
+                            @else
+                              <b>
+                                @if(is_null($open->registered_voter)) —
+                                @else {{ $open->registered_voter ? 'Yes' : 'No' }}
+                                @endif
+                              </b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Special Skills</span>
+                            @if($isEditing)
+                              <textarea class="reg-input" name="special_skills" rows="3">{{ $val($open->special_skills) }}</textarea>
+                            @else
+                              <b>{{ $open->special_skills ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Sporting Talent</span>
+                            @if($isEditing)
+                              <textarea class="reg-input" name="sporting_talent" rows="3">{{ $val($open->sporting_talent) }}</textarea>
+                            @else
+                              <b>{{ $open->sporting_talent ?: '—' }}</b>
+                            @endif
+                          </div>
+                        </div>
+
+                        {{-- ORGANIZATION --}}
+                        <div class="reg-box">
+                        <h4>Organization</h4>
+
+                        <div class="reg-kv">
+                            <span>PWD Organization / Group Name</span>
+                            @if($isEditing)
+                            <input class="reg-input"
+                                    name="pwd_org_affiliated"
+                                    value="{{ $val($open->pwd_org_affiliated) }}"
+                                    placeholder="e.g. PWD Association Tankulan">
+                            @else
+                            <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
+                            @endif
+                        </div>
+
+                        @foreach([
+                            ['Org Contact Person','org_contact_person'],
+                            ['Org Office Address','org_office_address'],
+                            ['Org Tel/Mobile','org_tel_mobile'],
+                        ] as [$label,$key])
+                            <div class="reg-kv">
+                            <span>{{ $label }}</span>
+                            @if($isEditing)
+                                <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
+                            @else
+                                <b>{{ $open->$key ?: '—' }}</b>
+                            @endif
+                            </div>
                         @endforeach
-
-                      </div>
-
-                      {{-- NOTE: For now, hindi ko ginawang editable dito ang disability types/causes/household members
-                           kasi pivot tables yan. Next step natin yan separately. --}}
-
-                      <div class="reg-box full">
-                        <h4>Disability Types</h4>
-                        <div class="reg-tags">
-                          @forelse($openTypes as $t)
-                            <span class="tag">{{ $t }}</span>
-                          @empty
-                            <span class="reg-muted">—</span>
-                          @endforelse
                         </div>
-                      </div>
 
-                      <div class="reg-box full">
-                        <h4>Causes of Disability</h4>
-                        @forelse($openCauses as $c)
-                          <div class="reg-mini">
-                            <b>{{ $c->category }}</b> • {{ $c->name }}
-                            @if($c->other_specify)
-                              <span class="reg-muted">({{ $c->other_specify }})</span>
+                        {{-- ID NUMBERS --}}
+                        <div class="reg-box">
+                          <h4>ID Numbers</h4>
+
+                          @foreach([
+                            ['ID Reference No','id_reference_no'],
+                            ['SSS No','sss_no'],
+                            ['GSIS No','gsis_no'],
+                            ['Pag-IBIG No','pagibig_no'],
+                            ['PHN No','phn_no'],
+                            ['PhilHealth No','philhealth_no'],
+                            ['PWD ID No','pwd_id_no'],
+                          ] as [$label,$key])
+                            <div class="reg-kv">
+                              <span>{{ $label }}</span>
+                              @if($isEditing)
+                                <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
+                              @else
+                                <b>{{ $open->$key ?: '—' }}</b>
+                              @endif
+                            </div>
+                          @endforeach
+                        </div>
+
+                        {{-- INCOME / INTERVIEW --}}
+                        <div class="reg-box">
+                          <h4>Income / Interview</h4>
+
+                          <div class="reg-kv">
+                            <span>Total Family Income</span>
+                            @if($isEditing)
+                              <input class="reg-input" type="number" step="0.01" name="total_family_income" value="{{ $val($open->total_family_income) }}">
+                            @else
+                              <b>{{ is_null($open->total_family_income) ? '—' : number_format((float)$open->total_family_income, 2) }}</b>
                             @endif
                           </div>
-                        @empty
-                          <div class="reg-muted">—</div>
-                        @endforelse
-                      </div>
 
-                      <div class="reg-box full">
-                        <h4>Household Members</h4>
-                        <div class="reg-table-wrap">
-                          <table class="reg-table mini-table">
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>DOB</th>
-                                <th>Civil Status</th>
-                                <th>Education</th>
-                                <th>Relationship</th>
-                                <th>Occupation</th>
-                                <th>Pension</th>
-                                <th>Income</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @forelse($openMembers as $m)
-                                <tr>
-                                  <td>{{ $m->name }}</td>
-                                  <td>{{ $m->date_of_birth ?: '—' }}</td>
-                                  <td>{{ $m->civil_status ?: '—' }}</td>
-                                  <td>{{ $m->educational_attainment ?: '—' }}</td>
-                                  <td>{{ $m->relationship_to_pwd ?: '—' }}</td>
-                                  <td>{{ $m->occupation ?: '—' }}</td>
-                                  <td>{{ $m->social_pension_affiliation ?: '—' }}</td>
-                                  <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income,2) }}</td>
-                                </tr>
-                              @empty
-                                <tr>
-                                  <td colspan="8" class="reg-empty">No household members.</td>
-                                </tr>
-                              @endforelse
-                            </tbody>
-                          </table>
+                          <div class="reg-kv">
+                            <span>Interviewee Name</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="interviewee_name" value="{{ $val($open->interviewee_name) }}">
+                            @else
+                              <b>{{ $open->interviewee_name ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Interviewee Relationship</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="interviewee_relationship" value="{{ $val($open->interviewee_relationship) }}">
+                            @else
+                              <b>{{ $open->interviewee_relationship ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          {{-- Interviewee Signature --}}
+                          <div class="reg-kv">
+                            <span>Interviewee Signature/Thumbmark (Image)</span>
+                            @if($isEditing)
+                              <input class="reg-input" type="file" name="interviewee_signature_thumbmark" accept="image/*">
+                              <small class="reg-muted">Upload (optional)</small>
+                            @else
+                              @if($open->interviewee_signature_thumbmark)
+                                <img class="sig-img" src="{{ Storage::url($open->interviewee_signature_thumbmark) }}" alt="Interviewee Signature">
+                              @else
+                                <b>—</b>
+                              @endif
+                            @endif
+                          </div>
                         </div>
-                      </div>
 
-                    </div>
+                        {{-- OFFICE --}}
+                        <div class="reg-box">
+                          <h4>Office</h4>
 
-                    {{-- ✅ SAVE BAR --}}
-                    @if($isEditMode)
-                      <div class="reg-savebar">
-                        <button class="reg-btn" type="submit">Save Changes</button>
-                        <a class="reg-btn ghost" href="{{ $cancelEditUrl }}">Cancel</a>
-                      </div>
-                      </form>
-                    @endif
+                          @foreach([
+                            ['Accomplished By (Name)','accomplished_by_name'],
+                            ['Accomplished By (Position)','accomplished_by_position'],
+                            ['Reporting Unit','reporting_unit_office_section'],
+                            ['Approved By','approved_by'],
+                          ] as [$label,$key])
+                            <div class="reg-kv">
+                              <span>{{ $label }}</span>
+                              @if($isEditing)
+                                <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
+                              @else
+                                <b>{{ $open->$key ?: '—' }}</b>
+                              @endif
+                            </div>
+                          @endforeach
 
-                  </div>
+                          <div class="reg-kv">
+                            <span>Approved Signature (Image)</span>
+                            @if($isEditing)
+                              <input class="reg-input" type="file" name="approved_signature" accept="image/*">
+                              <small class="reg-muted">Upload (optional)</small>
+                            @else
+                              @if($open->approved_signature)
+                                <img class="sig-img" src="{{ Storage::url($open->approved_signature) }}" alt="Approved Signature">
+                              @else
+                                <b>—</b>
+                              @endif
+                            @endif
+                          </div>
+                        </div>
+
+                        {{-- DISABILITY TYPES --}}
+                        <div class="reg-box full">
+                          <h4>Disability Types</h4>
+
+                          @if($isEditing)
+                            @php
+                              $allTypes = DB::table('disability_types')->orderBy('name')->get();
+                            @endphp
+
+                            <div class="reg-check-grid">
+                              @foreach($allTypes as $t)
+                                <label class="reg-check">
+                                  <input
+                                    type="checkbox"
+                                    name="disability_types[]"
+                                    value="{{ $t->id }}"
+                                    {{ in_array($t->id, $openTypeIds) ? 'checked' : '' }}
+                                  >
+                                  <span>{{ $t->name }}</span>
+                                </label>
+                              @endforeach
+                            </div>
+                          @else
+                            <div class="reg-tags">
+                              @forelse($openTypes as $t)
+                                <span class="tag">{{ $t }}</span>
+                              @empty
+                                <span class="reg-muted">—</span>
+                              @endforelse
+                            </div>
+                          @endif
+                        </div>
+
+                        {{-- CAUSES OF DISABILITY --}}
+                        <div class="reg-box full">
+                          <h4>Causes of Disability</h4>
+
+                          @if($isEditing)
+                            @php
+                              $allCauses = DB::table('disability_causes')
+                                ->orderBy('category')
+                                ->orderBy('name')
+                                ->get();
+                            @endphp
+
+                            <div class="reg-check-grid">
+                              @foreach($allCauses as $c)
+                                <label class="reg-check">
+                                  <input
+                                    type="checkbox"
+                                    name="disability_causes[]"
+                                    value="{{ $c->id }}"
+                                    {{ in_array($c->id, $openCauseIds) ? 'checked' : '' }}
+                                  >
+                                  <span>{{ $c->category }} • {{ $c->name }}</span>
+                                </label>
+
+                                {{-- optional other_specify input for "Others" --}}
+                                @if(strtolower($c->name) === 'others' && in_array($c->id, $openCauseIds))
+                                  <div class="reg-other">
+                                    <input class="reg-input" name="cause_other[{{ $c->id }}]" placeholder="Specify other..." value="{{ optional($openCauses->firstWhere('id',$c->id))->other_specify }}">
+                                  </div>
+                                @endif
+                              @endforeach
+                            </div>
+                          @else
+                            @forelse($openCauses as $c)
+                              <div class="reg-mini">
+                                <b>{{ $c->category }}</b> • {{ $c->name }}
+                                @if($c->other_specify)
+                                  <span class="reg-muted">({{ $c->other_specify }})</span>
+                                @endif
+                              </div>
+                            @empty
+                              <div class="reg-muted">—</div>
+                            @endforelse
+                          @endif
+                        </div>
+
+                        {{-- HOUSEHOLD MEMBERS --}}
+                        <div class="reg-box full">
+                          <h4>Household Members</h4>
+
+                          <div class="reg-table-wrap">
+                            <table class="reg-table mini-table">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>DOB</th>
+                                  <th>Civil Status</th>
+                                  <th>Education</th>
+                                  <th>Relationship</th>
+                                  <th>Occupation</th>
+                                  <th>Pension</th>
+                                  <th>Income</th>
+                                  @if($isEditing)
+                                    <th>Remove</th>
+                                  @endif
+                                </tr>
+                              </thead>
+
+                              <tbody id="membersBody">
+                                @forelse($openMembers as $m)
+                                  <tr>
+                                    @if($isEditing)
+                                      <td>
+                                        <input type="hidden" name="member_id[]" value="{{ $m->id }}">
+                                        <input class="reg-input" name="member_name[]" value="{{ $m->name }}">
+                                      </td>
+                                      <td><input class="reg-input" type="date" name="member_dob[]" value="{{ $m->date_of_birth }}"></td>
+                                      <td><input class="reg-input" name="member_civil_status[]" value="{{ $m->civil_status }}"></td>
+                                      <td><input class="reg-input" name="member_education[]" value="{{ $m->educational_attainment }}"></td>
+                                      <td><input class="reg-input" name="member_relationship[]" value="{{ $m->relationship_to_pwd }}"></td>
+                                      <td><input class="reg-input" name="member_occupation[]" value="{{ $m->occupation }}"></td>
+                                      <td><input class="reg-input" name="member_pension[]" value="{{ $m->social_pension_affiliation }}"></td>
+                                      <td><input class="reg-input" type="number" step="0.01" name="member_income[]" value="{{ $m->monthly_income }}"></td>
+                                      <td>
+                                        <button type="button" class="reg-btn mini ghost" onclick="removeRow(this)">X</button>
+                                        <input type="hidden" name="member_delete[]" value="0">
+                                      </td>
+                                    @else
+                                      <td>{{ $m->name }}</td>
+                                      <td>{{ $m->date_of_birth ?: '—' }}</td>
+                                      <td>{{ $m->civil_status ?: '—' }}</td>
+                                      <td>{{ $m->educational_attainment ?: '—' }}</td>
+                                      <td>{{ $m->relationship_to_pwd ?: '—' }}</td>
+                                      <td>{{ $m->occupation ?: '—' }}</td>
+                                      <td>{{ $m->social_pension_affiliation ?: '—' }}</td>
+                                      <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income,2) }}</td>
+                                    @endif
+                                  </tr>
+                                @empty
+                                  <tr>
+                                    <td colspan="{{ $isEditing ? 9 : 8 }}" class="reg-empty">No household members.</td>
+                                  </tr>
+                                @endforelse
+                              </tbody>
+                            </table>
+                          </div>
+
+                          @if($isEditing)
+                            <div style="margin-top:10px;">
+                              <button type="button" class="reg-btn mini" onclick="addMemberRow()">+ Add Member</button>
+                              <div class="reg-mini reg-muted" style="margin-top:6px;">
+                                (Add member then save to store.)
+                              </div>
+                            </div>
+                          @endif
+                        </div>
+
+                      </div>{{-- grid --}}
+
+                      @if($isEditing)
+                        <div class="reg-savebar">
+                          <button class="reg-btn" type="submit">Save Changes</button>
+                          <a class="reg-btn ghost" href="{{ $editOffUrl }}">Cancel</a>
+                        </div>
+                      @endif
+                    </form>
+
+                  </div>{{-- details --}}
                 </td>
               </tr>
             @endif
-
           @empty
             <tr>
               <td colspan="10" class="reg-empty">No records found.</td>
@@ -621,3 +930,52 @@ $closeViewUrl = $withQuery([], ['open','edit_open']);
     </div>
   </div>
 </div>
+
+<script>
+function previewPhoto(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const img = document.getElementById('photoPreview');
+  if(!img) return;
+  img.style.display = 'block';
+  img.src = URL.createObjectURL(file);
+}
+
+function addMemberRow(){
+  const tbody = document.getElementById('membersBody');
+  if(!tbody) return;
+
+  const tr = document.createElement('tr');
+
+  tr.innerHTML = `
+    <td>
+      <input type="hidden" name="member_id[]" value="">
+      <input class="reg-input" name="member_name[]" value="">
+    </td>
+    <td><input class="reg-input" type="date" name="member_dob[]" value=""></td>
+    <td><input class="reg-input" name="member_civil_status[]" value=""></td>
+    <td><input class="reg-input" name="member_education[]" value=""></td>
+    <td><input class="reg-input" name="member_relationship[]" value=""></td>
+    <td><input class="reg-input" name="member_occupation[]" value=""></td>
+    <td><input class="reg-input" name="member_pension[]" value=""></td>
+    <td><input class="reg-input" type="number" step="0.01" name="member_income[]" value=""></td>
+    <td>
+      <button type="button" class="reg-btn mini ghost" onclick="removeRow(this)">X</button>
+      <input type="hidden" name="member_delete[]" value="0">
+    </td>
+  `;
+
+  tbody.appendChild(tr);
+}
+
+function removeRow(btn){
+  const tr = btn.closest('tr');
+  if(!tr) return;
+
+  // mark delete if may hidden member_delete[]
+  const del = tr.querySelector('input[name="member_delete[]"]');
+  if(del) del.value = "1";
+
+  tr.style.display = 'none';
+}
+</script>

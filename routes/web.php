@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\StaffRegisteredController;
 
 // ✅ Livewire Admin Pages
 use App\Livewire\Admin\Dashboard as AdminDashboard;
@@ -53,8 +54,12 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::view('/staff/local-profile-form', 'pages.staff.local_profile_form')
         ->name('staff.local_profile_form');
 
-    // ✅ ✅ NEW: Registered Person (may file ka na: staff/registered.blade.php)
+    // ✅ Registered Person (registered.blade.php)
     Route::view('/staff/registered', 'pages.staff.registered')
         ->name('staff.registered');
+
+    // ✅ SAVE EDIT (for Save Changes button)
+    Route::put('/staff/registered/{id}', [StaffRegisteredController::class, 'update'])
+        ->name('staff.registered.update');
 
 });
