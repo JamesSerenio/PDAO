@@ -132,10 +132,8 @@ $withQuery = function(array $extra = [], array $remove = []) {
   return $u;
 };
 
-// close urls
-$closeViewUrl = $withQuery([], ['open']);          // remove open only
-$closeEditUrl = $withQuery([], ['edit']);          // remove edit only
-$closeBothUrl = $withQuery([], ['open','edit']);   // remove both
+// close url for edit only
+$closeEditUrl = $withQuery([], ['edit']);
 @endphp
 
 
@@ -201,9 +199,12 @@ $closeBothUrl = $withQuery([], ['open','edit']);   // remove both
               $isEditOpen = ($editId === (int)$r->id);
 
               // view url
-              $viewUrl = $withQuery(['open' => $r->id], []);     // keep all, set open
+              $viewUrl = $withQuery(['open' => $r->id], []);     // set open (view details)
               // edit chooser url
-              $editChooserUrl = $withQuery(['edit' => $r->id], []); // keep all, set edit
+              $editChooserUrl = $withQuery(['edit' => $r->id], []); // set edit (chooser row)
+
+              // base edit url (placeholder)
+              $baseEdit = url('/staff/registered/edit/' . $r->id);
             @endphp
 
             <tr class="{{ $isViewOpen ? 'is-open' : '' }}">
@@ -234,39 +235,27 @@ $closeBothUrl = $withQuery([], ['open','edit']);   // remove both
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
               <td class="reg-actions-cell">
-                {{-- VIEW --}}
-                @if($isViewOpen)
-                  <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
-                @else
-                  <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
-                @endif
+                <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
 
-                {{-- EDIT --}}
                 @if($isEditOpen)
-                  <a class="reg-btn mini ghost" href="{{ $closeEditUrl }}">Close edit</a>
+                  <a class="reg-btn mini ghost" href="{{ $closeEditUrl }}">Close</a>
                 @else
-                  <a class="reg-btn mini warn" href="{{ $editChooserUrl }}">Edit</a>
+                  <a class="reg-btn mini edit" href="{{ $editChooserUrl }}">Edit</a>
                 @endif
               </td>
             </tr>
 
             {{-- ✅ EDIT CHOOSER ROW --}}
             @if($isEditOpen)
-              @php
-                // base edit url (placeholder)
-                $baseEdit = url('/staff/registered/edit/' . $r->id);
-              @endphp
               <tr class="reg-edit-row">
                 <td colspan="10">
                   <div class="reg-edit-box">
                     <div class="reg-edit-top">
                       <div>
                         <h3 class="reg-h3">Choose what to edit</h3>
-                        <div class="reg-mini reg-muted">
-                          This is prepared links. Next step: create the edit pages.
-                        </div>
+                        <div class="reg-mini reg-muted">Select a section to edit.</div>
                       </div>
-                      <a class="reg-btn mini ghost" href="{{ $closeEditUrl }}">Close</a>
+                      {{-- ✅ REMOVED: close button here (may Close ka na sa action) --}}
                     </div>
 
                     <div class="reg-edit-grid">
@@ -296,7 +285,6 @@ $closeBothUrl = $withQuery([], ['open','edit']);   // remove both
               <tr class="reg-details-row">
                 <td colspan="10">
                   <div class="reg-details">
-
                     <div class="reg-details-top">
                       <div>
                         <h3 class="reg-h3">Full Information</h3>
@@ -462,8 +450,8 @@ $closeBothUrl = $withQuery([], ['open','edit']);   // remove both
                         </div>
                       </div>
 
-                    </div>{{-- grid --}}
-                  </div>{{-- details --}}
+                    </div>
+                  </div>
                 </td>
               </tr>
             @endif
