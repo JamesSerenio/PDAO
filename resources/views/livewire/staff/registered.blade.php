@@ -211,11 +211,33 @@ $kv = function($label, $value){
 
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
-              <td>
-                <a class="reg-btn mini {{ $isOpen ? 'ghost' : '' }}" href="{{ $openUrl }}">
-                  {{ $isOpen ? 'Opened' : 'View' }}
-                </a>
-              </td>
+                    <td>
+
+                    @php
+                        // URL without "open"
+                        $qsClose = request()->query();
+                        unset($qsClose['open']);
+                        $closeUrl = url()->current();
+                        if(count($qsClose)){
+                            $closeUrl .= '?' . http_build_query($qsClose);
+                        }
+                    @endphp
+
+                    @if($isOpen)
+
+                        <a class="reg-btn mini ghost" href="{{ $closeUrl }}">
+                            Close
+                        </a>
+
+                    @else
+
+                        <a class="reg-btn mini" href="{{ $openUrl }}">
+                            View
+                        </a>
+
+                    @endif
+
+</td>
             </tr>
 
             {{-- ✅ DETAILS ROW (only for selected) --}}
