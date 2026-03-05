@@ -53,4 +53,8 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::view('/staff/local-profile-form', 'pages.staff.local_profile_form')
         ->name('staff.local_profile_form');
 
+    // ✅ ✅ NEW: Registered Person (may file ka na: staff/registered.blade.php)
+    Route::view('/staff/registered', 'staff.registered')
+        ->name('staff.registered');
+
 });
