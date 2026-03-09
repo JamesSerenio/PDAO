@@ -240,7 +240,6 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
               </td>
             </tr>
 
-            {{-- ✅ DETAILS + EDIT MODE --}}
             @if($isOpen && $open)
               @php
                 $openAge = $open->date_of_birth ? Carbon::parse($open->date_of_birth)->age : null;
@@ -312,24 +311,33 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                             @endif
                           </div>
 
-                          {{-- Signature/Thumbmark --}}
-                            @php
-                            // smart display: supports 0/1 OR text like "Power Ranger"
-                            $orgVal = (string)($open->pwd_org_affiliated ?? '');
-                            $isBool = in_array($orgVal, ['0','1'], true);
-                            @endphp
+                          <div class="reg-kv">
+                            <span>Signature/Thumbmark</span>
+                            @if($isEditing)
+                              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+                                <input class="reg-input" type="file" name="signature_thumbmark" accept="image/*" onchange="previewSignature(event)">
+                                <small class="reg-muted">Choose signature/thumbmark (optional)</small>
+                              </div>
+                            @else
+                              @if($open->signature_thumbmark)
+                                <img id="signaturePreview" class="sig-img" src="{{ Storage::url($open->signature_thumbmark) }}" alt="Signature/Thumbmark">
+                              @else
+                                <b>—</b>
+                              @endif
+                            @endif
+                          </div>
 
-                                <div class="reg-kv">
-                                <span>PWD Organization / Group Name</span>
-                                @if($isEditing)
-                                    <input class="reg-input"
-                                        name="pwd_org_affiliated"
-                                        value="{{ $val($open->pwd_org_affiliated) }}"
-                                        placeholder="e.g. Power Ranger">
-                                @else
-                                    <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
-                                @endif
-                                </div>
+                          <div class="reg-kv">
+                            <span>PWD Organization / Group Name</span>
+                            @if($isEditing)
+                              <input class="reg-input"
+                                     name="pwd_org_affiliated"
+                                     value="{{ $val($open->pwd_org_affiliated) }}"
+                                     placeholder="e.g. Power Ranger">
+                            @else
+                              <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
+                            @endif
+                          </div>
 
                           <div class="reg-kv">
                             <span>LDR Number</span>
@@ -616,34 +624,34 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
                         {{-- ORGANIZATION --}}
                         <div class="reg-box">
-                        <h4>Organization</h4>
+                          <h4>Organization</h4>
 
-                        <div class="reg-kv">
+                          <div class="reg-kv">
                             <span>PWD Organization / Group Name</span>
                             @if($isEditing)
-                            <input class="reg-input"
-                                    name="pwd_org_affiliated"
-                                    value="{{ $val($open->pwd_org_affiliated) }}"
-                                    placeholder="e.g. PWD Association Tankulan">
+                              <input class="reg-input"
+                                     name="pwd_org_affiliated"
+                                     value="{{ $val($open->pwd_org_affiliated) }}"
+                                     placeholder="e.g. PWD Association Tankulan">
                             @else
-                            <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
+                              <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
                             @endif
-                        </div>
+                          </div>
 
-                        @foreach([
+                          @foreach([
                             ['Org Contact Person','org_contact_person'],
                             ['Org Office Address','org_office_address'],
                             ['Org Tel/Mobile','org_tel_mobile'],
-                        ] as [$label,$key])
+                          ] as [$label,$key])
                             <div class="reg-kv">
-                            <span>{{ $label }}</span>
-                            @if($isEditing)
+                              <span>{{ $label }}</span>
+                              @if($isEditing)
                                 <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
-                            @else
+                              @else
                                 <b>{{ $open->$key ?: '—' }}</b>
-                            @endif
+                              @endif
                             </div>
-                        @endforeach
+                          @endforeach
                         </div>
 
                         {{-- ID NUMBERS --}}
@@ -701,7 +709,6 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                             @endif
                           </div>
 
-                          {{-- Interviewee Signature --}}
                           <div class="reg-kv">
                             <span>Interviewee Signature/Thumbmark (Image)</span>
                             @if($isEditing)
@@ -809,7 +816,6 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                                   <span>{{ $c->category }} • {{ $c->name }}</span>
                                 </label>
 
-                                {{-- optional other_specify input for "Others" --}}
                                 @if(strtolower($c->name) === 'others' && in_array($c->id, $openCauseIds))
                                   <div class="reg-other">
                                     <input class="reg-input" name="cause_other[{{ $c->id }}]" placeholder="Specify other..." value="{{ optional($openCauses->firstWhere('id',$c->id))->other_specify }}">
@@ -902,7 +908,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                           @endif
                         </div>
 
-                      </div>{{-- grid --}}
+                      </div>
 
                       @if($isEditing)
                         <div class="reg-savebar">
@@ -912,7 +918,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                       @endif
                     </form>
 
-                  </div>{{-- details --}}
+                  </div>
                 </td>
               </tr>
             @endif
@@ -937,6 +943,28 @@ function previewPhoto(e){
   if(!file) return;
   const img = document.getElementById('photoPreview');
   if(!img) return;
+  img.style.display = 'block';
+  img.src = URL.createObjectURL(file);
+}
+
+function previewSignature(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+
+  let img = document.getElementById('signaturePreview');
+
+  if(!img){
+    img = document.createElement('img');
+    img.id = 'signaturePreview';
+    img.className = 'sig-img';
+    img.alt = 'Signature/Thumbmark Preview';
+
+    const box = e.target.closest('.reg-kv');
+    if(box){
+      box.appendChild(img);
+    }
+  }
+
   img.style.display = 'block';
   img.src = URL.createObjectURL(file);
 }
@@ -972,7 +1000,6 @@ function removeRow(btn){
   const tr = btn.closest('tr');
   if(!tr) return;
 
-  // mark delete if may hidden member_delete[]
   const del = tr.querySelector('input[name="member_delete[]"]');
   if(del) del.value = "1";
 
