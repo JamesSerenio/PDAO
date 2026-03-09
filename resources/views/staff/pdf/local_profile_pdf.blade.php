@@ -199,7 +199,7 @@
 
     .checkbox-line span {
       display: inline-block;
-      margin-right: 6px;
+      margin-right: 10px;
       white-space: nowrap;
     }
 
@@ -238,9 +238,47 @@
     }
 
     .h34 { height: 34px; }
-    .h72 { height: 72px; }
 
-    /* 19-26 section */
+    /* 14-16 */
+    .civil-row {
+      font-size: 6.6px;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .civil-row span {
+      display: inline-block;
+      margin-right: 12px;
+      white-space: nowrap;
+    }
+
+    .sec1516 {
+      font-size: 6.45px;
+      line-height: 1.06;
+    }
+
+    .sec1516 .section-title {
+      margin-bottom: 2px;
+    }
+
+    .sec1516 .item {
+      margin-bottom: 1px;
+    }
+
+    .sec1516 .subhead {
+      font-weight: bold;
+      margin: 2px 0 1px;
+    }
+
+    .underline-fill {
+      display: inline-block;
+      min-width: 78px;
+      border-bottom: 1px solid #666;
+      height: 8px;
+      vertical-align: bottom;
+    }
+
+    /* 19-26 */
     .sec1926-wrap {
       width: 100%;
     }
@@ -306,7 +344,6 @@
       padding-right: 2px;
     }
 
-    /* nested members table */
     .members-wrap {
       width: 100%;
     }
@@ -546,10 +583,11 @@
         </td>
       </tr>
 
+      <!-- 14-16 FIXED -->
       <tr>
         <td colspan="10">
           <div class="label">14. Civil Status:</div>
-          <div class="checkbox-line">
+          <div class="civil-row">
             <span>{{ $check(($open->civil_status ?? '') === 'Single') }} Single</span>
             <span>{{ $check(($open->civil_status ?? '') === 'Separated') }} Separated</span>
             <span>{{ $check(($open->civil_status ?? '') === 'Cohabitation (Live-in)') }} Cohabitation (Live-in)</span>
@@ -561,38 +599,41 @@
       </tr>
 
       <tr>
-        <td colspan="5" class="h72">
+        <td colspan="5" class="sec1516">
           <div class="section-title">15. Types of Disability:</div>
-          <div class="checkbox-line">
-            <div>{{ $check($typeChecked('Deaf or Hard of Hearing')) }} DEAF OR HARD OF HEARING</div>
-            <div>{{ $check($typeChecked('Intellectual Disability')) }} INTELLECTUAL DISABILITY</div>
-            <div>{{ $check($typeChecked('Learning Disability')) }} LEARNING DISABILITY</div>
-            <div>{{ $check($typeChecked('Mental Disability')) }} MENTAL DISABILITY</div>
-            <div>{{ $check($typeChecked('Physical Disability')) }} PHYSICAL DISABILITY</div>
-            <div>{{ $check($typeChecked('Multiple Disability')) }} MULTIPLE DISABILITY</div>
-            <div>{{ $check($typeChecked('Psychosocial Disability')) }} PSYCHOSOCIAL DISABILITY</div>
-            <div>{{ $check($typeChecked('Speech & Language Impairment')) }} SPEECH &amp; LANGUAGE IMPAIRMENT</div>
-            <div>{{ $check($typeChecked('Visual Disability')) }} VISUAL DISABILITY</div>
-            <div>{{ $check($typeChecked('Cancer (RA 11215)')) }} CANCER (RA 11215)</div>
-            <div>{{ $check($typeChecked('Rare Disease (RA 10747)')) }} RARE DISEASE (RA 10747)</div>
-          </div>
+          <div class="item">{{ $check($typeChecked('Deaf or Hard of Hearing')) }} DEAF OR HARD OF HEARING</div>
+          <div class="item">{{ $check($typeChecked('Intellectual Disability')) }} INTELLECTUAL DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Learning Disability')) }} LEARNING DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Mental Disability')) }} MENTAL DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Physical Disability')) }} PHYSICAL DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Multiple Disability')) }} MULTIPLE DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Psychosocial Disability')) }} PSYCHOSOCIAL DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Speech & Language Impairment')) }} SPEECH &amp; LANGUAGE IMPAIRMENT</div>
+          <div class="item">{{ $check($typeChecked('Visual Disability')) }} VISUAL DISABILITY</div>
+          <div class="item">{{ $check($typeChecked('Cancer (RA 11215)')) }} CANCER (RA 11215)</div>
+          <div class="item">{{ $check($typeChecked('Rare Disease (RA 10747)')) }} RARE DISEASE (RA 10747)</div>
         </td>
 
-        <td colspan="5" class="h72">
+        <td colspan="5" class="sec1516">
           <div class="section-title">16. Causes of Disability:</div>
-          <div class="checkbox-line">
-            <b>CONGENITAL/INBORN</b><br>
-            {{ $check($causeChecked('Congenital/Inborn', 'Autism')) }} AUTISM<br>
-            {{ $check($causeChecked('Congenital/Inborn', 'ADHD')) }} ADHD<br>
-            {{ $check($causeChecked('Congenital/Inborn', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
-            {{ $check($causeChecked('Congenital/Inborn', 'Down Syndrome')) }} DOWN SYNDROME<br>
-            {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Congenital/Inborn') }}<br><br>
 
-            <b>ACQUIRED</b><br>
-            {{ $check($causeChecked('Acquired', 'Chronic Illness')) }} CHRONIC ILLNESS<br>
-            {{ $check($causeChecked('Acquired', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
-            {{ $check($causeChecked('Acquired', 'Injury')) }} INJURY<br>
-            {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Acquired') }}
+          <div class="subhead">CONGENITAL/INBORN</div>
+          <div class="item">{{ $check($causeChecked('Congenital/Inborn', 'Autism')) }} AUTISM</div>
+          <div class="item">{{ $check($causeChecked('Congenital/Inborn', 'ADHD')) }} ADHD</div>
+          <div class="item">{{ $check($causeChecked('Congenital/Inborn', 'Cerebral Palsy')) }} CEREBRAL PALSY</div>
+          <div class="item">{{ $check($causeChecked('Congenital/Inborn', 'Down Syndrome')) }} DOWN SYNDROME</div>
+          <div class="item">
+            {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS, specify:
+            <span class="underline-fill">{{ $causeOtherText('Congenital/Inborn') }}</span>
+          </div>
+
+          <div class="subhead">ACQUIRED</div>
+          <div class="item">{{ $check($causeChecked('Acquired', 'Chronic Illness')) }} CHRONIC ILLNESS</div>
+          <div class="item">{{ $check($causeChecked('Acquired', 'Cerebral Palsy')) }} CEREBRAL PALSY</div>
+          <div class="item">{{ $check($causeChecked('Acquired', 'Injury')) }} INJURY</div>
+          <div class="item">
+            {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS, specify:
+            <span class="underline-fill">{{ $causeOtherText('Acquired') }}</span>
           </div>
         </td>
       </tr>
