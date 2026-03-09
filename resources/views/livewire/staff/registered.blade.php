@@ -232,12 +232,13 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
-              <td class="reg-actions-cell">
+            <td class="reg-actions-cell">
+              @if($isOpen)
+                <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
+              @else
                 <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
-                @if($isOpen)
-                  <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
-                @endif
-              </td>
+              @endif
+            </td>
             </tr>
 
             @if($isOpen && $open)
