@@ -12,7 +12,6 @@ class StaffRegisteredController extends Controller
 {
     public function update(Request $request, int $id)
     {
-        // ✅ normalize helpers
         $normalizeDecimal = function ($value) {
             if ($value === null) return null;
             $v = trim((string) $value);
@@ -27,7 +26,6 @@ class StaffRegisteredController extends Controller
             return $v === '' ? null : $v;
         };
 
-        // ✅ validate (include the missing fields + org group name TEXT)
         $data = $request->validate([
             'ldr_number'     => ['nullable', 'string', 'max:50'],
             'profiling_date' => ['nullable', 'date'],
@@ -62,18 +60,16 @@ class StaffRegisteredController extends Controller
             'specific_occupation' => ['nullable', 'string', 'max:150'],
             'employment_type'     => ['nullable', 'string', 'max:50'],
 
-            'registered_voter' => ['nullable', Rule::in(['1','0', 1, 0])],
+            'registered_voter' => ['nullable', Rule::in(['1', '0', 1, 0])],
 
-            'special_skills'   => ['nullable', 'string'],
-            'sporting_talent'  => ['nullable', 'string'],
+            'special_skills'  => ['nullable', 'string'],
+            'sporting_talent' => ['nullable', 'string'],
 
-            // ✅ ORG GROUP NAME (TEXT, not yes/no)
             'pwd_org_affiliated' => ['nullable', 'string', 'max:150'],
             'org_contact_person' => ['nullable', 'string', 'max:150'],
             'org_office_address' => ['nullable', 'string', 'max:255'],
             'org_tel_mobile'     => ['nullable', 'string', 'max:80'],
 
-            // ✅ IDs
             'pwd_id_no'       => ['nullable', 'string', 'max:30'],
             'id_reference_no' => ['nullable', 'string', 'max:80'],
             'sss_no'          => ['nullable', 'string', 'max:30'],
@@ -82,45 +78,39 @@ class StaffRegisteredController extends Controller
             'phn_no'          => ['nullable', 'string', 'max:30'],
             'philhealth_no'   => ['nullable', 'string', 'max:30'],
 
-            // ✅ income + interview + office
-            'total_family_income'          => ['nullable'],
-            'interviewee_name'             => ['nullable', 'string', 'max:150'],
-            'interviewee_relationship'     => ['nullable', 'string', 'max:100'],
-            'accomplished_by_name'         => ['nullable', 'string', 'max:150'],
-            'accomplished_by_position'     => ['nullable', 'string', 'max:100'],
-            'reporting_unit_office_section'=> ['nullable', 'string', 'max:150'],
-            'approved_by'                  => ['nullable', 'string', 'max:150'],
+            'total_family_income'           => ['nullable'],
+            'interviewee_name'              => ['nullable', 'string', 'max:150'],
+            'interviewee_relationship'      => ['nullable', 'string', 'max:100'],
+            'accomplished_by_name'          => ['nullable', 'string', 'max:150'],
+            'accomplished_by_position'      => ['nullable', 'string', 'max:100'],
+            'reporting_unit_office_section' => ['nullable', 'string', 'max:150'],
+            'approved_by'                   => ['nullable', 'string', 'max:150'],
 
-            // ✅ uploads (optional)
-            'photo_1x1' => ['nullable', 'image', 'max:2048'],
-            'signature_thumbmark' => ['nullable', 'image', 'max:2048'],
+            'photo_1x1'                        => ['nullable', 'image', 'max:2048'],
+            'signature_thumbmark'             => ['nullable', 'image', 'max:2048'],
             'interviewee_signature_thumbmark' => ['nullable', 'image', 'max:2048'],
-            'approved_signature' => ['nullable', 'image', 'max:2048'],
+            'approved_signature'              => ['nullable', 'image', 'max:2048'],
 
-            // ✅ disability pivot inputs (IDs)
-            'disability_types'    => ['nullable', 'array'],
-            'disability_types.*'  => ['integer'],
+            'disability_types'   => ['nullable', 'array'],
+            'disability_types.*' => ['integer'],
 
             'disability_causes'   => ['nullable', 'array'],
             'disability_causes.*' => ['integer'],
 
-            // ✅ other text for causes "Others"
-            'cause_other'         => ['nullable', 'array'],
+            'cause_other' => ['nullable', 'array'],
 
-            // ✅ household arrays
-            'member_id'            => ['nullable', 'array'],
-            'member_name'          => ['nullable', 'array'],
-            'member_dob'           => ['nullable', 'array'],
-            'member_civil_status'  => ['nullable', 'array'],
-            'member_education'     => ['nullable', 'array'],
-            'member_relationship'  => ['nullable', 'array'],
-            'member_occupation'    => ['nullable', 'array'],
-            'member_pension'       => ['nullable', 'array'],
-            'member_income'        => ['nullable', 'array'],
-            'member_delete'        => ['nullable', 'array'],
+            'member_id'           => ['nullable', 'array'],
+            'member_name'         => ['nullable', 'array'],
+            'member_dob'          => ['nullable', 'array'],
+            'member_civil_status' => ['nullable', 'array'],
+            'member_education'    => ['nullable', 'array'],
+            'member_relationship' => ['nullable', 'array'],
+            'member_occupation'   => ['nullable', 'array'],
+            'member_pension'      => ['nullable', 'array'],
+            'member_income'       => ['nullable', 'array'],
+            'member_delete'       => ['nullable', 'array'],
         ]);
 
-        // ✅ redirect (your blade already sends _redirect)
         $redirectTo = $request->input('_redirect');
         if (!$redirectTo) {
             $redirectTo = url('/staff/registered') . '?' . http_build_query([
@@ -130,22 +120,16 @@ class StaffRegisteredController extends Controller
         }
 
         DB::transaction(function () use ($request, $id, $data, $normalizeDecimal, $toNull) {
-
-            // --- fetch old row for old image paths (so we can delete if replaced)
             $old = DB::table('local_profiles')->where('id', $id)->first();
 
-            // ✅ handle uploads (replace only if new file uploaded)
             $updates = $data;
 
-            // registered_voter -> int|null
             $updates['registered_voter'] = ($request->input('registered_voter') === '' || $request->input('registered_voter') === null)
                 ? null
                 : (int) $request->input('registered_voter');
 
-            // total_family_income -> decimal|null
             $updates['total_family_income'] = $normalizeDecimal($request->input('total_family_income'));
 
-            // make some string fields clean null
             foreach ([
                 'ldr_number','middle_name','suffix','religion','ethnic_group','civil_status',
                 'house_no_street','sitio_purok','barangay','municipality','province','region',
@@ -162,7 +146,6 @@ class StaffRegisteredController extends Controller
                 }
             }
 
-            // photo_1x1
             if ($request->hasFile('photo_1x1')) {
                 $path = $request->file('photo_1x1')->store('local_profiles/photos', 'public');
                 $updates['photo_1x1'] = $path;
@@ -174,7 +157,6 @@ class StaffRegisteredController extends Controller
                 unset($updates['photo_1x1']);
             }
 
-            // signature_thumbmark
             if ($request->hasFile('signature_thumbmark')) {
                 $path = $request->file('signature_thumbmark')->store('local_profiles/signatures', 'public');
                 $updates['signature_thumbmark'] = $path;
@@ -186,7 +168,6 @@ class StaffRegisteredController extends Controller
                 unset($updates['signature_thumbmark']);
             }
 
-            // interviewee_signature_thumbmark
             if ($request->hasFile('interviewee_signature_thumbmark')) {
                 $path = $request->file('interviewee_signature_thumbmark')->store('local_profiles/interviewee_sign', 'public');
                 $updates['interviewee_signature_thumbmark'] = $path;
@@ -198,7 +179,6 @@ class StaffRegisteredController extends Controller
                 unset($updates['interviewee_signature_thumbmark']);
             }
 
-            // approved_signature
             if ($request->hasFile('approved_signature')) {
                 $path = $request->file('approved_signature')->store('local_profiles/approved_sign', 'public');
                 $updates['approved_signature'] = $path;
@@ -210,16 +190,35 @@ class StaffRegisteredController extends Controller
                 unset($updates['approved_signature']);
             }
 
+            unset(
+                $updates['disability_types'],
+                $updates['disability_causes'],
+                $updates['cause_other'],
+                $updates['member_id'],
+                $updates['member_name'],
+                $updates['member_dob'],
+                $updates['member_civil_status'],
+                $updates['member_education'],
+                $updates['member_relationship'],
+                $updates['member_occupation'],
+                $updates['member_pension'],
+                $updates['member_income'],
+                $updates['member_delete']
+            );
+
             $updates['updated_at'] = now();
 
-            // ✅ update main profile
             DB::table('local_profiles')->where('id', $id)->update($updates);
 
-            // ✅ disability types pivot (IDs)
             if ($request->has('disability_types')) {
-                $typeIds = array_values(array_filter((array)$request->input('disability_types'), fn($v) => is_numeric($v)));
+                $typeIds = array_values(array_filter(
+                    (array) $request->input('disability_types'),
+                    fn($v) => is_numeric($v)
+                ));
 
-                DB::table('local_profile_disability_types')->where('local_profile_id', $id)->delete();
+                DB::table('local_profile_disability_types')
+                    ->where('local_profile_id', $id)
+                    ->delete();
 
                 if (!empty($typeIds)) {
                     $rows = [];
@@ -229,16 +228,22 @@ class StaffRegisteredController extends Controller
                             'disability_type_id' => (int) $tid,
                         ];
                     }
+
                     DB::table('local_profile_disability_types')->insert($rows);
                 }
             }
 
-            // ✅ disability causes pivot + other_specify (IDs)
             if ($request->has('disability_causes')) {
-                $causeIds = array_values(array_filter((array)$request->input('disability_causes'), fn($v) => is_numeric($v)));
+                $causeIds = array_values(array_filter(
+                    (array) $request->input('disability_causes'),
+                    fn($v) => is_numeric($v)
+                ));
+
                 $causeOther = (array) $request->input('cause_other', []);
 
-                DB::table('local_profile_disability_causes')->where('local_profile_id', $id)->delete();
+                DB::table('local_profile_disability_causes')
+                    ->where('local_profile_id', $id)
+                    ->delete();
 
                 if (!empty($causeIds)) {
                     $rows = [];
@@ -252,36 +257,45 @@ class StaffRegisteredController extends Controller
                             'other_specify' => $other,
                         ];
                     }
+
                     DB::table('local_profile_disability_causes')->insert($rows);
                 }
             }
 
-            // ✅ household members update
-            // arrays are parallel (same index)
-            $memberIds   = (array) $request->input('member_id', []);
-            $names       = (array) $request->input('member_name', []);
-            $dobs        = (array) $request->input('member_dob', []);
-            $civils      = (array) $request->input('member_civil_status', []);
-            $educs       = (array) $request->input('member_education', []);
-            $rels        = (array) $request->input('member_relationship', []);
-            $occs        = (array) $request->input('member_occupation', []);
-            $pens        = (array) $request->input('member_pension', []);
-            $incomes     = (array) $request->input('member_income', []);
-            $deletes     = (array) $request->input('member_delete', []);
+            $memberIds = (array) $request->input('member_id', []);
+            $names     = (array) $request->input('member_name', []);
+            $dobs      = (array) $request->input('member_dob', []);
+            $civils    = (array) $request->input('member_civil_status', []);
+            $educs     = (array) $request->input('member_education', []);
+            $rels      = (array) $request->input('member_relationship', []);
+            $occs      = (array) $request->input('member_occupation', []);
+            $pens      = (array) $request->input('member_pension', []);
+            $incomes   = (array) $request->input('member_income', []);
+            $deletes   = (array) $request->input('member_delete', []);
 
             $count = max(
-                count($memberIds), count($names), count($dobs), count($civils), count($educs),
-                count($rels), count($occs), count($pens), count($incomes), count($deletes)
+                count($memberIds),
+                count($names),
+                count($dobs),
+                count($civils),
+                count($educs),
+                count($rels),
+                count($occs),
+                count($pens),
+                count($incomes),
+                count($deletes)
             );
 
             for ($i = 0; $i < $count; $i++) {
                 $mid = $memberIds[$i] ?? '';
                 $del = $deletes[$i] ?? '0';
 
-                // if marked delete
-                if ((string)$del === '1') {
+                if ((string) $del === '1') {
                     if ($mid !== '' && is_numeric($mid)) {
-                        DB::table('household_members')->where('id', (int)$mid)->where('local_profile_id', $id)->delete();
+                        DB::table('household_members')
+                            ->where('id', (int) $mid)
+                            ->where('local_profile_id', $id)
+                            ->delete();
                     }
                     continue;
                 }
@@ -298,23 +312,31 @@ class StaffRegisteredController extends Controller
                     'monthly_income' => $normalizeDecimal($incomes[$i] ?? null),
                 ];
 
-                // skip totally empty NEW rows
                 $anyFilled = false;
-                foreach (['name','date_of_birth','civil_status','educational_attainment','relationship_to_pwd','occupation','social_pension_affiliation','monthly_income'] as $k) {
+                foreach ([
+                    'name',
+                    'date_of_birth',
+                    'civil_status',
+                    'educational_attainment',
+                    'relationship_to_pwd',
+                    'occupation',
+                    'social_pension_affiliation',
+                    'monthly_income'
+                ] as $k) {
                     if ($k === 'name') {
-                        // "N/A" came from empty; treat as empty for this check
                         if (($names[$i] ?? '') !== '') $anyFilled = true;
                     } else {
                         if (!is_null($row[$k]) && $row[$k] !== '') $anyFilled = true;
                     }
                 }
+
                 if (!$anyFilled && ($mid === '' || !is_numeric($mid))) {
                     continue;
                 }
 
                 if ($mid !== '' && is_numeric($mid)) {
                     DB::table('household_members')
-                        ->where('id', (int)$mid)
+                        ->where('id', (int) $mid)
                         ->where('local_profile_id', $id)
                         ->update($row);
                 } else {
