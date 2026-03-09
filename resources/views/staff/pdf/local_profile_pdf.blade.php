@@ -85,8 +85,9 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
     }
-
     table.form td,
     table.form th {
       border: 1px solid #222;
@@ -114,25 +115,21 @@
       line-height: 1.08;
     }
 
-    .center {
-      text-align: center;
-    }
-
     .muted {
       color: #444;
       font-size: 6px;
       line-height: 1.02;
     }
 
-  .photo-box {
-    width: 100%;
-    height: 72px;
-    border: 1px solid #222;
-    text-align: center;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-  }
+    .photo-box {
+      width: 100%;
+      height: 72px;
+      border: 1px solid #222;
+      text-align: center;
+      overflow: hidden;
+      background: #fff;
+      position: relative;
+    }
 
     .photo-box img {
       width: 100%;
@@ -159,7 +156,7 @@
 
     .sig-box {
       width: 100%;
-      height: 28px;
+      height: 26px;
       border: 1px solid #222;
       text-align: center;
       overflow: hidden;
@@ -351,7 +348,7 @@
         <div class="label">2. Profiling Date:</div>
         <div class="value">{{ $open->profiling_date ?? '' }}</div>
       </td>
-      <td rowspan="3" colspan="2" class="vtop">
+      <td rowspan="2" colspan="2" class="vtop">
         <div class="photo-box">
           @if($photo1x1)
             <img src="{{ $photo1x1 }}" alt="1x1 Photo">
@@ -399,7 +396,7 @@
       </td>
 
       <td colspan="2" class="h34">
-        <div class="label">9. Blood Type: <span class="muted normal-case">(if known)</span></div>
+        <div class="label">9. Blood Type: <span class="label normal-case">(if known)</span></div>
         <div class="blood-grid">
           <div class="row">
             {{ $check($bloodType === 'A+') }} A+
@@ -433,10 +430,8 @@
           {{ $check(strtoupper((string)($open->sex ?? '')) === 'FEMALE') }} Female
         </div>
       </td>
-    </tr>
 
-    <tr>
-      <td colspan="10">
+      <td colspan="2">
         <div class="label">13. Signature / Thumbmark</div>
         <div class="sig-box">
           @if($signatureThumb)
