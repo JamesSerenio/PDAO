@@ -3,202 +3,236 @@
 <head>
   <meta charset="UTF-8">
   <title>Local Profile Form PDF</title>
-<style>
-  @page {
-    size: A4 portrait;
-    margin: 6px;
-  }
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 6px;
+    }
 
-  body {
-    font-family: DejaVu Sans, sans-serif;
-    font-size: 7px;
-    color: #111;
-    margin: 0;
-    padding: 0;
-    line-height: 1.15;
-  }
+    body {
+      font-family: DejaVu Sans, sans-serif;
+      font-size: 7px;
+      color: #111;
+      margin: 0;
+      padding: 0;
+      line-height: 1.08;
+    }
 
-  * {
-    box-sizing: border-box;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  .page {
-    width: 100%;
-  }
+    .page {
+      width: 100%;
+    }
 
-  .header-wrap {
-    position: relative;
-    width: 100%;
-    height: 58px;
-    margin-bottom: 2px;
-  }
+    .header {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-bottom: 2px;
+    }
 
-  .logo-left,
-  .logo-right {
-    position: absolute;
-    top: 0;
-    width: 52px;
-    height: 52px;
-  }
+    .header td {
+      border: none;
+      padding: 0;
+      vertical-align: middle;
+    }
 
-  .logo-left {
-    left: 200px;
-  }
+    .header-left,
+    .header-right {
+      width: 72px;
+      text-align: center;
+    }
 
-  .logo-right {
-    right: 200px;
-  }
+    .header-left img,
+    .header-right img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      display: inline-block;
+    }
 
-  .logo-left img,
-  .logo-right img {
-    width: 52px;
-    height: 52px;
-    display: block;
-    object-fit: contain;
-  }
+    .header-center {
+      text-align: center;
+      padding: 0 4px;
+    }
 
-  .header-title {
-    text-align: center;
-    padding-top: 1px;
-  }
+    .small {
+      font-size: 8px;
+      line-height: 1.05;
+    }
 
-  .small {
-    font-size: 8px;
-    line-height: 1.05;
-  }
+    .title-main {
+      font-size: 14px;
+      font-weight: bold;
+      margin-top: 2px;
+      letter-spacing: .2px;
+    }
 
-  .title-main {
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 2px;
-    letter-spacing: .3px;
-  }
+    .instruction {
+      font-size: 7px;
+      font-weight: bold;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+      padding: 2px 4px;
+      margin: 2px 0 4px;
+      text-align: left;
+      line-height: 1.05;
+    }
 
-  .instruction {
-    font-size: 7.5px;
-    font-weight: bold;
-    border-top: 1px solid #222;
-    border-bottom: 1px solid #222;
-    padding: 2px 4px;
-    margin: 2px 0 4px;
-  }
+    table.form {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
 
-  table.form {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
+    table.form td,
+    table.form th {
+      border: 1px solid #222;
+      padding: 2px 3px;
+      vertical-align: top;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
 
-  table.form td,
-  table.form th {
-    border: 1px solid #222;
-    padding: 2px 3px;
-    vertical-align: top;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
+    .label {
+      font-size: 6.9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      line-height: 1.05;
+    }
 
-  .label {
-    font-size: 7px;
-    font-weight: bold;
-    text-transform: uppercase;
-    line-height: 1.1;
-  }
+    .label.normal-case {
+      text-transform: none;
+    }
 
-  .value {
-    min-height: 9px;
-    margin-top: 1px;
-    font-size: 7.5px;
-    line-height: 1.15;
-  }
+    .value {
+      min-height: 8px;
+      margin-top: 1px;
+      font-size: 7px;
+      line-height: 1.08;
+    }
 
-  .center {
-    text-align: center;
-  }
+    .center {
+      text-align: center;
+    }
 
-  .muted {
-    color: #444;
-    font-size: 6.6px;
-    line-height: 1.1;
-  }
+    .muted {
+      color: #444;
+      font-size: 6px;
+      line-height: 1.02;
+    }
 
   .photo-box {
     width: 100%;
-    height: 62px;
+    height: 72px;
     border: 1px solid #222;
     text-align: center;
     overflow: hidden;
-    margin-top: 2px;
+    background: #fff;
+    position: relative;
   }
 
-  .photo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-  .sig-box {
-    width: 100%;
-    height: 28px;
-    border: 1px solid #222;
-    text-align: center;
-    overflow: hidden;
-    margin-top: 2px;
-  }
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: table;
+      text-align: center;
+    }
 
-  .sig-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+    .photo-placeholder span {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 6.2px;
+      font-weight: bold;
+      line-height: 1.1;
+      padding: 2px;
+    }
 
-  .checkbox-line {
-    line-height: 1.18;
-    font-size: 7px;
-  }
+    .sig-box {
+      width: 100%;
+      height: 28px;
+      border: 1px solid #222;
+      text-align: center;
+      overflow: hidden;
+      background: #fff;
+    }
 
-  .checkbox-line div {
-    margin: 0 0 1px 0;
-  }
+    .sig-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
 
-  .checkbox-line span {
-    display: inline-block;
-    margin-right: 6px;
-    white-space: nowrap;
-  }
+    .checkbox-line {
+      line-height: 1.1;
+      font-size: 6.7px;
+    }
 
-  .section-title {
-    font-weight: bold;
-    font-size: 7px;
-    margin-bottom: 1px;
-    text-transform: uppercase;
-    line-height: 1.1;
-  }
+    .checkbox-line div {
+      margin: 0 0 1px 0;
+    }
 
-  .members td,
-  .members th {
-    font-size: 6.6px;
-    padding: 2px;
-    line-height: 1.1;
-  }
+    .checkbox-line span {
+      display: inline-block;
+      margin-right: 6px;
+      white-space: nowrap;
+    }
 
-  .nowrap {
-    white-space: nowrap;
-  }
+    .section-title {
+      font-weight: bold;
+      font-size: 6.9px;
+      margin-bottom: 1px;
+      text-transform: uppercase;
+      line-height: 1.05;
+    }
 
-  .tight {
-    line-height: 1.05;
-  }
+    .members td,
+    .members th {
+      font-size: 6.1px;
+      padding: 2px;
+      line-height: 1.05;
+    }
 
-  .h18 { height: 18px; }
-  .h22 { height: 22px; }
-  .h26 { height: 26px; }
-  .h30 { height: 30px; }
-  .h36 { height: 36px; }
-  .h42 { height: 42px; }
-  .h48 { height: 48px; }
-  .h56 { height: 56px; }
-</style>
+    .tight {
+      line-height: 1.02;
+    }
+
+    .blood-grid {
+      font-size: 6.7px;
+      line-height: 1.1;
+      margin-top: 1px;
+    }
+
+    .blood-grid .row {
+      white-space: nowrap;
+      margin-bottom: 1px;
+    }
+
+    .h18 { height: 18px; }
+    .h22 { height: 22px; }
+    .h24 { height: 24px; }
+    .h26 { height: 26px; }
+    .h30 { height: 30px; }
+    .h34 { height: 34px; }
+    .h38 { height: 38px; }
+    .h42 { height: 42px; }
+    .h48 { height: 48px; }
+    .h56 { height: 56px; }
+    .h62 { height: 62px; }
+    .h72 { height: 72px; }
+
+    .vtop { vertical-align: top; }
+  </style>
 </head>
 <body>
 @php
@@ -239,7 +273,7 @@
   $photo1x1 = $storageToBase64($open->photo_1x1 ?? null);
   $signatureThumb = $storageToBase64($open->signature_thumbmark ?? null);
   $intervieweeSignature = $storageToBase64($open->interviewee_signature_thumbmark ?? null);
-  $approvedSignature = $storageToBase64($open->approved_signature ?? null);
+  $accomplishedSignature = $storageToBase64($open->approved_signature ?? null);
 
   $typeChecked = function($typeName) use ($openTypes) {
       return in_array($typeName, $openTypes);
@@ -262,30 +296,33 @@
   };
 
   $memberCount = max(count($openMembers), 4);
+
+  $bloodType = strtoupper(trim((string)($open->blood_type ?? '')));
+  $dobValue = trim((string)($open->date_of_birth ?? ''));
 @endphp
 
 <div class="page">
 
-  <div class="header-wrap">
-    <div class="logo-left">
-      @if($logo2)
-        <img src="{{ $logo2 }}" alt="Logo Left">
-      @endif
-    </div>
-
-    <div class="logo-right">
-      @if($logo1)
-        <img src="{{ $logo1 }}" alt="Logo Right">
-      @endif
-    </div>
-
-    <div class="header-title">
-      <div class="small">Republic of the Philippines</div>
-      <div class="small"><b>PROVINCE OF BUKIDNON</b></div>
-      <div class="small">Provincial Capitol</div>
-      <div class="title-main">LOCAL PROFILE FORM</div>
-    </div>
-  </div>
+  <table class="header">
+    <tr>
+      <td class="header-left">
+        @if($logo2)
+          <img src="{{ $logo2 }}" alt="Left Logo">
+        @endif
+      </td>
+      <td class="header-center">
+        <div class="small">Republic of the Philippines</div>
+        <div class="small"><b>PROVINCE OF BUKIDNON</b></div>
+        <div class="small">Provincial Capitol</div>
+        <div class="title-main">LOCAL PROFILE FORM</div>
+      </td>
+      <td class="header-right">
+        @if($logo1)
+          <img src="{{ $logo1 }}" alt="Right Logo">
+        @endif
+      </td>
+    </tr>
+  </table>
 
   <div class="instruction">
     WRITE N/A IF NOT APPLICABLE. WRITE IN CAPITAL LETTERS. USE BLACK BALLPEN. NO ERASURES, KEEP IT NEAT AND CLEAN.
@@ -293,31 +330,39 @@
 
   <table class="form">
     <colgroup>
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:8%;">
-      <col style="width:8%;">
-      <col style="width:8%;">
-      <col style="width:16%;">
-      <col style="width:16%;">
+      <col style="width:12%;">
+      <col style="width:12%;">
+      <col style="width:12%;">
+      <col style="width:12%;">
+      <col style="width:10%;">
+      <col style="width:10%;">
+      <col style="width:10%;">
+      <col style="width:10%;">
+      <col style="width:6%;">
+      <col style="width:6%;">
     </colgroup>
 
     <tr>
       <td colspan="4">
-        <div class="label">1. Local Disability Registry Number:</div>
+        <div class="label">1. Local Disability Registry Number: <span class="label normal-case">(To be filled up by PGO – PDAD)</span></div>
         <div class="value">{{ $open->ldr_number ?? '' }}</div>
       </td>
-      <td colspan="3">
+      <td colspan="4">
         <div class="label">2. Profiling Date:</div>
         <div class="value">{{ $open->profiling_date ?? '' }}</div>
       </td>
-      <td rowspan="3" colspan="2">
-        <div class="label center">3. Place 1" x 1"<br>6 months - present<br>Photo Here</div>
+      <td rowspan="3" colspan="2" class="vtop">
         <div class="photo-box">
           @if($photo1x1)
             <img src="{{ $photo1x1 }}" alt="1x1 Photo">
+          @else
+            <div class="photo-placeholder">
+              <span>
+                3. PLACE 1" X 1"<br>
+                6 months - present<br>
+                Photo Here
+              </span>
+            </div>
           @endif
         </div>
       </td>
@@ -336,48 +381,73 @@
         <div class="label">6. Middle Name:</div>
         <div class="value">{{ $open->middle_name ?? '' }}</div>
       </td>
-      <td>
+      <td colspan="2">
         <div class="label">7. Suffix:</div>
         <div class="value">{{ $open->suffix ?? '' }}</div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="2" class="h22">
-        <div class="label">8. Date of Birth:</div>
-        <div class="value">{{ $open->date_of_birth ?? '' }}</div>
+      <td colspan="2" class="h34">
+        <div class="label">
+          8. Date of Birth:
+          @if(!$dobValue)
+            <br><span class="muted">(mm/dd/yyyy)</span>
+          @endif
+        </div>
+        <div class="value">{{ $dobValue }}</div>
       </td>
-      <td colspan="2">
-        <div class="label">9. Blood Type:</div>
-        <div class="value">{{ $open->blood_type ?? '' }}</div>
+
+      <td colspan="2" class="h34">
+        <div class="label">9. Blood Type: <span class="muted normal-case">(if known)</span></div>
+        <div class="blood-grid">
+          <div class="row">
+            {{ $check($bloodType === 'A+') }} A+
+            &nbsp;&nbsp;{{ $check($bloodType === 'AB+') }} AB+
+            &nbsp;&nbsp;{{ $check($bloodType === 'B+') }} B+
+            &nbsp;&nbsp;{{ $check($bloodType === 'O+') }} O+
+          </div>
+          <div class="row">
+            {{ $check($bloodType === 'A-') }} A-
+            &nbsp;&nbsp;{{ $check($bloodType === 'AB-') }} AB-
+            &nbsp;&nbsp;{{ $check($bloodType === 'B-') }} B-
+            &nbsp;&nbsp;{{ $check($bloodType === 'O-') }} O-
+          </div>
+        </div>
       </td>
-      <td>
+
+      <td colspan="1">
         <div class="label">10. Religion:</div>
         <div class="value">{{ $open->religion ?? '' }}</div>
       </td>
-      <td>
+
+      <td colspan="1">
         <div class="label">11. Ethnic Group:</div>
         <div class="value">{{ $open->ethnic_group ?? '' }}</div>
       </td>
-      <td>
+
+      <td colspan="2">
         <div class="label">12. Sex:</div>
         <div class="value tight">
-          {{ $check(($open->sex ?? '') === 'MALE') }} Male<br>
-          {{ $check(($open->sex ?? '') === 'FEMALE') }} Female
+          {{ $check(strtoupper((string)($open->sex ?? '')) === 'MALE') }} Male<br>
+          {{ $check(strtoupper((string)($open->sex ?? '')) === 'FEMALE') }} Female
         </div>
       </td>
-      <td>
+    </tr>
+
+    <tr>
+      <td colspan="10">
         <div class="label">13. Signature / Thumbmark</div>
         <div class="sig-box">
           @if($signatureThumb)
-            <img src="{{ $signatureThumb }}" alt="Signature">
+            <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark">
           @endif
         </div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="9">
+      <td colspan="10">
         <div class="label">14. Civil Status:</div>
         <div class="checkbox-line">
           <span>{{ $check(($open->civil_status ?? '') === 'Single') }} Single</span>
@@ -391,7 +461,7 @@
     </tr>
 
     <tr>
-      <td colspan="4" class="h56">
+      <td colspan="5" class="h72">
         <div class="section-title">15. Types of Disability:</div>
         <div class="checkbox-line">
           <div>{{ $check($typeChecked('Deaf or Hard of Hearing')) }} DEAF OR HARD OF HEARING</div>
@@ -408,21 +478,21 @@
         </div>
       </td>
 
-      <td colspan="5" class="h56">
+      <td colspan="5" class="h72">
         <div class="section-title">16. Causes of Disability:</div>
         <div class="checkbox-line">
-          <b>CONGENITAL / INBORN</b><br>
+          <b>CONGENITAL/INBORN</b><br>
           {{ $check($causeChecked('Congenital/Inborn', 'Autism')) }} AUTISM<br>
           {{ $check($causeChecked('Congenital/Inborn', 'ADHD')) }} ADHD<br>
           {{ $check($causeChecked('Congenital/Inborn', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
           {{ $check($causeChecked('Congenital/Inborn', 'Down Syndrome')) }} DOWN SYNDROME<br>
-          {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS: {{ $causeOtherText('Congenital/Inborn') }}<br><br>
+          {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Congenital/Inborn') }}<br><br>
 
           <b>ACQUIRED</b><br>
           {{ $check($causeChecked('Acquired', 'Chronic Illness')) }} CHRONIC ILLNESS<br>
           {{ $check($causeChecked('Acquired', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
           {{ $check($causeChecked('Acquired', 'Injury')) }} INJURY<br>
-          {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS: {{ $causeOtherText('Acquired') }}
+          {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Acquired') }}
         </div>
       </td>
     </tr>
@@ -433,27 +503,27 @@
         <div class="muted">House No. and Street</div>
         <div class="value">{{ $open->house_no_street ?? '' }}</div>
       </td>
-      <td>
+      <td colspan="1">
         <div class="label">&nbsp;</div>
         <div class="muted">Sitio/Purok</div>
         <div class="value">{{ $open->sitio_purok ?? '' }}</div>
       </td>
-      <td>
+      <td colspan="1">
         <div class="label">&nbsp;</div>
         <div class="muted">Barangay</div>
         <div class="value">{{ $open->barangay ?? '' }}</div>
       </td>
-      <td>
+      <td colspan="2">
         <div class="label">&nbsp;</div>
         <div class="muted">Municipality</div>
         <div class="value">{{ $open->municipality ?? '' }}</div>
       </td>
-      <td>
+      <td colspan="2">
         <div class="label">&nbsp;</div>
         <div class="muted">Province</div>
         <div class="value">{{ $open->province ?? '' }}</div>
       </td>
-      <td colspan="3">
+      <td colspan="2">
         <div class="label">&nbsp;</div>
         <div class="muted">Region</div>
         <div class="value">{{ $open->region ?? '' }}</div>
@@ -466,7 +536,7 @@
         <div class="muted">Landline (If applicable)</div>
         <div class="value">{{ $open->landline ?? '' }}</div>
       </td>
-      <td colspan="2">
+      <td colspan="3">
         <div class="label">&nbsp;</div>
         <div class="muted">Mobile</div>
         <div class="value">{{ $open->mobile ?? '' }}</div>
@@ -479,7 +549,7 @@
     </tr>
 
     <tr>
-      <td colspan="3" class="h48">
+      <td colspan="3" class="h56">
         <div class="section-title">19. Educational Attainment</div>
         <div class="checkbox-line">
           <div>{{ $check(($open->education_level ?? '') === 'None') }} NONE</div>
@@ -493,59 +563,59 @@
         </div>
       </td>
 
-      <td class="h48">
+      <td class="h56">
         <div class="section-title">20. Status of Employment</div>
         <div class="checkbox-line">
-          <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} EMPLOYED</div>
-          <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} UNEMPLOYED</div>
-          <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} SELF-EMPLOYED</div>
+          <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} Employed</div>
+          <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} Unemployed</div>
+          <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} Self-employed</div>
         </div>
       </td>
 
-      <td class="h48">
+      <td class="h56">
         <div class="section-title">21. Category of Employment</div>
         <div class="checkbox-line">
-          <div>{{ $check(($open->employment_category ?? '') === 'Government') }} GOVERNMENT</div>
-          <div>{{ $check(($open->employment_category ?? '') === 'Private') }} PRIVATE</div>
+          <div>{{ $check(($open->employment_category ?? '') === 'Government') }} Government</div>
+          <div>{{ $check(($open->employment_category ?? '') === 'Private') }} Private</div>
         </div>
       </td>
 
-      <td class="h48">
+      <td colspan="2" class="h56">
         <div class="label">22. Specific Occupation:</div>
         <div class="value">{{ $open->specific_occupation ?? '' }}</div>
       </td>
 
-      <td class="h48">
+      <td class="h56">
         <div class="section-title">23. Types of Employment</div>
         <div class="checkbox-line">
-          <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} PERMANENT</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} SEASONAL</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} CONTRACTUAL</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} JOB ORDER</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} ON CALL</div>
+          <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} Permanent</div>
+          <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} Seasonal</div>
+          <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} Contractual</div>
+          <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} Job Order</div>
+          <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} On Call</div>
         </div>
       </td>
 
-      <td class="h48">
-        <div class="section-title">24. Registered Voter</div>
+      <td class="h56">
+        <div class="section-title">24. Registered Voter:</div>
         <div class="checkbox-line">
           <div>{{ $check((string)($open->registered_voter ?? '') === '1') }} YES</div>
           <div>{{ $check((string)($open->registered_voter ?? '') === '0') }} NO</div>
         </div>
       </td>
 
-      <td class="h48">
+      <td colspan="2" class="h56">
         <div class="label">25. Special Skills:</div>
         <div class="value">{{ $open->special_skills ?? '' }}</div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="7" class="h26">
+      <td colspan="7" class="h30">
         <div class="label">26. Sporting Talent:</div>
         <div class="value">{{ $open->sporting_talent ?? '' }}</div>
       </td>
-      <td colspan="2" class="h26">
+      <td colspan="3" class="h30">
         <div class="label">27. Organization Affiliation:</div>
         <div class="value">{{ $open->pwd_org_affiliated ?? '' }}</div>
         <div class="muted">Contact Person: {{ $open->org_contact_person ?? '' }}</div>
@@ -579,14 +649,14 @@
         <div class="label">PHILHEALTH No.</div>
         <div class="value">{{ $open->philhealth_no ?? '' }}</div>
       </td>
-      <td colspan="3">
+      <td colspan="4">
         <div class="label">PWD ID No.</div>
         <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="9" style="padding:0;">
+      <td colspan="10" style="padding:0;">
         <table class="form members" style="border:none; width:100%; table-layout:fixed;">
           <tr>
             <th colspan="8" style="text-align:left;">29. HOUSEHOLD MEMBERSHIP: (Fill in with all members of the house)</th>
@@ -628,14 +698,14 @@
         <div class="label">31. Name of Interviewee:</div>
         <div class="value">{{ $open->interviewee_name ?? '' }}</div>
       </td>
-      <td colspan="3">
+      <td colspan="4">
         <div class="label">32. Relationship to PWD:</div>
         <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="9">
+      <td colspan="10">
         <div class="label">33. Signature/Thumbmark of Interviewee (Other than PWD):</div>
         <div class="sig-box" style="height:24px;">
           @if($intervieweeSignature)
@@ -656,19 +726,19 @@
         <div class="muted">Position</div>
         <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
       </td>
-      <td colspan="3">
+      <td colspan="4">
         <div class="label">&nbsp;</div>
         <div class="muted">Signature</div>
         <div class="sig-box" style="height:22px;">
-          @if($approvedSignature)
-            <img src="{{ $approvedSignature }}" alt="Approved Signature">
+          @if($accomplishedSignature)
+            <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
           @endif
         </div>
       </td>
     </tr>
 
     <tr>
-      <td colspan="5">
+      <td colspan="6">
         <div class="label">35. Name of Reporting Unit (Office/Section):</div>
         <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
       </td>
