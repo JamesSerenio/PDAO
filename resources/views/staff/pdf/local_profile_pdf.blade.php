@@ -3,214 +3,202 @@
 <head>
   <meta charset="UTF-8">
   <title>Local Profile Form PDF</title>
-  <style>
-    @page {
-      size: A4 portrait;
-      margin: 6px;
-    }
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 6px;
+  }
 
-    body {
-      font-family: DejaVu Sans, sans-serif;
-      font-size: 7px;
-      color: #111;
-      margin: 0;
-      padding: 0;
-      line-height: 1.15;
-    }
+  body {
+    font-family: DejaVu Sans, sans-serif;
+    font-size: 7px;
+    color: #111;
+    margin: 0;
+    padding: 0;
+    line-height: 1.15;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    .page {
-      width: 100%;
-    }
+  .page {
+    width: 100%;
+  }
 
-    /* =========================
-       HEADER FIX
-    ========================= */
-    .header {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      margin-bottom: 2px;
-    }
+  .header-wrap {
+    position: relative;
+    width: 100%;
+    height: 58px;
+    margin-bottom: 2px;
+  }
 
-    .header td {
-      border: none;
-      padding: 0;
-      vertical-align: top;
-    }
+  .logo-left,
+  .logo-right {
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 52px;
+  }
 
-    .header-left {
-      width: 92px;
-      text-align: left;
-      padding-left: 4px;
-    }
+  .logo-left {
+    left: 200px;
+  }
 
-    .header-center {
-      text-align: center;
-    }
+  .logo-right {
+    right: 200px;
+  }
 
-    .header-right {
-      width: 92px;
-      text-align: right;
-      padding-right: 4px;
-    }
+  .logo-left img,
+  .logo-right img {
+    width: 52px;
+    height: 52px;
+    display: block;
+    object-fit: contain;
+  }
 
-    .header-left img,
-    .header-right img {
-      width: 52px;
-      height: 52px;
-      display: block;
-      object-fit: contain;
-    }
+  .header-title {
+    text-align: center;
+    padding-top: 1px;
+  }
 
-    .header-left img {
-      margin: 0 auto 0 0;
-    }
+  .small {
+    font-size: 8px;
+    line-height: 1.05;
+  }
 
-    .header-right img {
-      margin: 0 0 0 auto;
-    }
+  .title-main {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 2px;
+    letter-spacing: .3px;
+  }
 
-    .small {
-      font-size: 8px;
-      line-height: 1.05;
-    }
+  .instruction {
+    font-size: 7.5px;
+    font-weight: bold;
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+    padding: 2px 4px;
+    margin: 2px 0 4px;
+  }
 
-    .title-main {
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 2px;
-      letter-spacing: .3px;
-    }
+  table.form {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
 
-    .instruction {
-      font-size: 7.5px;
-      font-weight: bold;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
-      padding: 2px 4px;
-      margin: 2px 0 4px;
-    }
+  table.form td,
+  table.form th {
+    border: 1px solid #222;
+    padding: 2px 3px;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
 
-    table.form {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
+  .label {
+    font-size: 7px;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
 
-    table.form td,
-    table.form th {
-      border: 1px solid #222;
-      padding: 2px 3px;
-      vertical-align: top;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-    }
+  .value {
+    min-height: 9px;
+    margin-top: 1px;
+    font-size: 7.5px;
+    line-height: 1.15;
+  }
 
-    .label {
-      font-size: 7px;
-      font-weight: bold;
-      text-transform: uppercase;
-      line-height: 1.1;
-    }
+  .center {
+    text-align: center;
+  }
 
-    .value {
-      min-height: 9px;
-      margin-top: 1px;
-      font-size: 7.5px;
-      line-height: 1.15;
-    }
+  .muted {
+    color: #444;
+    font-size: 6.6px;
+    line-height: 1.1;
+  }
 
-    .center {
-      text-align: center;
-    }
+  .photo-box {
+    width: 100%;
+    height: 62px;
+    border: 1px solid #222;
+    text-align: center;
+    overflow: hidden;
+    margin-top: 2px;
+  }
 
-    .muted {
-      color: #444;
-      font-size: 6.6px;
-      line-height: 1.1;
-    }
+  .photo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-    .photo-box {
-      width: 100%;
-      height: 62px;
-      border: 1px solid #222;
-      text-align: center;
-      overflow: hidden;
-      margin-top: 2px;
-    }
+  .sig-box {
+    width: 100%;
+    height: 28px;
+    border: 1px solid #222;
+    text-align: center;
+    overflow: hidden;
+    margin-top: 2px;
+  }
 
-    .photo-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+  .sig-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
-    .sig-box {
-      width: 100%;
-      height: 28px;
-      border: 1px solid #222;
-      text-align: center;
-      overflow: hidden;
-      margin-top: 2px;
-    }
+  .checkbox-line {
+    line-height: 1.18;
+    font-size: 7px;
+  }
 
-    .sig-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+  .checkbox-line div {
+    margin: 0 0 1px 0;
+  }
 
-    .checkbox-line {
-      line-height: 1.18;
-      font-size: 7px;
-    }
+  .checkbox-line span {
+    display: inline-block;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
 
-    .checkbox-line div {
-      margin: 0 0 1px 0;
-    }
+  .section-title {
+    font-weight: bold;
+    font-size: 7px;
+    margin-bottom: 1px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
 
-    .checkbox-line span {
-      display: inline-block;
-      margin-right: 6px;
-      white-space: nowrap;
-    }
+  .members td,
+  .members th {
+    font-size: 6.6px;
+    padding: 2px;
+    line-height: 1.1;
+  }
 
-    .section-title {
-      font-weight: bold;
-      font-size: 7px;
-      margin-bottom: 1px;
-      text-transform: uppercase;
-      line-height: 1.1;
-    }
+  .nowrap {
+    white-space: nowrap;
+  }
 
-    .members td,
-    .members th {
-      font-size: 6.6px;
-      padding: 2px;
-      line-height: 1.1;
-    }
+  .tight {
+    line-height: 1.05;
+  }
 
-    .nowrap {
-      white-space: nowrap;
-    }
-
-    .tight {
-      line-height: 1.05;
-    }
-
-    .h18 { height: 18px; }
-    .h22 { height: 22px; }
-    .h26 { height: 26px; }
-    .h30 { height: 30px; }
-    .h36 { height: 36px; }
-    .h42 { height: 42px; }
-    .h48 { height: 48px; }
-    .h56 { height: 56px; }
-  </style>
+  .h18 { height: 18px; }
+  .h22 { height: 22px; }
+  .h26 { height: 26px; }
+  .h30 { height: 30px; }
+  .h36 { height: 36px; }
+  .h42 { height: 42px; }
+  .h48 { height: 48px; }
+  .h56 { height: 56px; }
+</style>
 </head>
 <body>
 @php
@@ -278,28 +266,26 @@
 
 <div class="page">
 
-  <table class="header">
-    <tr>
-      <td class="header-left">
-        @if($logo2)
-          <img src="{{ $logo2 }}" alt="Logo Left">
-        @endif
-      </td>
+  <div class="header-wrap">
+    <div class="logo-left">
+      @if($logo2)
+        <img src="{{ $logo2 }}" alt="Logo Left">
+      @endif
+    </div>
 
-      <td class="header-center">
-        <div class="small">Republic of the Philippines</div>
-        <div class="small"><b>PROVINCE OF BUKIDNON</b></div>
-        <div class="small">Provincial Capitol</div>
-        <div class="title-main">LOCAL PROFILE FORM</div>
-      </td>
+    <div class="logo-right">
+      @if($logo1)
+        <img src="{{ $logo1 }}" alt="Logo Right">
+      @endif
+    </div>
 
-      <td class="header-right">
-        @if($logo1)
-          <img src="{{ $logo1 }}" alt="Logo Right">
-        @endif
-      </td>
-    </tr>
-  </table>
+    <div class="header-title">
+      <div class="small">Republic of the Philippines</div>
+      <div class="small"><b>PROVINCE OF BUKIDNON</b></div>
+      <div class="small">Provincial Capitol</div>
+      <div class="title-main">LOCAL PROFILE FORM</div>
+    </div>
+  </div>
 
   <div class="instruction">
     WRITE N/A IF NOT APPLICABLE. WRITE IN CAPITAL LETTERS. USE BLACK BALLPEN. NO ERASURES, KEEP IT NEAT AND CLEAN.
@@ -694,4 +680,4 @@
   </table>
 </div>
 </body>
-</html> 
+</html>
