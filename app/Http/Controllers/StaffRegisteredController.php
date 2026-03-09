@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class StaffRegisteredController extends Controller
 {
@@ -324,9 +326,13 @@ class StaffRegisteredController extends Controller
                     'monthly_income'
                 ] as $k) {
                     if ($k === 'name') {
-                        if (($names[$i] ?? '') !== '') $anyFilled = true;
+                        if (($names[$i] ?? '') !== '') {
+                            $anyFilled = true;
+                        }
                     } else {
-                        if (!is_null($row[$k]) && $row[$k] !== '') $anyFilled = true;
+                        if (!is_null($row[$k]) && $row[$k] !== '') {
+                            $anyFilled = true;
+                        }
                     }
                 }
 
@@ -347,5 +353,58 @@ class StaffRegisteredController extends Controller
         });
 
         return redirect()->to($redirectTo)->with('success', 'Updated successfully.');
+    }
+
+    public function pdf(int $id)
+    {
+        $open = DB::table('local_profiles')->where('id', $id)->first();
+
+        abort_if(!$open, 404, 'Record not found.');
+
+        $openTypeIds = DB::table('local_profile_disability_types')
+            ->where('local_profile_id', $id)
+            ->pluck('disability_type_id')
+            ->toArray();
+
+        $openTypes = DB::table('local_profile_disability_types as lpdt')
+            ->join('disability_types as dt', 'dt.id', '=', 'lpdt.disability_type_id')
+            ->where('lpdt.local_profile_id', $id)
+            ->orderBy('dt.name')
+            ->pluck('dt.name')
+            ->toArray();
+
+        $openCauseIds = DB::table('local_profile_disability_causes')
+            ->where('local_profile_id', $id)
+            ->pluck('disability_cause_id')
+            ->toArray();
+
+        $openCauses = DB::table('local_profile_disability_causes as lpdc')
+            ->join('disability_causes as dc', 'dc.id', '=', 'lpdc.disability_cause_id')
+            ->where('lpdc.local_profile_id', $id)
+            ->select('dc.id', 'dc.category', 'dc.name', 'lpdc.other_specify')
+            ->orderBy('dc.category')
+            ->orderBy('dc.name')
+            ->get();
+
+        $openMembers = DB::table('household_members')
+            ->where('local_profile_id', $id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $allTypes = DB::table('disability_types')->orderBy('id')->get();
+        $allCauses = DB::table('disability_causes')->orderBy('id')->get();
+
+        $pdf = Pdf::loadView('staff.pdf.local_profile_pdf', [
+            'open'         => $open,
+            'openTypeIds'  => $openTypeIds,
+            'openTypes'    => $openTypes,
+            'openCauseIds' => $openCauseIds,
+            'openCauses'   => $openCauses,
+            'openMembers'  => $openMembers,
+            'allTypes'     => $allTypes,
+            'allCauses'    => $allCauses,
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->stream('local-profile-' . $id . '.pdf');
     }
 }
