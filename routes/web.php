@@ -62,4 +62,7 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     Route::put('/staff/registered/{id}', [StaffRegisteredController::class, 'update'])
         ->name('staff.registered.update');
 
+    Route::get('/staff/registered/{id}/pdf', [StaffRegisteredController::class, 'pdf'])
+    ->name('staff.registered.pdf');
+
 });
