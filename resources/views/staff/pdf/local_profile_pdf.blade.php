@@ -81,7 +81,6 @@
       line-height: 1.05;
     }
 
-    /* IMPORTANT FIX */
     .form-wrap {
       width: 100%;
       border-left: 1px solid #222;
@@ -106,13 +105,11 @@
       border-right: 1px solid #222;
     }
 
-    /* left border only on first cell of each row */
     table.form tr > td:first-child,
     table.form tr > th:first-child {
       border-left: 0;
     }
 
-    /* right-most cell should not double border with wrapper */
     table.form tr > td:last-child,
     table.form tr > th:last-child {
       border-right: 0;
@@ -236,21 +233,77 @@
       margin-bottom: 1px;
     }
 
-    .h18 { height: 18px; }
-    .h22 { height: 22px; }
-    .h24 { height: 24px; }
-    .h26 { height: 26px; }
-    .h30 { height: 30px; }
-    .h34 { height: 34px; }
-    .h38 { height: 38px; }
-    .h42 { height: 42px; }
-    .h48 { height: 48px; }
-    .h56 { height: 56px; }
-    .h62 { height: 62px; }
-    .h72 { height: 72px; }
-
     .vtop {
       vertical-align: top !important;
+    }
+
+    .h34 { height: 34px; }
+    .h72 { height: 72px; }
+
+    /* 19-26 section */
+    .sec1926-wrap {
+      width: 100%;
+    }
+
+    table.sec1926 {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    table.sec1926 td {
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      padding: 2px 3px;
+      vertical-align: top;
+    }
+
+    table.sec1926 td:last-child {
+      border-right: 0;
+    }
+
+    .sec1926-row1 {
+      height: 56px;
+    }
+
+    .sec1926-row2 {
+      height: 42px;
+    }
+
+    .two-col-checks {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 1px;
+    }
+
+    .two-col-checks td {
+      border: none !important;
+      padding: 0 6px 0 0 !important;
+      vertical-align: top;
+      font-size: 6.5px;
+      line-height: 1.08;
+    }
+
+    .line-fill {
+      margin-top: 2px;
+    }
+
+    .line-fill .line {
+      border-bottom: 1px solid #666;
+      height: 9px;
+      margin-bottom: 2px;
+      position: relative;
+    }
+
+    .line-fill .line span {
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      font-size: 6.8px;
+      background: #fff;
+      padding-right: 2px;
     }
 
     /* nested members table */
@@ -595,79 +648,142 @@
         </td>
       </tr>
 
+      <!-- 19-26 FIXED SECTION -->
       <tr>
-        <td colspan="3" class="h56">
-          <div class="section-title">19. Educational Attainment</div>
-          <div class="checkbox-line">
-            <div>{{ $check(($open->education_level ?? '') === 'None') }} NONE</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Kindergarten') }} KINDERGARTEN</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Elementary') }} ELEMENTARY</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Junior High School') }} JUNIOR HIGH SCHOOL</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Senior High') }} SENIOR HIGH</div>
-            <div>{{ $check(($open->education_level ?? '') === 'College') }} COLLEGE</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Vocational') }} VOCATIONAL</div>
-            <div>{{ $check(($open->education_level ?? '') === 'Post Graduate') }} POST GRADUATE</div>
+        <td colspan="10" style="padding:0;">
+          <div class="sec1926-wrap">
+            <table class="sec1926">
+              <colgroup>
+                <col style="width:15%;">
+                <col style="width:15%;">
+                <col style="width:8%;">
+                <col style="width:8%;">
+                <col style="width:15%;">
+                <col style="width:15%;">
+                <col style="width:12%;">
+                <col style="width:12%;">
+              </colgroup>
+
+              <tr class="sec1926-row1">
+                <td colspan="2">
+                  <div class="section-title">19. Educational Attainment:</div>
+                  <table class="two-col-checks">
+                    <tr>
+                      <td>
+                        <div>{{ $check(($open->education_level ?? '') === 'None') }} NONE</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'Kindergarten') }} KINDERGARTEN</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'Elementary') }} ELEMENTARY</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'Junior High School') }} JUNIOR HIGH SCHOOL</div>
+                      </td>
+                      <td>
+                        <div>{{ $check(($open->education_level ?? '') === 'Senior High') }} SENIOR HIGH</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'College') }} COLLEGE</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'Vocational') }} VOCATIONAL</div>
+                        <div>{{ $check(($open->education_level ?? '') === 'Post Graduate') }} POST GRADUATE</div>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+
+                <td colspan="2">
+                  <div class="label">22. Specific Occupation:</div>
+                  <div class="value">{{ $open->specific_occupation ?? '' }}</div>
+                </td>
+
+                <td colspan="2">
+                  <div class="label">25. Special Skills:</div>
+                  <div class="line-fill">
+                    <div class="line"><span>{{ $open->special_skills ?? '' }}</span></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="sec1926-row2">
+                <td>
+                  <div class="section-title">20. Status of Employment:</div>
+                  <div class="checkbox-line">
+                    <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} Employed</div>
+                    <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} Unemployed</div>
+                    <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} Self-employed</div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="section-title">21. Category of Employment:</div>
+                  <div class="checkbox-line">
+                    <div>{{ $check(($open->employment_category ?? '') === 'Government') }} Government</div>
+                    <div>{{ $check(($open->employment_category ?? '') === 'Private') }} Private</div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="section-title">23. Types of Employment:</div>
+                  <div class="checkbox-line">
+                    <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} Permanent</div>
+                    <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} Seasonal</div>
+                    <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} Contractual</div>
+                    <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} Job Order</div>
+                    <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} On Call</div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="section-title">24. Registered Voter:</div>
+                  <div class="checkbox-line">
+                    <div>{{ $check((string)($open->registered_voter ?? '') === '1') }} YES</div>
+                    <div>{{ $check((string)($open->registered_voter ?? '') === '0') }} NO</div>
+                  </div>
+                </td>
+
+                <td colspan="2">
+                  <div class="label">26. Sporting Talent:</div>
+                  <div class="line-fill">
+                    <div class="line"><span>{{ $open->sporting_talent ?? '' }}</span></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                  </div>
+                </td>
+              </tr>
+            </table>
           </div>
-        </td>
-
-        <td class="h56">
-          <div class="section-title">20. Status of Employment</div>
-          <div class="checkbox-line">
-            <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} Employed</div>
-            <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} Unemployed</div>
-            <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} Self-employed</div>
-          </div>
-        </td>
-
-        <td class="h56">
-          <div class="section-title">21. Category of Employment</div>
-          <div class="checkbox-line">
-            <div>{{ $check(($open->employment_category ?? '') === 'Government') }} Government</div>
-            <div>{{ $check(($open->employment_category ?? '') === 'Private') }} Private</div>
-          </div>
-        </td>
-
-        <td colspan="2" class="h56">
-          <div class="label">22. Specific Occupation:</div>
-          <div class="value">{{ $open->specific_occupation ?? '' }}</div>
-        </td>
-
-        <td class="h56">
-          <div class="section-title">23. Types of Employment</div>
-          <div class="checkbox-line">
-            <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} Permanent</div>
-            <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} Seasonal</div>
-            <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} Contractual</div>
-            <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} Job Order</div>
-            <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} On Call</div>
-          </div>
-        </td>
-
-        <td class="h56">
-          <div class="section-title">24. Registered Voter:</div>
-          <div class="checkbox-line">
-            <div>{{ $check((string)($open->registered_voter ?? '') === '1') }} YES</div>
-            <div>{{ $check((string)($open->registered_voter ?? '') === '0') }} NO</div>
-          </div>
-        </td>
-
-        <td colspan="2" class="h56">
-          <div class="label">25. Special Skills:</div>
-          <div class="value">{{ $open->special_skills ?? '' }}</div>
         </td>
       </tr>
 
       <tr>
-        <td colspan="7" class="h30">
-          <div class="label">26. Sporting Talent:</div>
-          <div class="value">{{ $open->sporting_talent ?? '' }}</div>
-        </td>
-        <td colspan="3" class="h30">
-          <div class="label">27. Organization Affiliation:</div>
-          <div class="value">{{ $open->pwd_org_affiliated ?? '' }}</div>
-          <div class="muted">Contact Person: {{ $open->org_contact_person ?? '' }}</div>
-          <div class="muted">Office Address: {{ $open->org_office_address ?? '' }}</div>
-          <div class="muted">Tel./Mobile: {{ $open->org_tel_mobile ?? '' }}</div>
+        <td colspan="10" style="padding:0;">
+          <table class="sec1926" style="width:100%;">
+            <colgroup>
+              <col style="width:22%;">
+              <col style="width:18%;">
+              <col style="width:34%;">
+              <col style="width:26%;">
+            </colgroup>
+            <tr style="height:30px;">
+              <td>
+                <div class="label">27. Organization Affiliation:</div>
+                <div class="value">{{ $open->pwd_org_affiliated ?? '' }}</div>
+              </td>
+              <td>
+                <div class="label">&nbsp;</div>
+                <div class="muted">Contact Person:</div>
+                <div class="value">{{ $open->org_contact_person ?? '' }}</div>
+              </td>
+              <td>
+                <div class="label">&nbsp;</div>
+                <div class="muted">Office Address:</div>
+                <div class="value">{{ $open->org_office_address ?? '' }}</div>
+              </td>
+              <td style="border-right:0;">
+                <div class="label">&nbsp;</div>
+                <div class="muted">Tel./Mobile:</div>
+                <div class="value">{{ $open->org_tel_mobile ?? '' }}</div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
 
