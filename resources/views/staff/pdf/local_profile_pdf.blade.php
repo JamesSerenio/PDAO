@@ -6,7 +6,7 @@
   <style>
     @page {
       size: A4 portrait;
-      margin: 6px;
+      margin: 6mm;
     }
 
     body {
@@ -81,20 +81,41 @@
       line-height: 1.05;
     }
 
-    table.form {
+    /* IMPORTANT FIX */
+    .form-wrap {
       width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
       border-left: 1px solid #222;
       border-right: 1px solid #222;
+      border-bottom: 1px solid #222;
     }
+
+    table.form {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
     table.form td,
     table.form th {
-      border: 1px solid #222;
       padding: 2px 3px;
       vertical-align: top;
       word-wrap: break-word;
       overflow-wrap: break-word;
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+    }
+
+    /* left border only on first cell of each row */
+    table.form tr > td:first-child,
+    table.form tr > th:first-child {
+      border-left: 0;
+    }
+
+    /* right-most cell should not double border with wrapper */
+    table.form tr > td:last-child,
+    table.form tr > th:last-child {
+      border-right: 0;
     }
 
     .label {
@@ -228,7 +249,38 @@
     .h62 { height: 62px; }
     .h72 { height: 72px; }
 
-    .vtop { vertical-align: top; }
+    .vtop {
+      vertical-align: top !important;
+    }
+
+    /* nested members table */
+    .members-wrap {
+      width: 100%;
+    }
+
+    table.members-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    table.members-table th,
+    table.members-table td {
+      padding: 2px;
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      vertical-align: top;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      font-size: 6.1px;
+      line-height: 1.05;
+    }
+
+    table.members-table th:last-child,
+    table.members-table td:last-child {
+      border-right: 0;
+    }
   </style>
 </head>
 <body>
@@ -293,7 +345,6 @@
   };
 
   $memberCount = max(count($openMembers), 4);
-
   $bloodType = strtoupper(trim((string)($open->blood_type ?? '')));
   $dobValue = trim((string)($open->date_of_birth ?? ''));
 @endphp
@@ -325,424 +376,428 @@
     WRITE N/A IF NOT APPLICABLE. WRITE IN CAPITAL LETTERS. USE BLACK BALLPEN. NO ERASURES, KEEP IT NEAT AND CLEAN.
   </div>
 
-  <table class="form">
-    <colgroup>
-      <col style="width:12%;">
-      <col style="width:12%;">
-      <col style="width:12%;">
-      <col style="width:12%;">
-      <col style="width:10%;">
-      <col style="width:10%;">
-      <col style="width:10%;">
-      <col style="width:10%;">
-      <col style="width:6%;">
-      <col style="width:6%;">
-    </colgroup>
+  <div class="form-wrap">
+    <table class="form">
+      <colgroup>
+        <col style="width:12%;">
+        <col style="width:12%;">
+        <col style="width:12%;">
+        <col style="width:12%;">
+        <col style="width:10%;">
+        <col style="width:10%;">
+        <col style="width:10%;">
+        <col style="width:10%;">
+        <col style="width:6%;">
+        <col style="width:6%;">
+      </colgroup>
 
-    <tr>
-      <td colspan="4">
-        <div class="label">1. Local Disability Registry Number: <span class="label normal-case">(To be filled up by PGO – PDAD)</span></div>
-        <div class="value">{{ $open->ldr_number ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">2. Profiling Date:</div>
-        <div class="value">{{ $open->profiling_date ?? '' }}</div>
-      </td>
-      <td rowspan="2" colspan="2" class="vtop">
-        <div class="photo-box">
-          @if($photo1x1)
-            <img src="{{ $photo1x1 }}" alt="1x1 Photo">
-          @else
-            <div class="photo-placeholder">
-              <span>
-                3. PLACE 1" X 1"<br>
-                6 months - present<br>
-                Photo Here
-              </span>
+      <tr>
+        <td colspan="4">
+          <div class="label">1. Local Disability Registry Number: <span class="label normal-case">(To be filled up by PGO – PDAD)</span></div>
+          <div class="value">{{ $open->ldr_number ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">2. Profiling Date:</div>
+          <div class="value">{{ $open->profiling_date ?? '' }}</div>
+        </td>
+        <td rowspan="2" colspan="2" class="vtop">
+          <div class="photo-box">
+            @if($photo1x1)
+              <img src="{{ $photo1x1 }}" alt="1x1 Photo">
+            @else
+              <div class="photo-placeholder">
+                <span>
+                  3. PLACE 1" X 1"<br>
+                  6 months - present<br>
+                  Photo Here
+                </span>
+              </div>
+            @endif
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <div class="label">4. Last Name:</div>
+          <div class="value">{{ $open->last_name ?? '' }}</div>
+        </td>
+        <td colspan="2">
+          <div class="label">5. First Name:</div>
+          <div class="value">{{ $open->first_name ?? '' }}</div>
+        </td>
+        <td colspan="2">
+          <div class="label">6. Middle Name:</div>
+          <div class="value">{{ $open->middle_name ?? '' }}</div>
+        </td>
+        <td colspan="2" style="border-right:1px solid #222 !important;">
+          <div class="label">7. Suffix:</div>
+          <div class="value">{{ $open->suffix ?? '' }}</div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="h34">
+          <div class="label">
+            8. Date of Birth:
+            @if(!$dobValue)
+              <br><span class="muted">(mm/dd/yyyy)</span>
+            @endif
+          </div>
+          <div class="value">{{ $dobValue }}</div>
+        </td>
+
+        <td colspan="2" class="h34">
+          <div class="label">9. Blood Type: <span class="label normal-case">(if known)</span></div>
+          <div class="blood-grid">
+            <div class="row">
+              {{ $check($bloodType === 'A+') }} A+
+              &nbsp;&nbsp;{{ $check($bloodType === 'AB+') }} AB+
+              &nbsp;&nbsp;{{ $check($bloodType === 'B+') }} B+
+              &nbsp;&nbsp;{{ $check($bloodType === 'O+') }} O+
             </div>
-          @endif
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="2">
-        <div class="label">4. Last Name:</div>
-        <div class="value">{{ $open->last_name ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">5. First Name:</div>
-        <div class="value">{{ $open->first_name ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">6. Middle Name:</div>
-        <div class="value">{{ $open->middle_name ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">7. Suffix:</div>
-        <div class="value">{{ $open->suffix ?? '' }}</div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="2" class="h34">
-        <div class="label">
-          8. Date of Birth:
-          @if(!$dobValue)
-            <br><span class="muted">(mm/dd/yyyy)</span>
-          @endif
-        </div>
-        <div class="value">{{ $dobValue }}</div>
-      </td>
-
-      <td colspan="2" class="h34">
-        <div class="label">9. Blood Type: <span class="label normal-case">(if known)</span></div>
-        <div class="blood-grid">
-          <div class="row">
-            {{ $check($bloodType === 'A+') }} A+
-            &nbsp;&nbsp;{{ $check($bloodType === 'AB+') }} AB+
-            &nbsp;&nbsp;{{ $check($bloodType === 'B+') }} B+
-            &nbsp;&nbsp;{{ $check($bloodType === 'O+') }} O+
+            <div class="row">
+              {{ $check($bloodType === 'A-') }} A-
+              &nbsp;&nbsp;{{ $check($bloodType === 'AB-') }} AB-
+              &nbsp;&nbsp;{{ $check($bloodType === 'B-') }} B-
+              &nbsp;&nbsp;{{ $check($bloodType === 'O-') }} O-
+            </div>
           </div>
-          <div class="row">
-            {{ $check($bloodType === 'A-') }} A-
-            &nbsp;&nbsp;{{ $check($bloodType === 'AB-') }} AB-
-            &nbsp;&nbsp;{{ $check($bloodType === 'B-') }} B-
-            &nbsp;&nbsp;{{ $check($bloodType === 'O-') }} O-
+        </td>
+
+        <td>
+          <div class="label">10. Religion:</div>
+          <div class="value">{{ $open->religion ?? '' }}</div>
+        </td>
+
+        <td>
+          <div class="label">11. Ethnic Group:</div>
+          <div class="value">{{ $open->ethnic_group ?? '' }}</div>
+        </td>
+
+        <td colspan="2">
+          <div class="label">12. Sex:</div>
+          <div class="value tight">
+            {{ $check(strtoupper((string)($open->sex ?? '')) === 'MALE') }} Male<br>
+            {{ $check(strtoupper((string)($open->sex ?? '')) === 'FEMALE') }} Female
           </div>
-        </div>
-      </td>
+        </td>
 
-      <td colspan="1">
-        <div class="label">10. Religion:</div>
-        <div class="value">{{ $open->religion ?? '' }}</div>
-      </td>
+        <td colspan="2">
+          <div class="label">13. Signature / Thumbmark</div>
+          <div class="sig-box">
+            @if($signatureThumb)
+              <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark">
+            @endif
+          </div>
+        </td>
+      </tr>
 
-      <td colspan="1">
-        <div class="label">11. Ethnic Group:</div>
-        <div class="value">{{ $open->ethnic_group ?? '' }}</div>
-      </td>
+      <tr>
+        <td colspan="10">
+          <div class="label">14. Civil Status:</div>
+          <div class="checkbox-line">
+            <span>{{ $check(($open->civil_status ?? '') === 'Single') }} Single</span>
+            <span>{{ $check(($open->civil_status ?? '') === 'Separated') }} Separated</span>
+            <span>{{ $check(($open->civil_status ?? '') === 'Cohabitation (Live-in)') }} Cohabitation (Live-in)</span>
+            <span>{{ $check(($open->civil_status ?? '') === 'Married') }} Married</span>
+            <span>{{ $check(($open->civil_status ?? '') === 'Widow') }} Widow</span>
+            <span>{{ $check(($open->civil_status ?? '') === 'Widower') }} Widower</span>
+          </div>
+        </td>
+      </tr>
 
-      <td colspan="2">
-        <div class="label">12. Sex:</div>
-        <div class="value tight">
-          {{ $check(strtoupper((string)($open->sex ?? '')) === 'MALE') }} Male<br>
-          {{ $check(strtoupper((string)($open->sex ?? '')) === 'FEMALE') }} Female
-        </div>
-      </td>
+      <tr>
+        <td colspan="5" class="h72">
+          <div class="section-title">15. Types of Disability:</div>
+          <div class="checkbox-line">
+            <div>{{ $check($typeChecked('Deaf or Hard of Hearing')) }} DEAF OR HARD OF HEARING</div>
+            <div>{{ $check($typeChecked('Intellectual Disability')) }} INTELLECTUAL DISABILITY</div>
+            <div>{{ $check($typeChecked('Learning Disability')) }} LEARNING DISABILITY</div>
+            <div>{{ $check($typeChecked('Mental Disability')) }} MENTAL DISABILITY</div>
+            <div>{{ $check($typeChecked('Physical Disability')) }} PHYSICAL DISABILITY</div>
+            <div>{{ $check($typeChecked('Multiple Disability')) }} MULTIPLE DISABILITY</div>
+            <div>{{ $check($typeChecked('Psychosocial Disability')) }} PSYCHOSOCIAL DISABILITY</div>
+            <div>{{ $check($typeChecked('Speech & Language Impairment')) }} SPEECH &amp; LANGUAGE IMPAIRMENT</div>
+            <div>{{ $check($typeChecked('Visual Disability')) }} VISUAL DISABILITY</div>
+            <div>{{ $check($typeChecked('Cancer (RA 11215)')) }} CANCER (RA 11215)</div>
+            <div>{{ $check($typeChecked('Rare Disease (RA 10747)')) }} RARE DISEASE (RA 10747)</div>
+          </div>
+        </td>
 
-      <td colspan="2">
-        <div class="label">13. Signature / Thumbmark</div>
-        <div class="sig-box">
-          @if($signatureThumb)
-            <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark">
-          @endif
-        </div>
-      </td>
-    </tr>
+        <td colspan="5" class="h72">
+          <div class="section-title">16. Causes of Disability:</div>
+          <div class="checkbox-line">
+            <b>CONGENITAL/INBORN</b><br>
+            {{ $check($causeChecked('Congenital/Inborn', 'Autism')) }} AUTISM<br>
+            {{ $check($causeChecked('Congenital/Inborn', 'ADHD')) }} ADHD<br>
+            {{ $check($causeChecked('Congenital/Inborn', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
+            {{ $check($causeChecked('Congenital/Inborn', 'Down Syndrome')) }} DOWN SYNDROME<br>
+            {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Congenital/Inborn') }}<br><br>
 
-    <tr>
-      <td colspan="10">
-        <div class="label">14. Civil Status:</div>
-        <div class="checkbox-line">
-          <span>{{ $check(($open->civil_status ?? '') === 'Single') }} Single</span>
-          <span>{{ $check(($open->civil_status ?? '') === 'Separated') }} Separated</span>
-          <span>{{ $check(($open->civil_status ?? '') === 'Cohabitation (Live-in)') }} Cohabitation (Live-in)</span>
-          <span>{{ $check(($open->civil_status ?? '') === 'Married') }} Married</span>
-          <span>{{ $check(($open->civil_status ?? '') === 'Widow') }} Widow</span>
-          <span>{{ $check(($open->civil_status ?? '') === 'Widower') }} Widower</span>
-        </div>
-      </td>
-    </tr>
+            <b>ACQUIRED</b><br>
+            {{ $check($causeChecked('Acquired', 'Chronic Illness')) }} CHRONIC ILLNESS<br>
+            {{ $check($causeChecked('Acquired', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
+            {{ $check($causeChecked('Acquired', 'Injury')) }} INJURY<br>
+            {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Acquired') }}
+          </div>
+        </td>
+      </tr>
 
-    <tr>
-      <td colspan="5" class="h72">
-        <div class="section-title">15. Types of Disability:</div>
-        <div class="checkbox-line">
-          <div>{{ $check($typeChecked('Deaf or Hard of Hearing')) }} DEAF OR HARD OF HEARING</div>
-          <div>{{ $check($typeChecked('Intellectual Disability')) }} INTELLECTUAL DISABILITY</div>
-          <div>{{ $check($typeChecked('Learning Disability')) }} LEARNING DISABILITY</div>
-          <div>{{ $check($typeChecked('Mental Disability')) }} MENTAL DISABILITY</div>
-          <div>{{ $check($typeChecked('Physical Disability')) }} PHYSICAL DISABILITY</div>
-          <div>{{ $check($typeChecked('Multiple Disability')) }} MULTIPLE DISABILITY</div>
-          <div>{{ $check($typeChecked('Psychosocial Disability')) }} PSYCHOSOCIAL DISABILITY</div>
-          <div>{{ $check($typeChecked('Speech & Language Impairment')) }} SPEECH &amp; LANGUAGE IMPAIRMENT</div>
-          <div>{{ $check($typeChecked('Visual Disability')) }} VISUAL DISABILITY</div>
-          <div>{{ $check($typeChecked('Cancer (RA 11215)')) }} CANCER (RA 11215)</div>
-          <div>{{ $check($typeChecked('Rare Disease (RA 10747)')) }} RARE DISEASE (RA 10747)</div>
-        </div>
-      </td>
+      <tr>
+        <td colspan="2">
+          <div class="label">17. Complete Address:</div>
+          <div class="muted">House No. and Street</div>
+          <div class="value">{{ $open->house_no_street ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">&nbsp;</div>
+          <div class="muted">Sitio/Purok</div>
+          <div class="value">{{ $open->sitio_purok ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">&nbsp;</div>
+          <div class="muted">Barangay</div>
+          <div class="value">{{ $open->barangay ?? '' }}</div>
+        </td>
+        <td colspan="2">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Municipality</div>
+          <div class="value">{{ $open->municipality ?? '' }}</div>
+        </td>
+        <td colspan="2">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Province</div>
+          <div class="value">{{ $open->province ?? '' }}</div>
+        </td>
+        <td colspan="2">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Region</div>
+          <div class="value">{{ $open->region ?? '' }}</div>
+        </td>
+      </tr>
 
-      <td colspan="5" class="h72">
-        <div class="section-title">16. Causes of Disability:</div>
-        <div class="checkbox-line">
-          <b>CONGENITAL/INBORN</b><br>
-          {{ $check($causeChecked('Congenital/Inborn', 'Autism')) }} AUTISM<br>
-          {{ $check($causeChecked('Congenital/Inborn', 'ADHD')) }} ADHD<br>
-          {{ $check($causeChecked('Congenital/Inborn', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
-          {{ $check($causeChecked('Congenital/Inborn', 'Down Syndrome')) }} DOWN SYNDROME<br>
-          {{ $check($causeChecked('Congenital/Inborn', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Congenital/Inborn') }}<br><br>
+      <tr>
+        <td colspan="3">
+          <div class="label">18. Contact Details:</div>
+          <div class="muted">Landline (If applicable)</div>
+          <div class="value">{{ $open->landline ?? '' }}</div>
+        </td>
+        <td colspan="3">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Mobile</div>
+          <div class="value">{{ $open->mobile ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">&nbsp;</div>
+          <div class="muted">E-mail Address</div>
+          <div class="value">{{ $open->email ?? '' }}</div>
+        </td>
+      </tr>
 
-          <b>ACQUIRED</b><br>
-          {{ $check($causeChecked('Acquired', 'Chronic Illness')) }} CHRONIC ILLNESS<br>
-          {{ $check($causeChecked('Acquired', 'Cerebral Palsy')) }} CEREBRAL PALSY<br>
-          {{ $check($causeChecked('Acquired', 'Injury')) }} INJURY<br>
-          {{ $check($causeChecked('Acquired', 'Others')) }} OTHERS, specify: {{ $causeOtherText('Acquired') }}
-        </div>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="3" class="h56">
+          <div class="section-title">19. Educational Attainment</div>
+          <div class="checkbox-line">
+            <div>{{ $check(($open->education_level ?? '') === 'None') }} NONE</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Kindergarten') }} KINDERGARTEN</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Elementary') }} ELEMENTARY</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Junior High School') }} JUNIOR HIGH SCHOOL</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Senior High') }} SENIOR HIGH</div>
+            <div>{{ $check(($open->education_level ?? '') === 'College') }} COLLEGE</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Vocational') }} VOCATIONAL</div>
+            <div>{{ $check(($open->education_level ?? '') === 'Post Graduate') }} POST GRADUATE</div>
+          </div>
+        </td>
 
-    <tr>
-      <td colspan="2">
-        <div class="label">17. Complete Address:</div>
-        <div class="muted">House No. and Street</div>
-        <div class="value">{{ $open->house_no_street ?? '' }}</div>
-      </td>
-      <td colspan="1">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Sitio/Purok</div>
-        <div class="value">{{ $open->sitio_purok ?? '' }}</div>
-      </td>
-      <td colspan="1">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Barangay</div>
-        <div class="value">{{ $open->barangay ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Municipality</div>
-        <div class="value">{{ $open->municipality ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Province</div>
-        <div class="value">{{ $open->province ?? '' }}</div>
-      </td>
-      <td colspan="2">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Region</div>
-        <div class="value">{{ $open->region ?? '' }}</div>
-      </td>
-    </tr>
+        <td class="h56">
+          <div class="section-title">20. Status of Employment</div>
+          <div class="checkbox-line">
+            <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} Employed</div>
+            <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} Unemployed</div>
+            <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} Self-employed</div>
+          </div>
+        </td>
 
-    <tr>
-      <td colspan="3">
-        <div class="label">18. Contact Details:</div>
-        <div class="muted">Landline (If applicable)</div>
-        <div class="value">{{ $open->landline ?? '' }}</div>
-      </td>
-      <td colspan="3">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Mobile</div>
-        <div class="value">{{ $open->mobile ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">&nbsp;</div>
-        <div class="muted">E-mail Address</div>
-        <div class="value">{{ $open->email ?? '' }}</div>
-      </td>
-    </tr>
+        <td class="h56">
+          <div class="section-title">21. Category of Employment</div>
+          <div class="checkbox-line">
+            <div>{{ $check(($open->employment_category ?? '') === 'Government') }} Government</div>
+            <div>{{ $check(($open->employment_category ?? '') === 'Private') }} Private</div>
+          </div>
+        </td>
 
-    <tr>
-      <td colspan="3" class="h56">
-        <div class="section-title">19. Educational Attainment</div>
-        <div class="checkbox-line">
-          <div>{{ $check(($open->education_level ?? '') === 'None') }} NONE</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Kindergarten') }} KINDERGARTEN</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Elementary') }} ELEMENTARY</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Junior High School') }} JUNIOR HIGH SCHOOL</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Senior High') }} SENIOR HIGH</div>
-          <div>{{ $check(($open->education_level ?? '') === 'College') }} COLLEGE</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Vocational') }} VOCATIONAL</div>
-          <div>{{ $check(($open->education_level ?? '') === 'Post Graduate') }} POST GRADUATE</div>
-        </div>
-      </td>
+        <td colspan="2" class="h56">
+          <div class="label">22. Specific Occupation:</div>
+          <div class="value">{{ $open->specific_occupation ?? '' }}</div>
+        </td>
 
-      <td class="h56">
-        <div class="section-title">20. Status of Employment</div>
-        <div class="checkbox-line">
-          <div>{{ $check(($open->employment_status ?? '') === 'Employed') }} Employed</div>
-          <div>{{ $check(($open->employment_status ?? '') === 'Unemployed') }} Unemployed</div>
-          <div>{{ $check(($open->employment_status ?? '') === 'Self-employed') }} Self-employed</div>
-        </div>
-      </td>
+        <td class="h56">
+          <div class="section-title">23. Types of Employment</div>
+          <div class="checkbox-line">
+            <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} Permanent</div>
+            <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} Seasonal</div>
+            <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} Contractual</div>
+            <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} Job Order</div>
+            <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} On Call</div>
+          </div>
+        </td>
 
-      <td class="h56">
-        <div class="section-title">21. Category of Employment</div>
-        <div class="checkbox-line">
-          <div>{{ $check(($open->employment_category ?? '') === 'Government') }} Government</div>
-          <div>{{ $check(($open->employment_category ?? '') === 'Private') }} Private</div>
-        </div>
-      </td>
+        <td class="h56">
+          <div class="section-title">24. Registered Voter:</div>
+          <div class="checkbox-line">
+            <div>{{ $check((string)($open->registered_voter ?? '') === '1') }} YES</div>
+            <div>{{ $check((string)($open->registered_voter ?? '') === '0') }} NO</div>
+          </div>
+        </td>
 
-      <td colspan="2" class="h56">
-        <div class="label">22. Specific Occupation:</div>
-        <div class="value">{{ $open->specific_occupation ?? '' }}</div>
-      </td>
+        <td colspan="2" class="h56">
+          <div class="label">25. Special Skills:</div>
+          <div class="value">{{ $open->special_skills ?? '' }}</div>
+        </td>
+      </tr>
 
-      <td class="h56">
-        <div class="section-title">23. Types of Employment</div>
-        <div class="checkbox-line">
-          <div>{{ $check(($open->employment_type ?? '') === 'Permanent') }} Permanent</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Seasonal') }} Seasonal</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Contractual') }} Contractual</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'Job Order') }} Job Order</div>
-          <div>{{ $check(($open->employment_type ?? '') === 'On Call') }} On Call</div>
-        </div>
-      </td>
+      <tr>
+        <td colspan="7" class="h30">
+          <div class="label">26. Sporting Talent:</div>
+          <div class="value">{{ $open->sporting_talent ?? '' }}</div>
+        </td>
+        <td colspan="3" class="h30">
+          <div class="label">27. Organization Affiliation:</div>
+          <div class="value">{{ $open->pwd_org_affiliated ?? '' }}</div>
+          <div class="muted">Contact Person: {{ $open->org_contact_person ?? '' }}</div>
+          <div class="muted">Office Address: {{ $open->org_office_address ?? '' }}</div>
+          <div class="muted">Tel./Mobile: {{ $open->org_tel_mobile ?? '' }}</div>
+        </td>
+      </tr>
 
-      <td class="h56">
-        <div class="section-title">24. Registered Voter:</div>
-        <div class="checkbox-line">
-          <div>{{ $check((string)($open->registered_voter ?? '') === '1') }} YES</div>
-          <div>{{ $check((string)($open->registered_voter ?? '') === '0') }} NO</div>
-        </div>
-      </td>
+      <tr>
+        <td>
+          <div class="label">28. ID Reference No.</div>
+          <div class="value">{{ $open->id_reference_no ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">SSS No.</div>
+          <div class="value">{{ $open->sss_no ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">GSIS No.</div>
+          <div class="value">{{ $open->gsis_no ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">PAG-IBIG No.</div>
+          <div class="value">{{ $open->pagibig_no ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">PHN No.</div>
+          <div class="value">{{ $open->phn_no ?? '' }}</div>
+        </td>
+        <td>
+          <div class="label">PHILHEALTH No.</div>
+          <div class="value">{{ $open->philhealth_no ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">PWD ID No.</div>
+          <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
+        </td>
+      </tr>
 
-      <td colspan="2" class="h56">
-        <div class="label">25. Special Skills:</div>
-        <div class="value">{{ $open->special_skills ?? '' }}</div>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="10" style="padding:0;">
+          <div class="members-wrap">
+            <table class="members-table">
+              <tr>
+                <th colspan="8" style="text-align:left;">29. HOUSEHOLD MEMBERSHIP: (Fill in with all members of the house)</th>
+              </tr>
+              <tr>
+                <th>Name<br><span class="muted">(Include PWD Member)<br>(Start with head of the family)</span></th>
+                <th>Date of Birth</th>
+                <th>Civil Status</th>
+                <th>Educational Attainment</th>
+                <th>Relationship to PWD</th>
+                <th>Occupation</th>
+                <th>Social Pension Affiliation<br><span class="muted">(SSS, GSIS, UCT, Local Pension)</span></th>
+                <th>Monthly Income</th>
+              </tr>
 
-    <tr>
-      <td colspan="7" class="h30">
-        <div class="label">26. Sporting Talent:</div>
-        <div class="value">{{ $open->sporting_talent ?? '' }}</div>
-      </td>
-      <td colspan="3" class="h30">
-        <div class="label">27. Organization Affiliation:</div>
-        <div class="value">{{ $open->pwd_org_affiliated ?? '' }}</div>
-        <div class="muted">Contact Person: {{ $open->org_contact_person ?? '' }}</div>
-        <div class="muted">Office Address: {{ $open->org_office_address ?? '' }}</div>
-        <div class="muted">Tel./Mobile: {{ $open->org_tel_mobile ?? '' }}</div>
-      </td>
-    </tr>
+              @for($i = 0; $i < $memberCount; $i++)
+                @php $m = $openMembers[$i] ?? null; @endphp
+                <tr>
+                  <td>{{ $m->name ?? '' }}</td>
+                  <td>{{ $m->date_of_birth ?? '' }}</td>
+                  <td>{{ $m->civil_status ?? '' }}</td>
+                  <td>{{ $m->educational_attainment ?? '' }}</td>
+                  <td>{{ $m->relationship_to_pwd ?? '' }}</td>
+                  <td>{{ $m->occupation ?? '' }}</td>
+                  <td>{{ $m->social_pension_affiliation ?? '' }}</td>
+                  <td>{{ isset($m->monthly_income) ? $m->monthly_income : '' }}</td>
+                </tr>
+              @endfor
+            </table>
+          </div>
+        </td>
+      </tr>
 
-    <tr>
-      <td>
-        <div class="label">28. ID Reference No.</div>
-        <div class="value">{{ $open->id_reference_no ?? '' }}</div>
-      </td>
-      <td>
-        <div class="label">SSS No.</div>
-        <div class="value">{{ $open->sss_no ?? '' }}</div>
-      </td>
-      <td>
-        <div class="label">GSIS No.</div>
-        <div class="value">{{ $open->gsis_no ?? '' }}</div>
-      </td>
-      <td>
-        <div class="label">PAG-IBIG No.</div>
-        <div class="value">{{ $open->pagibig_no ?? '' }}</div>
-      </td>
-      <td>
-        <div class="label">PHN No.</div>
-        <div class="value">{{ $open->phn_no ?? '' }}</div>
-      </td>
-      <td>
-        <div class="label">PHILHEALTH No.</div>
-        <div class="value">{{ $open->philhealth_no ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">PWD ID No.</div>
-        <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="3">
+          <div class="label">30. Total Family Income:</div>
+          <div class="value">{{ $open->total_family_income ?? '' }}</div>
+        </td>
+        <td colspan="3">
+          <div class="label">31. Name of Interviewee:</div>
+          <div class="value">{{ $open->interviewee_name ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">32. Relationship to PWD:</div>
+          <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
+        </td>
+      </tr>
 
-    <tr>
-      <td colspan="10" style="padding:0;">
-        <table class="form members" style="border:none; width:100%; table-layout:fixed;">
-          <tr>
-            <th colspan="8" style="text-align:left;">29. HOUSEHOLD MEMBERSHIP: (Fill in with all members of the house)</th>
-          </tr>
-          <tr>
-            <th>Name<br><span class="muted">(Include PWD Member)<br>(Start with head of the family)</span></th>
-            <th>Date of Birth</th>
-            <th>Civil Status</th>
-            <th>Educational Attainment</th>
-            <th>Relationship to PWD</th>
-            <th>Occupation</th>
-            <th>Social Pension Affiliation<br><span class="muted">(SSS, GSIS, UCT, Local Pension)</span></th>
-            <th>Monthly Income</th>
-          </tr>
+      <tr>
+        <td colspan="10">
+          <div class="label">33. Signature/Thumbmark of Interviewee (Other than PWD):</div>
+          <div class="sig-box" style="height:24px;">
+            @if($intervieweeSignature)
+              <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
+            @endif
+          </div>
+        </td>
+      </tr>
 
-          @for($i = 0; $i < $memberCount; $i++)
-            @php $m = $openMembers[$i] ?? null; @endphp
-            <tr>
-              <td>{{ $m->name ?? '' }}</td>
-              <td>{{ $m->date_of_birth ?? '' }}</td>
-              <td>{{ $m->civil_status ?? '' }}</td>
-              <td>{{ $m->educational_attainment ?? '' }}</td>
-              <td>{{ $m->relationship_to_pwd ?? '' }}</td>
-              <td>{{ $m->occupation ?? '' }}</td>
-              <td>{{ $m->social_pension_affiliation ?? '' }}</td>
-              <td>{{ isset($m->monthly_income) ? $m->monthly_income : '' }}</td>
-            </tr>
-          @endfor
-        </table>
-      </td>
-    </tr>
+      <tr>
+        <td colspan="3">
+          <div class="label">34. Accomplished By:</div>
+          <div class="muted">Name</div>
+          <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
+        </td>
+        <td colspan="3">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Position</div>
+          <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">&nbsp;</div>
+          <div class="muted">Signature</div>
+          <div class="sig-box" style="height:22px;">
+            @if($accomplishedSignature)
+              <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
+            @endif
+          </div>
+        </td>
+      </tr>
 
-    <tr>
-      <td colspan="3">
-        <div class="label">30. Total Family Income:</div>
-        <div class="value">{{ $open->total_family_income ?? '' }}</div>
-      </td>
-      <td colspan="3">
-        <div class="label">31. Name of Interviewee:</div>
-        <div class="value">{{ $open->interviewee_name ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">32. Relationship to PWD:</div>
-        <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="10">
-        <div class="label">33. Signature/Thumbmark of Interviewee (Other than PWD):</div>
-        <div class="sig-box" style="height:24px;">
-          @if($intervieweeSignature)
-            <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
-          @endif
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="3">
-        <div class="label">34. Accomplished By:</div>
-        <div class="muted">Name</div>
-        <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
-      </td>
-      <td colspan="3">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Position</div>
-        <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">&nbsp;</div>
-        <div class="muted">Signature</div>
-        <div class="sig-box" style="height:22px;">
-          @if($accomplishedSignature)
-            <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
-          @endif
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="6">
-        <div class="label">35. Name of Reporting Unit (Office/Section):</div>
-        <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
-      </td>
-      <td colspan="4">
-        <div class="label">36. Approved By:</div>
-        <div class="value">{{ $open->approved_by ?? '' }}</div>
-      </td>
-    </tr>
-  </table>
+      <tr>
+        <td colspan="6">
+          <div class="label">35. Name of Reporting Unit (Office/Section):</div>
+          <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
+        </td>
+        <td colspan="4">
+          <div class="label">36. Approved By:</div>
+          <div class="value">{{ $open->approved_by ?? '' }}</div>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
 </body>
 </html>
