@@ -328,18 +328,6 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                           </div>
 
                           <div class="reg-kv">
-                            <span>PWD Organization / Group Name</span>
-                            @if($isEditing)
-                              <input class="reg-input"
-                                     name="pwd_org_affiliated"
-                                     value="{{ $val($open->pwd_org_affiliated) }}"
-                                     placeholder="e.g. Power Ranger">
-                            @else
-                              <b>{{ $open->pwd_org_affiliated ?: '—' }}</b>
-                            @endif
-                          </div>
-
-                          <div class="reg-kv">
                             <span>LDR Number</span>
                             @if($isEditing)
                               <input class="reg-input" name="ldr_number" value="{{ $val($open->ldr_number) }}">
