@@ -169,7 +169,8 @@
     .photo-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover;;
+      object-fit: cover;
+      ;
     }
 
     .photo-placeholder {
@@ -389,6 +390,10 @@
     table.members-table th:last-child,
     table.members-table td:last-child {
       border-right: 0;
+    }
+
+    .member-row td {
+      height: 16px;
     }
   </style>
 </head>
@@ -910,7 +915,7 @@
 
               @for($i = 0; $i < $memberCount; $i++)
                 @php $m = $openMembers[$i] ?? null; @endphp
-                <tr>
+                <tr class="member-row">
                   <td>{{ $m->name ?? '' }}</td>
                   <td>{{ $m->date_of_birth ?? '' }}</td>
                   <td>{{ $m->civil_status ?? '' }}</td>
