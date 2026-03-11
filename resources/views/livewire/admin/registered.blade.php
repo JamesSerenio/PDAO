@@ -16,6 +16,8 @@ $perPage = 12;
 
 // ===== LIST QUERY (summary) =====
 $query = DB::table('local_profiles as lp')
+  ->whereNotNull('lp.date_of_birth')
+  ->whereRaw('TIMESTAMPDIFF(YEAR, lp.date_of_birth, CURDATE()) < 60')
   ->leftJoin('local_profile_disability_types as lpdt', 'lp.id', '=', 'lpdt.local_profile_id')
   ->leftJoin('disability_types as dt', 'lpdt.disability_type_id', '=', 'dt.id')
   ->select(

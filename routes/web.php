@@ -30,6 +30,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::view('/mapping', 'pages.admin.mapping')->name('mapping');
     Route::view('/local-profile-form', 'pages.admin.local_profile_form')->name('local_profile_form');
     Route::view('/registered', 'pages.admin.registered')->name('registered');
+    Route::view('/senior-citizens', 'pages.admin.senior_citizens')->name('senior_citizens');
 
     // Registered actions
     Route::put('/registered/{id}', [AdminRegisteredController::class, 'update'])
