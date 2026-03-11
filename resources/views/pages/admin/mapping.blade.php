@@ -11,7 +11,7 @@
     $cssPath = public_path('css/staffmapping.css');
     $cssVer = file_exists($cssPath) ? filemtime($cssPath) : time();
   @endphp
-  <link rel="stylesheet" href="{{ asset('css/staffmapping.css') }}?v={{ $cssVer }}">
+  <link rel="stylesheet" href="{{ asset('css/admin_mapping.css.') }}?v={{ $cssVer }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 @endpush
 

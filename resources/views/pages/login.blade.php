@@ -69,7 +69,7 @@
             <input type="checkbox" name="remember">
             Remember me
           </label>
-          <span class="role-hint">Admin / Staff</span>
+          <span class="role-hint">Admin</span>
         </div>
 
         <button type="submit" class="login-btn">
