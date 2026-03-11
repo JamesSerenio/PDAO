@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin_shell')
 
 @section('title','Senior Citizens')
 
