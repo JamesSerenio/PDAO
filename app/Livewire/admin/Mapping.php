@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Staff;
+namespace App\Livewire\admin;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -101,6 +101,6 @@ class Mapping extends Component
 
     public function render()
     {
-        return view('livewire.staff.mapping');
+        return view('livewire.admin.mapping');
     }
 }

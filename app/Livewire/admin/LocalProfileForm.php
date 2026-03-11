@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Staff;
+namespace App\Livewire\admin;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -483,7 +483,7 @@ class LocalProfileForm extends Component
 
     public function render()
     {
-        return view('livewire.staff.local-profile-form', [
+        return view('livewire.admin.local-profile-form', [
             'disabilityTypeOptions'   => $this->disabilityTypeOptions,
             'causeCongenitalOptions'  => $this->causeCongenitalOptions,
             'causeAcquiredOptions'    => $this->causeAcquiredOptions,
