@@ -1,7 +1,7 @@
-@extends('layouts.staff_shell')
+@extends('layouts.admin_shell')
 
-@section('title', 'Staff Dashboard')
-@section('page_title', 'Staff Dashboard')
+@section('title', 'admin Dashboard')
+@section('page_title', 'admin Dashboard')
 
 @section('page_subtitle')
   Welcome, <b>{{ auth()->user()->name }}</b> ({{ auth()->user()->role }})

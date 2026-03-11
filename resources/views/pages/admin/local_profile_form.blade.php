@@ -1,4 +1,4 @@
-@extends('layouts.staff_shell')
+@extends('layouts.admin_shell')
 
 @section('title', 'Local Profile Form')
 @section('page_title', 'Local Profile Form')
@@ -16,6 +16,6 @@
 @section('content')
 
   {{-- ✅ This page only wraps the Livewire component --}}
-  <livewire:staff.local-profile-form />
+  <livewire:admin.local-profile-form />
 
 @endsection

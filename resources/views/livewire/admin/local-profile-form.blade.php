@@ -522,7 +522,7 @@
       </div>
 
       <div class="lpf-actions">
-        <a href="{{ route('staff.dashboard') }}" class="lpf-btn lpf-btn-ghost">Cancel</a>
+        <a href="{{ route('admin.dashboard') }}" class="lpf-btn lpf-btn-ghost">Cancel</a>
         <button type="submit" class="lpf-btn lpf-btn-primary">Save Form</button>
       </div>
 

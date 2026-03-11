@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
-class StaffRegisteredController extends Controller
+class adminRegisteredController extends Controller
 {
     public function update(Request $request, int $id)
     {
@@ -115,7 +115,7 @@ class StaffRegisteredController extends Controller
 
         $redirectTo = $request->input('_redirect');
         if (!$redirectTo) {
-            $redirectTo = url('/staff/registered') . '?' . http_build_query([
+            $redirectTo = url('/admin/registered') . '?' . http_build_query([
                 'open' => $id,
                 'editMode' => 0,
             ]);
@@ -394,7 +394,7 @@ class StaffRegisteredController extends Controller
         $allTypes = DB::table('disability_types')->orderBy('id')->get();
         $allCauses = DB::table('disability_causes')->orderBy('id')->get();
 
-        $pdf = Pdf::loadView('staff.pdf.local_profile_pdf', [
+        $pdf = Pdf::loadView('admin.pdf.local_profile_pdf', [
             'open'         => $open,
             'openTypeIds'  => $openTypeIds,
             'openTypes'    => $openTypes,

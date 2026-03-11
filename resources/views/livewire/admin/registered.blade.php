@@ -242,7 +242,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
                   <a
                     class="reg-btn mini ghost"
-                    href="{{ route('staff.registered.pdf', $r->id) }}"
+                    href="{{ route('admin.registered.pdf', $r->id) }}"
                     target="_blank"
                   >
                     PDF
@@ -295,7 +295,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
                     <form
                       method="POST"
-                      action="{{ route('staff.registered.update', $open->id) }}"
+                      action="{{ route('admin.registered.update', $open->id) }}"
                       enctype="multipart/form-data"
                       class="reg-form"
                     >

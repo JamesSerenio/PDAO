@@ -1,4 +1,4 @@
-@extends('layouts.staff_shell')
+@extends('layouts.admin_shell')
 
 @section('title', 'Registered Person')
 @section('page_title', 'Registered Person')
@@ -15,5 +15,5 @@
 @endpush
 
 @section('content')
-  @include('staff.registered')
+  @include('admin.registered')
 @endsection

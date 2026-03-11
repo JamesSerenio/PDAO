@@ -1,4 +1,4 @@
-{{-- resources/views/livewire/staff/mapping.blade.php --}}
+{{-- resources/views/livewire/admin/mapping.blade.php --}}
 
 <div class="map-wrap">
 
@@ -128,15 +128,15 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    function initStaffMap() {
+    function initadminMap() {
       const mapEl = document.getElementById("map");
       if (!mapEl) return;
 
       // prevent re-init
       if (mapEl.dataset.inited === "1") {
-        if (window.__staffMap) {
-          setTimeout(() => window.__staffMap.invalidateSize(true), 60);
-          setTimeout(() => window.__staffMap.invalidateSize(true), 250);
+        if (window.__adminMap) {
+          setTimeout(() => window.__adminMap.invalidateSize(true), 60);
+          setTimeout(() => window.__adminMap.invalidateSize(true), 250);
         }
         return;
       }
@@ -166,7 +166,7 @@
       const suggestionsEl = document.getElementById("suggestions");
 
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
-      window.__staffMap = map;
+      window.__adminMap = map;
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
@@ -341,7 +341,7 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", initStaffMap);
-    document.addEventListener("livewire:navigated", initStaffMap);
+    document.addEventListener("DOMContentLoaded", initadminMap);
+    document.addEventListener("livewire:navigated", initadminMap);
   </script>
 @endpush
