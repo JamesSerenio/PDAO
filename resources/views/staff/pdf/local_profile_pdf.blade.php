@@ -26,6 +26,10 @@
       width: 100%;
     }
 
+    .page-break {
+      page-break-before: always;
+    }
+
     .header {
       width: 100%;
       border-collapse: collapse;
@@ -97,6 +101,7 @@
       text-align: left;
       line-height: 1.0;
     }
+
     .form-wrap {
       width: 100%;
       border-left: 1px solid #222;
@@ -170,7 +175,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      ;
     }
 
     .photo-placeholder {
@@ -256,7 +260,6 @@
 
     .h34 { height: 34px; }
 
-    /* 14-16 */
     .civil-row {
       font-size: 6.6px;
       line-height: 1.05;
@@ -295,7 +298,6 @@
       vertical-align: bottom;
     }
 
-    /* 19-26 */
     .sec1926-wrap {
       width: 100%;
     }
@@ -336,6 +338,7 @@
     .no-border {
       border: none !important;
     }
+
     .two-col-checks td {
       border: none !important;
       padding: 0 6px 0 0 !important;
@@ -395,6 +398,7 @@
     .member-row td {
       height: 16px;
     }
+
     .row30-inline td,
     .row3133-inline td {
       padding: 2px 4px !important;
@@ -419,220 +423,384 @@
       display: inline-block;
       object-fit: contain;
     }
-    .row3133 td{
+
+    .row3133 td {
       vertical-align: top;
     }
 
-    .cell-box{
-      padding:3px;
+    .cell-box {
+      padding: 3px;
     }
 
-    .cell-box .label{
+    .cell-box .label {
       font-weight: bold;
-      font-size:7px;
+      font-size: 7px;
     }
 
-    .cell-box .value{
-      margin-top:2px;
-      font-size:7px;
-    }
-    .signature-box{
-      height:70px;   /* malaking space para sa thumbmark */
+    .cell-box .value {
+      margin-top: 2px;
+      font-size: 7px;
     }
 
-    .signature-box img{
-      display:block;
-      margin-top:10px;
-    }
-    .row3133-swap{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      table-layout:fixed;
+    .signature-box {
+      height: 70px;
     }
 
-    .row3133-swap td{
-      border-top:1px solid #222;
-      border-right:1px solid #222;
-      vertical-align:top;
-      padding:3px 5px;
+    .signature-box img {
+      display: block;
+      margin-top: 10px;
     }
 
-    .row3133-swap td:last-child{
-      border-right:0;
+    .row3133-swap {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
     }
 
-    /* swap sizes */
-    .row3133-swap .box31{
-      width:32%;
+    .row3133-swap td {
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      vertical-align: top;
+      padding: 3px 5px;
     }
 
-    .row3133-swap .box32{
-      width:20%;
+    .row3133-swap td:last-child {
+      border-right: 0;
     }
 
-    .row3133-swap .box33{
-      width:48%;
-      height:70px; /* malaking thumbmark space */
+    .row3133-swap .box31 {
+      width: 32%;
     }
 
-    .row3133-swap .label{
-      font-size:7px;
-      font-weight:bold;
-      line-height:1.1;
+    .row3133-swap .box32 {
+      width: 20%;
     }
 
-    .row3133-swap .value{
-      margin-top:2px;
-      font-size:7px;
-      line-height:1.1;
+    .row3133-swap .box33 {
+      width: 48%;
+      height: 70px;
     }
 
-    .row3133-swap .sig33{
-      display:block;
-      height:34px;
-      max-width:100%;
-      margin-top:8px;
-      object-fit:contain;
-    }
-    .row34-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      table-layout:fixed;
+    .row3133-swap .label {
+      font-size: 7px;
+      font-weight: bold;
+      line-height: 1.1;
     }
 
-    .row34-table td{
-      border-top:1px solid #222;
-      border-right:1px solid #222;
-      vertical-align:top;
-      padding:3px 5px;
+    .row3133-swap .value {
+      margin-top: 2px;
+      font-size: 7px;
+      line-height: 1.1;
     }
 
-    .row34-table td:last-child{
-      border-right:0;
+    .row3133-swap .sig33 {
+      display: block;
+      height: 34px;
+      max-width: 100%;
+      margin-top: 8px;
+      object-fit: contain;
     }
 
-    .row34-title{
-      width:17%;
+    .row34-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
     }
 
-    .row34-name{
-      width:23%;
+    .row34-table td {
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      vertical-align: top;
+      padding: 3px 5px;
     }
 
-    .row34-position{
-      width:20%;
+    .row34-table td:last-child {
+      border-right: 0;
     }
 
-    .row34-signature{
-      width:40%;
+    .row34-title {
+      width: 17%;
     }
 
-    .row34-sub{
-      font-size:6.4px;
-      line-height:1.05;
-      margin-bottom:1px;
-      color:#444;
-      font-weight:bold;
+    .row34-name {
+      width: 23%;
     }
 
-    .row34-sigbox{
-      height:22px;
-      border:none;
-      text-align:left;
-      overflow:hidden;
-      background:#fff;
+    .row34-position {
+      width: 20%;
     }
 
-    .row34-sigbox img{
-      height:100%;
-      max-width:100%;
-      object-fit:contain;
-      display:block;
-    }
-    .row3536-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      table-layout:fixed;
+    .row34-signature {
+      width: 40%;
     }
 
-    .row3536-table td{
-      border-top:1px solid #222;
-      border-right:1px solid #222;
-      vertical-align:top;
-      padding:3px 5px;
+    .row34-sub {
+      font-size: 6.4px;
+      line-height: 1.05;
+      margin-bottom: 1px;
+      color: #444;
+      font-weight: bold;
     }
 
-    .row3536-table td:last-child{
-      border-right:0;
+    .row34-sigbox {
+      height: 22px;
+      border: none;
+      text-align: left;
+      overflow: hidden;
+      background: #fff;
     }
 
-    .row35-box{
-      width:100%;
-      height:24px;
+    .row34-sigbox img {
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
     }
 
-    .row36-title{
-      width:21%;
+    .row3536-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
     }
 
-    .row36-name{
-      width:43%;
+    .row3536-table td {
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      vertical-align: top;
+      padding: 3px 5px;
     }
 
-    .row36-sign{
-      width:36%;
+    .row3536-table td:last-child {
+      border-right: 0;
     }
 
-    .row36-sub{
-      font-size:6.4px;
-      line-height:1.05;
-      margin-bottom:1px;
-      color:#444;
-      font-weight:bold;
+    .row35-box {
+      width: 100%;
+      height: 24px;
     }
 
-    .row36-sigbox{
-      height:18px;
-      border:none;
-      text-align:left;
-      overflow:hidden;
-      background:#fff;
+    .row36-title {
+      width: 21%;
     }
 
-    .row36-sigbox img{
-      height:100%;
-      max-width:100%;
-      object-fit:contain;
-      display:block;
-    }
-    .row35-table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      table-layout:fixed;
+    .row36-name {
+      width: 43%;
     }
 
-    .row35-table td{
-      border-top:1px solid #222;
-      border-right:1px solid #222;
-      vertical-align:top;
-      padding:3px 5px;
+    .row36-sign {
+      width: 36%;
     }
 
-    .row35-table td:last-child{
-      border-right:0;
+    .row36-sub {
+      font-size: 6.4px;
+      line-height: 1.05;
+      margin-bottom: 1px;
+      color: #444;
+      font-weight: bold;
     }
 
-    .row35-title{
-      width:40%;
+    .row36-sigbox {
+      height: 18px;
+      border: none;
+      text-align: left;
+      overflow: hidden;
+      background: #fff;
     }
 
-    .row35-value{
-      width:60%;
+    .row36-sigbox img {
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
     }
+
+    .row35-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+    }
+
+    .row35-table td {
+      border-top: 1px solid #222;
+      border-right: 1px solid #222;
+      vertical-align: top;
+      padding: 3px 5px;
+    }
+
+    .row35-table td:last-child {
+      border-right: 0;
+    }
+
+    .row35-title {
+      width: 40%;
+    }
+
+    .row35-value {
+      width: 60%;
+    }
+
+/* =========================
+     PAGE 2 / BACK FIXED
+  ========================= */
+  .back-page {
+    width: 100%;
+    padding-top: 10mm;
+  }
+
+  .back-header {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .back-header .line1 {
+    font-size: 9.8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .back-header .line2 {
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.18;
+    margin: 2px 0 0;
+    letter-spacing: .2px;
+  }
+
+  .back-header .line3 {
+    font-size: 8.9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.15;
+    margin: 14px 0 0;
+    letter-spacing: .2px;
+  }
+
+  .consent-box {
+    width: 70%;
+    margin: 8px auto 0;
+    border: 1px solid #7d7d7d;
+    padding: 16px 22px 18px;
+  }
+
+  .consent-box p {
+    font-size: 10px;
+    line-height: 1.42;
+    text-align: justify;
+    text-indent: 30px;
+    margin: 0 0 13px 0;
+  }
+
+  .consent-box .para-tight {
+    margin-bottom: 11px;
+  }
+
+  .consent-box .bold-center {
+    font-size: 7.5px;
+    font-weight: 800;
+    text-align: center;
+    margin: 10px 0 14px;
+    text-transform: uppercase;
+    line-height: 1.25;
+  }
+
+  .consent-title {
+    text-align: center;
+    font-size: 8.3px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 4px 0 14px;
+    line-height: 1.2;
+  }
+
+  .signed-line {
+    margin-top: 18px;
+    font-size: 7.5px;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .fill-line {
+    display: inline-block;
+    border-bottom: 1px solid #333;
+    min-width: 44px;
+    height: 11px;
+    line-height: 11px;
+    text-align: center;
+    vertical-align: bottom;
+    padding: 0 2px;
+  }
+
+  .fill-line.month {
+    min-width: 108px;
+  }
+
+  .fill-line.year {
+    min-width: 42px;
+  }
+
+  .conformed {
+    margin-top: 26px;
+    width: 100%;
+    min-height: 110px;
+    position: relative;
+  }
+
+  .conformed-label {
+    font-size: 7.5px;
+    text-align: left;
+    width: 82%;
+    margin: 0 auto 24px;
+  }
+
+  .respondent-wrap {
+    width: 48%;
+    margin-left: auto;
+    margin-right: 3%;
+    text-align: center;
+  }
+
+  .respondent-sign-box {
+    width: 100%;
+    height: 34px;
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 2px;
+  }
+
+  .respondent-sign-box img {
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .respondent-line {
+    border-top: 1px solid #222;
+    width: 100%;
+    margin: 0 auto 3px;
+    height: 1px;
+  }
+
+  .respondent-name {
+    font-size: 7.2px;
+    font-weight: 700;
+    min-height: 10px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  .respondent-caption {
+    font-size: 7px;
+    line-height: 1.2;
+  }
   </style>
 </head>
 <body>
@@ -671,11 +839,11 @@
   $logo1 = $imgToBase64(public_path('img/logopdf1.png'));
   $logo2 = $imgToBase64(public_path('img/logopdf2.png'));
 
-$photo1x1 = $storageToBase64($open->photo_1x1 ?? null);
-$signatureThumb = $storageToBase64($open->signature_thumbmark ?? null);
-$intervieweeSignature = $storageToBase64($open->interviewee_signature_thumbmark ?? null);
-$accomplishedSignature = $storageToBase64($open->accomplished_signature ?? null);
-$approvedSignature = $storageToBase64($open->approved_signature ?? null);
+  $photo1x1 = $storageToBase64($open->photo_1x1 ?? null);
+  $signatureThumb = $storageToBase64($open->signature_thumbmark ?? null);
+  $intervieweeSignature = $storageToBase64($open->interviewee_signature_thumbmark ?? null);
+  $accomplishedSignature = $storageToBase64($open->accomplished_signature ?? null);
+  $approvedSignature = $storageToBase64($open->approved_signature ?? null);
 
   $typeChecked = function($typeName) use ($openTypes) {
       return in_array($typeName, $openTypes);
@@ -700,8 +868,24 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
   $memberCount = max(count($openMembers), 4);
   $bloodType = strtoupper(trim((string)($open->blood_type ?? '')));
   $dobValue = trim((string)($open->date_of_birth ?? ''));
+
+  $profileDateObj = null;
+  try {
+      $profileDateObj = !empty($open->profiling_date) ? Carbon::parse($open->profiling_date) : null;
+  } catch (\Throwable $e) {
+      $profileDateObj = null;
+  }
+
+  $signedDay = $profileDateObj ? $profileDateObj->format('d') : '';
+  $signedMonth = $profileDateObj ? $profileDateObj->format('F') : '';
+  $signedYear = $profileDateObj ? $profileDateObj->format('Y') : '';
+
+  $consentName = trim((string)($open->interviewee_name ?? ''));
 @endphp
 
+<!-- =========================
+     PAGE 1 / FRONT
+========================= -->
 <div class="page">
 
   <table class="header">
@@ -846,7 +1030,6 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
         </td>
       </tr>
 
-      <!-- 14-16 FIXED -->
       <tr>
         <td colspan="10">
           <div class="label">14. Civil Status:</div>
@@ -952,7 +1135,6 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
         </td>
       </tr>
 
-      <!-- 19-26 FIXED SECTION -->
       <tr>
         <td colspan="10" style="padding:0;">
           <div class="sec1926-wrap">
@@ -1091,46 +1273,49 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
         </td>
       </tr>
 
-<tr>
-  <td colspan="10" style="padding:0;">
-    <table style="width:100%; border-collapse:separate; border-spacing:0; table-layout:fixed;">
-      <colgroup>
-        <col style="width:13%;">
-        <col style="width:13%;">
-        <col style="width:11%;">
-        <col style="width:13%;">
-        <col style="width:11%;">
-        <col style="width:13%;">
-        <col style="width:26%;">
-      </colgroup>
       <tr>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">28. ID REFERENCE NO.</div>
-          <div class="value">{{ $open->id_reference_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">SSS NO.:</div>
-          <div class="value">{{ $open->sss_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">GSIS NO.:</div>
-          <div class="value">{{ $open->gsis_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">PAG-IBIG NO.:</div>
-          <div class="value">{{ $open->pagibig_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">PHN NO.:</div>
-          <div class="value">{{ $open->phn_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">PHILHEALTH NO.:</div>
-          <div class="value">{{ $open->philhealth_no ?? '' }}</div>
-        </td>
-        <td style="border-top:1px solid #222; padding:2px 3px; vertical-align:top;">
-          <div class="label">PWD ID NO.:</div>
-          <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
+        <td colspan="10" style="padding:0;">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; table-layout:fixed;">
+            <colgroup>
+              <col style="width:13%;">
+              <col style="width:13%;">
+              <col style="width:11%;">
+              <col style="width:13%;">
+              <col style="width:11%;">
+              <col style="width:13%;">
+              <col style="width:26%;">
+            </colgroup>
+            <tr>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">28. ID REFERENCE NO.</div>
+                <div class="value">{{ $open->id_reference_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">SSS NO.:</div>
+                <div class="value">{{ $open->sss_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">GSIS NO.:</div>
+                <div class="value">{{ $open->gsis_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">PAG-IBIG NO.:</div>
+                <div class="value">{{ $open->pagibig_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">PHN NO.:</div>
+                <div class="value">{{ $open->phn_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">PHILHEALTH NO.:</div>
+                <div class="value">{{ $open->philhealth_no ?? '' }}</div>
+              </td>
+              <td style="border-top:1px solid #222; padding:2px 3px; vertical-align:top;">
+                <div class="label">PWD ID NO.:</div>
+                <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
 
@@ -1170,7 +1355,6 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
         </td>
       </tr>
 
-      <!-- 30 -->
       <tr class="row30-inline">
         <td colspan="10">
           <span class="label inline-label">30. TOTAL FAMILY INCOME:</span>
@@ -1178,110 +1362,190 @@ $approvedSignature = $storageToBase64($open->approved_signature ?? null);
         </td>
       </tr>
 
-        <tr>
-          <td colspan="10" style="padding:0;">
-            <table class="row3133-swap">
-              <tr>
-                <!-- 31 = dating size ng 33 -->
-                <td class="box31">
-                  <div class="label">31. NAME OF INTERVIEWEE:</div>
-                  <div class="value">{{ $open->interviewee_name ?? '' }}</div>
-                </td>
+      <tr>
+        <td colspan="10" style="padding:0;">
+          <table class="row3133-swap">
+            <tr>
+              <td class="box31">
+                <div class="label">31. NAME OF INTERVIEWEE:</div>
+                <div class="value">{{ $open->interviewee_name ?? '' }}</div>
+              </td>
 
-                <!-- 32 = same lang -->
-                <td class="box32">
-                  <div class="label">32. RELATIONSHIP TO PWD:</div>
-                  <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
-                </td>
+              <td class="box32">
+                <div class="label">32. RELATIONSHIP TO PWD:</div>
+                <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
+              </td>
 
-                <!-- 33 = dating size ng 31 -->
-                <td class="box33">
-                  <div class="label">
-                    33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
-                  </div>
+              <td class="box33">
+                <div class="label">
+                  33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
+                </div>
 
-                  @if($intervieweeSignature)
-                    <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature" class="sig33">
+                @if($intervieweeSignature)
+                  <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature" class="sig33">
+                @endif
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="10" style="padding:0;">
+          <table class="row34-table">
+            <tr>
+              <td class="row34-title">
+                <div class="label">34. ACCOMPLISHED BY:</div>
+              </td>
+
+              <td class="row34-name">
+                <div class="muted row34-sub">NAME:</div>
+                <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
+              </td>
+
+              <td class="row34-position">
+                <div class="muted row34-sub">POSITION:</div>
+                <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
+              </td>
+
+              <td class="row34-signature">
+                <div class="muted row34-sub">SIGNATURE:</div>
+                <div class="sig-box row34-sigbox">
+                  @if($accomplishedSignature)
+                    <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
                   @endif
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-<tr>
-  <td colspan="10" style="padding:0;">
-    <table class="row34-table">
-      <tr>
-        <td class="row34-title">
-          <div class="label">34. ACCOMPLISHED BY:</div>
-        </td>
-
-        <td class="row34-name">
-          <div class="muted row34-sub">NAME:</div>
-          <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
-        </td>
-
-        <td class="row34-position">
-          <div class="muted row34-sub">POSITION:</div>
-          <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
-        </td>
-
-        <td class="row34-signature">
-          <div class="muted row34-sub">SIGNATURE:</div>
-          <div class="sig-box row34-sigbox">
-            @if($accomplishedSignature)
-              <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
-            @endif
-          </div>
+                </div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
-    </table>
-  </td>
-</tr>
 
-<tr>
-  <td colspan="10" style="padding:0;">
-    <table class="row35-table">
       <tr>
-        <td class="row35-title">
-          <div class="label">35. NAME OF REPORTING UNIT (OFFICE/SECTION):</div>
-        </td>
+        <td colspan="10" style="padding:0;">
+          <table class="row35-table">
+            <tr>
+              <td class="row35-title">
+                <div class="label">35. NAME OF REPORTING UNIT (OFFICE/SECTION):</div>
+              </td>
 
-        <td class="row35-value">
-          <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
+              <td class="row35-value">
+                <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
-    </table>
-  </td>
-</tr>
 
-<tr>
-  <td colspan="10" style="padding:0;">
-    <table class="row3536-table">
       <tr>
-        <td class="row36-title">
-          <div class="label">36. APPROVED BY:</div>
-        </td>
+        <td colspan="10" style="padding:0;">
+          <table class="row3536-table">
+            <tr>
+              <td class="row36-title">
+                <div class="label">36. APPROVED BY:</div>
+              </td>
 
-        <td class="row36-name">
-          <div class="muted row36-sub">C/MSWDO/PDAO/MAYOR:</div>
-          <div class="value">{{ $open->approved_by ?? '' }}</div>
-        </td>
+              <td class="row36-name">
+                <div class="muted row36-sub">C/MSWDO/PDAO/MAYOR:</div>
+                <div class="value">{{ $open->approved_by ?? '' }}</div>
+              </td>
 
-        <td class="row36-sign">
-          <div class="muted row36-sub">SIGNATURE:</div>
-          <div class="sig-box row36-sigbox">
-            @if($approvedSignature)
-              <img src="{{ $approvedSignature }}" alt="Approved Signature">
-            @endif
-          </div>
+              <td class="row36-sign">
+                <div class="muted row36-sub">SIGNATURE:</div>
+                <div class="sig-box row36-sigbox">
+                  @if($approvedSignature)
+                    <img src="{{ $approvedSignature }}" alt="Approved Signature">
+                  @endif
+                </div>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
+
     </table>
-  </td>
-</tr>
   </div>
 </div>
+
+<!-- =========================
+     PAGE 2 / BACK
+========================= -->
+<div class="page page-break back-page">
+
+  <div class="back-header">
+    <div class="line1">OFFICE OF THE PROVINCIAL GOVERNOR</div>
+    <div class="line2">PERSONS WITH DISABILITY AFFAIRS DIVISION</div>
+    <div class="line3">LOCAL DISABILITY PROFILING STATEMENT</div>
+  </div>
+
+  <div class="consent-box">
+    <p class="para-tight">
+      The legal basis of this profiling is Article II, Section 5.1., Subsections A, B and C of
+      Ordinance No. 2021-058R (26<sup>th</sup> SP) otherwise known as,
+      <i>An Ordinance Institutionalizing the Local Magna Carta for Persons with Disabilities in the Province of Bukidnon Providing Funds Thereof and For Other Purposes.</i>
+    </p>
+
+    <p class="para-tight">
+      By answering this questionnaire, you agree that we will process your data in
+      accordance with Republic Act 10173, the Data Privacy Act of 2012.
+    </p>
+
+    <p class="para-tight">
+      We respect your trust and protect your privacy, and therefore we will never sell or
+      share this data with any third parties.
+    </p>
+
+    <p class="para-tight">
+      You shall notify us in writing and acknowledged by us, if you wish certain
+      information that we hold, to be shared to other entities and parties. For your concern,
+      you may contact <b>Mr. Dominador D. Libayao</b>, <i>Disability Affairs Officer IV</i> of Provincial
+      Governor’s Office – Persons with Disability Affairs Division.
+    </p>
+
+    <div class="bold-center">
+      ALL INFORMATION OBTAINED WILL BE STRICTLY HELD CONFIDENTIAL.
+    </div>
+
+    <div class="consent-title">DATA PRIVACY CONSENT</div>
+
+    <p class="para-tight">
+      I/We hereby certify to the correctness of data by answering this questionnaire
+      voluntarily and without reservation and coercion.
+    </p>
+
+    <p>
+      I/We hereby agree and authorized Provincial Governor’s Office – Persons with
+      Disability Affairs Division (PGO-PDAD) to collect, store, update and disclose all
+      information, personal or legal to PGO-PDAD including PGO Divisions and to all PGB
+      Offices and Departments and its attached offices, likewise, The National Government
+      Local Offices and its attached agencies as may be necessary.
+    </p>
+
+    <div class="signed-line">
+      Signed this
+      <span class="fill-line">{{ $signedDay }}</span>
+      day of
+      <span class="fill-line month">{{ $signedMonth }}</span>
+      20<span class="fill-line year">{{ $profileDateObj ? $profileDateObj->format('y') : '' }}</span>.
+    </div>
+
+    <div class="conformed">
+      <div class="conformed-label">Conformed by:</div>
+
+      <div class="respondent-wrap">
+        <div class="respondent-sign-box">
+          @if($intervieweeSignature)
+            <img src="{{ $intervieweeSignature }}" alt="Interviewee/Respondent Signature">
+          @endif
+        </div>
+
+        <div class="respondent-line"></div>
+        <div class="respondent-name">{{ $consentName }}</div>
+        <div class="respondent-caption">Name and Signature of Interviewee/Respondent</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
