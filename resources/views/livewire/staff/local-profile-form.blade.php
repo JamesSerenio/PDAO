@@ -70,7 +70,6 @@
 
           <div class="lpf-field">
             <label class="lpf-label" for="date_of_birth">Date of Birth</label>
-            {{-- ✅ LIVE para instant age --}}
             <input id="date_of_birth" class="lpf-input" type="date" wire:model.live="date_of_birth">
           </div>
 
@@ -348,14 +347,13 @@
         <div class="lpf-section-title">Organization & ID References</div>
 
         <div class="lpf-grid lpf-stagger">
-          {{-- ✅ FIX: input-only Yes/No (not dropdown) --}}
           <div class="lpf-field">
-          <label class="lpf-label">PWD Organization / Group Name</label>
-          <input class="lpf-input" type="text"
+            <label class="lpf-label">PWD Organization / Group Name</label>
+            <input class="lpf-input" type="text"
                 wire:model.defer="pwd_org_affiliated"
                 placeholder="Example: PWD Association Tankulan">
 
-          <small class="lpf-help">Enter the name of the PWD organization or group.</small>
+            <small class="lpf-help">Enter the name of the PWD organization or group.</small>
           </div>
 
           <div class="lpf-field">
@@ -442,7 +440,6 @@
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.occupation"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.social_pension_affiliation"></td>
 
-                  {{-- ✅ FIX: LIVE para auto-total agad --}}
                   <td>
                     <input class="lpf-input lpf-input-sm" type="number" step="0.01"
                            wire:model.live="household_members.{{ $i }}.monthly_income">
@@ -464,7 +461,6 @@
             + Add Member
           </button>
 
-          {{-- ✅ FIX: readonly kasi auto-total from monthly incomes --}}
           <div class="lpf-field" style="max-width:260px;">
             <label class="lpf-label">Total Family Income</label>
             <input class="lpf-input" type="text" value="{{ $total_family_income ?? '' }}" readonly>
@@ -501,6 +497,11 @@
           <div class="lpf-field">
             <label class="lpf-label">Position</label>
             <input class="lpf-input" type="text" wire:model.defer="accomplished_by_position">
+          </div>
+
+          <div class="lpf-field">
+            <label class="lpf-label">Accomplished Signature (Image)</label>
+            <input class="lpf-input" type="file" accept="image/*" wire:model="accomplished_signature">
           </div>
 
           <div class="lpf-field">

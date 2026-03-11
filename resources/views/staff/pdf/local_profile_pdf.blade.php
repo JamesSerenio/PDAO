@@ -395,6 +395,162 @@
     .member-row td {
       height: 16px;
     }
+    .row30-inline td,
+    .row3133-inline td {
+      padding: 2px 4px !important;
+      vertical-align: middle !important;
+      height: 18px;
+    }
+
+    .inline-label {
+      display: inline;
+      font-size: 6.7px;
+      line-height: 1.05;
+    }
+
+    .inline-value {
+      display: inline;
+      font-size: 6.7px;
+      line-height: 1.05;
+      margin-left: 3px;
+    }
+
+    .row3133-inline img {
+      display: inline-block;
+      object-fit: contain;
+    }
+    .row3133 td{
+      vertical-align: top;
+    }
+
+    .cell-box{
+      padding:3px;
+    }
+
+    .cell-box .label{
+      font-weight: bold;
+      font-size:7px;
+    }
+
+    .cell-box .value{
+      margin-top:2px;
+      font-size:7px;
+    }
+    .signature-box{
+      height:70px;   /* malaking space para sa thumbmark */
+    }
+
+    .signature-box img{
+      display:block;
+      margin-top:10px;
+    }
+    .row3133-swap{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      table-layout:fixed;
+    }
+
+    .row3133-swap td{
+      border-top:1px solid #222;
+      border-right:1px solid #222;
+      vertical-align:top;
+      padding:3px 5px;
+    }
+
+    .row3133-swap td:last-child{
+      border-right:0;
+    }
+
+    /* swap sizes */
+    .row3133-swap .box31{
+      width:32%;
+    }
+
+    .row3133-swap .box32{
+      width:20%;
+    }
+
+    .row3133-swap .box33{
+      width:48%;
+      height:70px; /* malaking thumbmark space */
+    }
+
+    .row3133-swap .label{
+      font-size:7px;
+      font-weight:bold;
+      line-height:1.1;
+    }
+
+    .row3133-swap .value{
+      margin-top:2px;
+      font-size:7px;
+      line-height:1.1;
+    }
+
+    .row3133-swap .sig33{
+      display:block;
+      height:34px;
+      max-width:100%;
+      margin-top:8px;
+      object-fit:contain;
+    }
+    .row34-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      table-layout:fixed;
+    }
+
+    .row34-table td{
+      border-top:1px solid #222;
+      border-right:1px solid #222;
+      vertical-align:top;
+      padding:3px 5px;
+    }
+
+    .row34-table td:last-child{
+      border-right:0;
+    }
+
+    .row34-title{
+      width:17%;
+    }
+
+    .row34-name{
+      width:23%;
+    }
+
+    .row34-position{
+      width:20%;
+    }
+
+    .row34-signature{
+      width:40%;
+    }
+
+    .row34-sub{
+      font-size:6.4px;
+      line-height:1.05;
+      margin-bottom:1px;
+      color:#444;
+      font-weight:bold;
+    }
+
+    .row34-sigbox{
+      height:22px;
+      border:none;
+      text-align:left;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .row34-sigbox img{
+      height:100%;
+      max-width:100%;
+      object-fit:contain;
+      display:block;
+    }
   </style>
 </head>
 <body>
@@ -931,53 +1087,75 @@
         </td>
       </tr>
 
-      <tr>
-        <td colspan="3">
-          <div class="label">30. Total Family Income:</div>
-          <div class="value">{{ $open->total_family_income ?? '' }}</div>
-        </td>
-        <td colspan="3">
-          <div class="label">31. Name of Interviewee:</div>
-          <div class="value">{{ $open->interviewee_name ?? '' }}</div>
-        </td>
-        <td colspan="4">
-          <div class="label">32. Relationship to PWD:</div>
-          <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
-        </td>
-      </tr>
-
-      <tr>
+      <!-- 30 -->
+      <tr class="row30-inline">
         <td colspan="10">
-          <div class="label">33. Signature/Thumbmark of Interviewee (Other than PWD):</div>
-          <div class="sig-box" style="height:24px;">
-            @if($intervieweeSignature)
-              <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
-            @endif
-          </div>
+          <span class="label inline-label">30. TOTAL FAMILY INCOME:</span>
+          <span class="inline-value">{{ $open->total_family_income ?? '' }}</span>
         </td>
       </tr>
 
-      <tr>
-        <td colspan="3">
-          <div class="label">34. Accomplished By:</div>
-          <div class="muted">Name</div>
-          <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
-        </td>
-        <td colspan="3">
-          <div class="label">&nbsp;</div>
-          <div class="muted">Position</div>
-          <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
-        </td>
-        <td colspan="4">
-          <div class="label">&nbsp;</div>
-          <div class="muted">Signature</div>
-          <div class="sig-box" style="height:22px;">
-            @if($accomplishedSignature)
-              <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
-            @endif
-          </div>
-        </td>
-      </tr>
+        <tr>
+          <td colspan="10" style="padding:0;">
+            <table class="row3133-swap">
+              <tr>
+                <!-- 31 = dating size ng 33 -->
+                <td class="box31">
+                  <div class="label">31. NAME OF INTERVIEWEE:</div>
+                  <div class="value">{{ $open->interviewee_name ?? '' }}</div>
+                </td>
+
+                <!-- 32 = same lang -->
+                <td class="box32">
+                  <div class="label">32. RELATIONSHIP TO PWD:</div>
+                  <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
+                </td>
+
+                <!-- 33 = dating size ng 31 -->
+                <td class="box33">
+                  <div class="label">
+                    33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
+                  </div>
+
+                  @if($intervieweeSignature)
+                    <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature" class="sig33">
+                  @endif
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="10" style="padding:0;">
+            <table class="row34-table">
+              <tr>
+                <td class="row34-title">
+                  <div class="label">34. ACCOMPLISHED BY:</div>
+                </td>
+
+                <td class="row34-name">
+                  <div class="muted row34-sub">NAME:</div>
+                  <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
+                </td>
+
+                <td class="row34-position">
+                  <div class="muted row34-sub">POSITION:</div>
+                  <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
+                </td>
+
+                <td class="row34-signature">
+                  <div class="muted row34-sub">SIGNATURE:</div>
+                  <div class="sig-box row34-sigbox">
+                    @if($accomplishedSignature)
+                      <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
+                    @endif
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
       <tr>
         <td colspan="6">
