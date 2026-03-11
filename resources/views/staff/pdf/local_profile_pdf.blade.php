@@ -551,6 +551,88 @@
       object-fit:contain;
       display:block;
     }
+    .row3536-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      table-layout:fixed;
+    }
+
+    .row3536-table td{
+      border-top:1px solid #222;
+      border-right:1px solid #222;
+      vertical-align:top;
+      padding:3px 5px;
+    }
+
+    .row3536-table td:last-child{
+      border-right:0;
+    }
+
+    .row35-box{
+      width:100%;
+      height:24px;
+    }
+
+    .row36-title{
+      width:21%;
+    }
+
+    .row36-name{
+      width:43%;
+    }
+
+    .row36-sign{
+      width:36%;
+    }
+
+    .row36-sub{
+      font-size:6.4px;
+      line-height:1.05;
+      margin-bottom:1px;
+      color:#444;
+      font-weight:bold;
+    }
+
+    .row36-sigbox{
+      height:18px;
+      border:none;
+      text-align:left;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .row36-sigbox img{
+      height:100%;
+      max-width:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .row35-table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      table-layout:fixed;
+    }
+
+    .row35-table td{
+      border-top:1px solid #222;
+      border-right:1px solid #222;
+      vertical-align:top;
+      padding:3px 5px;
+    }
+
+    .row35-table td:last-child{
+      border-right:0;
+    }
+
+    .row35-title{
+      width:40%;
+    }
+
+    .row35-value{
+      width:60%;
+    }
   </style>
 </head>
 <body>
@@ -589,10 +671,11 @@
   $logo1 = $imgToBase64(public_path('img/logopdf1.png'));
   $logo2 = $imgToBase64(public_path('img/logopdf2.png'));
 
-  $photo1x1 = $storageToBase64($open->photo_1x1 ?? null);
-  $signatureThumb = $storageToBase64($open->signature_thumbmark ?? null);
-  $intervieweeSignature = $storageToBase64($open->interviewee_signature_thumbmark ?? null);
-  $accomplishedSignature = $storageToBase64($open->approved_signature ?? null);
+$photo1x1 = $storageToBase64($open->photo_1x1 ?? null);
+$signatureThumb = $storageToBase64($open->signature_thumbmark ?? null);
+$intervieweeSignature = $storageToBase64($open->interviewee_signature_thumbmark ?? null);
+$accomplishedSignature = $storageToBase64($open->accomplished_signature ?? null);
+$approvedSignature = $storageToBase64($open->approved_signature ?? null);
 
   $typeChecked = function($typeName) use ($openTypes) {
       return in_array($typeName, $openTypes);
@@ -1126,48 +1209,78 @@
           </td>
         </tr>
 
-        <tr>
-          <td colspan="10" style="padding:0;">
-            <table class="row34-table">
-              <tr>
-                <td class="row34-title">
-                  <div class="label">34. ACCOMPLISHED BY:</div>
-                </td>
-
-                <td class="row34-name">
-                  <div class="muted row34-sub">NAME:</div>
-                  <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
-                </td>
-
-                <td class="row34-position">
-                  <div class="muted row34-sub">POSITION:</div>
-                  <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
-                </td>
-
-                <td class="row34-signature">
-                  <div class="muted row34-sub">SIGNATURE:</div>
-                  <div class="sig-box row34-sigbox">
-                    @if($accomplishedSignature)
-                      <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
-                    @endif
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
+<tr>
+  <td colspan="10" style="padding:0;">
+    <table class="row34-table">
       <tr>
-        <td colspan="6">
-          <div class="label">35. Name of Reporting Unit (Office/Section):</div>
-          <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
+        <td class="row34-title">
+          <div class="label">34. ACCOMPLISHED BY:</div>
         </td>
-        <td colspan="4">
-          <div class="label">36. Approved By:</div>
-          <div class="value">{{ $open->approved_by ?? '' }}</div>
+
+        <td class="row34-name">
+          <div class="muted row34-sub">NAME:</div>
+          <div class="value">{{ $open->accomplished_by_name ?? '' }}</div>
+        </td>
+
+        <td class="row34-position">
+          <div class="muted row34-sub">POSITION:</div>
+          <div class="value">{{ $open->accomplished_by_position ?? '' }}</div>
+        </td>
+
+        <td class="row34-signature">
+          <div class="muted row34-sub">SIGNATURE:</div>
+          <div class="sig-box row34-sigbox">
+            @if($accomplishedSignature)
+              <img src="{{ $accomplishedSignature }}" alt="Accomplished Signature">
+            @endif
+          </div>
         </td>
       </tr>
     </table>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="10" style="padding:0;">
+    <table class="row35-table">
+      <tr>
+        <td class="row35-title">
+          <div class="label">35. NAME OF REPORTING UNIT (OFFICE/SECTION):</div>
+        </td>
+
+        <td class="row35-value">
+          <div class="value">{{ $open->reporting_unit_office_section ?? '' }}</div>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="10" style="padding:0;">
+    <table class="row3536-table">
+      <tr>
+        <td class="row36-title">
+          <div class="label">36. APPROVED BY:</div>
+        </td>
+
+        <td class="row36-name">
+          <div class="muted row36-sub">C/MSWDO/PDAO/MAYOR:</div>
+          <div class="value">{{ $open->approved_by ?? '' }}</div>
+        </td>
+
+        <td class="row36-sign">
+          <div class="muted row36-sub">SIGNATURE:</div>
+          <div class="sig-box row36-sigbox">
+            @if($approvedSignature)
+              <img src="{{ $approvedSignature }}" alt="Approved Signature">
+            @endif
+          </div>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
   </div>
 </div>
 </body>
