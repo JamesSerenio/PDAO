@@ -7,7 +7,7 @@
   {{-- REQUIRED for Livewire requests --}}
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>@yield('title', 'Staff Panel')</title>
+  <title>@yield('title', 'Admin Panel')</title>
   <link rel="icon" type="image/png" href="{{ asset('img/LOGOP.png') }}">
 
   {{-- Main CSS (safe filemtime) --}}
@@ -36,7 +36,7 @@
   ];
 @endphp
 
-<body class="dash-admin staff-shell @yield('body_class')">
+<body class="dash-admin admin-shell @yield('body_class')">
   <div class="dash-layout">
 
     <!-- SIDEBAR -->
@@ -48,7 +48,7 @@
         </div>
         <div class="brand-text">
           <div class="brand-name">PDAO</div>
-          <div class="brand-sub">Staff Panel</div>
+          <div class="brand-sub">Admin Panel</div>
         </div>
       </div>
 
@@ -81,7 +81,7 @@
 
       <header class="dash-topbar">
         <div class="topbar-title">
-          <h1>@yield('page_title', 'Staff Panel')</h1>
+          <h1>@yield('page_title', 'Admin Panel')</h1>
           <p>@yield('page_subtitle')</p>
         </div>
 
