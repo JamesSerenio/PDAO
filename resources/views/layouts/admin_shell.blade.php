@@ -29,10 +29,10 @@
   $active = request()->route() ? request()->route()->getName() : '';
 
   $menu = [
-    ['label' => 'Dashboard',          'route' => 'staff.dashboard',          'icon' => '🏠'],
-    ['label' => 'Local Profile Form', 'route' => 'staff.local_profile_form', 'icon' => '🧾'],
-    ['label' => 'Mapping',            'route' => 'staff.mapping',            'icon' => '🗺️'],
-    ['label' => 'Registered Person',  'route' => 'staff.registered',         'icon' => '👥'],
+    ['label' => 'Dashboard',          'route' => 'admin.dashboard',          'icon' => '🏠'],
+    ['label' => 'Local Profile Form', 'route' => 'admin.local_profile_form', 'icon' => '🧾'],
+    ['label' => 'Mapping',            'route' => 'admin.mapping',            'icon' => '🗺️'],
+    ['label' => 'Registered Person',  'route' => 'admin.registered',         'icon' => '👥'],
   ];
 @endphp
 
