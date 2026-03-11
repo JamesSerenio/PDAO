@@ -720,7 +720,7 @@
   }
 
   .signed-line {
-    margin-top: 18px;
+    margin-top: 10px;
     font-size: 7.5px;
     text-align: center;
     line-height: 1.3;
@@ -801,6 +801,21 @@
     font-size: 7px;
     line-height: 1.2;
   }
+  .confidential-title{
+  text-align:center;
+  font-weight:800;
+  font-size:13px;
+  margin:14px 0 8px;
+  letter-spacing:.2px;
+}
+
+.privacy-title{
+  text-align:center;
+  font-weight:900;
+  font-size:12px;
+  margin:8px 0 14px;
+  letter-spacing:.4px;
+}
   </style>
 </head>
 <body>
@@ -1502,11 +1517,13 @@
       Governor’s Office – Persons with Disability Affairs Division.
     </p>
 
-    <div class="bold-center">
+    <div class="confidential-title">
       ALL INFORMATION OBTAINED WILL BE STRICTLY HELD CONFIDENTIAL.
     </div>
 
-    <div class="consent-title">DATA PRIVACY CONSENT</div>
+    <div class="privacy-title">
+      DATA PRIVACY CONSENT
+    </div>
 
     <p class="para-tight">
       I/We hereby certify to the correctness of data by answering this questionnaire
@@ -1529,22 +1546,28 @@
       20<span class="fill-line year">{{ $profileDateObj ? $profileDateObj->format('y') : '' }}</span>.
     </div>
 
-    <div class="conformed">
-      <div class="conformed-label">Conformed by:</div>
+<div class="conformed">
+  <div class="conformed-label">Conformed by:</div>
 
-      <div class="respondent-wrap">
-        <div class="respondent-sign-box">
-          @if($intervieweeSignature)
-            <img src="{{ $intervieweeSignature }}" alt="Interviewee/Respondent Signature">
-          @endif
-        </div>
+  <div class="respondent-wrap">
 
-        <div class="respondent-line"></div>
-        <div class="respondent-name">{{ $consentName }}</div>
-        <div class="respondent-caption">Name and Signature of Interviewee/Respondent</div>
-      </div>
+    <div class="respondent-name">
+      {{ strtoupper($consentName) }}
+    </div>
+
+    <div class="respondent-sign-box">
+      @if($intervieweeSignature)
+        <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
+      @endif
+    </div>
+
+    <div class="respondent-line"></div>
+
+    <div class="respondent-caption">
+      Name and Signature of Interviewee/Respondent
     </div>
   </div>
+</div>
 </div>
 
 </body>
