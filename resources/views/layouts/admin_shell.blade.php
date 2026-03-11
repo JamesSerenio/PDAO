@@ -17,7 +17,7 @@
   @endphp
   <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ $adminVer }}">
 
-  {{-- ✅ Livewire Styles --}}
+  {{-- Livewire Styles --}}
   @livewireStyles
 
   {{-- Per-page styles --}}
@@ -33,6 +33,9 @@
     ['label' => 'Local Profile Form', 'route' => 'admin.local_profile_form', 'icon' => '🧾'],
     ['label' => 'Mapping',            'route' => 'admin.mapping',            'icon' => '🗺️'],
     ['label' => 'Registered Person',  'route' => 'admin.registered',         'icon' => '👥'],
+
+    // ✅ NEW MENU
+    ['label' => 'Senior Citizens',    'route' => 'admin.senior_citizens',    'icon' => '👴'],
   ];
 @endphp
 
@@ -101,10 +104,11 @@
 
   </div>
 
-  {{-- ✅ Livewire Scripts (MUST be before </body>) --}}
+  {{-- Livewire Scripts --}}
   @livewireScripts
 
   {{-- Per-page scripts --}}
   @stack('scripts')
+
 </body>
 </html>
