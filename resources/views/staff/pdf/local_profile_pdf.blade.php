@@ -771,7 +771,7 @@
     height: 34px;
     overflow: hidden;
     background: #fff;
-    margin-bottom: 2px;
+    margin-bottom: 1cap;
   }
 
   .respondent-sign-box img {
@@ -782,18 +782,17 @@
     margin: 0 auto;
   }
 
-  .respondent-line {
-    border-top: 1px solid #222;
-    width: 100%;
-    margin: 0 auto 3px;
-    height: 1px;
-  }
+.respondent-line{
+  border-top:1px solid #222;
+  width:85%;
+  margin:2px auto 3px;
+}
 
   .respondent-name {
-    font-size: 7.2px;
+    font-size: 7.4px;
     font-weight: 700;
     min-height: 10px;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     text-transform: uppercase;
   }
 
@@ -1546,25 +1545,26 @@
       20<span class="fill-line year">{{ $profileDateObj ? $profileDateObj->format('y') : '' }}</span>.
     </div>
 
-<div class="conformed">
-  <div class="conformed-label">Conformed by:</div>
+    <div class="conformed">
+      <div class="conformed-label">Conformed by:</div>
 
-  <div class="respondent-wrap">
+    <div class="respondent-wrap">
 
-    <div class="respondent-name">
-      {{ strtoupper($consentName) }}
-    </div>
+      <div class="respondent-sign-box">
+        @if($intervieweeSignature)
+          <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
+        @endif
+      </div>
 
-    <div class="respondent-sign-box">
-      @if($intervieweeSignature)
-        <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature">
-      @endif
-    </div>
+      <div class="respondent-name">
+        {{ strtoupper($consentName) }}
+      </div>
 
-    <div class="respondent-line"></div>
+      <div class="respondent-line"></div>
 
-    <div class="respondent-caption">
-      Name and Signature of Interviewee/Respondent
+      <div class="respondent-caption">
+        Name and Signature of Interviewee/Respondent
+      </div>
     </div>
   </div>
 </div>
