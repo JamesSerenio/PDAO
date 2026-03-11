@@ -30,7 +30,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .header td {
@@ -41,46 +41,62 @@
 
     .header-left,
     .header-right {
-      width: 72px;
-      text-align: center;
+      width: 90px;
+    }
+
+    .header-left {
+      text-align: left;
+    }
+
+    .header-right {
+      text-align: right;
     }
 
     .header-left img,
     .header-right img {
-      width: 52px;
-      height: 52px;
+      width: 68px;
+      height: 68px;
       object-fit: contain;
       display: inline-block;
+      position: relative;
+    }
+
+    .header-left img {
+      left: 150px;
+    }
+
+    .header-right img {
+      right: 150px;
     }
 
     .header-center {
       text-align: center;
-      padding: 0 4px;
+      padding: 0 2px;
     }
 
     .small {
-      font-size: 8px;
-      line-height: 1.05;
+      font-size: 7.6px;
+      line-height: 1.0;
+      margin: 0;
     }
 
     .title-main {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: bold;
-      margin-top: 2px;
+      margin-top: 1px;
       letter-spacing: .2px;
+      line-height: 1;
     }
 
     .instruction {
       font-size: 7px;
       font-weight: bold;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
-      padding: 2px 4px;
-      margin: 2px 0 4px;
+      border: none;
+      padding: 1px 4px;
+      margin: 1px 0 3px;
       text-align: left;
-      line-height: 1.05;
+      line-height: 1.0;
     }
-
     .form-wrap {
       width: 100%;
       border-left: 1px solid #222;
@@ -142,6 +158,7 @@
     .photo-box {
       width: 100%;
       height: 72px;
+      aspect-ratio: 1 / 1;
       border: 1px solid #222;
       text-align: center;
       overflow: hidden;
@@ -152,8 +169,7 @@
     .photo-box img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
+      object-fit: cover;;
     }
 
     .photo-placeholder {
@@ -175,7 +191,7 @@
     .sig-box {
       width: 100%;
       height: 26px;
-      border: 1px solid #222;
+      border: none;
       text-align: center;
       overflow: hidden;
       background: #fff;
@@ -316,6 +332,9 @@
       margin-top: 1px;
     }
 
+    .no-border {
+      border: none !important;
+    }
     .two-col-checks td {
       border: none !important;
       padding: 0 6px 0 0 !important;
@@ -575,7 +594,7 @@
 
         <td colspan="2">
           <div class="label">13. Signature / Thumbmark</div>
-          <div class="sig-box">
+          <div class="sig-box no-border">
             @if($signatureThumb)
               <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark">
             @endif
@@ -828,33 +847,45 @@
         </td>
       </tr>
 
+<tr>
+  <td colspan="10" style="padding:0;">
+    <table style="width:100%; border-collapse:separate; border-spacing:0; table-layout:fixed;">
+      <colgroup>
+        <col style="width:13%;">
+        <col style="width:13%;">
+        <col style="width:11%;">
+        <col style="width:13%;">
+        <col style="width:11%;">
+        <col style="width:13%;">
+        <col style="width:26%;">
+      </colgroup>
       <tr>
-        <td>
-          <div class="label">28. ID Reference No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">28. ID REFERENCE NO.</div>
           <div class="value">{{ $open->id_reference_no ?? '' }}</div>
         </td>
-        <td>
-          <div class="label">SSS No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">SSS NO.:</div>
           <div class="value">{{ $open->sss_no ?? '' }}</div>
         </td>
-        <td>
-          <div class="label">GSIS No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">GSIS NO.:</div>
           <div class="value">{{ $open->gsis_no ?? '' }}</div>
         </td>
-        <td>
-          <div class="label">PAG-IBIG No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">PAG-IBIG NO.:</div>
           <div class="value">{{ $open->pagibig_no ?? '' }}</div>
         </td>
-        <td>
-          <div class="label">PHN No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">PHN NO.:</div>
           <div class="value">{{ $open->phn_no ?? '' }}</div>
         </td>
-        <td>
-          <div class="label">PHILHEALTH No.</div>
+        <td style="border-top:1px solid #222; border-right:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">PHILHEALTH NO.:</div>
           <div class="value">{{ $open->philhealth_no ?? '' }}</div>
         </td>
-        <td colspan="4">
-          <div class="label">PWD ID No.</div>
+        <td style="border-top:1px solid #222; padding:2px 3px; vertical-align:top;">
+          <div class="label">PWD ID NO.:</div>
           <div class="value">{{ $open->pwd_id_no ?? '' }}</div>
         </td>
       </tr>
