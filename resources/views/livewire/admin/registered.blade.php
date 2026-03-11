@@ -78,7 +78,10 @@ $barangays = DB::table('local_profiles')
   ->pluck('barangay')
   ->toArray();
 
-$total = (int) DB::table('local_profiles')->count();
+$total = (int) DB::table('local_profiles')
+  ->whereNotNull('date_of_birth')
+  ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) < 60')
+  ->count();
 
 $fullName = function($r){
   $mid = $r->middle_name ? (' ' . $r->middle_name) : '';
