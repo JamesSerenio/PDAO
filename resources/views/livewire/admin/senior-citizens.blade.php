@@ -1,14 +1,3 @@
-@extends('layouts.admin_shell')
-
-@section('title', 'Senior Citizens')
-@section('page_title', 'Senior Citizens')
-@section('page_subtitle', 'Registered persons aged 60 years old and above')
-
-@push('styles')
-<link rel="stylesheet" href="{{ asset('css/admin_senior_citizens.css') }}">
-@endpush
-
-@section('content')
 @php
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -83,7 +72,7 @@ $rows = $query->orderByDesc('lp.created_at')->paginate($perPage)->appends(reques
 
 $barangays = DB::table('local_profiles')
   ->whereNotNull('barangay')
-  ->where('barangay','<>','')
+  ->where('barangay', '<>', '')
   ->distinct()
   ->orderBy('barangay')
   ->pluck('barangay')
@@ -94,7 +83,7 @@ $total = (int) DB::table('local_profiles')
   ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) >= 60')
   ->count();
 
-$fullName = function($r){
+$fullName = function($r) {
   $mid = $r->middle_name ? (' ' . $r->middle_name) : '';
   $suf = $r->suffix ? (' ' . $r->suffix) : '';
   return trim($r->last_name . ', ' . $r->first_name . $mid . $suf);
@@ -102,13 +91,10 @@ $fullName = function($r){
 
 // ===== OPEN DETAILS (full data) =====
 $open = null;
-
 $openTypes = [];
 $openTypeIds = [];
-
 $openCauses = collect();
 $openCauseIds = [];
-
 $openMembers = collect();
 
 if ($openId > 0) {
@@ -135,7 +121,7 @@ if ($openId > 0) {
     $openCauses = DB::table('local_profile_disability_causes as lpdc')
       ->join('disability_causes as dc', 'dc.id', '=', 'lpdc.disability_cause_id')
       ->where('lpdc.local_profile_id', $openId)
-      ->select('dc.id','dc.category', 'dc.name', 'lpdc.other_specify')
+      ->select('dc.id', 'dc.category', 'dc.name', 'lpdc.other_specify')
       ->orderBy('dc.category')
       ->orderBy('dc.name')
       ->get();
@@ -150,14 +136,20 @@ if ($openId > 0) {
 // helper: build url with query
 $withQuery = function(array $extra = [], array $remove = []) {
   $qs = request()->query();
-  foreach($remove as $k){ unset($qs[$k]); }
-  foreach($extra as $k => $v){ $qs[$k] = $v; }
+  foreach ($remove as $k) {
+    unset($qs[$k]);
+  }
+  foreach ($extra as $k => $v) {
+    $qs[$k] = $v;
+  }
   $u = url()->current();
-  if(count($qs)) $u .= '?' . http_build_query($qs);
+  if (count($qs)) {
+    $u .= '?' . http_build_query($qs);
+  }
   return $u;
 };
 
-$closeViewUrl = $withQuery([], ['open','editMode']);
+$closeViewUrl = $withQuery([], ['open', 'editMode']);
 @endphp
 
 <div class="senior-wrap">
@@ -217,7 +209,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
           @forelse($rows as $r)
             @php
               $age = $r->date_of_birth ? Carbon::parse($r->date_of_birth)->age : null;
-              $isOpen = ($openId === (int)$r->id);
+              $isOpen = ($openId === (int) $r->id);
               $viewUrl = $withQuery(['open' => $r->id, 'editMode' => 0], []);
             @endphp
 
@@ -237,7 +229,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
               <td><span class="pill">{{ $r->ldr_number ?: '—' }}</span></td>
               <td>{{ $r->sex ?: '—' }}</td>
-              <td>{{ $age ? $age.' yrs' : '—' }}</td>
+              <td>{{ $age ? $age . ' yrs' : '—' }}</td>
               <td>{{ $r->barangay ?: '—' }}</td>
               <td>{{ $r->disabilities ?: '—' }}</td>
 
@@ -249,7 +241,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
               <td class="senior-actions-cell">
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div class="senior-actions">
                   @if($isOpen)
                     <a class="senior-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
                   @else
@@ -273,7 +265,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                 $editOnUrl  = $withQuery(['open' => $openId, 'editMode' => 1], []);
                 $editOffUrl = $withQuery(['open' => $openId, 'editMode' => 0], []);
                 $isEditing = ($editMode === 1);
-                $val = fn($x) => (string)($x ?? '');
+                $val = fn($x) => (string) ($x ?? '');
               @endphp
 
               <tr class="senior-details-row">
@@ -288,10 +280,10 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                           <span class="dot">•</span>
                           Profiled: <b>{{ $open->profiling_date ? Carbon::parse($open->profiling_date)->format('M d, Y') : '—' }}</b>
                           <span class="dot">•</span>
-                          Age: <b>{{ $openAge ? $openAge.' yrs' : '—' }}</b>
+                          Age: <b>{{ $openAge ? $openAge . ' yrs' : '—' }}</b>
                         </div>
 
-                        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                        <div class="senior-actions senior-top-actions">
                           @if($isEditing)
                             <a class="senior-btn mini ghost" href="{{ $editOffUrl }}">Cancel edit</a>
                           @else
@@ -318,17 +310,17 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                       @csrf
                       @method('PUT')
 
-                      <input type="hidden" name="_redirect" value="{{ $withQuery(['open'=>$openId,'editMode'=>0], []) }}">
+                      <input type="hidden" name="_redirect" value="{{ $withQuery(['open' => $openId, 'editMode' => 0], []) }}">
 
                       <div class="senior-grid">
 
                         <div class="senior-box">
                           <h4>Personal</h4>
 
-                          <div class="senior-kv" style="border-bottom:none; padding-bottom:0;">
+                          <div class="senior-kv no-border">
                             <span>Photo (1x1)</span>
                             @if($isEditing)
-                              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+                              <div class="senior-upload-wrap">
                                 <input class="senior-input" type="file" name="photo_1x1" accept="image/*" onchange="previewPhoto(event)">
                                 <small class="senior-muted">Choose new photo (optional)</small>
                               </div>
@@ -340,7 +332,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                           <div class="senior-kv">
                             <span>Signature/Thumbmark</span>
                             @if($isEditing)
-                              <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+                              <div class="senior-upload-wrap">
                                 <input class="senior-input" type="file" name="signature_thumbmark" accept="image/*" onchange="previewSignature(event)">
                                 <small class="senior-muted">Choose signature/thumbmark (optional)</small>
                               </div>
@@ -378,7 +370,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                             <span>Blood Type</span>
                             @if($isEditing)
                               <select class="senior-input" name="blood_type">
-                                @php $bts = ['','A+','A-','B+','B-','AB+','AB-','O+','O-']; @endphp
+                                @php $bts = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']; @endphp
                                 @foreach($bts as $bt)
                                   <option value="{{ $bt }}" {{ $open->blood_type === $bt ? 'selected' : '' }}>
                                     {{ $bt === '' ? '—' : $bt }}
@@ -397,7 +389,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                             <span>Civil Status</span>
                             @if($isEditing)
                               <select class="senior-input" name="civil_status">
-                                @php $cs = ['','Single','Separated','Cohabitation (Live-in)','Married','Widow','Widower']; @endphp
+                                @php $cs = ['', 'Single', 'Separated', 'Cohabitation (Live-in)', 'Married', 'Widow', 'Widower']; @endphp
                                 @foreach($cs as $c)
                                   <option value="{{ $c }}" {{ $open->civil_status === $c ? 'selected' : '' }}>
                                     {{ $c === '' ? '—' : $c }}
@@ -593,7 +585,7 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                                     <td>{{ $m->relationship_to_pwd ?: '—' }}</td>
                                     <td>{{ $m->occupation ?: '—' }}</td>
                                     <td>{{ $m->social_pension_affiliation ?: '—' }}</td>
-                                    <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income,2) }}</td>
+                                    <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income, 2) }}</td>
                                   </tr>
                                 @empty
                                   <tr>
@@ -666,4 +658,3 @@ function previewSignature(e){
   img.src = URL.createObjectURL(file);
 }
 </script>
-@endsection
