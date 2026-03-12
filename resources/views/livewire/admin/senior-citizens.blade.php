@@ -272,12 +272,12 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                     </svg>
                   </a>
 
-                    <form
-                      method="POST"
-                      action="{{ route('admin.registered.destroy', $r->id) }}"
-                      onsubmit="return confirm('Are you sure you want to delete this record?');"
-                      class="inline-icon-form"
-                    >
+                  <form
+                    method="POST"
+                    action="{{ route('admin.registered.destroy', $r->id) }}"
+                    onsubmit="return confirm('Are you sure you want to delete this record?');"
+                    class="inline-icon-form"
+                  >
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="reg-icon-btn delete" title="Delete">
@@ -539,10 +539,13 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                           <div class="senior-kv">
                             <span>Interviewee Signature/Thumbmark</span>
                             @if($isEditing)
-                              <input class="senior-input" type="file" name="interviewee_signature_thumbmark" accept="image/*">
+                              <div class="senior-upload-wrap">
+                                <input class="senior-input" type="file" name="interviewee_signature_thumbmark" accept="image/*" onchange="previewIntervieweeSignature(event)">
+                                <small class="senior-muted">Upload (optional)</small>
+                              </div>
                             @else
                               @if($open->interviewee_signature_thumbmark)
-                                <img class="sig-img" src="{{ Storage::url($open->interviewee_signature_thumbmark) }}" alt="Interviewee Signature">
+                                <img id="intervieweeSignaturePreview" class="sig-img" src="{{ Storage::url($open->interviewee_signature_thumbmark) }}" alt="Interviewee Signature">
                               @else
                                 <b>—</b>
                               @endif
@@ -552,6 +555,7 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
 
                         <div class="senior-box">
                           <h4>Office</h4>
+
                           @foreach([
                             ['Accomplished By (Name)','accomplished_by_name'],
                             ['Accomplished By (Position)','accomplished_by_position'],
@@ -567,6 +571,38 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                               @endif
                             </div>
                           @endforeach
+
+                          <div class="senior-kv">
+                            <span>Accomplished Signature (Image)</span>
+                            @if($isEditing)
+                              <div class="senior-upload-wrap">
+                                <input class="senior-input" type="file" name="accomplished_signature" accept="image/*" onchange="previewAccomplishedSignature(event)">
+                                <small class="senior-muted">Upload (optional)</small>
+                              </div>
+                            @else
+                              @if(!empty($open->accomplished_signature))
+                                <img id="accomplishedSignaturePreview" class="sig-img" src="{{ Storage::url($open->accomplished_signature) }}" alt="Accomplished Signature">
+                              @else
+                                <b>—</b>
+                              @endif
+                            @endif
+                          </div>
+
+                          <div class="senior-kv">
+                            <span>Approved Signature (Image)</span>
+                            @if($isEditing)
+                              <div class="senior-upload-wrap">
+                                <input class="senior-input" type="file" name="approved_signature" accept="image/*" onchange="previewApprovedSignature(event)">
+                                <small class="senior-muted">Upload (optional)</small>
+                              </div>
+                            @else
+                              @if($open->approved_signature)
+                                <img id="approvedSignaturePreview" class="sig-img" src="{{ Storage::url($open->approved_signature) }}" alt="Approved Signature">
+                              @else
+                                <b>—</b>
+                              @endif
+                            @endif
+                          </div>
                         </div>
 
                         <div class="senior-box full">
@@ -682,6 +718,72 @@ function previewSignature(e){
     img.id = 'signaturePreview';
     img.className = 'sig-img';
     img.alt = 'Signature/Thumbmark Preview';
+
+    const box = e.target.closest('.senior-kv');
+    if(box){
+      box.appendChild(img);
+    }
+  }
+
+  img.style.display = 'block';
+  img.src = URL.createObjectURL(file);
+}
+
+function previewIntervieweeSignature(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+
+  let img = document.getElementById('intervieweeSignaturePreview');
+
+  if(!img){
+    img = document.createElement('img');
+    img.id = 'intervieweeSignaturePreview';
+    img.className = 'sig-img';
+    img.alt = 'Interviewee Signature Preview';
+
+    const box = e.target.closest('.senior-kv');
+    if(box){
+      box.appendChild(img);
+    }
+  }
+
+  img.style.display = 'block';
+  img.src = URL.createObjectURL(file);
+}
+
+function previewAccomplishedSignature(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+
+  let img = document.getElementById('accomplishedSignaturePreview');
+
+  if(!img){
+    img = document.createElement('img');
+    img.id = 'accomplishedSignaturePreview';
+    img.className = 'sig-img';
+    img.alt = 'Accomplished Signature Preview';
+
+    const box = e.target.closest('.senior-kv');
+    if(box){
+      box.appendChild(img);
+    }
+  }
+
+  img.style.display = 'block';
+  img.src = URL.createObjectURL(file);
+}
+
+function previewApprovedSignature(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+
+  let img = document.getElementById('approvedSignaturePreview');
+
+  if(!img){
+    img = document.createElement('img');
+    img.id = 'approvedSignaturePreview';
+    img.className = 'sig-img';
+    img.alt = 'Approved Signature Preview';
 
     const box = e.target.closest('.senior-kv');
     if(box){
