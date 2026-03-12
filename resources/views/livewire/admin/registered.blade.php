@@ -252,6 +252,17 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                   >
                     PDF
                   </a>
+
+                  <form
+                    method="POST"
+                    action="{{ route('admin.registered.destroy', $r->id) }}"
+                    onsubmit="return confirm('Are you sure you want to delete this record?')"
+                    style="display:inline;"
+                  >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="reg-btn mini reg-btn-danger">Delete</button>
+                  </form>
                 </div>
               </td>
             </tr>

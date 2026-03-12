@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 
-class adminRegisteredController extends Controller
+class AdminRegisteredController extends Controller
 {
     public function update(Request $request, int $id)
     {
@@ -91,6 +90,7 @@ class adminRegisteredController extends Controller
             'photo_1x1'                        => ['nullable', 'image', 'max:2048'],
             'signature_thumbmark'             => ['nullable', 'image', 'max:2048'],
             'interviewee_signature_thumbmark' => ['nullable', 'image', 'max:2048'],
+            'accomplished_signature'          => ['nullable', 'image', 'max:2048'],
             'approved_signature'              => ['nullable', 'image', 'max:2048'],
 
             'disability_types'   => ['nullable', 'array'],
@@ -179,6 +179,17 @@ class adminRegisteredController extends Controller
                 }
             } else {
                 unset($updates['interviewee_signature_thumbmark']);
+            }
+
+            if ($request->hasFile('accomplished_signature')) {
+                $path = $request->file('accomplished_signature')->store('local_profiles/accomplished_sign', 'public');
+                $updates['accomplished_signature'] = $path;
+
+                if ($old && $old->accomplished_signature) {
+                    Storage::disk('public')->delete($old->accomplished_signature);
+                }
+            } else {
+                unset($updates['accomplished_signature']);
             }
 
             if ($request->hasFile('approved_signature')) {
@@ -369,6 +380,7 @@ class adminRegisteredController extends Controller
             'photo_1x1',
             'signature_thumbmark',
             'interviewee_signature_thumbmark',
+            'accomplished_signature',
             'approved_signature',
         ];
 
