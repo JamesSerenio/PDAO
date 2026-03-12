@@ -5,6 +5,7 @@ use Carbon\Carbon;
 
 $q = trim((string) request('q', ''));
 $barangay = trim((string) request('barangay', ''));
+$disabilityType = trim((string) request('disability_type', ''));
 
 // view open
 $openId = (int) request('open', 0);
@@ -35,7 +36,7 @@ $query = DB::table('local_profiles as lp')
     'lp.mobile',
     'lp.email',
     'lp.created_at',
-    DB::raw('GROUP_CONCAT(dt.name SEPARATOR ", ") as disabilities')
+    DB::raw('GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ", ") as disabilities')
   )
   ->groupBy(
     'lp.id',
@@ -68,6 +69,10 @@ if ($barangay !== '') {
   $query->where('lp.barangay', $barangay);
 }
 
+if ($disabilityType !== '') {
+  $query->where('dt.id', (int) $disabilityType);
+}
+
 $rows = $query->orderByDesc('lp.created_at')->paginate($perPage)->appends(request()->query());
 
 $barangays = DB::table('local_profiles')
@@ -77,6 +82,10 @@ $barangays = DB::table('local_profiles')
   ->orderBy('barangay')
   ->pluck('barangay')
   ->toArray();
+
+$disabilityTypeOptions = DB::table('disability_types')
+  ->orderBy('name')
+  ->get();
 
 $total = (int) DB::table('local_profiles')
   ->whereNotNull('date_of_birth')
@@ -159,31 +168,51 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
         <h2>Senior Citizens</h2>
         <p class="senior-sub">
           Total senior records: <b>{{ number_format($total) }}</b>
-          @if($q !== '' || $barangay !== '')
+          @if($q !== '' || $barangay !== '' || $disabilityType !== '')
             <span class="senior-muted">• filtered</span>
           @endif
         </p>
       </div>
 
-      <form class="senior-filters" method="GET">
+      <form class="senior-filters" method="GET" id="seniorSearchForm">
         <div class="senior-field">
           <label>Search</label>
-          <input name="q" value="{{ $q }}" placeholder="Name / LDR / PWD ID...">
+          <input
+            id="seniorSearchInput"
+            name="q"
+            value="{{ $q }}"
+            placeholder="Name / LDR / PWD ID..."
+            autocomplete="off"
+          >
         </div>
 
         <div class="senior-field">
           <label>Barangay</label>
-          <select name="barangay">
+          <select name="barangay" id="seniorBarangayFilter">
             <option value="">All barangays</option>
             @foreach($barangays as $b)
-              <option value="{{ $b }}" {{ $barangay === $b ? 'selected' : '' }}>{{ $b }}</option>
+              <option value="{{ $b }}" {{ $barangay === $b ? 'selected' : '' }}>
+                {{ $b }}
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <div class="senior-field">
+          <label>Types of Disability</label>
+          <select name="disability_type" id="seniorDisabilityTypeFilter">
+            <option value="">All disability types</option>
+            @foreach($disabilityTypeOptions as $dtOpt)
+              <option value="{{ $dtOpt->id }}" {{ $disabilityType === (string) $dtOpt->id ? 'selected' : '' }}>
+                {{ $dtOpt->name }}
+              </option>
             @endforeach
           </select>
         </div>
 
         <div class="senior-actions">
           <button class="senior-btn" type="submit">Filter</button>
-          <a class="senior-btn ghost" href="{{ url()->current() }}">Reset</a>
+          <a class="senior-btn ghost" href="{{ route('admin.senior_citizens') }}">Refresh</a>
         </div>
       </form>
     </div>
@@ -693,9 +722,7 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                           @if($isEditing)
                             <div class="senior-member-tools">
                               <button type="button" class="senior-btn mini" onclick="addMemberRow()">+ Add Member</button>
-                              <div class="senior-mini senior-muted">
-                                (Add member then save to store.)
-                              </div>
+                              <div class="senior-mini senior-muted">(Add member then save to store.)</div>
                             </div>
                           @endif
                         </div>
@@ -867,5 +894,21 @@ function removeRow(btn){
   if(del) del.value = "1";
 
   tr.style.display = 'none';
+}
+
+const seniorSearchForm = document.getElementById('seniorSearchForm');
+const seniorBarangayFilter = document.getElementById('seniorBarangayFilter');
+const seniorDisabilityTypeFilter = document.getElementById('seniorDisabilityTypeFilter');
+
+if (seniorBarangayFilter) {
+  seniorBarangayFilter.addEventListener('change', function () {
+    seniorSearchForm.submit();
+  });
+}
+
+if (seniorDisabilityTypeFilter) {
+  seniorDisabilityTypeFilter.addEventListener('change', function () {
+    seniorSearchForm.submit();
+  });
 }
 </script>
