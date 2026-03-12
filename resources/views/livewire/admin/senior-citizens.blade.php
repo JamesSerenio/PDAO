@@ -632,6 +632,7 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
 
                         <div class="senior-box full">
                           <h4>Household Members</h4>
+
                           <div class="senior-table-wrap">
                             <table class="senior-table mini-table">
                               <thead>
@@ -644,28 +645,59 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                                   <th>Occupation</th>
                                   <th>Pension</th>
                                   <th>Income</th>
+                                  @if($isEditing)
+                                    <th>Remove</th>
+                                  @endif
                                 </tr>
                               </thead>
-                              <tbody>
+
+                              <tbody id="membersBody">
                                 @forelse($openMembers as $m)
                                   <tr>
-                                    <td>{{ $m->name ?: '—' }}</td>
-                                    <td>{{ $m->date_of_birth ?: '—' }}</td>
-                                    <td>{{ $m->civil_status ?: '—' }}</td>
-                                    <td>{{ $m->educational_attainment ?: '—' }}</td>
-                                    <td>{{ $m->relationship_to_pwd ?: '—' }}</td>
-                                    <td>{{ $m->occupation ?: '—' }}</td>
-                                    <td>{{ $m->social_pension_affiliation ?: '—' }}</td>
-                                    <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income, 2) }}</td>
+                                    @if($isEditing)
+                                      <td>
+                                        <input type="hidden" name="member_id[]" value="{{ $m->id }}">
+                                        <input class="senior-input" name="member_name[]" value="{{ $m->name }}">
+                                      </td>
+                                      <td><input class="senior-input" type="date" name="member_dob[]" value="{{ $m->date_of_birth }}"></td>
+                                      <td><input class="senior-input" name="member_civil_status[]" value="{{ $m->civil_status }}"></td>
+                                      <td><input class="senior-input" name="member_education[]" value="{{ $m->educational_attainment }}"></td>
+                                      <td><input class="senior-input" name="member_relationship[]" value="{{ $m->relationship_to_pwd }}"></td>
+                                      <td><input class="senior-input" name="member_occupation[]" value="{{ $m->occupation }}"></td>
+                                      <td><input class="senior-input" name="member_pension[]" value="{{ $m->social_pension_affiliation }}"></td>
+                                      <td><input class="senior-input" type="number" step="0.01" name="member_income[]" value="{{ $m->monthly_income }}"></td>
+                                      <td>
+                                        <button type="button" class="senior-btn mini ghost" onclick="removeRow(this)">X</button>
+                                        <input type="hidden" name="member_delete[]" value="0">
+                                      </td>
+                                    @else
+                                      <td>{{ $m->name ?: '—' }}</td>
+                                      <td>{{ $m->date_of_birth ?: '—' }}</td>
+                                      <td>{{ $m->civil_status ?: '—' }}</td>
+                                      <td>{{ $m->educational_attainment ?: '—' }}</td>
+                                      <td>{{ $m->relationship_to_pwd ?: '—' }}</td>
+                                      <td>{{ $m->occupation ?: '—' }}</td>
+                                      <td>{{ $m->social_pension_affiliation ?: '—' }}</td>
+                                      <td>{{ is_null($m->monthly_income) ? '—' : number_format((float)$m->monthly_income, 2) }}</td>
+                                    @endif
                                   </tr>
                                 @empty
                                   <tr>
-                                    <td colspan="8" class="senior-empty">No household members.</td>
+                                    <td colspan="{{ $isEditing ? 9 : 8 }}" class="senior-empty">No household members.</td>
                                   </tr>
                                 @endforelse
                               </tbody>
                             </table>
                           </div>
+
+                          @if($isEditing)
+                            <div class="senior-member-tools">
+                              <button type="button" class="senior-btn mini" onclick="addMemberRow()">+ Add Member</button>
+                              <div class="senior-mini senior-muted">
+                                (Add member then save to store.)
+                              </div>
+                            </div>
+                          @endif
                         </div>
 
                       </div>
@@ -793,5 +825,47 @@ function previewApprovedSignature(e){
 
   img.style.display = 'block';
   img.src = URL.createObjectURL(file);
+}
+
+function addMemberRow(){
+  const tbody = document.getElementById('membersBody');
+  if(!tbody) return;
+
+  const emptyRow = tbody.querySelector('.senior-empty');
+  if (emptyRow) {
+    emptyRow.closest('tr').remove();
+  }
+
+  const tr = document.createElement('tr');
+
+  tr.innerHTML = `
+    <td>
+      <input type="hidden" name="member_id[]" value="">
+      <input class="senior-input" name="member_name[]" value="">
+    </td>
+    <td><input class="senior-input" type="date" name="member_dob[]" value=""></td>
+    <td><input class="senior-input" name="member_civil_status[]" value=""></td>
+    <td><input class="senior-input" name="member_education[]" value=""></td>
+    <td><input class="senior-input" name="member_relationship[]" value=""></td>
+    <td><input class="senior-input" name="member_occupation[]" value=""></td>
+    <td><input class="senior-input" name="member_pension[]" value=""></td>
+    <td><input class="senior-input" type="number" step="0.01" name="member_income[]" value=""></td>
+    <td>
+      <button type="button" class="senior-btn mini ghost" onclick="removeRow(this)">X</button>
+      <input type="hidden" name="member_delete[]" value="0">
+    </td>
+  `;
+
+  tbody.appendChild(tr);
+}
+
+function removeRow(btn){
+  const tr = btn.closest('tr');
+  if(!tr) return;
+
+  const del = tr.querySelector('input[name="member_delete[]"]');
+  if(del) del.value = "1";
+
+  tr.style.display = 'none';
 }
 </script>
