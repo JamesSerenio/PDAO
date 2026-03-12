@@ -5,6 +5,7 @@ use Carbon\Carbon;
 
 $q = trim((string) request('q', ''));
 $barangay = trim((string) request('barangay', ''));
+$disabilityType = trim((string) request('disability_type', ''));
 
 // view open
 $openId = (int) request('open', 0);
@@ -35,7 +36,7 @@ $query = DB::table('local_profiles as lp')
     'lp.mobile',
     'lp.email',
     'lp.created_at',
-    DB::raw('GROUP_CONCAT(dt.name SEPARATOR ", ") as disabilities')
+    DB::raw('GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ", ") as disabilities')
   )
   ->groupBy(
     'lp.id',
@@ -68,15 +69,23 @@ if ($barangay !== '') {
   $query->where('lp.barangay', $barangay);
 }
 
+if ($disabilityType !== '') {
+  $query->where('dt.id', (int) $disabilityType);
+}
+
 $rows = $query->orderByDesc('lp.created_at')->paginate($perPage)->appends(request()->query());
 
 $barangays = DB::table('local_profiles')
   ->whereNotNull('barangay')
-  ->where('barangay','<>','')
+  ->where('barangay', '<>', '')
   ->distinct()
   ->orderBy('barangay')
   ->pluck('barangay')
   ->toArray();
+
+$disabilityTypeOptions = DB::table('disability_types')
+  ->orderBy('name')
+  ->get();
 
 $total = (int) DB::table('local_profiles')
   ->whereNotNull('date_of_birth')
@@ -155,21 +164,27 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
         <h2>Registered Persons</h2>
         <p class="reg-sub">
           Total records: <b>{{ number_format($total) }}</b>
-          @if($q !== '' || $barangay !== '')
+          @if($q !== '' || $barangay !== '' || $disabilityType !== '')
             <span class="reg-muted">• filtered</span>
           @endif
         </p>
       </div>
 
-      <form class="reg-filters" method="GET">
+      <form class="reg-filters" method="GET" id="autoSearchForm">
         <div class="reg-field">
           <label>Search</label>
-          <input name="q" value="{{ $q }}" placeholder="Name / LDR / PWD ID...">
+          <input
+            id="autoSearchInput"
+            name="q"
+            value="{{ $q }}"
+            placeholder="Name / LDR / PWD ID..."
+            autocomplete="off"
+          >
         </div>
 
         <div class="reg-field">
           <label>Barangay</label>
-          <select name="barangay">
+          <select name="barangay" id="barangayFilter">
             <option value="">All barangays</option>
             @foreach($barangays as $b)
               <option value="{{ $b }}" {{ $barangay === $b ? 'selected' : '' }}>{{ $b }}</option>
@@ -177,9 +192,21 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
           </select>
         </div>
 
+        <div class="reg-field">
+          <label>Types of Disability</label>
+          <select name="disability_type" id="disabilityTypeFilter">
+            <option value="">All disability types</option>
+            @foreach($disabilityTypeOptions as $dtOpt)
+              <option value="{{ $dtOpt->id }}" {{ $disabilityType === (string)$dtOpt->id ? 'selected' : '' }}>
+                {{ $dtOpt->name }}
+              </option>
+            @endforeach
+          </select>
+        </div>
+
         <div class="reg-actions">
-          <button class="reg-btn" type="submit">Filter</button>
-          <a class="reg-btn ghost" href="{{ url()->current() }}">Reset</a>
+          <button class="reg-btn" type="submit">Search</button>
+          <a class="reg-btn ghost" href="{{ url()->current() }}">Refresh</a>
         </div>
       </form>
     </div>
@@ -914,5 +941,34 @@ function removeRow(btn){
   if(del) del.value = "1";
 
   tr.style.display = 'none';
+}
+
+// ===== AUTO SEARCH =====
+const autoSearchForm = document.getElementById('autoSearchForm');
+const autoSearchInput = document.getElementById('autoSearchInput');
+const barangayFilter = document.getElementById('barangayFilter');
+const disabilityTypeFilter = document.getElementById('disabilityTypeFilter');
+
+let searchTimer = null;
+
+if (autoSearchInput) {
+  autoSearchInput.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      autoSearchForm.submit();
+    }, 400);
+  });
+}
+
+if (barangayFilter) {
+  barangayFilter.addEventListener('change', function () {
+    autoSearchForm.submit();
+  });
+}
+
+if (disabilityTypeFilter) {
+  disabilityTypeFilter.addEventListener('change', function () {
+    autoSearchForm.submit();
+  });
 }
 </script>
