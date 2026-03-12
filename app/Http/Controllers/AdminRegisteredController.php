@@ -355,6 +355,36 @@ class adminRegisteredController extends Controller
         return redirect()->to($redirectTo)->with('success', 'Updated successfully.');
     }
 
+    public function destroy(int $id)
+    {
+        $record = DB::table('local_profiles')->where('id', $id)->first();
+
+        if (!$record) {
+            return redirect()
+                ->route('admin.registered')
+                ->with('success', 'Record not found.');
+        }
+
+        $fileFields = [
+            'photo_1x1',
+            'signature_thumbmark',
+            'interviewee_signature_thumbmark',
+            'approved_signature',
+        ];
+
+        foreach ($fileFields as $field) {
+            if (!empty($record->$field)) {
+                Storage::disk('public')->delete($record->$field);
+            }
+        }
+
+        DB::table('local_profiles')->where('id', $id)->delete();
+
+        return redirect()
+            ->route('admin.registered')
+            ->with('success', 'Record deleted successfully.');
+    }
+
     public function pdf(int $id)
     {
         $open = DB::table('local_profiles')->where('id', $id)->first();
