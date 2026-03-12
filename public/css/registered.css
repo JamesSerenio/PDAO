@@ -355,3 +355,85 @@ tr.is-open{ outline:2px solid rgba(34,197,94,.25); }
 .reg-btn-danger:hover{
   background:#b91c1c;
 }
+
+.reg-icon-actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.reg-icon-btn{
+  width:36px;
+  height:36px;
+  border:none;
+  outline:none;
+  border-radius:12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  cursor:pointer;
+  transition:all .18s ease;
+  box-shadow:0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.reg-icon-btn svg{
+  width:18px;
+  height:18px;
+}
+
+.reg-icon-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(15, 23, 42, 0.14);
+}
+
+.reg-icon-btn.view{
+  background:#eef6ff;
+  color:#2563eb;
+  border:1px solid #bfdbfe;
+}
+
+.reg-icon-btn.view:hover{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.reg-icon-btn.pdf{
+  background:#fff1f2;
+  color:#e11d48;
+  border:1px solid #fecdd3;
+}
+
+.reg-icon-btn.pdf:hover{
+  background:#ffe4e6;
+  color:#be123c;
+}
+
+.reg-icon-btn.delete{
+  background:#fff7ed;
+  color:#ea580c;
+  border:1px solid #fed7aa;
+}
+
+.reg-icon-btn.delete:hover{
+  background:#ffedd5;
+  color:#c2410c;
+}
+
+.reg-icon-btn.close{
+  background:#f3f4f6;
+  color:#4b5563;
+  border:1px solid #d1d5db;
+}
+
+.reg-icon-btn.close:hover{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.reg-actions-cell{
+  min-width:140px;
+  text-align:center;
+}

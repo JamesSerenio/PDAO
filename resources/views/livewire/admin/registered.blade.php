@@ -170,11 +170,11 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
         </p>
       </div>
 
-      <form class="reg-filters" method="GET" id="autoSearchForm">
+      <form class="reg-filters" method="GET" id="searchForm">
         <div class="reg-field">
           <label>Search</label>
           <input
-            id="autoSearchInput"
+            id="searchInput"
             name="q"
             value="{{ $q }}"
             placeholder="Name / LDR / PWD ID..."
@@ -263,35 +263,55 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
-              <td class="reg-actions-cell">
-                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                  @if($isOpen)
-                    <a class="reg-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
-                  @else
-                    <a class="reg-btn mini" href="{{ $viewUrl }}">View more info</a>
-                  @endif
-
-                  <a
-                    class="reg-btn mini ghost"
-                    href="{{ route('admin.registered.pdf', $r->id) }}"
-                    target="_blank"
-                  >
-                    PDF
+            <td class="reg-actions-cell">
+              <div class="reg-icon-actions">
+                @if($isOpen)
+                  <a class="reg-icon-btn close" href="{{ $closeViewUrl }}" title="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/>
+                    </svg>
                   </a>
+                @else
+                  <a class="reg-icon-btn view" href="{{ $viewUrl }}" title="View more info">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </a>
+                @endif
 
-                  <form
-                    method="POST"
-                    action="{{ route('admin.registered.destroy', $r->id) }}"
-                    onsubmit="return confirm('Are you sure you want to delete this record?')"
-                    style="display:inline;"
-                  >
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="reg-btn mini reg-btn-danger">Delete</button>
-                  </form>
-                </div>
-              </td>
-            </tr>
+                <a
+                  class="reg-icon-btn pdf"
+                  href="{{ route('admin.registered.pdf', $r->id) }}"
+                  target="_blank"
+                  title="Open PDF"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 2v5h5"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15h6M9 11h3"/>
+                  </svg>
+                </a>
+
+                <form
+                  method="POST"
+                  action="{{ route('admin.registered.destroy', $r->id) }}"
+                  onsubmit="return confirm('Are you sure you want to delete this record?')"
+                  style="display:inline;"
+                >
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="reg-icon-btn delete" title="Delete">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4h8v2"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 6l-1 14H6L5 6"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6M14 11v6"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </td>
 
             @if($isOpen && $open)
               @php
@@ -943,32 +963,20 @@ function removeRow(btn){
   tr.style.display = 'none';
 }
 
-// ===== AUTO SEARCH =====
-const autoSearchForm = document.getElementById('autoSearchForm');
-const autoSearchInput = document.getElementById('autoSearchInput');
+// only dropdown auto-submit
+const searchForm = document.getElementById('searchForm');
 const barangayFilter = document.getElementById('barangayFilter');
 const disabilityTypeFilter = document.getElementById('disabilityTypeFilter');
 
-let searchTimer = null;
-
-if (autoSearchInput) {
-  autoSearchInput.addEventListener('input', function () {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      autoSearchForm.submit();
-    }, 400);
-  });
-}
-
 if (barangayFilter) {
   barangayFilter.addEventListener('change', function () {
-    autoSearchForm.submit();
+    searchForm.submit();
   });
 }
 
 if (disabilityTypeFilter) {
   disabilityTypeFilter.addEventListener('change', function () {
-    autoSearchForm.submit();
+    searchForm.submit();
   });
 }
 </script>
