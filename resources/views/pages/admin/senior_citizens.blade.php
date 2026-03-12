@@ -9,5 +9,7 @@
 @endpush
 
 @section('content')
-  @livewire('admin.senior-citizens')
+
+@include('livewire.admin.senior-citizens')
+
 @endsection

@@ -241,20 +241,55 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
               <td>{{ Carbon::parse($r->created_at)->format('M d, Y h:i A') }}</td>
 
               <td class="senior-actions-cell">
-                <div class="senior-actions">
+                <div class="reg-icon-actions">
                   @if($isOpen)
-                    <a class="senior-btn mini ghost" href="{{ $closeViewUrl }}">Close</a>
+                    <a class="reg-icon-btn close" href="{{ $closeViewUrl }}" title="Close">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18"></path>
+                        <path d="M6 6l12 12"></path>
+                      </svg>
+                    </a>
                   @else
-                    <a class="senior-btn mini" href="{{ $viewUrl }}">View more info</a>
+                    <a class="reg-icon-btn view" href="{{ $viewUrl }}" title="View more info">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    </a>
                   @endif
 
                   <a
-                    class="senior-btn mini ghost"
+                    class="reg-icon-btn pdf"
                     href="{{ route('admin.registered.pdf', $r->id) }}"
                     target="_blank"
+                    title="Open PDF"
                   >
-                    PDF
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <path d="M14 2v6h6"></path>
+                      <path d="M9 15h6"></path>
+                      <path d="M9 11h3"></path>
+                    </svg>
                   </a>
+
+                    <form
+                      method="POST"
+                      action="{{ route('admin.registered.destroy', $r->id) }}"
+                      onsubmit="return confirm('Are you sure you want to delete this record?');"
+                      class="inline-icon-form"
+                    >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="reg-icon-btn delete" title="Delete">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                        <path d="M10 11v6"></path>
+                        <path d="M14 11v6"></path>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                      </svg>
+                    </button>
+                  </form>
                 </div>
               </td>
             </tr>
@@ -296,7 +331,7 @@ $closeViewUrl = $withQuery([], ['open', 'editMode']);
                         @if($open->photo_1x1)
                           <img id="photoPreview" class="senior-photo big" src="{{ Storage::url($open->photo_1x1) }}" alt="Photo">
                         @else
-                          <img id="photoPreview" class="senior-photo big" src="" alt="Photo" style="display:none;">
+                          <img id="photoPreview" class="senior-photo big is-hidden" src="" alt="Photo">
                         @endif
                       </div>
                     </div>
@@ -632,7 +667,7 @@ function previewPhoto(e){
   if(!file) return;
   const img = document.getElementById('photoPreview');
   if(!img) return;
-  img.style.display = 'block';
+  img.classList.remove('is-hidden');
   img.src = URL.createObjectURL(file);
 }
 
