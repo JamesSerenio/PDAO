@@ -4,6 +4,12 @@
   </div>
 @endif
 
+@if (session('error'))
+  <div class="lpf-alert lpf-alert-error lpf-animate-in" role="alert">
+    <b>{{ session('error') }}</b>
+  </div>
+@endif
+
 @if ($errors->any())
   <div class="lpf-alert lpf-alert-error lpf-animate-in" role="alert">
     <b>Please fix the errors:</b>
@@ -39,43 +45,88 @@
         <div class="lpf-grid lpf-stagger">
           <div class="lpf-field">
             <label class="lpf-label" for="ldr_number">Local Disability Registry No.</label>
-            <input id="ldr_number" class="lpf-input" type="text" wire:model.defer="ldr_number"
-                   placeholder="(Filled by office if applicable)">
+            <input
+              id="ldr_number"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="ldr_number"
+              placeholder="(Filled by office if applicable)"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="profiling_date">Profiling Date</label>
-            <input id="profiling_date" class="lpf-input" type="date" wire:model.defer="profiling_date">
+            <input
+              id="profiling_date"
+              class="lpf-input"
+              type="date"
+              wire:model.defer="profiling_date"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="last_name">Last Name</label>
-            <input id="last_name" class="lpf-input" type="text" wire:model.defer="last_name" placeholder="DELA CRUZ">
+            <input
+              id="last_name"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="last_name"
+              placeholder="DELA CRUZ"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="first_name">First Name</label>
-            <input id="first_name" class="lpf-input" type="text" wire:model.defer="first_name" placeholder="JUAN">
+            <input
+              id="first_name"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="first_name"
+              placeholder="JUAN"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="middle_name">Middle Name</label>
-            <input id="middle_name" class="lpf-input" type="text" wire:model.defer="middle_name" placeholder="SANTOS">
+            <input
+              id="middle_name"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="middle_name"
+              placeholder="SANTOS"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="suffix">Suffix</label>
-            <input id="suffix" class="lpf-input" type="text" wire:model.defer="suffix" placeholder="Jr., Sr., III">
+            <input
+              id="suffix"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="suffix"
+              placeholder="Jr., Sr., III"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="date_of_birth">Date of Birth</label>
-            <input id="date_of_birth" class="lpf-input" type="date" wire:model.live="date_of_birth">
+            <input
+              id="date_of_birth"
+              class="lpf-input"
+              type="date"
+              wire:model.live="date_of_birth"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="age_display">Age (Auto)</label>
-            <input id="age_display" class="lpf-input" type="text" value="{{ $age ?: '—' }}" readonly>
+            <input
+              id="age_display"
+              class="lpf-input"
+              type="text"
+              value="{{ $age ?: '—' }}"
+              readonly
+            >
             <small class="lpf-help">Auto-calculated from birthday.</small>
           </div>
 
@@ -83,21 +134,37 @@
             <label class="lpf-label" for="blood_type">Blood Type</label>
             <select id="blood_type" class="lpf-select" wire:model.defer="blood_type">
               <option value="">-- Select --</option>
-              <option value="A+">A+</option><option value="A-">A-</option>
-              <option value="B+">B+</option><option value="B-">B-</option>
-              <option value="AB+">AB+</option><option value="AB-">AB-</option>
-              <option value="O+">O+</option><option value="O-">O-</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
             </select>
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="religion">Religion</label>
-            <input id="religion" class="lpf-input" type="text" wire:model.defer="religion" placeholder="Optional">
+            <input
+              id="religion"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="religion"
+              placeholder="Optional"
+            >
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="ethnic_group">Ethnic Group</label>
-            <input id="ethnic_group" class="lpf-input" type="text" wire:model.defer="ethnic_group" placeholder="Optional">
+            <input
+              id="ethnic_group"
+              class="lpf-input"
+              type="text"
+              wire:model.defer="ethnic_group"
+              placeholder="Optional"
+            >
           </div>
 
           <div class="lpf-field">
@@ -124,13 +191,25 @@
 
           <div class="lpf-field">
             <label class="lpf-label" for="photo_1x1">1x1 Photo</label>
-            <input id="photo_1x1" class="lpf-input" type="file" accept="image/*" wire:model="photo_1x1">
+            <input
+              id="photo_1x1"
+              class="lpf-input"
+              type="file"
+              accept="image/*"
+              wire:model="photo_1x1"
+            >
             <small class="lpf-help">Upload image file (jpg/png).</small>
           </div>
 
           <div class="lpf-field">
             <label class="lpf-label" for="signature_thumbmark">Signature/Thumbmark</label>
-            <input id="signature_thumbmark" class="lpf-input" type="file" accept="image/*" wire:model="signature_thumbmark">
+            <input
+              id="signature_thumbmark"
+              class="lpf-input"
+              type="file"
+              accept="image/*"
+              wire:model="signature_thumbmark"
+            >
           </div>
         </div>
       </div>
@@ -349,10 +428,12 @@
         <div class="lpf-grid lpf-stagger">
           <div class="lpf-field">
             <label class="lpf-label">PWD Organization / Group Name</label>
-            <input class="lpf-input" type="text"
-                wire:model.defer="pwd_org_affiliated"
-                placeholder="Example: PWD Association Tankulan">
-
+            <input
+              class="lpf-input"
+              type="text"
+              wire:model.defer="pwd_org_affiliated"
+              placeholder="Example: PWD Association Tankulan"
+            >
             <small class="lpf-help">Enter the name of the PWD organization or group.</small>
           </div>
 
@@ -439,14 +520,20 @@
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.relationship_to_pwd"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.occupation"></td>
                   <td><input class="lpf-input lpf-input-sm" type="text" wire:model.defer="household_members.{{ $i }}.social_pension_affiliation"></td>
-
                   <td>
-                    <input class="lpf-input lpf-input-sm" type="number" step="0.01"
-                           wire:model.live="household_members.{{ $i }}.monthly_income">
+                    <input
+                      class="lpf-input lpf-input-sm"
+                      type="number"
+                      step="0.01"
+                      wire:model.live="household_members.{{ $i }}.monthly_income"
+                    >
                   </td>
-
                   <td>
-                    <button type="button" class="lpf-mini lpf-mini-danger" wire:click="removeHouseholdMember({{ $i }})">
+                    <button
+                      type="button"
+                      class="lpf-mini lpf-mini-danger"
+                      wire:click="removeHouseholdMember({{ $i }})"
+                    >
                       Remove
                     </button>
                   </td>
