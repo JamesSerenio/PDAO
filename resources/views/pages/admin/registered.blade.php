@@ -8,7 +8,7 @@
 
 @push('styles')
   @php
-    $regCss = public_path('css/registered.css');
+    $regCss = public_path('css/admin_register.css');
     $regVer = file_exists($regCss) ? filemtime($regCss) : time();
   @endphp
   <link rel="stylesheet" href="{{ asset('css/registered.css') }}?v={{ $regVer }}">
