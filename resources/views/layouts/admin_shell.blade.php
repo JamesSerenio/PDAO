@@ -28,15 +28,13 @@
 @php
   $active = request()->route() ? request()->route()->getName() : '';
 
-  $menu = [
-    ['label' => 'Dashboard',          'route' => 'admin.dashboard',          'icon' => '🏠'],
-    ['label' => 'Local Profile Form', 'route' => 'admin.local_profile_form', 'icon' => '🧾'],
-    ['label' => 'Mapping',            'route' => 'admin.mapping',            'icon' => '🗺️'],
-    ['label' => 'Registered Person',  'route' => 'admin.registered',         'icon' => '👥'],
-
-    // ✅ NEW MENU
-    ['label' => 'Senior Citizens',    'route' => 'admin.senior_citizens',    'icon' => '👴'],
-  ];
+$menu = [
+  ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'icon' => 'dashboard'],
+  ['label' => 'Local Profile Form', 'route' => 'admin.local_profile_form', 'icon' => 'form'],
+  ['label' => 'Mapping', 'route' => 'admin.mapping', 'icon' => 'map'],
+  ['label' => 'Registered Person', 'route' => 'admin.registered', 'icon' => 'users'],
+  ['label' => 'Senior Citizens', 'route' => 'admin.senior_citizens', 'icon' => 'elderly'],
+];
 @endphp
 
 <body class="dash-admin admin-shell @yield('body_class')">
