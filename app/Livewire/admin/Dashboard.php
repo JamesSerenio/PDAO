@@ -22,7 +22,7 @@ class Dashboard extends Component
 
     public function updatedRange(): void
     {
-        // Livewire will re-render automatically
+        // Livewire auto re-render
     }
 
     public function setRange(string $value): void
@@ -106,17 +106,78 @@ class Dashboard extends Component
         };
     }
 
+    protected function getChartData(): array
+    {
+        $labels = [];
+        $data = [];
+
+        if ($this->range === 'day') {
+            for ($hour = 0; $hour < 24; $hour++) {
+                $labels[] = str_pad((string) $hour, 2, '0', STR_PAD_LEFT) . ':00';
+                $data[] = DB::table('local_profiles')
+                    ->whereDate('created_at', Carbon::today())
+                    ->whereHour('created_at', $hour)
+                    ->count();
+            }
+        } elseif ($this->range === 'week') {
+            $start = Carbon::now()->startOfWeek();
+
+            for ($i = 0; $i < 7; $i++) {
+                $date = $start->copy()->addDays($i);
+                $labels[] = $date->format('D');
+                $data[] = DB::table('local_profiles')
+                    ->whereDate('created_at', $date->toDateString())
+                    ->count();
+            }
+        } elseif ($this->range === 'month') {
+            $daysInMonth = Carbon::now()->daysInMonth;
+            $year = Carbon::now()->year;
+            $month = Carbon::now()->month;
+
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $labels[] = (string) $day;
+                $data[] = DB::table('local_profiles')
+                    ->whereYear('created_at', $year)
+                    ->whereMonth('created_at', $month)
+                    ->whereDay('created_at', $day)
+                    ->count();
+            }
+        } elseif ($this->range === 'year') {
+            for ($month = 1; $month <= 12; $month++) {
+                $labels[] = Carbon::create(null, $month, 1)->format('M');
+                $data[] = DB::table('local_profiles')
+                    ->whereYear('created_at', Carbon::now()->year)
+                    ->whereMonth('created_at', $month)
+                    ->count();
+            }
+        } else {
+            $years = DB::table('local_profiles')
+                ->selectRaw('YEAR(created_at) as year')
+                ->distinct()
+                ->orderBy('year')
+                ->pluck('year');
+
+            foreach ($years as $year) {
+                $labels[] = (string) $year;
+                $data[] = DB::table('local_profiles')
+                    ->whereYear('created_at', $year)
+                    ->count();
+            }
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+        ];
+    }
+
     public function render()
     {
         $registeredCount = $this->getRegisteredQuery()->count();
-
         $pwdCount = $this->getPwdQuery()->count();
-
         $seniorCount = $this->getSeniorQuery()->count();
-
-        $recentProfiles = $this->getRecentProfilesQuery()
-            ->limit(5)
-            ->get();
+        $recentProfiles = $this->getRecentProfilesQuery()->limit(5)->get();
+        $chart = $this->getChartData();
 
         return view('livewire.admin.dashboard', [
             'registeredCount' => $registeredCount,
@@ -124,6 +185,8 @@ class Dashboard extends Component
             'seniorCount' => $seniorCount,
             'recentProfiles' => $recentProfiles,
             'rangeLabel' => $this->rangeLabel,
+            'chartLabels' => $chart['labels'],
+            'chartData' => $chart['data'],
         ]);
     }
 }

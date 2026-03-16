@@ -78,35 +78,42 @@
   </div>
 
   <div class="dash-panels">
+
     <div class="panel">
       <div class="panel-head">
-        <h2>Overview</h2>
+        <h2>Registration Trends</h2>
         <span class="panel-pill">{{ $rangeLabel }}</span>
       </div>
 
       <div class="panel-body">
-        <div class="overview-stack">
-          <div class="overview-box">
-            <strong>Filtered Registered:</strong>
-            <span wire:loading.remove wire:target="range">{{ $registeredCount }}</span>
-            <span wire:loading wire:target="range">Loading...</span>
+        <div wire:loading wire:target="range" class="panel-empty">
+          Loading graph...
+        </div>
+
+        <div wire:loading.remove wire:target="range">
+          <div class="chart-summary">
+            <div class="overview-box">
+              <strong>Registered</strong>
+              <div>{{ $registeredCount }}</div>
+            </div>
+
+            <div class="overview-box">
+              <strong>PWD</strong>
+              <div>{{ $pwdCount }}</div>
+            </div>
+
+            <div class="overview-box">
+              <strong>Senior Citizens</strong>
+              <div>{{ $seniorCount }}</div>
+            </div>
           </div>
 
-          <div class="overview-box">
-            <strong>Filtered Registered PWD:</strong>
-            <span wire:loading.remove wire:target="range">{{ $pwdCount }}</span>
-            <span wire:loading wire:target="range">Loading...</span>
-          </div>
-
-          <div class="overview-box">
-            <strong>Filtered Senior Citizens:</strong>
-            <span wire:loading.remove wire:target="range">{{ $seniorCount }}</span>
-            <span wire:loading wire:target="range">Loading...</span>
-          </div>
-
-          <div class="overview-box">
-            <strong>Current Date & Time:</strong>
-            <span id="overviewLiveDateTime">{{ now()->format('F d, Y h:i:s A') }}</span>
+          <div class="chart-box">
+            <canvas
+              id="dashboardLineChart"
+              data-labels='@json($chartLabels)'
+              data-values='@json($chartData)'>
+            </canvas>
           </div>
         </div>
       </div>
@@ -144,7 +151,7 @@
                           $age = \Carbon\Carbon::parse($person->date_of_birth)->age;
                       }
 
-                      $category = ($age !== null && $age >= 60) ? 'Senior Citizen' : 'PWD';
+                      $category = $age === null ? '—' : ($age >= 60 ? 'Senior Citizen' : 'PWD');
                     @endphp
                     <tr>
                       <td>
@@ -172,10 +179,15 @@
         </div>
       </div>
     </div>
+
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   @script
   <script>
+    let dashboardChartInstance = null;
+
     function updateDashboardClock() {
       const now = new Date();
 
@@ -189,7 +201,6 @@
       const liveDateText = document.getElementById('liveDateText');
       const liveTimeText = document.getElementById('liveTimeText');
       const liveAmPm = document.getElementById('liveAmPm');
-      const overviewLiveDateTime = document.getElementById('overviewLiveDateTime');
 
       let hours = now.getHours();
       const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -205,13 +216,92 @@
       if (liveDateText) liveDateText.textContent = formattedDate;
       if (liveTimeText) liveTimeText.textContent = formattedTime;
       if (liveAmPm) liveAmPm.textContent = realAmpm;
-      if (overviewLiveDateTime) {
-        overviewLiveDateTime.textContent = `${formattedDate} ${formattedTime} ${realAmpm}`;
-      }
     }
 
-    setInterval(updateDashboardClock, 1000);
-    updateDashboardClock();
+    function renderDashboardLineChart() {
+      const canvas = document.getElementById('dashboardLineChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      const labels = JSON.parse(canvas.dataset.labels || '[]');
+      const values = JSON.parse(canvas.dataset.values || '[]');
+      const ctx = canvas.getContext('2d');
+
+      if (dashboardChartInstance) {
+        dashboardChartInstance.destroy();
+      }
+
+      dashboardChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Registered Records',
+            data: values,
+            borderColor: '#16a34a',
+            backgroundColor: 'rgba(22, 163, 74, 0.12)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#16a34a',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            borderWidth: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 500
+          },
+          plugins: {
+            legend: {
+              display: true
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          interaction: {
+            mode: 'nearest',
+            intersect: false
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0
+              },
+              grid: {
+                color: 'rgba(15, 23, 42, 0.08)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('livewire:initialized', () => {
+      updateDashboardClock();
+      setInterval(updateDashboardClock, 1000);
+
+      setTimeout(() => {
+        renderDashboardLineChart();
+      }, 100);
+
+      Livewire.hook('morph.updated', () => {
+        setTimeout(() => {
+          renderDashboardLineChart();
+        }, 50);
+      });
+    });
   </script>
   @endscript
 </div>
