@@ -200,6 +200,8 @@
 
   {{-- PIE CHARTS --}}
   <div class="dash-panels dash-panels-two">
+
+    {{-- MALE & FEMALE --}}
     <div class="panel">
       <div class="panel-head">
         <h2>Male & Female</h2>
@@ -212,17 +214,53 @@
         </div>
 
         <div wire:loading.remove wire:target="range">
-          <div class="pie-chart-box">
-            <canvas
-              id="dashboardGenderPieChart"
-              data-labels='@json($sexPieLabels)'
-              data-values='@json($sexPieData)'>
-            </canvas>
+          <div class="pie-info-layout">
+            <div class="pie-chart-box pie-chart-box-small">
+              <canvas
+                id="dashboardGenderPieChart"
+                data-labels='@json($sexPieLabels)'
+                data-values='@json($sexPieData)'>
+              </canvas>
+            </div>
+
+            <div class="pie-side-description">
+              <div class="pie-desc-card">
+                <div class="pie-desc-title">Gender Overview</div>
+                <p class="pie-desc-text">
+                  This chart presents the distribution of registered individuals by sex for
+                  <strong>{{ strtolower($rangeLabel) }}</strong>. It helps identify whether the
+                  recorded population is more represented by male or female registrants.
+                </p>
+
+                <div class="pie-stat-list">
+                  <div class="pie-stat-item">
+                    <span class="pie-dot pie-dot-male"></span>
+                    <div>
+                      <strong>Male</strong>
+                      <small>{{ $sexPieData[0] ?? 0 }} registered record(s)</small>
+                    </div>
+                  </div>
+
+                  <div class="pie-stat-item">
+                    <span class="pie-dot pie-dot-female"></span>
+                    <div>
+                      <strong>Female</strong>
+                      <small>{{ $sexPieData[1] ?? 0 }} registered record(s)</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pie-note">
+                  This summary makes it easier to monitor gender balance in the profiling data.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
+    {{-- TYPES OF DISABILITY --}}
     <div class="panel">
       <div class="panel-head">
         <h2>Types of Disability</h2>
@@ -235,16 +273,53 @@
         </div>
 
         <div wire:loading.remove wire:target="range">
-          <div class="pie-chart-box">
-            <canvas
-              id="dashboardDisabilityPieChart"
-              data-labels='@json($disabilityPieLabels)'
-              data-values='@json($disabilityPieData)'>
-            </canvas>
+          <div class="pie-info-layout">
+            <div class="pie-chart-box pie-chart-box-small">
+              <canvas
+                id="dashboardDisabilityPieChart"
+                data-labels='@json($disabilityPieLabels)'
+                data-values='@json($disabilityPieData)'>
+              </canvas>
+            </div>
+
+            <div class="pie-side-description">
+              <div class="pie-desc-card">
+                <div class="pie-desc-title">Disability Summary</div>
+                <p class="pie-desc-text">
+                  This graph shows the recorded types of disability based on the current
+                  <strong>{{ strtolower($rangeLabel) }}</strong> selection. It provides a quick
+                  overview of which disability category appears most frequently in the system.
+                </p>
+
+                <div class="pie-stat-list pie-stat-list-vertical">
+                  @forelse(($disabilityPieLabels ?? []) as $index => $label)
+                    @if(($disabilityPieData[$index] ?? 0) > 0)
+                      <div class="pie-stat-item">
+                        <span class="pie-dot pie-dot-disability"></span>
+                        <div>
+                          <strong>{{ $label }}</strong>
+                          <small>{{ $disabilityPieData[$index] ?? 0 }} record(s)</small>
+                        </div>
+                      </div>
+                    @endif
+                  @empty
+                    <div class="pie-note">
+                      No disability records available for this selected range.
+                    </div>
+                  @endforelse
+                </div>
+
+                <div class="pie-note">
+                  This helps the office understand which services and support programs may be
+                  most needed by the registered beneficiaries.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
