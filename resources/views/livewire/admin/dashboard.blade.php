@@ -1,3 +1,35 @@
+@php
+    $sexData = is_array($sexPieData ?? null) ? $sexPieData : [];
+    $disabilityData = is_array($disabilityPieData ?? null) ? $disabilityPieData : [];
+    $disabilityLabelsSafe = is_array($disabilityPieLabels ?? null) ? $disabilityPieLabels : [];
+
+    $totalGender = array_sum($sexData);
+    $totalDisability = array_sum($disabilityData);
+
+    $maleCount = (int) ($sexData[0] ?? 0);
+    $femaleCount = (int) ($sexData[1] ?? 0);
+
+    $malePercent = $totalGender > 0 ? round(($maleCount / $totalGender) * 100, 1) : 0;
+    $femalePercent = $totalGender > 0 ? round(($femaleCount / $totalGender) * 100, 1) : 0;
+
+    $topDisabilityLabel = 'No data';
+    $topDisabilityCount = 0;
+    $topDisabilityPercent = 0;
+
+    if (!empty($disabilityLabelsSafe) && !empty($disabilityData)) {
+        $maxDisabilityCount = max($disabilityData);
+        $topDisabilityIndex = array_search($maxDisabilityCount, $disabilityData, true);
+
+        if ($topDisabilityIndex !== false) {
+            $topDisabilityLabel = $disabilityLabelsSafe[$topDisabilityIndex] ?? 'No data';
+            $topDisabilityCount = (int) $maxDisabilityCount;
+            $topDisabilityPercent = $totalDisability > 0
+                ? round(($topDisabilityCount / $totalDisability) * 100, 1)
+                : 0;
+        }
+    }
+@endphp
+
 <div>
   <div class="dash-grid">
 
@@ -228,30 +260,44 @@
                 <div class="pie-desc-title">Gender Overview</div>
                 <p class="pie-desc-text">
                   This chart presents the distribution of registered individuals by sex for
-                  <strong>{{ strtolower($rangeLabel) }}</strong>. It helps identify whether the
-                  recorded population is more represented by male or female registrants.
+                  <strong>{{ strtolower($rangeLabel) }}</strong>. Out of
+                  <strong>{{ $totalGender }}</strong> total gender-recorded registration{{ $totalGender == 1 ? '' : 's' }},
+                  <strong>{{ $maleCount }}</strong> are male and <strong>{{ $femaleCount }}</strong> are female.
                 </p>
 
                 <div class="pie-stat-list">
                   <div class="pie-stat-item">
                     <span class="pie-dot pie-dot-male"></span>
-                    <div>
+                    <div class="pie-stat-content">
                       <strong>Male</strong>
-                      <small>{{ $sexPieData[0] ?? 0 }} registered record(s)</small>
+                      <small>{{ $maleCount }} out of {{ $totalGender }} total record(s)</small>
+                      <div class="pie-percent-row">
+                        <span>{{ $malePercent }}%</span>
+                        <div class="pie-progress">
+                          <div class="pie-progress-bar pie-progress-male" data-width="{{ $malePercent }}"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <div class="pie-stat-item">
                     <span class="pie-dot pie-dot-female"></span>
-                    <div>
+                    <div class="pie-stat-content">
                       <strong>Female</strong>
-                      <small>{{ $sexPieData[1] ?? 0 }} registered record(s)</small>
+                      <small>{{ $femaleCount }} out of {{ $totalGender }} total record(s)</small>
+                      <div class="pie-percent-row">
+                        <span>{{ $femalePercent }}%</span>
+                        <div class="pie-progress">
+                          <div class="pie-progress-bar pie-progress-female" data-width="{{ $femalePercent }}"></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div class="pie-note">
-                  This summary makes it easier to monitor gender balance in the profiling data.
+                  This summary helps the office quickly understand the current gender composition
+                  of registered individuals and compare representation within the selected range.
                 </div>
               </div>
             </div>
@@ -286,19 +332,33 @@
               <div class="pie-desc-card">
                 <div class="pie-desc-title">Disability Summary</div>
                 <p class="pie-desc-text">
-                  This graph shows the recorded types of disability based on the current
-                  <strong>{{ strtolower($rangeLabel) }}</strong> selection. It provides a quick
-                  overview of which disability category appears most frequently in the system.
+                  This graph shows the recorded types of disability for
+                  <strong>{{ strtolower($rangeLabel) }}</strong>. Out of
+                  <strong>{{ $totalDisability }}</strong> total disability-tagged record{{ $totalDisability == 1 ? '' : 's' }},
+                  the most recorded category is <strong>{{ $topDisabilityLabel }}</strong>
+                  with <strong>{{ $topDisabilityCount }}</strong> {{ $topDisabilityCount == 1 ? 'entry' : 'entries' }}
+                  representing <strong>{{ $topDisabilityPercent }}%</strong> of the total.
                 </p>
 
                 <div class="pie-stat-list pie-stat-list-vertical">
-                  @forelse(($disabilityPieLabels ?? []) as $index => $label)
-                    @if(($disabilityPieData[$index] ?? 0) > 0)
+                  @forelse($disabilityLabelsSafe as $index => $label)
+                    @php
+                      $count = (int) ($disabilityData[$index] ?? 0);
+                      $percent = $totalDisability > 0 ? round(($count / $totalDisability) * 100, 1) : 0;
+                    @endphp
+
+                    @if($count > 0)
                       <div class="pie-stat-item">
                         <span class="pie-dot pie-dot-disability"></span>
-                        <div>
+                        <div class="pie-stat-content">
                           <strong>{{ $label }}</strong>
-                          <small>{{ $disabilityPieData[$index] ?? 0 }} record(s)</small>
+                          <small>{{ $count }} out of {{ $totalDisability }} total record(s)</small>
+                          <div class="pie-percent-row">
+                            <span>{{ $percent }}%</span>
+                            <div class="pie-progress">
+                              <div class="pie-progress-bar pie-progress-disability" data-width="{{ $percent }}"></div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     @endif
@@ -310,8 +370,8 @@
                 </div>
 
                 <div class="pie-note">
-                  This helps the office understand which services and support programs may be
-                  most needed by the registered beneficiaries.
+                  This detailed view helps identify priority disability categories and supports
+                  better planning for assistance, services, and inclusive programs.
                 </div>
               </div>
             </div>
@@ -359,6 +419,14 @@
       if (liveDateText) liveDateText.textContent = formattedDate;
       if (liveTimeText) liveTimeText.textContent = formattedTime;
       if (liveAmPm) liveAmPm.textContent = realAmpm;
+    }
+
+    function applyProgressWidths() {
+      document.querySelectorAll('.pie-progress-bar[data-width]').forEach((el) => {
+        const raw = parseFloat(el.dataset.width || '0');
+        const safe = Number.isFinite(raw) ? Math.max(0, Math.min(raw, 100)) : 0;
+        el.style.width = safe + '%';
+      });
     }
 
     function renderDashboardLineChart() {
@@ -512,6 +580,7 @@
       renderDashboardLineChart();
       renderGenderPieChart();
       renderDisabilityPieChart();
+      applyProgressWidths();
     }
 
     document.addEventListener('livewire:initialized', () => {
