@@ -170,25 +170,15 @@
                   @foreach($recentProfiles as $person)
                     @php
                       $age = null;
-
                       if (!empty($person->date_of_birth)) {
                           $age = \Carbon\Carbon::parse($person->date_of_birth)->age;
                       }
-
                       $category = $age === null ? '—' : ($age >= 60 ? 'Senior Citizen' : 'PWD');
                     @endphp
                     <tr>
-                      <td>
-                        {{ $person->last_name }},
-                        {{ $person->first_name }}
-                        {{ $person->middle_name }}
-                      </td>
+                      <td>{{ $person->last_name }}, {{ $person->first_name }} {{ $person->middle_name }}</td>
                       <td>{{ $person->barangay ?: '—' }}</td>
-                      <td>
-                        {{ $person->profiling_date
-                            ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y')
-                            : '—' }}
-                      </td>
+                      <td>{{ $person->profiling_date ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y') : '—' }}</td>
                       <td>{{ $category }}</td>
                     </tr>
                   @endforeach
@@ -276,13 +266,9 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: {
-            duration: 500
-          },
+          animation: { duration: 500 },
           plugins: {
-            legend: {
-              display: true
-            },
+            legend: { display: true },
             tooltip: {
               mode: 'index',
               intersect: false
@@ -295,17 +281,11 @@
           scales: {
             y: {
               beginAtZero: true,
-              ticks: {
-                precision: 0
-              },
-              grid: {
-                color: 'rgba(15, 23, 42, 0.08)'
-              }
+              ticks: { precision: 0 },
+              grid: { color: 'rgba(15, 23, 42, 0.08)' }
             },
             x: {
-              grid: {
-                display: false
-              }
+              grid: { display: false }
             }
           }
         }

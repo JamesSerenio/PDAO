@@ -716,3 +716,73 @@ body.dash-admin{
     min-width:560px;
   }
 }
+.dash-card-hover-title{
+  min-height:215px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.card-hover-shell{
+  width:100%;
+  min-height:180px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  position:relative;
+}
+
+.hover-title-only{
+  font-size:14px;
+  font-weight:700;
+  color:#334155;
+  opacity:0;
+  visibility:hidden;
+  height:0;
+  margin:0;
+  overflow:hidden;
+  transform:translateY(-6px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+.dash-card-hover-title:hover .hover-title-only{
+  opacity:1;
+  visibility:visible;
+  height:auto;
+  margin-top:2px;
+  transform:translateY(0);
+}
+
+.card-icon{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#fff;
+  flex-shrink:0;
+  box-shadow:0 10px 24px rgba(15,23,42,.10);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.dash-card-hover-title:hover .card-icon{
+  transform:scale(1.08);
+  box-shadow:0 16px 28px rgba(15,23,42,.16);
+}
+
+.card-icon-registered{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.card-icon-pwd{
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.card-icon-senior{
+  background:linear-gradient(135deg,#f59e0b,#fbbf24);
+}
