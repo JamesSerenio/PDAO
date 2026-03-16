@@ -185,6 +185,54 @@ class Dashboard extends Component
         ];
     }
 
+    protected function getSexPieData(): array
+    {
+        $maleQuery = DB::table('local_profiles')->whereRaw("UPPER(sex) = 'MALE'");
+        $femaleQuery = DB::table('local_profiles')->whereRaw("UPPER(sex) = 'FEMALE'");
+
+        $male = $this->applyRangeFilter($maleQuery)->count();
+        $female = $this->applyRangeFilter($femaleQuery)->count();
+
+        return [
+            'labels' => ['Male', 'Female'],
+            'data' => [$male, $female],
+        ];
+    }
+
+    protected function getDisabilityTypesPieData(): array
+    {
+        $query = DB::table('disability_types as dt')
+            ->leftJoin('local_profile_disability_types as lpdt', 'dt.id', '=', 'lpdt.disability_type_id')
+            ->leftJoin('local_profiles as lp', 'lp.id', '=', 'lpdt.local_profile_id')
+            ->select(
+                'dt.name',
+                DB::raw('COUNT(lpdt.local_profile_id) as total')
+            )
+            ->groupBy('dt.id', 'dt.name')
+            ->orderByDesc('total');
+
+        if ($this->range === 'day') {
+            $query->whereDate('lp.created_at', Carbon::today());
+        } elseif ($this->range === 'week') {
+            $query->whereBetween('lp.created_at', [
+                Carbon::now()->startOfWeek(),
+                Carbon::now()->endOfWeek(),
+            ]);
+        } elseif ($this->range === 'month') {
+            $query->whereYear('lp.created_at', Carbon::now()->year)
+                  ->whereMonth('lp.created_at', Carbon::now()->month);
+        } elseif ($this->range === 'year') {
+            $query->whereYear('lp.created_at', Carbon::now()->year);
+        }
+
+        $rows = $query->get();
+
+        return [
+            'labels' => $rows->pluck('name')->toArray(),
+            'data' => $rows->pluck('total')->map(fn ($value) => (int) $value)->toArray(),
+        ];
+    }
+
     public function render()
     {
         $registeredCount = $this->getRegisteredQuery()->count();
@@ -192,6 +240,8 @@ class Dashboard extends Component
         $seniorCount = $this->getSeniorQuery()->count();
         $recentProfiles = $this->getRecentProfilesQuery()->limit(5)->get();
         $chart = $this->getChartData();
+        $sexPie = $this->getSexPieData();
+        $disabilityPie = $this->getDisabilityTypesPieData();
 
         return view('livewire.admin.dashboard', [
             'registeredCount' => $registeredCount,
@@ -201,6 +251,10 @@ class Dashboard extends Component
             'rangeLabel' => $this->rangeLabel,
             'chartLabels' => $chart['labels'],
             'chartData' => $chart['data'],
+            'sexPieLabels' => $sexPie['labels'],
+            'sexPieData' => $sexPie['data'],
+            'disabilityPieLabels' => $disabilityPie['labels'],
+            'disabilityPieData' => $disabilityPie['data'],
         ]);
     }
 }
