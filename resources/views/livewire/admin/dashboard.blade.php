@@ -5,7 +5,12 @@
       <div class="card-top-row">
         <div>
           <div class="card-title">Registered</div>
-          <div class="card-value">{{ $registeredCount }}</div>
+          <div class="card-value" wire:loading.remove wire:target="range">
+            {{ $registeredCount }}
+          </div>
+          <div class="card-value" wire:loading wire:target="range">
+            ...
+          </div>
           <div class="card-sub">{{ $rangeLabel }} records</div>
         </div>
 
@@ -23,14 +28,24 @@
 
     <div class="dash-card">
       <div class="card-title">Registered PWD</div>
-      <div class="card-value">{{ $pwdCount }}</div>
-      <div class="card-sub">Total registered persons</div>
+      <div class="card-value" wire:loading.remove wire:target="range">
+        {{ $pwdCount }}
+      </div>
+      <div class="card-value" wire:loading wire:target="range">
+        ...
+      </div>
+      <div class="card-sub">{{ $rangeLabel }} registered PWD</div>
     </div>
 
     <div class="dash-card">
       <div class="card-title">Senior Citizens</div>
-      <div class="card-value">{{ $seniorCount }}</div>
-      <div class="card-sub">Age 60 years old and above</div>
+      <div class="card-value" wire:loading.remove wire:target="range">
+        {{ $seniorCount }}
+      </div>
+      <div class="card-value" wire:loading wire:target="range">
+        ...
+      </div>
+      <div class="card-sub">{{ $rangeLabel }} senior citizens</div>
     </div>
 
     <div class="scoreboard-card">
@@ -72,15 +87,21 @@
       <div class="panel-body">
         <div class="overview-stack">
           <div class="overview-box">
-            <strong>Filtered Registered:</strong> {{ $registeredCount }}
+            <strong>Filtered Registered:</strong>
+            <span wire:loading.remove wire:target="range">{{ $registeredCount }}</span>
+            <span wire:loading wire:target="range">Loading...</span>
           </div>
 
           <div class="overview-box">
-            <strong>Total Registered PWD:</strong> {{ $pwdCount }}
+            <strong>Filtered Registered PWD:</strong>
+            <span wire:loading.remove wire:target="range">{{ $pwdCount }}</span>
+            <span wire:loading wire:target="range">Loading...</span>
           </div>
 
           <div class="overview-box">
-            <strong>Total Senior Citizens:</strong> {{ $seniorCount }}
+            <strong>Filtered Senior Citizens:</strong>
+            <span wire:loading.remove wire:target="range">{{ $seniorCount }}</span>
+            <span wire:loading wire:target="range">Loading...</span>
           </div>
 
           <div class="overview-box">
@@ -98,41 +119,57 @@
       </div>
 
       <div class="panel-body">
-        @if($recentProfiles->count())
-          <div class="recent-table-wrap">
-            <table class="recent-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Barangay</th>
-                  <th>Profiling Date</th>
-                  <th>Category</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($recentProfiles as $person)
-                  @php
-                    $age = null;
-                    if (!empty($person->date_of_birth)) {
-                        $age = \Carbon\Carbon::parse($person->date_of_birth)->age;
-                    }
-                    $category = ($age !== null && $age >= 60) ? 'Senior Citizen' : 'PWD';
-                  @endphp
+        <div wire:loading wire:target="range" class="panel-empty">
+          Loading recent records...
+        </div>
+
+        <div wire:loading.remove wire:target="range">
+          @if($recentProfiles->count())
+            <div class="recent-table-wrap">
+              <table class="recent-table">
+                <thead>
                   <tr>
-                    <td>{{ $person->last_name }}, {{ $person->first_name }} {{ $person->middle_name }}</td>
-                    <td>{{ $person->barangay ?: '—' }}</td>
-                    <td>{{ $person->profiling_date ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y') : '—' }}</td>
-                    <td>{{ $category }}</td>
+                    <th>Name</th>
+                    <th>Barangay</th>
+                    <th>Profiling Date</th>
+                    <th>Category</th>
                   </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-        @else
-          <div class="panel-empty">
-            No recent records.
-          </div>
-        @endif
+                </thead>
+                <tbody>
+                  @foreach($recentProfiles as $person)
+                    @php
+                      $age = null;
+
+                      if (!empty($person->date_of_birth)) {
+                          $age = \Carbon\Carbon::parse($person->date_of_birth)->age;
+                      }
+
+                      $category = ($age !== null && $age >= 60) ? 'Senior Citizen' : 'PWD';
+                    @endphp
+                    <tr>
+                      <td>
+                        {{ $person->last_name }},
+                        {{ $person->first_name }}
+                        {{ $person->middle_name }}
+                      </td>
+                      <td>{{ $person->barangay ?: '—' }}</td>
+                      <td>
+                        {{ $person->profiling_date
+                            ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y')
+                            : '—' }}
+                      </td>
+                      <td>{{ $category }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          @else
+            <div class="panel-empty">
+              No recent records for {{ strtolower($rangeLabel) }}.
+            </div>
+          @endif
+        </div>
       </div>
     </div>
   </div>
@@ -168,7 +205,9 @@
       if (liveDateText) liveDateText.textContent = formattedDate;
       if (liveTimeText) liveTimeText.textContent = formattedTime;
       if (liveAmPm) liveAmPm.textContent = realAmpm;
-      if (overviewLiveDateTime) overviewLiveDateTime.textContent = `${formattedDate} ${formattedTime} ${realAmpm}`;
+      if (overviewLiveDateTime) {
+        overviewLiveDateTime.textContent = `${formattedDate} ${formattedTime} ${realAmpm}`;
+      }
     }
 
     setInterval(updateDashboardClock, 1000);
