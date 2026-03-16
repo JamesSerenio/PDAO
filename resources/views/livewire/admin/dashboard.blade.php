@@ -1,10 +1,16 @@
 <div>
   <div class="dash-grid">
 
-    <div class="dash-card">
-      <div class="card-top-row">
-        <div>
-          <div class="card-title">Registered</div>
+    {{-- REGISTERED --}}
+    <div class="dash-card dash-card-hover-info dash-card-registered">
+      <div class="card-hover-shell">
+        <div class="card-icon card-icon-registered">
+          <i class="fas fa-id-card"></i>
+        </div>
+
+        <div class="card-title">Registered</div>
+
+        <div class="hover-reveal-content">
           <div class="card-value" wire:loading.remove wire:target="range">
             {{ $registeredCount }}
           </div>
@@ -12,42 +18,63 @@
             ...
           </div>
           <div class="card-sub">{{ $rangeLabel }} records</div>
+
+          <div class="card-filter-form">
+            <select wire:model.live="range" class="card-filter-select">
+              <option value="day">This Day</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+              <option value="year">This Year</option>
+              <option value="overall">Overall</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{-- REGISTERED PWD --}}
+    <div class="dash-card dash-card-hover-info">
+      <div class="card-hover-shell">
+        <div class="card-icon card-icon-pwd">
+          <i class="fas fa-wheelchair"></i>
         </div>
 
-        <div class="card-filter-form">
-          <select wire:model.live="range" class="card-filter-select">
-            <option value="day">This Day</option>
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-            <option value="overall">Overall</option>
-          </select>
+        <div class="card-title">Registered PWD</div>
+
+        <div class="hover-reveal-content">
+          <div class="card-value" wire:loading.remove wire:target="range">
+            {{ $pwdCount }}
+          </div>
+          <div class="card-value" wire:loading wire:target="range">
+            ...
+          </div>
+          <div class="card-sub">{{ $rangeLabel }} registered PWD</div>
         </div>
       </div>
     </div>
 
-    <div class="dash-card">
-      <div class="card-title">Registered PWD</div>
-      <div class="card-value" wire:loading.remove wire:target="range">
-        {{ $pwdCount }}
+    {{-- SENIOR CITIZENS --}}
+    <div class="dash-card dash-card-hover-info">
+      <div class="card-hover-shell">
+        <div class="card-icon card-icon-senior">
+          <i class="fas fa-user-clock"></i>
+        </div>
+
+        <div class="card-title">Senior Citizens</div>
+
+        <div class="hover-reveal-content">
+          <div class="card-value" wire:loading.remove wire:target="range">
+            {{ $seniorCount }}
+          </div>
+          <div class="card-value" wire:loading wire:target="range">
+            ...
+          </div>
+          <div class="card-sub">{{ $rangeLabel }} senior citizens</div>
+        </div>
       </div>
-      <div class="card-value" wire:loading wire:target="range">
-        ...
-      </div>
-      <div class="card-sub">{{ $rangeLabel }} registered PWD</div>
     </div>
 
-    <div class="dash-card">
-      <div class="card-title">Senior Citizens</div>
-      <div class="card-value" wire:loading.remove wire:target="range">
-        {{ $seniorCount }}
-      </div>
-      <div class="card-value" wire:loading wire:target="range">
-        ...
-      </div>
-      <div class="card-sub">{{ $rangeLabel }} senior citizens</div>
-    </div>
-
+    {{-- SYSTEM CLOCK --}}
     <div class="scoreboard-card">
       <span class="scoreboard-live-dot"></span>
 

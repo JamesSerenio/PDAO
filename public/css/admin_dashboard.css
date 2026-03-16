@@ -3,6 +3,7 @@
    admin_dashboard.css
    =========================== */
 
+/* Base */
 body.dash-admin{
   margin:0;
   font-family:Inter, system-ui, -apple-system, sans-serif;
@@ -96,12 +97,13 @@ body.dash-admin{
   color:#0f172a;
   border:1px solid transparent;
   background:transparent;
-  transition:background .15s ease, border-color .15s ease;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
 }
 
 .dash-link:hover{
   background:#f1f5f9;
   border-color:#e2e8f0;
+  transform:translateX(2px);
 }
 
 .dash-link.active{
@@ -143,11 +145,12 @@ body.dash-admin{
   font-weight:800;
   color:#fff;
   background:#ef4444;
-  transition:background .15s ease;
+  transition:background .15s ease, transform .15s ease;
 }
 
 .dash-logout:hover{
   background:#dc2626;
+  transform:translateY(-1px);
 }
 
 /* Main */
@@ -211,7 +214,7 @@ body.dash-admin{
   margin-top:16px;
 }
 
-/* Cards */
+/* Top Cards */
 .dash-grid{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
@@ -220,32 +223,23 @@ body.dash-admin{
 
 .dash-card,
 .scoreboard-card{
+  position:relative;
   background:#ffffff;
   border:1px solid #e5e7eb;
   border-radius:18px;
   padding:16px;
   min-width:0;
   box-shadow:none;
+  overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
-.card-title{
-  font-size:13px;
-  color:#64748b;
-  font-weight:700;
-}
-
-.card-value{
-  font-size:28px;
-  font-weight:900;
-  margin-top:8px;
-  line-height:1.1;
-  color:#0f172a;
-}
-
-.card-sub{
-  font-size:13px;
-  color:#64748b;
-  margin-top:6px;
+.dash-card:hover,
+.scoreboard-card:hover,
+.panel:hover{
+  border-color:#d1d5db;
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(15,23,42,.05);
 }
 
 .card-top-row{
@@ -256,12 +250,70 @@ body.dash-admin{
   flex-wrap:wrap;
 }
 
+.card-main-content{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.card-title{
+  font-size:13px;
+  color:#64748b;
+  font-weight:700;
+  text-align:center;
+}
+
+.card-value{
+  font-size:28px;
+  font-weight:900;
+  margin-top:8px;
+  line-height:1.1;
+  color:#0f172a;
+  text-align:center;
+}
+
+.card-sub{
+  font-size:13px;
+  color:#64748b;
+  margin-top:6px;
+  text-align:center;
+}
+
+.card-icon{
+  width:56px;
+  height:56px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#fff;
+  flex-shrink:0;
+  box-shadow:0 10px 24px rgba(15,23,42,.10);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+
+.card-icon-registered{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.card-icon-pwd{
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.card-icon-senior{
+  background:linear-gradient(135deg,#f59e0b,#fbbf24);
+}
+
 .card-filter-form{
   margin:0;
+  width:100%;
+  margin-top:12px;
 }
 
 .card-filter-select{
-  padding:9px 12px;
+  width:100%;
+  padding:10px 12px;
   border:1px solid #d1d5db;
   border-radius:12px;
   background:#ffffff;
@@ -270,16 +322,55 @@ body.dash-admin{
   color:#111827;
   cursor:pointer;
   outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
 }
 
-/* Plain scoreboard */
+.card-filter-select:focus{
+  border-color:#86efac;
+  box-shadow:0 0 0 4px rgba(34,197,94,.10);
+}
+
+/* Hover reveal cards */
+.dash-card-hover-info{
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.card-hover-shell{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.hover-reveal-content{
+  width:100%;
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transform:translateY(8px);
+  transition:max-height .35s ease, opacity .25s ease, transform .25s ease;
+}
+
+.dash-card-hover-info:hover .hover-reveal-content{
+  max-height:220px;
+  opacity:1;
+  transform:translateY(0);
+}
+
+.dash-card-hover-info:hover .card-icon{
+  transform:scale(1.08);
+  box-shadow:0 16px 28px rgba(15,23,42,.16);
+}
+
+/* Scoreboard */
 .scoreboard-card{
   position:relative;
-  overflow:hidden;
-}
-
-.scoreboard-card::before{
-  display:none;
 }
 
 .scoreboard-live-dot{
@@ -290,6 +381,7 @@ body.dash-admin{
   height:10px;
   border-radius:50%;
   background:#22c55e;
+  box-shadow:0 0 0 6px rgba(34,197,94,.12);
 }
 
 .scoreboard-header{
@@ -355,7 +447,6 @@ body.dash-admin{
   letter-spacing:3px;
   line-height:1;
   color:#0f172a;
-  text-shadow:none;
 }
 
 .scoreboard-ampm{
@@ -395,6 +486,7 @@ body.dash-admin{
   border:1px solid #e5e7eb;
   border-radius:18px;
   overflow:hidden;
+  transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
 .panel-head{
@@ -435,6 +527,8 @@ body.dash-admin{
   justify-content:center;
   color:#64748b;
   font-weight:700;
+  min-height:120px;
+  text-align:center;
 }
 
 .overview-stack{
@@ -449,28 +543,95 @@ body.dash-admin{
   background:#ffffff;
 }
 
+/* Chart */
+.chart-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.chart-box{
+  position:relative;
+  height:320px;
+  width:100%;
+}
+
+.chart-summary .overview-box{
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:14px;
+  padding:14px 16px;
+  font-size:14px;
+  color:#0f172a;
+  box-shadow:0 6px 18px rgba(15,23,42,.05);
+}
+
+.chart-summary .overview-box strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:13px;
+  color:#475569;
+}
+
+.chart-summary .overview-box div{
+  font-size:24px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+#dashboardLineChart{
+  width:100% !important;
+  height:100% !important;
+}
+
+/* Recent table */
 .recent-table-wrap{
+  max-height:290px;
+  overflow-y:auto;
   overflow-x:auto;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:14px;
+  background:#ffffff;
 }
 
 .recent-table{
   width:100%;
   border-collapse:collapse;
+  min-width:650px;
 }
 
-.recent-table th{
-  text-align:left;
-  padding:10px;
-  border-bottom:1px solid #e5e7eb;
-  white-space:nowrap;
-  color:#0f172a;
+.recent-table thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f8fafc;
 }
 
+.recent-table th,
 .recent-table td{
-  padding:10px;
-  border-bottom:1px solid #f1f5f9;
-  vertical-align:top;
-  color:#334155;
+  padding:12px 14px;
+  text-align:left;
+  border-bottom:1px solid rgba(15,23,42,.06);
+  font-size:14px;
+}
+
+.recent-table tbody tr:hover{
+  background:#f9fdf9;
+}
+
+.recent-table-wrap::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+.recent-table-wrap::-webkit-scrollbar-thumb{
+  background:rgba(15,23,42,.18);
+  border-radius:999px;
+}
+
+.recent-table-wrap::-webkit-scrollbar-track{
+  background:transparent;
 }
 
 /* Remove heavy animation */
@@ -481,13 +642,6 @@ body.dash-admin{
 .dash-panels .panel{
   animation:none;
   opacity:1;
-}
-
-/* Hover plain */
-.dash-card:hover,
-.scoreboard-card:hover,
-.panel:hover{
-  border-color:#d1d5db;
 }
 
 /* Responsive */
@@ -546,6 +700,10 @@ body.dash-admin{
     align-items:stretch;
   }
 
+  .chart-summary{
+    grid-template-columns:1fr;
+  }
+
   .card-filter-select{
     width:100%;
   }
@@ -553,44 +711,8 @@ body.dash-admin{
   .scoreboard-header{
     flex-direction:column;
   }
-}
-.chart-summary{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:16px;
-}
 
-.chart-box{
-  position:relative;
-  height:320px;
-  width:100%;
-}
-
-.chart-summary .overview-box{
-  background:#f8fafc;
-  border:1px solid rgba(15,23,42,.08);
-  border-radius:14px;
-  padding:14px 16px;
-  font-size:14px;
-  color:#0f172a;
-  box-shadow:0 6px 18px rgba(15,23,42,.05);
-}
-
-.chart-summary .overview-box strong{
-  display:block;
-  margin-bottom:6px;
-  font-size:13px;
-  color:#475569;
-}
-
-.chart-summary .overview-box div{
-  font-size:24px;
-  font-weight:700;
-  color:#0f172a;
-}
-
-#dashboardLineChart{
-  width:100% !important;
-  height:100% !important;
+  .recent-table{
+    min-width:560px;
+  }
 }
