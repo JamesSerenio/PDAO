@@ -22,7 +22,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ADMIN
 // ======================
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+    // Dashboard page blade na ang tatawagin
+    Route::view('/dashboard', 'pages.admin.dashboard')->name('dashboard');
 
     Route::view('/mapping', 'pages.admin.mapping')->name('mapping');
     Route::view('/local-profile-form', 'pages.admin.local_profile_form')->name('local_profile_form');

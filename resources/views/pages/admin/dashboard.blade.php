@@ -12,7 +12,7 @@
     $pageCss = public_path('css/admin_dashboard_page.css');
     $pageCssVer = file_exists($pageCss) ? filemtime($pageCss) : time();
   @endphp
-  <link rel="stylesheet" href="{{ asset('css/admin_dashboard_page.css') }}?v={{ $pageCssVer }}">
+  <link rel="stylesheet" href="{{ asset('css/admin_dashboard.css') }}?v={{ $pageCssVer }}">
 @endpush
 
 @section('content')

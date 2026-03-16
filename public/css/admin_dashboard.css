@@ -1,12 +1,12 @@
 /* ===========================
    DASHBOARD (dash-admin)
+   admin_dashboard.css
    =========================== */
-/* Helps prevent layout shifts while animating */
 
-   
+/* Base */
 body.dash-admin{
   margin:0;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family:Inter, system-ui, -apple-system, sans-serif;
   color:#0f172a;
   background:
     radial-gradient(900px 600px at 10% 10%, rgba(34,197,94,.18), transparent 60%),
@@ -15,9 +15,16 @@ body.dash-admin{
   min-height:100vh;
 }
 
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+/* Layout */
 .dash-layout{
   display:grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns:280px 1fr;
   min-height:100vh;
 }
 
@@ -27,25 +34,10 @@ body.dash-admin{
   height:100vh;
   background:rgba(255,255,255,.85);
   border-right:1px solid rgba(15,23,42,.10);
-  backdrop-filter: blur(10px);
-
-  padding:0px 12px;
+  backdrop-filter:blur(10px);
+  padding:0 12px;
   display:flex;
   flex-direction:column;
-}
-
-/* remove extra gap pushing logout down */
-.dash-nav{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-top:8px;
-  flex-grow:1;   /* 👈 important */
-}
-
-/* logout section */
-.dash-sidebar-footer{
-  padding:10px 6px 0;  /* smaller spacing */
 }
 
 .dash-brand{
@@ -56,6 +48,7 @@ body.dash-admin{
   border-radius:16px;
   border:1px solid rgba(15,23,42,.08);
   background:rgba(255,255,255,.70);
+  margin-top:10px;
 }
 
 .brand-badge{
@@ -66,6 +59,7 @@ body.dash-admin{
   place-items:center;
   background:linear-gradient(180deg, rgba(106,90,205,.18), rgba(106,90,205,.06));
   border:1px solid rgba(106,90,205,.25);
+  flex-shrink:0;
 }
 
 .brand-badge img{
@@ -85,12 +79,12 @@ body.dash-admin{
   margin-top:2px;
 }
 
-/* Nav */
 .dash-nav{
   display:flex;
   flex-direction:column;
   gap:6px;
-  margin-top:4px;
+  margin-top:8px;
+  flex-grow:1;
 }
 
 .dash-link{
@@ -102,7 +96,7 @@ body.dash-admin{
   text-decoration:none;
   color:#0f172a;
   border:1px solid transparent;
-  transition:.15s;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
   background:transparent;
 }
 
@@ -121,9 +115,16 @@ body.dash-admin{
   width:26px;
   display:inline-flex;
   justify-content:center;
+  align-items:center;
+  flex-shrink:0;
 }
 
-/* Sidebar footer */
+.dash-ico svg{
+  width:20px;
+  height:20px;
+  display:block;
+}
+
 .dash-sidebar-footer{
   margin-top:auto;
   padding:10px 8px;
@@ -143,7 +144,7 @@ body.dash-admin{
   color:#fff;
   background:linear-gradient(135deg,#ef4444,#dc2626);
   box-shadow:0 14px 28px rgba(239,68,68,.22);
-  transition:.15s;
+  transition:transform .15s ease, box-shadow .15s ease;
 }
 
 .dash-logout:hover{
@@ -154,6 +155,7 @@ body.dash-admin{
 /* Main */
 .dash-main{
   padding:18px 18px 28px;
+  min-width:0;
 }
 
 .dash-topbar{
@@ -165,8 +167,8 @@ body.dash-admin{
   border:1px solid rgba(15,23,42,.10);
   border-radius:18px;
   padding:14px 16px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 18px 45px rgba(15,23,42,.08);
+  backdrop-filter:blur(10px);
+  box-shadow:0 18px 45px rgba(15,23,42,.08);
 }
 
 .topbar-title h1{
@@ -198,6 +200,7 @@ body.dash-admin{
   font-size:12px;
   font-weight:700;
   color:#166534;
+  white-space:nowrap;
 }
 
 .chip-dot{
@@ -211,10 +214,10 @@ body.dash-admin{
   margin-top:16px;
 }
 
-/* Cards grid */
+/* Cards */
 .dash-grid{
   display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns:repeat(4, minmax(0, 1fr));
   gap:14px;
 }
 
@@ -222,9 +225,10 @@ body.dash-admin{
   background:rgba(255,255,255,.80);
   border:1px solid rgba(15,23,42,.10);
   border-radius:18px;
-  padding:14px 14px;
-  box-shadow: 0 18px 45px rgba(15,23,42,.06);
-  backdrop-filter: blur(10px);
+  padding:14px;
+  box-shadow:0 18px 45px rgba(15,23,42,.06);
+  backdrop-filter:blur(10px);
+  min-width:0;
 }
 
 .card-title{
@@ -237,6 +241,7 @@ body.dash-admin{
   font-size:28px;
   font-weight:900;
   margin-top:6px;
+  line-height:1.1;
 }
 
 .card-sub{
@@ -245,10 +250,192 @@ body.dash-admin{
   margin-top:4px;
 }
 
+.card-top-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.card-filter-form{
+  margin:0;
+}
+
+.card-filter-select{
+  padding:8px 12px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  background:#fff;
+  font-size:14px;
+  font-weight:600;
+  color:#111827;
+  cursor:pointer;
+  outline:none;
+}
+
+/* Scoreboard card */
+.scoreboard-card{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top left, rgba(34,197,94,.14), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(59,130,246,.14), transparent 35%),
+    linear-gradient(145deg, #0b1220, #111827 55%, #0f172a);
+  border-radius:22px;
+  padding:18px;
+  min-height:170px;
+  box-shadow:
+    0 18px 35px rgba(2,6,23,.28),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.scoreboard-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.02) 0px,
+      rgba(255,255,255,.02) 2px,
+      transparent 2px,
+      transparent 18px
+    );
+  pointer-events:none;
+  opacity:.45;
+}
+
+.scoreboard-live-dot{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 0 rgba(34,197,94,.7);
+  animation:scoreboardPulse 1.5s infinite;
+  z-index:2;
+}
+
+@keyframes scoreboardPulse{
+  0%{ box-shadow:0 0 0 0 rgba(34,197,94,.7); }
+  70%{ box-shadow:0 0 0 10px rgba(34,197,94,0); }
+  100%{ box-shadow:0 0 0 0 rgba(34,197,94,0); }
+}
+
+.scoreboard-header{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:stretch;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.scoreboard-team{
+  flex:1;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  padding:8px 10px;
+  text-align:center;
+  box-shadow:inset 0 0 12px rgba(255,255,255,.02);
+}
+
+.scoreboard-team-label{
+  font-size:10px;
+  letter-spacing:1.8px;
+  font-weight:800;
+  color:#cbd5e1;
+  text-transform:uppercase;
+}
+
+.scoreboard-team-name{
+  margin-top:4px;
+  font-size:13px;
+  font-weight:700;
+  color:#f8fafc;
+}
+
+.scoreboard-main{
+  position:relative;
+  z-index:1;
+  border-radius:18px;
+  padding:14px 14px 12px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+    #0a0f1d;
+  border:1px solid rgba(103,232,249,.12);
+  box-shadow:
+    inset 0 0 18px rgba(103,232,249,.05),
+    0 8px 16px rgba(0,0,0,.18);
+}
+
+.scoreboard-title{
+  text-align:center;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#cbd5e1;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.scoreboard-clock-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:8px;
+}
+
+.scoreboard-time{
+  font-family:"Courier New", monospace;
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:4px;
+  line-height:1;
+  color:#86efac;
+  text-shadow:
+    0 0 6px rgba(134,239,172,.85),
+    0 0 14px rgba(134,239,172,.35),
+    0 0 22px rgba(134,239,172,.18);
+}
+
+.scoreboard-ampm{
+  font-size:13px;
+  font-weight:800;
+  color:#facc15;
+  letter-spacing:1px;
+  margin-bottom:5px;
+  text-shadow:0 0 10px rgba(250,204,21,.25);
+}
+
+.scoreboard-date{
+  margin-top:10px;
+  text-align:center;
+  font-size:14px;
+  font-weight:700;
+  color:#dbeafe;
+  letter-spacing:.6px;
+}
+
+.scoreboard-sub{
+  margin-top:8px;
+  text-align:center;
+  font-size:11px;
+  color:rgba(255,255,255,.72);
+  letter-spacing:.5px;
+}
+
 /* Panels */
 .dash-panels{
   display:grid;
-  grid-template-columns: 1.2fr .8fr;
+  grid-template-columns:1.2fr .8fr;
   gap:14px;
   margin-top:14px;
 }
@@ -258,14 +445,15 @@ body.dash-admin{
   border:1px solid rgba(15,23,42,.10);
   border-radius:18px;
   overflow:hidden;
-  box-shadow: 0 18px 45px rgba(15,23,42,.06);
-  backdrop-filter: blur(10px);
+  box-shadow:0 18px 45px rgba(15,23,42,.06);
+  backdrop-filter:blur(10px);
 }
 
 .panel-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:10px;
   padding:12px 14px;
   border-bottom:1px solid rgba(15,23,42,.08);
 }
@@ -284,6 +472,7 @@ body.dash-admin{
   color:#5a4bc4;
   border:1px dashed rgba(106,90,205,.45);
   background:rgba(106,90,205,.08);
+  white-space:nowrap;
 }
 
 .panel-body{
@@ -299,86 +488,161 @@ body.dash-admin{
   font-weight:700;
 }
 
-/* Responsive */
-@media (max-width: 1100px){
-  .dash-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dash-panels{ grid-template-columns: 1fr; }
+.overview-stack{
+  display:grid;
+  gap:12px;
 }
 
-@media (max-width: 820px){
-  .dash-layout{ grid-template-columns: 1fr; }
+.overview-box{
+  padding:12px;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  background:#fff;
+}
+
+.recent-table-wrap{
+  overflow-x:auto;
+}
+
+.recent-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.recent-table th{
+  text-align:left;
+  padding:10px;
+  border-bottom:1px solid #e5e7eb;
+  white-space:nowrap;
+}
+
+.recent-table td{
+  padding:10px;
+  border-bottom:1px solid #f1f5f9;
+  vertical-align:top;
+}
+
+/* Animations */
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(12px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes fadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+
+.dash-sidebar,
+.dash-topbar,
+.dash-content{
+  animation:fadeUp .45s ease both;
+}
+
+.dash-card{
+  opacity:0;
+  animation:fadeUp .45s ease both;
+}
+
+.dash-card:nth-child(1){ animation-delay:.06s; }
+.dash-card:nth-child(2){ animation-delay:.12s; }
+.dash-card:nth-child(3){ animation-delay:.18s; }
+.dash-card:nth-child(4){ animation-delay:.24s; }
+
+.dash-panels .panel{
+  opacity:0;
+  animation:fadeUp .50s ease both;
+}
+
+.dash-panels .panel:nth-child(1){ animation-delay:.30s; }
+.dash-panels .panel:nth-child(2){ animation-delay:.36s; }
+
+.dash-card:hover{
+  transform:translateY(-2px);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.panel:hover{
+  transform:translateY(-1px);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+/* Responsive */
+@media (max-width:1100px){
+  .dash-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .dash-panels{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:820px){
+  .dash-layout{
+    grid-template-columns:1fr;
+  }
+
   .dash-sidebar{
     position:relative;
     height:auto;
   }
+
+  .dash-topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
 }
 
-/* ===========================
-   ANIMATIONS (FADE / SLIDE)
-   Add this at the bottom of admin_dashboard.css
-   =========================== */
+@media (max-width:768px){
+  .dash-main{
+    padding:14px;
+  }
 
-/* Keyframes */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  .scoreboard-time{
+    font-size:26px;
+    letter-spacing:2px;
+  }
+
+  .scoreboard-date{
+    font-size:12px;
+  }
+
+  .scoreboard-team-name{
+    font-size:12px;
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@media (max-width:640px){
+  .dash-grid{
+    grid-template-columns:1fr;
+  }
+
+  .card-top-row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .card-filter-select{
+    width:100%;
+  }
+
+  .scoreboard-header{
+    flex-direction:column;
+  }
 }
 
-/* Global animated items */
-.dash-sidebar,
-.dash-topbar,
-.dash-content{
-  animation: fadeUp .45s ease both;
-}
-
-/* Stagger effect: cards fade one by one */
-.dash-card{
-  opacity: 0;
-  animation: fadeUp .45s ease both;
-}
-
-/* 1..4 cards delay (works for staff/admin cards) */
-.dash-card:nth-child(1){ animation-delay: .06s; }
-.dash-card:nth-child(2){ animation-delay: .12s; }
-.dash-card:nth-child(3){ animation-delay: .18s; }
-.dash-card:nth-child(4){ animation-delay: .24s; }
-
-/* Panels fade after cards */
-.dash-panels .panel{
-  opacity: 0;
-  animation: fadeUp .50s ease both;
-}
-
-.dash-panels .panel:nth-child(1){ animation-delay: .30s; }
-.dash-panels .panel:nth-child(2){ animation-delay: .36s; }
-
-/* Subtle hover micro-animations (optional) */
-.dash-card:hover{
-  transform: translateY(-2px);
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.panel:hover{
-  transform: translateY(-1px);
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-/* Reduce motion support */
+/* Reduce motion */
 @media (prefers-reduced-motion: reduce){
   .dash-sidebar,
   .dash-topbar,
   .dash-content,
   .dash-card,
-  .dash-panels .panel{
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
+  .dash-panels .panel,
+  .scoreboard-live-dot{
+    animation:none !important;
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
   }
 }
-
