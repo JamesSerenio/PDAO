@@ -554,3 +554,43 @@ body.dash-admin{
     flex-direction:column;
   }
 }
+.chart-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.chart-box{
+  position:relative;
+  height:320px;
+  width:100%;
+}
+
+.chart-summary .overview-box{
+  background:#f8fafc;
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:14px;
+  padding:14px 16px;
+  font-size:14px;
+  color:#0f172a;
+  box-shadow:0 6px 18px rgba(15,23,42,.05);
+}
+
+.chart-summary .overview-box strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:13px;
+  color:#475569;
+}
+
+.chart-summary .overview-box div{
+  font-size:24px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+#dashboardLineChart{
+  width:100% !important;
+  height:100% !important;
+}
