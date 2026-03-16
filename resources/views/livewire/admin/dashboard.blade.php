@@ -103,6 +103,7 @@
 
   <div class="dash-panels">
 
+    {{-- LINE CHART --}}
     <div class="panel">
       <div class="panel-head">
         <h2>Registration Trends</h2>
@@ -143,6 +144,7 @@
       </div>
     </div>
 
+    {{-- RECENT REGISTRATIONS --}}
     <div class="panel">
       <div class="panel-head">
         <h2>Recent Registrations</h2>
@@ -196,11 +198,63 @@
 
   </div>
 
+  {{-- PIE CHARTS --}}
+  <div class="dash-panels dash-panels-two">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Male & Female</h2>
+        <span class="panel-pill">{{ $rangeLabel }}</span>
+      </div>
+
+      <div class="panel-body">
+        <div wire:loading wire:target="range" class="panel-empty">
+          Loading gender graph...
+        </div>
+
+        <div wire:loading.remove wire:target="range">
+          <div class="pie-chart-box">
+            <canvas
+              id="dashboardGenderPieChart"
+              data-labels='@json($sexPieLabels)'
+              data-values='@json($sexPieData)'>
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Types of Disability</h2>
+        <span class="panel-pill">{{ $rangeLabel }}</span>
+      </div>
+
+      <div class="panel-body">
+        <div wire:loading wire:target="range" class="panel-empty">
+          Loading disability graph...
+        </div>
+
+        <div wire:loading.remove wire:target="range">
+          <div class="pie-chart-box">
+            <canvas
+              id="dashboardDisabilityPieChart"
+              data-labels='@json($disabilityPieLabels)'
+              data-values='@json($disabilityPieData)'>
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   @script
   <script>
     let dashboardChartInstance = null;
+    let dashboardGenderPieInstance = null;
+    let dashboardDisabilityPieInstance = null;
+    let dashboardClockStarted = false;
 
     function updateDashboardClock() {
       const now = new Date();
@@ -292,17 +346,113 @@
       });
     }
 
+    function renderGenderPieChart() {
+      const canvas = document.getElementById('dashboardGenderPieChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      const labels = JSON.parse(canvas.dataset.labels || '[]');
+      const values = JSON.parse(canvas.dataset.values || '[]');
+      const ctx = canvas.getContext('2d');
+
+      if (dashboardGenderPieInstance) {
+        dashboardGenderPieInstance.destroy();
+      }
+
+      dashboardGenderPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: [
+              '#2563eb',
+              '#ec4899'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500 },
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    function renderDisabilityPieChart() {
+      const canvas = document.getElementById('dashboardDisabilityPieChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      const labels = JSON.parse(canvas.dataset.labels || '[]');
+      const values = JSON.parse(canvas.dataset.values || '[]');
+      const ctx = canvas.getContext('2d');
+
+      if (dashboardDisabilityPieInstance) {
+        dashboardDisabilityPieInstance.destroy();
+      }
+
+      dashboardDisabilityPieInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: [
+              '#16a34a',
+              '#22c55e',
+              '#84cc16',
+              '#eab308',
+              '#f59e0b',
+              '#f97316',
+              '#ef4444',
+              '#8b5cf6',
+              '#06b6d4',
+              '#3b82f6',
+              '#14b8a6'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500 },
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+
+    function renderAllDashboardCharts() {
+      renderDashboardLineChart();
+      renderGenderPieChart();
+      renderDisabilityPieChart();
+    }
+
     document.addEventListener('livewire:initialized', () => {
-      updateDashboardClock();
-      setInterval(updateDashboardClock, 1000);
+      if (!dashboardClockStarted) {
+        updateDashboardClock();
+        setInterval(updateDashboardClock, 1000);
+        dashboardClockStarted = true;
+      }
 
       setTimeout(() => {
-        renderDashboardLineChart();
+        renderAllDashboardCharts();
       }, 100);
 
       Livewire.hook('morph.updated', () => {
         setTimeout(() => {
-          renderDashboardLineChart();
+          renderAllDashboardCharts();
         }, 50);
       });
     });
