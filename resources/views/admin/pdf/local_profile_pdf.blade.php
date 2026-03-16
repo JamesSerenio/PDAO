@@ -491,8 +491,27 @@
     }
 
     .row3133-swap .box33 {
-      width: 48%;
-      height: 70px;
+      text-align: center;
+    }
+
+    .sig33-box {
+      width: 100%;
+      height: 34px;
+      overflow: hidden;
+      margin-top: 8px;
+      text-align: center;
+      line-height: 34px;
+    }
+
+    .row3133-swap .sig33 {
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 90%;
+      max-height: 30px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      margin: 0;
     }
 
     .row3133-swap .label {
@@ -510,15 +529,9 @@
     .row3133-swap .box33 {
       width: 48%;
       height: 70px;
+      vertical-align: top;
       padding: 3px 5px;
-    }
-
-    .row3133-swap .label33 {
-      width: 100%;
       text-align: left;
-      font-size: 7px;
-      font-weight: bold;
-      line-height: 1.1;
     }
 
     .sig33-wrap {
@@ -1462,12 +1475,10 @@
                 <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
               </td>
 
-            <td class="box33">
-              <div class="label label33">
-                33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
-              </div>
+                <td class="box33">
+              <div class="label">33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):</div>
 
-              <div class="sig33-wrap">
+              <div class="sig33-box">
                 @if($intervieweeSignature)
                   <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature" class="sig33">
                 @endif
