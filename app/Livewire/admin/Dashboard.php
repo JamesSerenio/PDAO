@@ -12,12 +12,17 @@ class Dashboard extends Component
 
     public function mount(): void
     {
-        $this->range = request('range', 'month');
+        $allowed = ['day', 'week', 'month', 'year', 'overall'];
+        $requestedRange = request('range', 'month');
+
+        $this->range = in_array($requestedRange, $allowed, true)
+            ? $requestedRange
+            : 'month';
     }
 
     public function updatedRange(): void
     {
-        $this->dispatch('$refresh');
+        // Livewire will re-render automatically
     }
 
     public function setRange(string $value): void
@@ -29,10 +34,8 @@ class Dashboard extends Component
         }
     }
 
-    protected function getRegisteredQuery()
+    protected function applyRangeFilter($query)
     {
-        $query = DB::table('local_profiles');
-
         if ($this->range === 'day') {
             $query->whereDate('created_at', Carbon::today());
         } elseif ($this->range === 'week') {
@@ -50,6 +53,48 @@ class Dashboard extends Component
         return $query;
     }
 
+    protected function getRegisteredQuery()
+    {
+        $query = DB::table('local_profiles');
+        return $this->applyRangeFilter($query);
+    }
+
+    protected function getPwdQuery()
+    {
+        $query = DB::table('local_profiles')
+            ->whereNotNull('date_of_birth')
+            ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) < 60');
+
+        return $this->applyRangeFilter($query);
+    }
+
+    protected function getSeniorQuery()
+    {
+        $query = DB::table('local_profiles')
+            ->whereNotNull('date_of_birth')
+            ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) >= 60');
+
+        return $this->applyRangeFilter($query);
+    }
+
+    protected function getRecentProfilesQuery()
+    {
+        $query = DB::table('local_profiles')
+            ->select(
+                'id',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'barangay',
+                'profiling_date',
+                'date_of_birth',
+                'created_at'
+            )
+            ->orderByDesc('created_at');
+
+        return $this->applyRangeFilter($query);
+    }
+
     public function getRangeLabelProperty(): string
     {
         return match ($this->range) {
@@ -63,29 +108,13 @@ class Dashboard extends Component
 
     public function render()
     {
-        $registeredQuery = $this->getRegisteredQuery();
+        $registeredCount = $this->getRegisteredQuery()->count();
 
-        $registeredCount = (clone $registeredQuery)->count();
+        $pwdCount = $this->getPwdQuery()->count();
 
-        $pwdCount = DB::table('local_profiles')->count();
+        $seniorCount = $this->getSeniorQuery()->count();
 
-        $seniorCount = DB::table('local_profiles')
-            ->whereNotNull('date_of_birth')
-            ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) >= 60')
-            ->count();
-
-        $recentProfiles = DB::table('local_profiles')
-            ->select(
-                'id',
-                'first_name',
-                'middle_name',
-                'last_name',
-                'barangay',
-                'profiling_date',
-                'date_of_birth',
-                'created_at'
-            )
-            ->orderByDesc('created_at')
+        $recentProfiles = $this->getRecentProfilesQuery()
             ->limit(5)
             ->get();
 
