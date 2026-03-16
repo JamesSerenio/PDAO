@@ -200,13 +200,26 @@
       text-align: center;
       overflow: hidden;
       background: #fff;
+      position: relative;
     }
 
-    .sig-box img {
+    .sig-box {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      height: 26px;
+      border: none;
+      text-align: center;
+      overflow: hidden;
+      background: #fff;
+      position: relative;
+    }
+
+    td .sig-box img {
+      max-width: 92%;
+      max-height: 22px;
+      width: auto;
+      height: auto;
       display: block;
+      margin: 0 auto;
     }
 
     .checkbox-line {
@@ -494,12 +507,38 @@
       line-height: 1.1;
     }
 
+    .row3133-swap .box33 {
+      width: 48%;
+      height: 70px;
+      padding: 3px 5px;
+    }
+
+    .row3133-swap .label33 {
+      width: 100%;
+      text-align: left;
+      font-size: 7px;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+
+    .sig33-wrap {
+      width: 100%;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+
     .row3133-swap .sig33 {
       display: block;
-      height: 34px;
-      max-width: 100%;
-      margin-top: 8px;
+      max-width: 90%;
+      max-height: 32px;
+      width: auto;
+      height: auto;
       object-fit: contain;
+      margin: 0 auto;
     }
 
     .row34-table {
@@ -547,17 +586,24 @@
     .row34-sigbox {
       height: 22px;
       border: none;
-      text-align: left;
+      text-align: center;
       overflow: hidden;
       background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .row34-sigbox img {
-      height: 100%;
-      max-width: 100%;
+      max-width: 90%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
       object-fit: contain;
       display: block;
+      margin: 0 auto;
     }
+
 
     .row3536-table {
       width: 100%;
@@ -605,16 +651,23 @@
     .row36-sigbox {
       height: 18px;
       border: none;
-      text-align: left;
+      text-align: center;
       overflow: hidden;
       background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .row36-sigbox img {
-      height: 100%;
-      max-width: 100%;
-      object-fit: contain;
-      display: block;
+    .row36-sigbox {
+      height: 18px;
+      border: none;
+      text-align: center;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .row35-table {
@@ -814,6 +867,25 @@
   font-size:12px;
   margin:8px 0 14px;
   letter-spacing:.4px;
+}
+.thumbmark-box {
+  width: 100%;
+  height: 26px;
+  border: none;
+  text-align: center;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+}
+
+.thumbmark-img {
+  max-width: 88%;
+  max-height: 20px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
   </style>
 </head>
@@ -1036,11 +1108,11 @@
 
         <td colspan="2">
           <div class="label">13. Signature / Thumbmark</div>
-          <div class="sig-box no-border">
-            @if($signatureThumb)
-              <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark">
-            @endif
-          </div>
+        <div class="sig-box thumbmark-box no-border">
+          @if($signatureThumb)
+            <img src="{{ $signatureThumb }}" alt="Signature / Thumbmark" class="thumbmark-img">
+          @endif
+        </div>
         </td>
       </tr>
 
@@ -1390,15 +1462,17 @@
                 <div class="value">{{ $open->interviewee_relationship ?? '' }}</div>
               </td>
 
-              <td class="box33">
-                <div class="label">
-                  33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
-                </div>
+            <td class="box33">
+              <div class="label label33">
+                33. SIGNATURE/THUMBMARK OF INTERVIEWEE (OTHER THAN PWD):
+              </div>
 
+              <div class="sig33-wrap">
                 @if($intervieweeSignature)
                   <img src="{{ $intervieweeSignature }}" alt="Interviewee Signature" class="sig33">
                 @endif
-              </td>
+              </div>
+            </td>
             </tr>
           </table>
         </td>
