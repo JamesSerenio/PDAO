@@ -162,10 +162,25 @@
   document.addEventListener('DOMContentLoaded', function () {
     const toggle = document.getElementById('sidebarToggle');
     const body = document.body;
+    const storageKey = 'pdao_sidebar_state';
+
+    const savedState = localStorage.getItem(storageKey);
+
+    if (savedState === 'expanded') {
+      body.classList.remove('sidebar-collapsed');
+    } else {
+      body.classList.add('sidebar-collapsed');
+    }
 
     if (toggle) {
       toggle.addEventListener('click', function () {
         body.classList.toggle('sidebar-collapsed');
+
+        if (body.classList.contains('sidebar-collapsed')) {
+          localStorage.setItem(storageKey, 'collapsed');
+        } else {
+          localStorage.setItem(storageKey, 'expanded');
+        }
       });
     }
   });
