@@ -112,11 +112,17 @@ class Dashboard extends Component
         $data = [];
 
         if ($this->range === 'day') {
+            $today = Carbon::today();
+
             for ($hour = 0; $hour < 24; $hour++) {
                 $labels[] = str_pad((string) $hour, 2, '0', STR_PAD_LEFT) . ':00';
+
+                $startHour = $today->copy()->addHours($hour);
+                $endHour = $startHour->copy()->addHour();
+
                 $data[] = DB::table('local_profiles')
-                    ->whereDate('created_at', Carbon::today())
-                    ->whereHour('created_at', $hour)
+                    ->where('created_at', '>=', $startHour)
+                    ->where('created_at', '<', $endHour)
                     ->count();
             }
         } elseif ($this->range === 'week') {
@@ -125,17 +131,20 @@ class Dashboard extends Component
             for ($i = 0; $i < 7; $i++) {
                 $date = $start->copy()->addDays($i);
                 $labels[] = $date->format('D');
+
                 $data[] = DB::table('local_profiles')
                     ->whereDate('created_at', $date->toDateString())
                     ->count();
             }
         } elseif ($this->range === 'month') {
-            $daysInMonth = Carbon::now()->daysInMonth;
-            $year = Carbon::now()->year;
-            $month = Carbon::now()->month;
+            $now = Carbon::now();
+            $daysInMonth = $now->daysInMonth;
+            $year = $now->year;
+            $month = $now->month;
 
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $labels[] = (string) $day;
+
                 $data[] = DB::table('local_profiles')
                     ->whereYear('created_at', $year)
                     ->whereMonth('created_at', $month)
@@ -143,22 +152,27 @@ class Dashboard extends Component
                     ->count();
             }
         } elseif ($this->range === 'year') {
+            $currentYear = Carbon::now()->year;
+
             for ($month = 1; $month <= 12; $month++) {
                 $labels[] = Carbon::create(null, $month, 1)->format('M');
+
                 $data[] = DB::table('local_profiles')
-                    ->whereYear('created_at', Carbon::now()->year)
+                    ->whereYear('created_at', $currentYear)
                     ->whereMonth('created_at', $month)
                     ->count();
             }
         } else {
             $years = DB::table('local_profiles')
                 ->selectRaw('YEAR(created_at) as year')
+                ->whereNotNull('created_at')
                 ->distinct()
                 ->orderBy('year')
                 ->pluck('year');
 
             foreach ($years as $year) {
                 $labels[] = (string) $year;
+
                 $data[] = DB::table('local_profiles')
                     ->whereYear('created_at', $year)
                     ->count();
