@@ -47,9 +47,14 @@ class Mapping extends Component
 
     public function closeResults(): void
     {
+        $this->profiles = [];
         $this->showResults = false;
 
-        $this->dispatch('mapProfilesLoaded', profiles: [], barangay: '');
+        $this->dispatch(
+            'mapProfilesLoaded',
+            profiles: [],
+            barangay: ''
+        );
     }
 
     public function setBarangay($payload = null): void
@@ -72,16 +77,22 @@ class Mapping extends Component
 
     public function search(): void
     {
-        $b = trim($this->searchBarangay);
+        $barangayInput = trim($this->searchBarangay);
 
-        if ($b === '') {
+        if ($barangayInput === '') {
             $this->profiles = [];
             $this->showResults = false;
-            $this->dispatch('mapProfilesLoaded', profiles: [], barangay: '');
+
+            $this->dispatch(
+                'mapProfilesLoaded',
+                profiles: [],
+                barangay: ''
+            );
             return;
         }
 
-        $normalizedBarangay = mb_strtolower($this->normalizeBarangayName($b));
+        $normalizedBarangay = $this->normalizeBarangayName($barangayInput);
+        $normalizedBarangayLower = mb_strtolower($normalizedBarangay);
 
         $rows = DB::table('local_profiles as lp')
             ->leftJoin('local_profile_disability_types as lpdt', 'lpdt.local_profile_id', '=', 'lp.id')
@@ -90,11 +101,14 @@ class Mapping extends Component
                 "LOWER(TRIM(
                     CASE
                         WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
                         WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
+                        WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
                         ELSE lp.barangay
                     END
                 )) = ?",
-                [$normalizedBarangay]
+                [$normalizedBarangayLower]
             )
             ->groupBy(
                 'lp.id',
@@ -129,22 +143,33 @@ class Mapping extends Component
             $photoUrl = null;
 
             if (!empty($p->photo_1x1)) {
-                $path = ltrim((string) $p->photo_1x1, '/');
+                $path = trim((string) $p->photo_1x1);
 
-                if (str_starts_with($path, 'storage/')) {
-                    $photoUrl = asset($path);
-                } else {
-                    $photoUrl = asset('storage/' . $path);
+                if ($path !== '') {
+                    $path = ltrim($path, '/');
+
+                    if (
+                        str_starts_with($path, 'http://') ||
+                        str_starts_with($path, 'https://')
+                    ) {
+                        $photoUrl = $path;
+                    } elseif (str_starts_with($path, 'storage/')) {
+                        $photoUrl = asset($path);
+                    } else {
+                        $photoUrl = asset('storage/' . $path);
+                    }
                 }
             }
 
             $firstName = trim((string) $p->first_name);
-            $lastName  = trim((string) $p->last_name);
+            $lastName = trim((string) $p->last_name);
 
             $initials = '';
+
             if ($firstName !== '') {
                 $initials .= mb_strtoupper(mb_substr($firstName, 0, 1));
             }
+
             if ($lastName !== '') {
                 $initials .= mb_strtoupper(mb_substr($lastName, 0, 1));
             }
@@ -159,14 +184,14 @@ class Mapping extends Component
                 'initials' => $initials !== '' ? $initials : 'NP',
                 'disability_types' => $p->disability_types ?: '—',
             ];
-        })->toArray();
+        })->values()->toArray();
 
         $this->showResults = true;
 
         $this->dispatch(
             'mapProfilesLoaded',
             profiles: $this->profiles,
-            barangay: $this->normalizeBarangayName($b)
+            barangay: $normalizedBarangay
         );
     }
 
@@ -178,6 +203,7 @@ class Mapping extends Component
             'Tankulan (Pob.)' => 'Tankulan',
             'Tankulan Pob.' => 'Tankulan',
             'Tankulan Poblacion' => 'Tankulan',
+            'Tankulan (Poblacion)' => 'Tankulan',
             'Guilangguilang' => 'Guilang-guilang',
             'Santo Nino' => 'Santo Niño',
         ];
