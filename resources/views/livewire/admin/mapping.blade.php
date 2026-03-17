@@ -120,7 +120,189 @@
 
 @push('styles')
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="{{ asset('css/admin_mapping.css') }}">
+
+  <style>
+    #map {
+      width: 100%;
+      min-height: 78vh;
+      border-radius: 18px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 16px;
+      box-shadow: 0 16px 35px rgba(2, 6, 23, .14);
+      padding: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .sug-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .sug-item:hover {
+      background: #f3f4f6;
+    }
+
+    .sug-pin {
+      font-size: 14px;
+    }
+
+    .sug-name {
+      font-weight: 700;
+      color: #111827;
+      flex: 1;
+    }
+
+    .sug-sub {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .results-drawer.is-hidden {
+      display: none;
+    }
+
+    .leaflet-popup-content {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .leaflet-tooltip.barangay-label {
+      background: rgba(17, 24, 39, 0.92);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    }
+
+    .leaflet-tooltip.barangay-label::before {
+      display: none;
+    }
+
+    .pulse {
+      animation: pulseGlow .35s ease;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); opacity: .9; }
+      50% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .barangay-pin-wrap {
+      width: 28px;
+      height: 36px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .barangay-pin {
+      position: relative;
+      width: 22px;
+      height: 22px;
+      background: #ef4444;
+      border: 2px solid #ffffff;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
+    .barangay-pin::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      top: 5px;
+      left: 5px;
+    }
+
+    .profile-marker-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      background: #fff;
+      border: 3px solid #22c55e;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-marker-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-marker-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .4px;
+    }
+
+    .profile-popup {
+      min-width: 180px;
+    }
+
+    .profile-popup .ttl {
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .profile-popup .meta {
+      font-size: 12px;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+
+    .profile-popup .type {
+      font-size: 12px;
+      color: #111827;
+    }
+  </style>
 @endpush
 
 @push('scripts')
@@ -184,13 +366,9 @@
 
       let geoJsonLayer = null;
       let activePolygon = null;
-      let selectedBarangayName = null;
-
-      const profileMarkersLayer = L.layerGroup();
-      const barangayPointLayer = L.layerGroup();
-
-      const polygonLayerMap = {};
-      const barangayPointMap = {};
+      let profileMarkersLayer = L.layerGroup();
+      let barangayPointLayer = L.layerGroup();
+      let polygonLayerMap = {};
 
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
       window.__adminMap = map;
@@ -201,7 +379,6 @@
       }).addTo(map);
 
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
-
       profileMarkersLayer.addTo(map);
       barangayPointLayer.addTo(map);
 
@@ -349,86 +526,71 @@
         };
       }
 
-      function getLayerCenter(layer) {
-        const barangayName = normalizeBarangayName(layer?.feature?.properties?.name || "");
+    function getLayerCenter(layer) {
+      const barangayName = normalizeBarangayName(layer?.feature?.properties?.name || "");
 
-        const manualCenters = {
-          "Dahilayan": L.latLng(8.199722, 124.859659),
-          "Maluko": L.latLng(8.385093, 124.947517),
-          "Guilang-guilang": L.latLng(8.471948, 124.985790),
-          "Dalirig": L.latLng(8.391885, 124.914217),
-          "Alae": L.latLng(8.424744, 124.818849),
-          "Mambatangan": L.latLng(8.474071, 124.800392),
-          "Mantibugao": L.latLng(8.470421, 124.824766),
-          "Lunocan": L.latLng(8.442489, 124.842101),
-          "Santo Niño": L.latLng(8.436206, 124.869232),
-        };
+      const manualCenters = {
+        "Dahilayan": L.latLng(8.199722, 124.859659),
+        "Maluko": L.latLng(8.385093, 124.947517),
+        "Guilang-guilang": L.latLng(8.471948, 124.985790),
+        "Dalirig": L.latLng(8.391885, 124.914217),
+        "Alae": L.latLng(8.424744, 124.818849),
+        "Mambatangan": L.latLng(8.474071, 124.800392),
+        "Mantibugao": L.latLng(8.470421, 124.824766),
+        "Lunocan": L.latLng(8.442489, 124.842101),
+        "Santo Niño": L.latLng(8.436206, 124.869232),
+      };
 
-        if (manualCenters[barangayName]) {
-          return manualCenters[barangayName];
-        }
-
-        try {
-          if (typeof layer.getCenter === "function") {
-            const c = layer.getCenter();
-            if (c && isFinite(c.lat) && isFinite(c.lng)) {
-              return c;
-            }
-          }
-        } catch (e) {}
-
-        try {
-          const bounds = layer.getBounds();
-          if (bounds) {
-            const c = bounds.getCenter();
-            if (c && isFinite(c.lat) && isFinite(c.lng)) {
-              return c;
-            }
-          }
-        } catch (e) {}
-
-        return L.latLng(defaultLat, defaultLng);
+      if (manualCenters[barangayName]) {
+        return manualCenters[barangayName];
       }
+
+      try {
+        if (typeof layer.getCenter === "function") {
+          const c = layer.getCenter();
+          if (c && isFinite(c.lat) && isFinite(c.lng)) {
+            return c;
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const bounds = layer.getBounds();
+        if (bounds) {
+          const c = bounds.getCenter();
+          if (c && isFinite(c.lat) && isFinite(c.lng)) {
+            return c;
+          }
+        }
+      } catch (e) {}
+
+      return L.latLng(defaultLat, defaultLng);
+    }
 
       function createProfileIcon(profile) {
         const hasPhoto = !!profile.photo_url;
         const initials = escapeHtml(profile.initials || "NP");
-        const fullName = escapeHtml(profile.full_name || "");
 
         const html = hasPhoto
-          ? `
-            <div class="ig-profile-marker">
-              <div class="ig-profile-ring">
-                <div class="ig-profile-inner">
-                  <img src="${escapeHtml(profile.photo_url)}" alt="${fullName}">
-                </div>
-              </div>
-            </div>
-          `
-          : `
-            <div class="ig-profile-marker">
-              <div class="ig-profile-ring ig-profile-ring-fallback">
-                <div class="ig-profile-inner ig-profile-fallback">${initials}</div>
-              </div>
-            </div>
-          `;
+          ? `<div class="profile-marker-wrap"><img src="${escapeHtml(profile.photo_url)}" alt="${escapeHtml(profile.full_name || '')}"></div>`
+          : `<div class="profile-marker-wrap"><div class="profile-marker-fallback">${initials}</div></div>`;
 
         return L.divIcon({
-          className: "ig-profile-div-icon",
+          className: "profile-div-icon",
           html,
-          iconSize: [58, 58],
-          iconAnchor: [29, 29],
-          popupAnchor: [0, -24]
+          iconSize: [42, 42],
+          iconAnchor: [21, 21],
+          popupAnchor: [0, -18]
         });
       }
 
       function createProfilePopup(profile, barangay) {
         return `
           <div class="profile-popup">
-            <div class="ttl">${escapeHtml(profile.full_name || "Unknown")}</div>
+            <div class="ttl">${escapeHtml(profile.full_name || 'Unknown')}</div>
             <div class="meta">Barangay: <b>${escapeHtml(barangay)}</b></div>
-            <div class="meta">Age: <b>${escapeHtml(profile.age ?? "—")}</b></div>
-            <div class="type">Disability: ${escapeHtml(profile.disability_types || "—")}</div>
+            <div class="meta">Age: <b>${escapeHtml(profile.age ?? '—')}</b></div>
+            <div class="type">Disability: ${escapeHtml(profile.disability_types || '—')}</div>
           </div>
         `;
       }
@@ -437,50 +599,14 @@
         profileMarkersLayer.clearLayers();
       }
 
-      function showBarangayPin(name) {
-        const normalized = normalizeBarangayName(name);
-        const point = barangayPointMap[normalized];
-        if (!point) return;
-
-        if (!barangayPointLayer.hasLayer(point)) {
-          barangayPointLayer.addLayer(point);
-        }
-      }
-
-      function hideBarangayPin(name) {
-        const normalized = normalizeBarangayName(name);
-        const point = barangayPointMap[normalized];
-        if (!point) return;
-
-        if (barangayPointLayer.hasLayer(point)) {
-          barangayPointLayer.removeLayer(point);
-        }
-      }
-
-      function updateSelectedBarangayPin(name) {
-        if (selectedBarangayName && selectedBarangayName !== name) {
-          showBarangayPin(selectedBarangayName);
-        }
-
-        selectedBarangayName = name || null;
-
-        if (selectedBarangayName) {
-          hideBarangayPin(selectedBarangayName);
-        }
-      }
-
       function renderBarangayProfileMarkers(barangayName, profiles) {
         clearProfileMarkers();
 
-        if (!barangayName) return;
+        if (!barangayName || !profiles || !profiles.length) return;
 
         const normalized = normalizeBarangayName(barangayName);
         const targetLayer = polygonLayerMap[normalized];
         if (!targetLayer) return;
-
-        updateSelectedBarangayPin(normalized);
-
-        if (!profiles || !profiles.length) return;
 
         const center = getLayerCenter(targetLayer);
         const count = profiles.length;
@@ -488,7 +614,7 @@
         profiles.forEach((profile, index) => {
           const angle = (index / Math.max(count, 1)) * Math.PI * 2;
           const ring = Math.floor(index / 8);
-          const offset = 0.0018 + (ring * 0.0010);
+          const offset = 0.002 + (ring * 0.0009);
 
           const lat = center.lat + Math.sin(angle) * offset;
           const lng = center.lng + Math.cos(angle) * offset;
@@ -578,7 +704,7 @@
                 layer.bindPopup(`
                   <div style="min-width:170px;">
                     <strong>${escapeHtml(name)}</strong><br>
-                    <small>${isInvalidBoundary ? "Boundary only (not searchable)" : "Click polygon to search this barangay"}</small>
+                    <small>${isInvalidBoundary ? 'Boundary only (not searchable)' : 'Click polygon to search this barangay'}</small>
                   </div>
                 `);
 
@@ -616,7 +742,6 @@
                     doSearchFlow(name);
                   });
 
-                  barangayPointMap[name] = point;
                   barangayPointLayer.addLayer(point);
                 }
 
@@ -739,7 +864,7 @@
 
       document.addEventListener("livewire:navigated", function() {
         setTimeout(() => map.invalidateSize(true), 60);
-        setTimeout(() => window.__adminMap?.invalidateSize(true), 250);
+        setTimeout(() => map.invalidateSize(true), 250);
       });
 
       document.addEventListener("livewire:init", () => {
