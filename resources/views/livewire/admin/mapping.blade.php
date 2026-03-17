@@ -536,6 +536,8 @@
         "Dalirig": L.latLng(8.391885, 124.914217),
         "Alae": L.latLng(8.424744, 124.818849),
         "Mambatangan": L.latLng(8.474071, 124.800392),
+        "Mantibugao": L.latLng(8.470421 , 124.824766),
+        "lunocan": L.latLng(8.442489  , 124.842101),
       };
 
       if (manualCenters[barangayName]) {
