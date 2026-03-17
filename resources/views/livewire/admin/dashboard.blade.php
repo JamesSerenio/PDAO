@@ -464,6 +464,7 @@
           responsive: true,
           maintainAspectRatio: false,
           animation: { duration: 500 },
+          cutout: '58%',
           plugins: {
             legend: { display: true },
             tooltip: {
@@ -502,7 +503,7 @@
       }
 
       dashboardGenderPieInstance = new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: labels,
           datasets: [{
@@ -518,6 +519,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          cutout: '58%',
           animation: { duration: 500 },
           plugins: {
             legend: {
@@ -541,7 +543,7 @@
       }
 
       dashboardDisabilityPieInstance = new Chart(ctx, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: labels,
           datasets: [{
@@ -566,6 +568,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          cutout: '58%',
           animation: { duration: 500 },
           plugins: {
             legend: {
