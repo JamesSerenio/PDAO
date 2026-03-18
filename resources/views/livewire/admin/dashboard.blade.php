@@ -214,7 +214,7 @@
                       <td>{{ $person->barangay ?: '—' }}</td>
                       <td>{{ $person->profiling_date ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y') : '—' }}</td>
                       <td>
-                        <span class="table-badge {{ $category === 'Senior Citizen' ? 'table-badge-senior' : 'table-badge-pwd' }}">
+                        <span class="table-badge {{ $category === 'Senior Citizen' ? 'table-badge-senior' : ($category === 'PWD' ? 'table-badge-pwd' : '') }}">
                           {{ $category }}
                         </span>
                       </td>
@@ -401,30 +401,43 @@
 
     const centerTextPlugin = {
       id: 'centerTextPlugin',
-      afterDraw(chart) {
+      afterDraw(chart, args, pluginOptions) {
         if (chart.config.type !== 'doughnut') return;
 
-        const { ctx, chartArea } = chart;
-        if (!chartArea) return;
+        const tooltipVisible = chart.tooltip && chart.tooltip.opacity > 0;
+        if (tooltipVisible) return;
 
-        const canvas = chart.canvas;
-        const centerTitle = canvas.dataset.centerTitle || '';
-        const centerValue = canvas.dataset.centerValue || '';
+        const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data || !meta.data.length) return;
 
-        const x = (chartArea.left + chartArea.right) / 2;
-        const y = (chartArea.top + chartArea.bottom) / 2;
+        const x = meta.data[0].x;
+        const y = meta.data[0].y;
+
+        const {
+          title = '',
+          value = '',
+          titleColor = '#64748b',
+          valueColor = '#0f172a'
+        } = pluginOptions || {};
+
+        const ctx = chart.ctx;
 
         ctx.save();
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        ctx.fillStyle = '#64748b';
-        ctx.font = '700 12px Inter, sans-serif';
-        ctx.fillText(centerTitle, x, y - 12);
+        if (title) {
+          ctx.fillStyle = titleColor;
+          ctx.font = '700 14px Inter, Arial, sans-serif';
+          ctx.fillText(title, x, y - 12);
+        }
 
-        ctx.fillStyle = '#0f172a';
-        ctx.font = '900 22px Inter, sans-serif';
-        ctx.fillText(centerValue, x, y + 12);
+        if (value !== '' && value !== null && value !== undefined) {
+          ctx.fillStyle = valueColor;
+          ctx.font = '900 24px Inter, Arial, sans-serif';
+          ctx.fillText(String(value), x, y + 14);
+        }
+
         ctx.restore();
       }
     };
@@ -569,6 +582,7 @@
       const labels = JSON.parse(canvas.dataset.labels || '[]');
       const values = JSON.parse(canvas.dataset.values || '[]');
       const ctx = canvas.getContext('2d');
+      const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
 
       if (dashboardGenderPieInstance) {
         dashboardGenderPieInstance.destroy();
@@ -589,12 +603,19 @@
             hoverOffset: 10
           }]
         },
+        plugins: [centerTextPlugin],
         options: {
           responsive: true,
           maintainAspectRatio: false,
           cutout: '64%',
           animation: { duration: 650 },
           plugins: {
+            centerTextPlugin: {
+              title: 'Gender',
+              value: total,
+              titleColor: '#64748b',
+              valueColor: '#0f172a'
+            },
             legend: {
               position: 'bottom',
               labels: {
@@ -609,14 +630,23 @@
               }
             },
             tooltip: {
+              enabled: true,
               backgroundColor: '#0f172a',
               titleColor: '#ffffff',
               bodyColor: '#e2e8f0',
-              padding: 12
+              padding: 12,
+              displayColors: true,
+              cornerRadius: 10,
+              callbacks: {
+                label: function(context) {
+                  const value = Number(context.raw || 0);
+                  const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return ` ${context.label}: ${value} (${percent}%)`;
+                }
+              }
             }
           }
-        },
-        plugins: [centerTextPlugin]
+        }
       });
     }
 
@@ -627,6 +657,7 @@
       const labels = JSON.parse(canvas.dataset.labels || '[]');
       const values = JSON.parse(canvas.dataset.values || '[]');
       const ctx = canvas.getContext('2d');
+      const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
 
       if (dashboardDisabilityPieInstance) {
         dashboardDisabilityPieInstance.destroy();
@@ -656,12 +687,19 @@
             hoverOffset: 10
           }]
         },
+        plugins: [centerTextPlugin],
         options: {
           responsive: true,
           maintainAspectRatio: false,
           cutout: '64%',
           animation: { duration: 650 },
           plugins: {
+            centerTextPlugin: {
+              title: 'Disability',
+              value: total,
+              titleColor: '#64748b',
+              valueColor: '#0f172a'
+            },
             legend: {
               position: 'bottom',
               labels: {
@@ -676,14 +714,23 @@
               }
             },
             tooltip: {
+              enabled: true,
               backgroundColor: '#0f172a',
               titleColor: '#ffffff',
               bodyColor: '#e2e8f0',
-              padding: 12
+              padding: 12,
+              displayColors: true,
+              cornerRadius: 10,
+              callbacks: {
+                label: function(context) {
+                  const value = Number(context.raw || 0);
+                  const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return ` ${context.label}: ${value} (${percent}%)`;
+                }
+              }
             }
           }
-        },
-        plugins: [centerTextPlugin]
+        }
       });
     }
 

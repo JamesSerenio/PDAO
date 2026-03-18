@@ -1346,3 +1346,18 @@ body.dash-admin{
     padding:14px;
   }
 }
+
+.pie-chart-box canvas{
+  display:block;
+  margin:0 auto;
+}
+
+.pie-chart-box-small{
+  height:320px;
+  min-height:320px;
+}
+
+#dashboardGenderPieChart,
+#dashboardDisabilityPieChart{
+  filter:drop-shadow(0 10px 20px rgba(15,23,42,.06));
+}
