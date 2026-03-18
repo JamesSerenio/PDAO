@@ -28,17 +28,14 @@
                 : 0;
         }
     }
-
-    $latestPerson = $recentProfiles->first();
 @endphp
 
 <div>
-  {{-- TOP GRID --}}
-  <div class="dash-grid dash-grid-compact">
+  <div class="dash-grid">
 
     {{-- REGISTERED --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-registered stat-card-compact">
-      <div class="card-hover-shell card-hover-shell-compact">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-registered">
+      <div class="card-hover-shell">
         <div class="card-icon card-icon-registered card-anim-icon">
           <i class="fas fa-id-card"></i>
         </div>
@@ -67,8 +64,8 @@
     </div>
 
     {{-- REGISTERED PWD --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-pwd stat-card-compact">
-      <div class="card-hover-shell card-hover-shell-compact">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-pwd">
+      <div class="card-hover-shell">
         <div class="card-icon card-icon-pwd card-anim-icon">
           <i class="fas fa-wheelchair"></i>
         </div>
@@ -87,8 +84,8 @@
     </div>
 
     {{-- SENIOR CITIZENS --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-senior stat-card-compact">
-      <div class="card-hover-shell card-hover-shell-compact">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-senior">
+      <div class="card-hover-shell">
         <div class="card-icon card-icon-senior card-anim-icon">
           <i class="fas fa-user-clock"></i>
         </div>
@@ -106,8 +103,8 @@
       </div>
     </div>
 
-    {{-- WEATHER + CLOCK --}}
-    <div class="scoreboard-card weather-scoreboard-card weather-scoreboard-compact">
+    {{-- WEATHER WIDGET + CLOCK --}}
+    <div class="scoreboard-card weather-scoreboard-card">
       <span class="scoreboard-live-dot"></span>
 
       <div class="weather-widget-card">
@@ -170,43 +167,10 @@
         <div class="scoreboard-sub" id="liveWeatherMetaText">Real-time dashboard display</div>
       </div>
     </div>
+
   </div>
 
-  {{-- QUICK STATS --}}
-  <div class="quick-stats-grid">
-    <div class="quick-stat-card quick-stat-card-blue">
-      <div class="quick-stat-label">Male Records</div>
-      <div class="quick-stat-value">{{ $maleCount }}</div>
-      <div class="quick-stat-sub">{{ $malePercent }}% of gender data</div>
-    </div>
-
-    <div class="quick-stat-card quick-stat-card-pink">
-      <div class="quick-stat-label">Female Records</div>
-      <div class="quick-stat-value">{{ $femaleCount }}</div>
-      <div class="quick-stat-sub">{{ $femalePercent }}% of gender data</div>
-    </div>
-
-    <div class="quick-stat-card quick-stat-card-green">
-      <div class="quick-stat-label">Top Disability Type</div>
-      <div class="quick-stat-value quick-stat-value-text">{{ $topDisabilityLabel }}</div>
-      <div class="quick-stat-sub">
-        {{ $topDisabilityCount }} record(s) • {{ $topDisabilityPercent }}%
-      </div>
-    </div>
-
-    <div class="quick-stat-card quick-stat-card-slate">
-      <div class="quick-stat-label">Latest Registration</div>
-      <div class="quick-stat-value quick-stat-value-text">
-        {{ $latestPerson ? $latestPerson->last_name . ', ' . $latestPerson->first_name : 'No data' }}
-      </div>
-      <div class="quick-stat-sub">
-        {{ $latestPerson && $latestPerson->profiling_date ? \Carbon\Carbon::parse($latestPerson->profiling_date)->format('M d, Y') : 'No recent date' }}
-      </div>
-    </div>
-  </div>
-
-  {{-- PANELS --}}
-  <div class="dash-panels dash-panels-main">
+  <div class="dash-panels">
 
     {{-- LINE CHART --}}
     <div class="panel panel-glass">
@@ -238,7 +202,7 @@
             </div>
           </div>
 
-          <div class="chart-box chart-box-elevated chart-box-main">
+          <div class="chart-box chart-box-elevated">
             <canvas
               id="dashboardLineChart"
               data-labels='@json($chartLabels)'
@@ -263,7 +227,7 @@
 
         <div wire:loading.remove wire:target="range">
           @if($recentProfiles->count())
-            <div class="recent-table-wrap recent-table-modern recent-table-wrap-tall">
+            <div class="recent-table-wrap recent-table-modern">
               <table class="recent-table">
                 <thead>
                   <tr>
@@ -613,59 +577,61 @@
       return date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
     }
 
-    async function reverseGeocode(lat, lon) {
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`,
-          {
-            headers: {
-              Accept: 'application/json'
-            }
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`Reverse geocode HTTP ${res.status}`);
+async function reverseGeocode(lat, lon) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`,
+      {
+        headers: {
+          Accept: 'application/json'
         }
-
-        const data = await res.json();
-        const address = data.address || {};
-
-        const city =
-          address.city ||
-          address.town ||
-          address.municipality ||
-          address.village ||
-          address.suburb ||
-          address.county ||
-          data.name ||
-          '';
-
-        const province =
-          address.state ||
-          address.region ||
-          address.province ||
-          '';
-
-        const country = address.country || '';
-
-        const parts = [city, province, country]
-          .filter(Boolean)
-          .filter((value, index, arr) => arr.indexOf(value) === index);
-
-        if (parts.length > 0) {
-          return parts.join(', ');
-        }
-
-        if (data.display_name) {
-          return data.display_name;
-        }
-      } catch (error) {
-        console.error('Reverse geocoding failed:', error);
       }
+    );
 
-      return 'Location unavailable';
+    if (!res.ok) {
+      throw new Error(`Reverse geocode HTTP ${res.status}`);
     }
+
+    const data = await res.json();
+    console.log('Nominatim reverse result:', data);
+
+    const address = data.address || {};
+
+    const city =
+      address.city ||
+      address.town ||
+      address.municipality ||
+      address.village ||
+      address.suburb ||
+      address.county ||
+      data.name ||
+      '';
+
+    const province =
+      address.state ||
+      address.region ||
+      address.province ||
+      '';
+
+    const country = address.country || '';
+
+    const parts = [city, province, country]
+      .filter(Boolean)
+      .filter((value, index, arr) => arr.indexOf(value) === index);
+
+    if (parts.length > 0) {
+      return parts.join(', ');
+    }
+
+    if (data.display_name) {
+      return data.display_name;
+    }
+  } catch (error) {
+    console.error('Reverse geocoding failed:', error);
+  }
+
+  return 'Location unavailable';
+}
 
     function setMiniForecastDay(index, label, icon, temp) {
       const dayLabel = document.getElementById(`dayLabel${index}`);
@@ -677,81 +643,81 @@
       if (dayTemp) dayTemp.textContent = temp;
     }
 
-    async function loadWeatherByCoords(lat, lon) {
-      const weatherText = document.getElementById('liveWeatherText');
-      const tempText = document.getElementById('liveTemperatureText');
-      const locationText = document.getElementById('liveLocationText');
-      const metaText = document.getElementById('liveWeatherMetaText');
-      const highText = document.getElementById('liveTempHigh');
-      const lowText = document.getElementById('liveTempLow');
+async function loadWeatherByCoords(lat, lon) {
+  const weatherText = document.getElementById('liveWeatherText');
+  const tempText = document.getElementById('liveTemperatureText');
+  const locationText = document.getElementById('liveLocationText');
+  const metaText = document.getElementById('liveWeatherMetaText');
+  const highText = document.getElementById('liveTempHigh');
+  const lowText = document.getElementById('liveTempLow');
 
-      try {
-        if (locationText) {
-          locationText.textContent = 'Fetching location...';
-        }
-
-        const locationName = await reverseGeocode(lat, lon);
-
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
-
-        const res = await fetch(url);
-
-        if (!res.ok) {
-          throw new Error(`Weather HTTP ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        if (!data || !data.current) {
-          throw new Error('Weather data unavailable');
-        }
-
-        const current = data.current;
-        const daily = data.daily || {};
-        const weatherCode = Number(current.weather_code || 0);
-        const weatherDesc = getWeatherDescription(weatherCode);
-        const temp = Math.round(Number(current.temperature_2m ?? 0));
-        const apparent = Math.round(Number(current.apparent_temperature ?? 0));
-        const humidity = current.relative_humidity_2m ?? '--';
-        const wind = current.wind_speed_10m ?? '--';
-        const tempUnit = data.current_units?.temperature_2m || '°C';
-        const windUnit = data.current_units?.wind_speed_10m || 'km/h';
-
-        const todayMax = daily.temperature_2m_max?.[0];
-        const todayMin = daily.temperature_2m_min?.[0];
-
-        if (weatherText) weatherText.textContent = weatherDesc;
-        if (tempText) tempText.textContent = `${temp}°`;
-        if (locationText) locationText.textContent = locationName;
-        if (metaText) metaText.textContent = `Feels like ${apparent}${tempUnit} • Humidity ${humidity}% • Wind ${wind} ${windUnit}`;
-        if (highText) highText.textContent = `↑ ${todayMax !== undefined ? Math.round(todayMax) : '--'}°`;
-        if (lowText) lowText.textContent = `↓ ${todayMin !== undefined ? Math.round(todayMin) : '--'}°`;
-
-        const times = daily.time || [];
-        const maxTemps = daily.temperature_2m_max || [];
-        const codes = daily.weather_code || [];
-
-        for (let i = 1; i <= 4; i++) {
-          const label = times[i] ? formatDayName(times[i]) : 'DAY';
-          const icon = codes[i] !== undefined ? getWeatherEmoji(Number(codes[i])) : '⛅';
-          const forecastTemp = maxTemps[i] !== undefined ? `${Math.round(maxTemps[i])}°` : '--°';
-          setMiniForecastDay(i, label, icon, forecastTemp);
-        }
-      } catch (error) {
-        console.error('Weather fetch failed:', error);
-
-        if (weatherText) weatherText.textContent = 'Weather unavailable';
-        if (tempText) tempText.textContent = '--°';
-        if (locationText) locationText.textContent = 'Location unavailable';
-        if (metaText) metaText.textContent = 'Check internet or location permission';
-        if (highText) highText.textContent = '↑ --°';
-        if (lowText) lowText.textContent = '↓ --°';
-
-        for (let i = 1; i <= 4; i++) {
-          setMiniForecastDay(i, 'DAY', '⛅', '--°');
-        }
-      }
+  try {
+    if (locationText) {
+      locationText.textContent = 'Fetching location...';
     }
+
+    const locationName = await reverseGeocode(lat, lon);
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
+
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Weather HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    if (!data || !data.current) {
+      throw new Error('Weather data unavailable');
+    }
+
+    const current = data.current;
+    const daily = data.daily || {};
+    const weatherCode = Number(current.weather_code || 0);
+    const weatherDesc = getWeatherDescription(weatherCode);
+    const temp = Math.round(Number(current.temperature_2m ?? 0));
+    const apparent = Math.round(Number(current.apparent_temperature ?? 0));
+    const humidity = current.relative_humidity_2m ?? '--';
+    const wind = current.wind_speed_10m ?? '--';
+    const tempUnit = data.current_units?.temperature_2m || '°C';
+    const windUnit = data.current_units?.wind_speed_10m || 'km/h';
+
+    const todayMax = daily.temperature_2m_max?.[0];
+    const todayMin = daily.temperature_2m_min?.[0];
+
+    if (weatherText) weatherText.textContent = weatherDesc;
+    if (tempText) tempText.textContent = `${temp}°`;
+    if (locationText) locationText.textContent = locationName;
+    if (metaText) metaText.textContent = `Feels like ${apparent}${tempUnit} • Humidity ${humidity}% • Wind ${wind} ${windUnit}`;
+    if (highText) highText.textContent = `↑ ${todayMax !== undefined ? Math.round(todayMax) : '--'}°`;
+    if (lowText) lowText.textContent = `↓ ${todayMin !== undefined ? Math.round(todayMin) : '--'}°`;
+
+    const times = daily.time || [];
+    const maxTemps = daily.temperature_2m_max || [];
+    const codes = daily.weather_code || [];
+
+    for (let i = 1; i <= 4; i++) {
+      const label = times[i] ? formatDayName(times[i]) : 'DAY';
+      const icon = codes[i] !== undefined ? getWeatherEmoji(Number(codes[i])) : '⛅';
+      const forecastTemp = maxTemps[i] !== undefined ? `${Math.round(maxTemps[i])}°` : '--°';
+      setMiniForecastDay(i, label, icon, forecastTemp);
+    }
+  } catch (error) {
+    console.error('Weather fetch failed:', error);
+
+    if (weatherText) weatherText.textContent = 'Weather unavailable';
+    if (tempText) tempText.textContent = '--°';
+    if (locationText) locationText.textContent = 'Location unavailable';
+    if (metaText) metaText.textContent = 'Check internet or location permission';
+    if (highText) highText.textContent = '↑ --°';
+    if (lowText) lowText.textContent = '↓ --°';
+
+    for (let i = 1; i <= 4; i++) {
+      setMiniForecastDay(i, 'DAY', '⛅', '--°');
+    }
+  }
+}
 
     function loadDashboardWeather() {
       const weatherText = document.getElementById('liveWeatherText');
@@ -819,7 +785,7 @@
             label: 'Registered Records',
             data: values,
             borderColor: '#16a34a',
-            backgroundColor: 'rgba(22, 163, 74, 0.12)',
+            backgroundColor: 'rgba(22, 163, 74, 0.14)',
             fill: true,
             tension: 0.38,
             pointRadius: 4,
@@ -913,7 +879,10 @@
           labels: labels,
           datasets: [{
             data: values,
-            backgroundColor: ['#2563eb', '#ec4899'],
+            backgroundColor: [
+              '#2563eb',
+              '#ec4899'
+            ],
             borderColor: '#ffffff',
             borderWidth: 3,
             hoverOffset: 10
