@@ -103,25 +103,61 @@
       </div>
     </div>
 
-    {{-- SYSTEM CLOCK --}}
-    <div class="scoreboard-card">
+    {{-- WEATHER + CLOCK COMPACT --}}
+    <div class="scoreboard-card weather-compact-card">
       <span class="scoreboard-live-dot"></span>
 
-      <div class="scoreboard-header weather-header">
-        <div class="scoreboard-team weather-team weather-team-main">
-          <div class="scoreboard-team-label">Weather</div>
-          <div class="scoreboard-team-name" id="liveWeatherText">Loading...</div>
-          <div class="scoreboard-team-sub" id="liveLocationText">Detecting location...</div>
+      <div class="weather-compact-top">
+        <div class="weather-compact-widget">
+          <div class="weather-compact-left">
+            <div class="weather-compact-temp" id="liveTemperatureText">--°</div>
+
+            <div class="weather-compact-range">
+              <span id="liveTempHigh">↑ --°</span>
+              <span id="liveTempLow">↓ --°</span>
+            </div>
+
+            <div class="weather-compact-desc" id="liveWeatherText">Loading...</div>
+            <div class="weather-compact-location" id="liveLocationText">Detecting location...</div>
+          </div>
+
+          <div class="weather-compact-right">
+            <div class="weather-compact-visual">
+              <div class="weather-compact-sun"></div>
+              <div class="weather-compact-cloud cloud-back"></div>
+              <div class="weather-compact-cloud cloud-front"></div>
+            </div>
+          </div>
         </div>
 
-        <div class="scoreboard-team weather-team weather-team-temp">
-          <div class="scoreboard-team-label">Temperature</div>
-          <div class="scoreboard-team-name weather-temp-value" id="liveTemperatureText">--°C</div>
-          <div class="scoreboard-team-sub" id="liveWeatherMetaText">Please wait</div>
+        <div class="weather-compact-days">
+          <div class="weather-mini-day">
+            <div class="weather-mini-name" id="dayLabel1">THU</div>
+            <div class="weather-mini-icon" id="dayIcon1">⛅</div>
+            <div class="weather-mini-temp" id="dayTemp1">--°</div>
+          </div>
+
+          <div class="weather-mini-day">
+            <div class="weather-mini-name" id="dayLabel2">FRI</div>
+            <div class="weather-mini-icon" id="dayIcon2">⛅</div>
+            <div class="weather-mini-temp" id="dayTemp2">--°</div>
+          </div>
+
+          <div class="weather-mini-day">
+            <div class="weather-mini-name" id="dayLabel3">SAT</div>
+            <div class="weather-mini-icon" id="dayIcon3">⛅</div>
+            <div class="weather-mini-temp" id="dayTemp3">--°</div>
+          </div>
+
+          <div class="weather-mini-day">
+            <div class="weather-mini-name" id="dayLabel4">SUN</div>
+            <div class="weather-mini-icon" id="dayIcon4">⛅</div>
+            <div class="weather-mini-temp" id="dayTemp4">--°</div>
+          </div>
         </div>
       </div>
 
-      <div class="scoreboard-main">
+      <div class="scoreboard-main weather-clock-box compact-clock-box">
         <div class="scoreboard-title">System Clock</div>
 
         <div class="scoreboard-clock-row">
@@ -130,13 +166,11 @@
         </div>
 
         <div class="scoreboard-date" id="liveDateText">{{ now()->format('l, F d, Y') }}</div>
-        <div class="scoreboard-sub">Real-time dashboard display</div>
+        <div class="scoreboard-sub" id="liveWeatherMetaText">Real-time dashboard display</div>
       </div>
     </div>
 
-  </div>
-
-  <div class="dash-panels">
+      <div class="dash-panels">
 
     {{-- LINE CHART --}}
     <div class="panel panel-glass">
@@ -401,6 +435,7 @@
     let dashboardGenderPieInstance = null;
     let dashboardDisabilityPieInstance = null;
     let dashboardClockStarted = false;
+    let weatherLoaded = false;
 
     const centerTextPlugin = {
       id: 'centerTextPlugin',
@@ -488,6 +523,215 @@
         const safe = Number.isFinite(raw) ? Math.max(0, Math.min(raw, 100)) : 0;
         el.style.width = safe + '%';
       });
+    }
+
+    function getWeatherDescription(code) {
+      const map = {
+        0: 'Clear',
+        1: 'Mainly Clear',
+        2: 'Partly Cloudy',
+        3: 'Overcast',
+        45: 'Fog',
+        48: 'Fog',
+        51: 'Light Drizzle',
+        53: 'Drizzle',
+        55: 'Heavy Drizzle',
+        56: 'Freezing Drizzle',
+        57: 'Freezing Drizzle',
+        61: 'Light Rain',
+        63: 'Rain',
+        65: 'Heavy Rain',
+        66: 'Freezing Rain',
+        67: 'Freezing Rain',
+        71: 'Light Snow',
+        73: 'Snow',
+        75: 'Heavy Snow',
+        77: 'Snow Grains',
+        80: 'Rain Showers',
+        81: 'Rain Showers',
+        82: 'Heavy Showers',
+        85: 'Snow Showers',
+        86: 'Snow Showers',
+        95: 'Thunderstorm',
+        96: 'Thunderstorm',
+        99: 'Thunderstorm'
+      };
+
+      return map[code] || 'Unknown';
+    }
+
+    function getWeatherEmoji(code) {
+      if ([0, 1].includes(code)) return '☀️';
+      if ([2, 3].includes(code)) return '⛅';
+      if ([45, 48].includes(code)) return '🌫️';
+      if ([51, 53, 55, 56, 57].includes(code)) return '🌦️';
+      if ([61, 63, 65, 80, 81, 82].includes(code)) return '🌧️';
+      if ([66, 67].includes(code)) return '🌨️';
+      if ([71, 73, 75, 77, 85, 86].includes(code)) return '❄️';
+      if ([95, 96, 99].includes(code)) return '⛈️';
+      return '⛅';
+    }
+
+    function formatDayName(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
+    }
+
+    async function reverseGeocode(lat, lon) {
+      try {
+        const res = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`
+        );
+        const data = await res.json();
+
+        if (data?.results?.length) {
+          const place = data.results[0];
+
+          const city =
+            place.city ||
+            place.town ||
+            place.village ||
+            place.municipality ||
+            place.name ||
+            '';
+
+          const province = place.admin1 || place.admin2 || '';
+          const country = place.country || '';
+
+          const parts = [city, province, country].filter(Boolean);
+
+          if (parts.length) {
+            return parts.join(', ');
+          }
+        }
+      } catch (error) {
+        console.error('Reverse geocoding failed:', error);
+      }
+
+      return 'Location unavailable';
+    }
+
+    function setMiniForecastDay(index, label, icon, temp) {
+      const dayLabel = document.getElementById(`dayLabel${index}`);
+      const dayIcon = document.getElementById(`dayIcon${index}`);
+      const dayTemp = document.getElementById(`dayTemp${index}`);
+
+      if (dayLabel) dayLabel.textContent = label;
+      if (dayIcon) dayIcon.textContent = icon;
+      if (dayTemp) dayTemp.textContent = temp;
+    }
+
+    async function loadWeatherByCoords(lat, lon) {
+      const weatherText = document.getElementById('liveWeatherText');
+      const tempText = document.getElementById('liveTemperatureText');
+      const locationText = document.getElementById('liveLocationText');
+      const metaText = document.getElementById('liveWeatherMetaText');
+      const highText = document.getElementById('liveTempHigh');
+      const lowText = document.getElementById('liveTempLow');
+
+      try {
+        const locationName = await reverseGeocode(lat, lon);
+
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data || !data.current) {
+          throw new Error('Weather data unavailable');
+        }
+
+        const current = data.current;
+        const daily = data.daily || {};
+        const weatherCode = Number(current.weather_code || 0);
+        const weatherDesc = getWeatherDescription(weatherCode);
+        const temp = Math.round(Number(current.temperature_2m ?? 0));
+        const apparent = Math.round(Number(current.apparent_temperature ?? 0));
+        const humidity = current.relative_humidity_2m ?? '--';
+        const wind = current.wind_speed_10m ?? '--';
+        const tempUnit = data.current_units?.temperature_2m || '°C';
+        const windUnit = data.current_units?.wind_speed_10m || 'km/h';
+
+        const todayMax = daily.temperature_2m_max?.[0];
+        const todayMin = daily.temperature_2m_min?.[0];
+
+        if (weatherText) weatherText.textContent = weatherDesc;
+        if (tempText) tempText.textContent = `${temp}°`;
+        if (locationText) locationText.textContent = locationName;
+        if (metaText) metaText.textContent = `Feels like ${apparent}${tempUnit} • Humidity ${humidity}% • Wind ${wind} ${windUnit}`;
+        if (highText) highText.textContent = `↑ ${todayMax !== undefined ? Math.round(todayMax) : '--'}°`;
+        if (lowText) lowText.textContent = `↓ ${todayMin !== undefined ? Math.round(todayMin) : '--'}°`;
+
+        const times = daily.time || [];
+        const maxTemps = daily.temperature_2m_max || [];
+        const codes = daily.weather_code || [];
+
+        for (let i = 1; i <= 4; i++) {
+          const label = times[i] ? formatDayName(times[i]) : 'DAY';
+          const icon = codes[i] !== undefined ? getWeatherEmoji(Number(codes[i])) : '⛅';
+          const forecastTemp = maxTemps[i] !== undefined ? `${Math.round(maxTemps[i])}°` : '--°';
+          setMiniForecastDay(i, label, icon, forecastTemp);
+        }
+      } catch (error) {
+        console.error('Weather fetch failed:', error);
+
+        if (weatherText) weatherText.textContent = 'Weather unavailable';
+        if (tempText) tempText.textContent = '--°';
+        if (locationText) locationText.textContent = 'Unable to detect weather';
+        if (metaText) metaText.textContent = 'Check internet or location permission';
+        if (highText) highText.textContent = '↑ --°';
+        if (lowText) lowText.textContent = '↓ --°';
+
+        for (let i = 1; i <= 4; i++) {
+          setMiniForecastDay(i, 'DAY', '⛅', '--°');
+        }
+      }
+    }
+
+    function loadDashboardWeather() {
+      const weatherText = document.getElementById('liveWeatherText');
+      const tempText = document.getElementById('liveTemperatureText');
+      const locationText = document.getElementById('liveLocationText');
+      const metaText = document.getElementById('liveWeatherMetaText');
+      const highText = document.getElementById('liveTempHigh');
+      const lowText = document.getElementById('liveTempLow');
+
+      if (!weatherText || !tempText || !locationText || !metaText) return;
+
+      weatherText.textContent = 'Loading weather...';
+      tempText.textContent = '--°';
+      locationText.textContent = 'Requesting location...';
+      metaText.textContent = 'Please allow location access';
+      if (highText) highText.textContent = '↑ --°';
+      if (lowText) lowText.textContent = '↓ --°';
+
+      if (!navigator.geolocation) {
+        weatherText.textContent = 'Geolocation unsupported';
+        locationText.textContent = 'This browser does not support location';
+        metaText.textContent = 'Weather cannot be loaded automatically';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          loadWeatherByCoords(lat, lon);
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+
+          weatherText.textContent = 'Location denied';
+          tempText.textContent = '--°';
+          locationText.textContent = 'Permission not granted';
+          metaText.textContent = 'Enable location to show live weather';
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000
+        }
+      );
     }
 
     function renderDashboardLineChart() {
@@ -756,6 +1000,15 @@
         updateDashboardClock();
         setInterval(updateDashboardClock, 1000);
         dashboardClockStarted = true;
+      }
+
+      if (!weatherLoaded) {
+        loadDashboardWeather();
+        weatherLoaded = true;
+
+        setInterval(() => {
+          loadDashboardWeather();
+        }, 600000);
       }
 
       setTimeout(() => {
