@@ -107,14 +107,17 @@
     <div class="scoreboard-card">
       <span class="scoreboard-live-dot"></span>
 
-      <div class="scoreboard-header">
-        <div class="scoreboard-team">
-          <div class="scoreboard-team-label">Date</div>
-          <div class="scoreboard-team-name">PDAO</div>
+      <div class="scoreboard-header weather-header">
+        <div class="scoreboard-team weather-team weather-team-main">
+          <div class="scoreboard-team-label">Weather</div>
+          <div class="scoreboard-team-name" id="liveWeatherText">Loading...</div>
+          <div class="scoreboard-team-sub" id="liveLocationText">Detecting location...</div>
         </div>
-        <div class="scoreboard-team">
-          <div class="scoreboard-team-label">Time</div>
-          <div class="scoreboard-team-name">LIVE</div>
+
+        <div class="scoreboard-team weather-team weather-team-temp">
+          <div class="scoreboard-team-label">Temperature</div>
+          <div class="scoreboard-team-name weather-temp-value" id="liveTemperatureText">--°C</div>
+          <div class="scoreboard-team-sub" id="liveWeatherMetaText">Please wait</div>
         </div>
       </div>
 
@@ -404,39 +407,46 @@
       afterDraw(chart, args, pluginOptions) {
         if (chart.config.type !== 'doughnut') return;
 
-        const tooltipVisible = chart.tooltip && chart.tooltip.opacity > 0;
-        if (tooltipVisible) return;
-
         const meta = chart.getDatasetMeta(0);
         if (!meta || !meta.data || !meta.data.length) return;
 
         const x = meta.data[0].x;
         const y = meta.data[0].y;
-
-        const {
-          title = '',
-          value = '',
-          titleColor = '#64748b',
-          valueColor = '#0f172a'
-        } = pluginOptions || {};
-
         const ctx = chart.ctx;
+
+        const active = chart.getActiveElements();
+        const hovered = active && active.length > 0;
+
+        let title = pluginOptions.title || '';
+        let value = pluginOptions.value || '';
+
+        if (hovered) {
+          const index = active[0].index;
+          const dataset = chart.data.datasets[0];
+          const label = chart.data.labels[index];
+          const rawValue = Number(dataset.data[index] || 0);
+          const total = dataset.data.reduce((a, b) => a + Number(b || 0), 0);
+          const percent = total > 0 ? ((rawValue / total) * 100).toFixed(1) : 0;
+
+          title = String(label);
+          value = `${rawValue} (${percent}%)`;
+        }
 
         ctx.save();
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        if (title) {
-          ctx.fillStyle = titleColor;
-          ctx.font = '700 14px Inter, Arial, sans-serif';
-          ctx.fillText(title, x, y - 12);
-        }
+        ctx.fillStyle = hovered ? '#475569' : (pluginOptions.titleColor || '#64748b');
+        ctx.font = hovered
+          ? '700 12px Inter, Arial, sans-serif'
+          : '700 14px Inter, Arial, sans-serif';
+        ctx.fillText(title, x, y - 12);
 
-        if (value !== '' && value !== null && value !== undefined) {
-          ctx.fillStyle = valueColor;
-          ctx.font = '900 24px Inter, Arial, sans-serif';
-          ctx.fillText(String(value), x, y + 14);
-        }
+        ctx.fillStyle = pluginOptions.valueColor || '#0f172a';
+        ctx.font = hovered
+          ? '900 15px Inter, Arial, sans-serif'
+          : '900 24px Inter, Arial, sans-serif';
+        ctx.fillText(String(value), x, y + 14);
 
         ctx.restore();
       }
@@ -630,7 +640,7 @@
               }
             },
             tooltip: {
-              enabled: true,
+              enabled: false,
               backgroundColor: '#0f172a',
               titleColor: '#ffffff',
               bodyColor: '#e2e8f0',
@@ -714,7 +724,7 @@
               }
             },
             tooltip: {
-              enabled: true,
+              enabled: false,
               backgroundColor: '#0f172a',
               titleColor: '#ffffff',
               bodyColor: '#e2e8f0',

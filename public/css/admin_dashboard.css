@@ -762,7 +762,7 @@ body.dash-admin{
   backdrop-filter:blur(10px);
   border:1px solid #e5e7eb;
   border-radius:22px;
-  overflow:visible;
+  overflow:hidden;
   transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
   animation:fadeUpSoft .5s ease;
   box-shadow:0 12px 28px rgba(15,23,42,.04);
@@ -1361,4 +1361,66 @@ body.dash-admin{
 #dashboardGenderPieChart,
 #dashboardDisabilityPieChart{
   filter:drop-shadow(0 10px 20px rgba(15,23,42,.06));
+}
+/* ===========================
+   WEATHER HEADER
+   =========================== */
+.weather-header{
+  grid-template-columns:1fr 1fr;
+}
+
+.weather-team{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+.weather-team::before{
+  content:"";
+  position:absolute;
+  inset:auto -30px -30px auto;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:rgba(34,197,94,.06);
+  pointer-events:none;
+}
+
+.weather-team-main::before{
+  background:rgba(59,130,246,.08);
+}
+
+.weather-team-temp::before{
+  background:rgba(34,197,94,.08);
+}
+
+.scoreboard-team-sub{
+  margin-top:6px;
+  font-size:11px;
+  font-weight:700;
+  color:#64748b;
+  line-height:1.4;
+  word-break:break-word;
+}
+
+.weather-temp-value{
+  font-size:22px;
+  font-weight:900;
+  color:#16a34a;
+  margin-top:4px;
+}
+
+.weather-loading{
+  opacity:.7;
+}
+
+@media (max-width:640px){
+  .weather-header{
+    grid-template-columns:1fr;
+  }
+
+  .weather-temp-value{
+    font-size:20px;
+  }
 }
