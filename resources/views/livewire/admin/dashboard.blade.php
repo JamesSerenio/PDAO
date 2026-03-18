@@ -28,14 +28,17 @@
                 : 0;
         }
     }
+
+    $latestPerson = $recentProfiles->first();
 @endphp
 
 <div>
-  <div class="dash-grid">
+  {{-- TOP GRID --}}
+  <div class="dash-grid dash-grid-compact">
 
     {{-- REGISTERED --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-registered">
-      <div class="card-hover-shell">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-registered stat-card-compact">
+      <div class="card-hover-shell card-hover-shell-compact">
         <div class="card-icon card-icon-registered card-anim-icon">
           <i class="fas fa-id-card"></i>
         </div>
@@ -64,8 +67,8 @@
     </div>
 
     {{-- REGISTERED PWD --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-pwd">
-      <div class="card-hover-shell">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-pwd stat-card-compact">
+      <div class="card-hover-shell card-hover-shell-compact">
         <div class="card-icon card-icon-pwd card-anim-icon">
           <i class="fas fa-wheelchair"></i>
         </div>
@@ -84,8 +87,8 @@
     </div>
 
     {{-- SENIOR CITIZENS --}}
-    <div class="dash-card dash-card-hover-title stat-card stat-card-senior">
-      <div class="card-hover-shell">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-senior stat-card-compact">
+      <div class="card-hover-shell card-hover-shell-compact">
         <div class="card-icon card-icon-senior card-anim-icon">
           <i class="fas fa-user-clock"></i>
         </div>
@@ -103,61 +106,59 @@
       </div>
     </div>
 
-    {{-- WEATHER + CLOCK COMPACT --}}
-    <div class="scoreboard-card weather-compact-card">
+    {{-- WEATHER + CLOCK --}}
+    <div class="scoreboard-card weather-scoreboard-card weather-scoreboard-compact">
       <span class="scoreboard-live-dot"></span>
 
-      <div class="weather-compact-top">
-        <div class="weather-compact-widget">
-          <div class="weather-compact-left">
-            <div class="weather-compact-temp" id="liveTemperatureText">--°</div>
+      <div class="weather-widget-card">
+        <div class="weather-widget-left">
+          <div class="weather-main-temp" id="liveTemperatureText">--°</div>
 
-            <div class="weather-compact-range">
-              <span id="liveTempHigh">↑ --°</span>
-              <span id="liveTempLow">↓ --°</span>
-            </div>
-
-            <div class="weather-compact-desc" id="liveWeatherText">Loading...</div>
-            <div class="weather-compact-location" id="liveLocationText">Detecting location...</div>
+          <div class="weather-range-row">
+            <span class="weather-range-high" id="liveTempHigh">↑ --°</span>
+            <span class="weather-range-low" id="liveTempLow">↓ --°</span>
           </div>
 
-          <div class="weather-compact-right">
-            <div class="weather-compact-visual">
-              <div class="weather-compact-sun"></div>
-              <div class="weather-compact-cloud cloud-back"></div>
-              <div class="weather-compact-cloud cloud-front"></div>
-            </div>
-          </div>
+          <div class="weather-main-desc" id="liveWeatherText">Loading...</div>
+          <div class="weather-main-location" id="liveLocationText">Detecting location...</div>
         </div>
 
-        <div class="weather-compact-days">
-          <div class="weather-mini-day">
-            <div class="weather-mini-name" id="dayLabel1">THU</div>
-            <div class="weather-mini-icon" id="dayIcon1">⛅</div>
-            <div class="weather-mini-temp" id="dayTemp1">--°</div>
-          </div>
-
-          <div class="weather-mini-day">
-            <div class="weather-mini-name" id="dayLabel2">FRI</div>
-            <div class="weather-mini-icon" id="dayIcon2">⛅</div>
-            <div class="weather-mini-temp" id="dayTemp2">--°</div>
-          </div>
-
-          <div class="weather-mini-day">
-            <div class="weather-mini-name" id="dayLabel3">SAT</div>
-            <div class="weather-mini-icon" id="dayIcon3">⛅</div>
-            <div class="weather-mini-temp" id="dayTemp3">--°</div>
-          </div>
-
-          <div class="weather-mini-day">
-            <div class="weather-mini-name" id="dayLabel4">SUN</div>
-            <div class="weather-mini-icon" id="dayIcon4">⛅</div>
-            <div class="weather-mini-temp" id="dayTemp4">--°</div>
+        <div class="weather-widget-right">
+          <div class="weather-visual">
+            <div class="weather-sun"></div>
+            <div class="weather-cloud cloud-back"></div>
+            <div class="weather-cloud cloud-front"></div>
           </div>
         </div>
       </div>
 
-      <div class="scoreboard-main weather-clock-box compact-clock-box">
+      <div class="weather-mini-days">
+        <div class="weather-day-card">
+          <div class="weather-day-name" id="dayLabel1">DAY</div>
+          <div class="weather-day-icon" id="dayIcon1">⛅</div>
+          <div class="weather-day-temp" id="dayTemp1">--°</div>
+        </div>
+
+        <div class="weather-day-card">
+          <div class="weather-day-name" id="dayLabel2">DAY</div>
+          <div class="weather-day-icon" id="dayIcon2">⛅</div>
+          <div class="weather-day-temp" id="dayTemp2">--°</div>
+        </div>
+
+        <div class="weather-day-card">
+          <div class="weather-day-name" id="dayLabel3">DAY</div>
+          <div class="weather-day-icon" id="dayIcon3">⛅</div>
+          <div class="weather-day-temp" id="dayTemp3">--°</div>
+        </div>
+
+        <div class="weather-day-card">
+          <div class="weather-day-name" id="dayLabel4">DAY</div>
+          <div class="weather-day-icon" id="dayIcon4">⛅</div>
+          <div class="weather-day-temp" id="dayTemp4">--°</div>
+        </div>
+      </div>
+
+      <div class="scoreboard-main weather-clock-box">
         <div class="scoreboard-title">System Clock</div>
 
         <div class="scoreboard-clock-row">
@@ -169,8 +170,43 @@
         <div class="scoreboard-sub" id="liveWeatherMetaText">Real-time dashboard display</div>
       </div>
     </div>
+  </div>
 
-      <div class="dash-panels">
+  {{-- QUICK STATS --}}
+  <div class="quick-stats-grid">
+    <div class="quick-stat-card quick-stat-card-blue">
+      <div class="quick-stat-label">Male Records</div>
+      <div class="quick-stat-value">{{ $maleCount }}</div>
+      <div class="quick-stat-sub">{{ $malePercent }}% of gender data</div>
+    </div>
+
+    <div class="quick-stat-card quick-stat-card-pink">
+      <div class="quick-stat-label">Female Records</div>
+      <div class="quick-stat-value">{{ $femaleCount }}</div>
+      <div class="quick-stat-sub">{{ $femalePercent }}% of gender data</div>
+    </div>
+
+    <div class="quick-stat-card quick-stat-card-green">
+      <div class="quick-stat-label">Top Disability Type</div>
+      <div class="quick-stat-value quick-stat-value-text">{{ $topDisabilityLabel }}</div>
+      <div class="quick-stat-sub">
+        {{ $topDisabilityCount }} record(s) • {{ $topDisabilityPercent }}%
+      </div>
+    </div>
+
+    <div class="quick-stat-card quick-stat-card-slate">
+      <div class="quick-stat-label">Latest Registration</div>
+      <div class="quick-stat-value quick-stat-value-text">
+        {{ $latestPerson ? $latestPerson->last_name . ', ' . $latestPerson->first_name : 'No data' }}
+      </div>
+      <div class="quick-stat-sub">
+        {{ $latestPerson && $latestPerson->profiling_date ? \Carbon\Carbon::parse($latestPerson->profiling_date)->format('M d, Y') : 'No recent date' }}
+      </div>
+    </div>
+  </div>
+
+  {{-- PANELS --}}
+  <div class="dash-panels dash-panels-main">
 
     {{-- LINE CHART --}}
     <div class="panel panel-glass">
@@ -202,7 +238,7 @@
             </div>
           </div>
 
-          <div class="chart-box chart-box-elevated">
+          <div class="chart-box chart-box-elevated chart-box-main">
             <canvas
               id="dashboardLineChart"
               data-labels='@json($chartLabels)'
@@ -227,7 +263,7 @@
 
         <div wire:loading.remove wire:target="range">
           @if($recentProfiles->count())
-            <div class="recent-table-wrap recent-table-modern">
+            <div class="recent-table-wrap recent-table-modern recent-table-wrap-tall">
               <table class="recent-table">
                 <thead>
                   <tr>
@@ -580,29 +616,49 @@
     async function reverseGeocode(lat, lon) {
       try {
         const res = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&format=json`
-        );
-        const data = await res.json();
-
-        if (data?.results?.length) {
-          const place = data.results[0];
-
-          const city =
-            place.city ||
-            place.town ||
-            place.village ||
-            place.municipality ||
-            place.name ||
-            '';
-
-          const province = place.admin1 || place.admin2 || '';
-          const country = place.country || '';
-
-          const parts = [city, province, country].filter(Boolean);
-
-          if (parts.length) {
-            return parts.join(', ');
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`,
+          {
+            headers: {
+              Accept: 'application/json'
+            }
           }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Reverse geocode HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const address = data.address || {};
+
+        const city =
+          address.city ||
+          address.town ||
+          address.municipality ||
+          address.village ||
+          address.suburb ||
+          address.county ||
+          data.name ||
+          '';
+
+        const province =
+          address.state ||
+          address.region ||
+          address.province ||
+          '';
+
+        const country = address.country || '';
+
+        const parts = [city, province, country]
+          .filter(Boolean)
+          .filter((value, index, arr) => arr.indexOf(value) === index);
+
+        if (parts.length > 0) {
+          return parts.join(', ');
+        }
+
+        if (data.display_name) {
+          return data.display_name;
         }
       } catch (error) {
         console.error('Reverse geocoding failed:', error);
@@ -630,11 +686,20 @@
       const lowText = document.getElementById('liveTempLow');
 
       try {
+        if (locationText) {
+          locationText.textContent = 'Fetching location...';
+        }
+
         const locationName = await reverseGeocode(lat, lon);
 
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
 
         const res = await fetch(url);
+
+        if (!res.ok) {
+          throw new Error(`Weather HTTP ${res.status}`);
+        }
+
         const data = await res.json();
 
         if (!data || !data.current) {
@@ -677,7 +742,7 @@
 
         if (weatherText) weatherText.textContent = 'Weather unavailable';
         if (tempText) tempText.textContent = '--°';
-        if (locationText) locationText.textContent = 'Unable to detect weather';
+        if (locationText) locationText.textContent = 'Location unavailable';
         if (metaText) metaText.textContent = 'Check internet or location permission';
         if (highText) highText.textContent = '↑ --°';
         if (lowText) lowText.textContent = '↓ --°';
@@ -754,7 +819,7 @@
             label: 'Registered Records',
             data: values,
             borderColor: '#16a34a',
-            backgroundColor: 'rgba(22, 163, 74, 0.14)',
+            backgroundColor: 'rgba(22, 163, 74, 0.12)',
             fill: true,
             tension: 0.38,
             pointRadius: 4,
@@ -848,10 +913,7 @@
           labels: labels,
           datasets: [{
             data: values,
-            backgroundColor: [
-              '#2563eb',
-              '#ec4899'
-            ],
+            backgroundColor: ['#2563eb', '#ec4899'],
             borderColor: '#ffffff',
             borderWidth: 3,
             hoverOffset: 10
