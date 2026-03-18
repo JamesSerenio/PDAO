@@ -34,7 +34,7 @@
   <div class="dash-grid">
 
     {{-- REGISTERED --}}
-    <div class="dash-card dash-card-hover-title">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-registered">
       <div class="card-hover-shell">
         <div class="card-icon card-icon-registered card-anim-icon">
           <i class="fas fa-id-card"></i>
@@ -64,7 +64,7 @@
     </div>
 
     {{-- REGISTERED PWD --}}
-    <div class="dash-card dash-card-hover-title">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-pwd">
       <div class="card-hover-shell">
         <div class="card-icon card-icon-pwd card-anim-icon">
           <i class="fas fa-wheelchair"></i>
@@ -84,7 +84,7 @@
     </div>
 
     {{-- SENIOR CITIZENS --}}
-    <div class="dash-card dash-card-hover-title">
+    <div class="dash-card dash-card-hover-title stat-card stat-card-senior">
       <div class="card-hover-shell">
         <div class="card-icon card-icon-senior card-anim-icon">
           <i class="fas fa-user-clock"></i>
@@ -136,7 +136,7 @@
   <div class="dash-panels">
 
     {{-- LINE CHART --}}
-    <div class="panel">
+    <div class="panel panel-glass">
       <div class="panel-head">
         <h2>Registration Trends</h2>
         <span class="panel-pill">{{ $rangeLabel }}</span>
@@ -165,7 +165,7 @@
             </div>
           </div>
 
-          <div class="chart-box">
+          <div class="chart-box chart-box-elevated">
             <canvas
               id="dashboardLineChart"
               data-labels='@json($chartLabels)'
@@ -177,7 +177,7 @@
     </div>
 
     {{-- RECENT REGISTRATIONS --}}
-    <div class="panel">
+    <div class="panel panel-glass">
       <div class="panel-head">
         <h2>Recent Registrations</h2>
         <span class="panel-pill">Latest 5</span>
@@ -190,7 +190,7 @@
 
         <div wire:loading.remove wire:target="range">
           @if($recentProfiles->count())
-            <div class="recent-table-wrap">
+            <div class="recent-table-wrap recent-table-modern">
               <table class="recent-table">
                 <thead>
                   <tr>
@@ -213,7 +213,11 @@
                       <td>{{ $person->last_name }}, {{ $person->first_name }} {{ $person->middle_name }}</td>
                       <td>{{ $person->barangay ?: '—' }}</td>
                       <td>{{ $person->profiling_date ? \Carbon\Carbon::parse($person->profiling_date)->format('M d, Y') : '—' }}</td>
-                      <td>{{ $category }}</td>
+                      <td>
+                        <span class="table-badge {{ $category === 'Senior Citizen' ? 'table-badge-senior' : 'table-badge-pwd' }}">
+                          {{ $category }}
+                        </span>
+                      </td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -234,7 +238,7 @@
   <div class="dash-panels dash-panels-two">
 
     {{-- MALE & FEMALE --}}
-    <div class="panel">
+    <div class="panel panel-glass">
       <div class="panel-head">
         <h2>Male & Female</h2>
         <span class="panel-pill">{{ $rangeLabel }}</span>
@@ -247,11 +251,13 @@
 
         <div wire:loading.remove wire:target="range">
           <div class="pie-info-layout">
-            <div class="pie-chart-box pie-chart-box-small">
+            <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
               <canvas
                 id="dashboardGenderPieChart"
                 data-labels='@json($sexPieLabels)'
-                data-values='@json($sexPieData)'>
+                data-values='@json($sexPieData)'
+                data-center-title="Gender"
+                data-center-value="{{ $totalGender }}">
               </canvas>
             </div>
 
@@ -307,7 +313,7 @@
     </div>
 
     {{-- TYPES OF DISABILITY --}}
-    <div class="panel">
+    <div class="panel panel-glass">
       <div class="panel-head">
         <h2>Types of Disability</h2>
         <span class="panel-pill">{{ $rangeLabel }}</span>
@@ -320,11 +326,13 @@
 
         <div wire:loading.remove wire:target="range">
           <div class="pie-info-layout">
-            <div class="pie-chart-box pie-chart-box-small">
+            <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
               <canvas
                 id="dashboardDisabilityPieChart"
                 data-labels='@json($disabilityPieLabels)'
-                data-values='@json($disabilityPieData)'>
+                data-values='@json($disabilityPieData)'
+                data-center-title="Disability"
+                data-center-value="{{ $totalDisability }}">
               </canvas>
             </div>
 
@@ -391,6 +399,36 @@
     let dashboardDisabilityPieInstance = null;
     let dashboardClockStarted = false;
 
+    const centerTextPlugin = {
+      id: 'centerTextPlugin',
+      afterDraw(chart) {
+        if (chart.config.type !== 'doughnut') return;
+
+        const { ctx, chartArea } = chart;
+        if (!chartArea) return;
+
+        const canvas = chart.canvas;
+        const centerTitle = canvas.dataset.centerTitle || '';
+        const centerValue = canvas.dataset.centerValue || '';
+
+        const x = (chartArea.left + chartArea.right) / 2;
+        const y = (chartArea.top + chartArea.bottom) / 2;
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '700 12px Inter, sans-serif';
+        ctx.fillText(centerTitle, x, y - 12);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '900 22px Inter, sans-serif';
+        ctx.fillText(centerValue, x, y + 12);
+        ctx.restore();
+      }
+    };
+
     function updateDashboardClock() {
       const now = new Date();
 
@@ -449,11 +487,11 @@
             label: 'Registered Records',
             data: values,
             borderColor: '#16a34a',
-            backgroundColor: 'rgba(22, 163, 74, 0.12)',
+            backgroundColor: 'rgba(22, 163, 74, 0.14)',
             fill: true,
-            tension: 0.35,
+            tension: 0.38,
             pointRadius: 4,
-            pointHoverRadius: 6,
+            pointHoverRadius: 7,
             pointBackgroundColor: '#16a34a',
             pointBorderColor: '#ffffff',
             pointBorderWidth: 2,
@@ -463,13 +501,29 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 500 },
-          cutout: '58%',
+          animation: { duration: 650 },
           plugins: {
-            legend: { display: true },
+            legend: {
+              display: true,
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                padding: 18,
+                color: '#334155',
+                font: {
+                  size: 12,
+                  weight: '700'
+                }
+              }
+            },
             tooltip: {
               mode: 'index',
-              intersect: false
+              intersect: false,
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#e2e8f0',
+              padding: 12,
+              displayColors: true
             }
           },
           interaction: {
@@ -479,11 +533,29 @@
           scales: {
             y: {
               beginAtZero: true,
-              ticks: { precision: 0 },
-              grid: { color: 'rgba(15, 23, 42, 0.08)' }
+              ticks: {
+                precision: 0,
+                color: '#64748b',
+                font: {
+                  weight: '600'
+                }
+              },
+              grid: {
+                color: 'rgba(15, 23, 42, 0.08)',
+                drawBorder: false
+              }
             },
             x: {
-              grid: { display: false }
+              ticks: {
+                color: '#64748b',
+                font: {
+                  weight: '600'
+                }
+              },
+              grid: {
+                display: false,
+                drawBorder: false
+              }
             }
           }
         }
@@ -513,20 +585,38 @@
               '#ec4899'
             ],
             borderColor: '#ffffff',
-            borderWidth: 2
+            borderWidth: 3,
+            hoverOffset: 10
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutout: '58%',
-          animation: { duration: 500 },
+          cutout: '64%',
+          animation: { duration: 650 },
           plugins: {
             legend: {
-              position: 'bottom'
+              position: 'bottom',
+              labels: {
+                padding: 16,
+                usePointStyle: false,
+                boxWidth: 36,
+                color: '#475569',
+                font: {
+                  size: 12,
+                  weight: '700'
+                }
+              }
+            },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#e2e8f0',
+              padding: 12
             }
           }
-        }
+        },
+        plugins: [centerTextPlugin]
       });
     }
 
@@ -562,20 +652,38 @@
               '#14b8a6'
             ],
             borderColor: '#ffffff',
-            borderWidth: 2
+            borderWidth: 3,
+            hoverOffset: 10
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutout: '58%',
-          animation: { duration: 500 },
+          cutout: '64%',
+          animation: { duration: 650 },
           plugins: {
             legend: {
-              position: 'bottom'
+              position: 'bottom',
+              labels: {
+                padding: 16,
+                usePointStyle: false,
+                boxWidth: 36,
+                color: '#475569',
+                font: {
+                  size: 12,
+                  weight: '700'
+                }
+              }
+            },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#ffffff',
+              bodyColor: '#e2e8f0',
+              padding: 12
             }
           }
-        }
+        },
+        plugins: [centerTextPlugin]
       });
     }
 
@@ -600,7 +708,7 @@
       Livewire.hook('morph.updated', () => {
         setTimeout(() => {
           renderAllDashboardCharts();
-        }, 50);
+        }, 80);
       });
     });
   </script>
