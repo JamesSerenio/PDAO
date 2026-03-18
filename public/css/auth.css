@@ -41,13 +41,13 @@ body.login{
   position:absolute;
   inset:0;
   background:url("/img/LGU.png") center center / cover no-repeat;
-  filter(none);
+  filter:none;
   opacity:.9;
   z-index:0;
   transform:scale(1);
   animation:bgPulse 10s ease-in-out infinite;
   transition:
-    opacity .7s ease,
+    opacity .75s ease,
     transform 1s cubic-bezier(.22,.8,.2,1),
     filter 1s cubic-bezier(.22,.8,.2,1);
 }
@@ -61,8 +61,8 @@ body.login{
   position:absolute;
   inset:0;
   z-index:1;
-  background:rgba(255,255,255,0.15);
-  transition:opacity .7s ease;
+  background:rgba(255,255,255,0.12);
+  transition:opacity .75s ease;
 }
 
 /* BACKGROUND NA PAPASOK SA CARD */
@@ -70,12 +70,12 @@ body.login{
   position:absolute;
   left:50%;
   top:50%;
-  width:min(860px, 92vw);
-  height:390px;
+  width:min(550px, 85vw);
+  height:350px;
   transform:translate(-50%, -50%);
   border-radius:34px;
   background:url("/img/LGU.png") center center / cover no-repeat;
-  filter:blur(0.1px);
+  filter:blur(0.2px);
   opacity:0;
   z-index:3;
   pointer-events:none;
@@ -83,7 +83,7 @@ body.login{
   border:1px solid rgba(255,255,255,.24);
 }
 
-/* ISANG SET LANG NG LOGOS */
+/* LOGOS */
 .travel-badge{
   position:absolute;
   z-index:6;
@@ -223,7 +223,7 @@ body.login{
   border:1px solid rgba(255,255,255,.36);
   position:relative;
   overflow:hidden;
-  background:rgba(255,255,255,.75);
+  background:rgba(255,255,255,.76);
   backdrop-filter:blur(1px);
   opacity:0;
   transform:scale(.84) translateY(20px);
@@ -237,15 +237,15 @@ body.login{
   inset:0;
   background:url("/img/LGU.png") center center / cover no-repeat;
   opacity:0;
-  filter:blur(0.6px);
+  filter:blur(0.2px);
   z-index:0;
-  transition:opacity .25s ease;
+  transition:opacity .3s ease;
 }
 
 .card-overlay{
   position:absolute;
   inset:0;
-  background:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.30);
   z-index:1;
 }
 
@@ -430,11 +430,11 @@ body.login{
   animation:fieldIn .42s ease forwards;
 }
 
-.show-form .field-1{ animation-delay:.78s; }
-.show-form .field-2{ animation-delay:.88s; }
-.show-form .field-3{ animation-delay:.98s; }
-.show-form .field-4{ animation-delay:1.08s; }
-.show-form .field-5{ animation-delay:1.16s; }
+.show-form .field-1{ animation-delay:.70s; }
+.show-form .field-2{ animation-delay:.80s; }
+.show-form .field-3{ animation-delay:.90s; }
+.show-form .field-4{ animation-delay:1.00s; }
+.show-form .field-5{ animation-delay:1.08s; }
 
 @keyframes fieldIn{
   to{
@@ -445,9 +445,9 @@ body.login{
 
 /* OPEN */
 .scene.show-form .scene-bg{
-  opacity:.85;
+  opacity:0;
   transform:scale(1.08);
-  filter: none;
+  filter:none;
   animation:none;
 }
 
@@ -481,26 +481,26 @@ body.login{
 .scene.show-form .login-card{
   opacity:1;
   transform:scale(1) translateY(0);
-  transition-delay:.56s;
+  transition-delay:.50s;
 }
 
 .scene.show-form .card-bg{
-  opacity:.16;
-  transition-delay:.66s;
+  opacity:.28;
+  transition-delay:.62s;
 }
 
 .scene.show-form .logo-left,
 .scene.show-form .logo-right{
   opacity:1;
-  transition-delay:.80s;
+  transition-delay:.76s;
 }
 
 @keyframes bgIntoCard{
   0%{
     left:50%;
     top:50%;
-    width:min(860px, 92vw);
-    height:390px;
+    width:min(550px, 85vw);
+    height:350px;
     transform:translate(-50%, -50%) scale(1);
     border-radius:34px;
     opacity:1;
@@ -512,7 +512,7 @@ body.login{
     height:500px;
     transform:translate(-50%, -50%) scale(1.01);
     border-radius:28px;
-    opacity:.7;
+    opacity:.8;
   }
   100%{
     left:50%;
@@ -527,7 +527,7 @@ body.login{
 
 @keyframes moveLeftBadge{
   0%{
-    left:calc(50% - 165px);
+    left:calc(50% - 190px);
     top:50%;
     width:108px;
     height:108px;
@@ -546,7 +546,7 @@ body.login{
 
 @keyframes moveRightBadge{
   0%{
-    left:calc(50% + 165px);
+    left:calc(50% + 190px);
     top:50%;
     width:108px;
     height:108px;
@@ -573,11 +573,11 @@ body.login{
   }
 
   .travel-left{
-    left:calc(50% - 140px);
+    left:calc(50% - 150px);
   }
 
   .travel-right{
-    left:calc(50% + 140px);
+    left:calc(50% + 150px);
   }
 }
 

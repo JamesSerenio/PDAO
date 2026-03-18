@@ -15,7 +15,6 @@
     <div class="scene-overlay"></div>
     <div class="bg-to-card"></div>
 
-    <!-- ITO LANG ANG ANIMATED LOGOS, WALA NANG DUPLICATE -->
     <div class="travel-badge travel-left">
       <img src="{{ asset('img/LOGOL.png') }}" alt="Left Logo">
     </div>
@@ -27,14 +26,13 @@
     <section class="intro-screen">
       <div class="intro-panel">
         <h1 class="intro-title">Login</h1>
-        <p class="intro-subtitle">Manalo Fortich Person With Disabilities Affairs Office</p>
+        <p class="intro-subtitle">Manolo Fortich Person With Disabilities Affairs Office</p>
         <button type="button" class="intro-btn" id="openLoginBtn">Login</button>
       </div>
     </section>
 
     <section class="form-screen">
       <div class="login-card">
-
         <div class="card-bg"></div>
         <div class="card-overlay"></div>
 
@@ -138,4 +136,4 @@
     });
   </script>
 </body>
-</html> 
+</html>
