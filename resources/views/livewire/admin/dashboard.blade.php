@@ -3,6 +3,13 @@
     $disabilityData = is_array($disabilityPieData ?? null) ? $disabilityPieData : [];
     $disabilityLabelsSafe = is_array($disabilityPieLabels ?? null) ? $disabilityPieLabels : [];
 
+    $pwdShare = $registeredCount > 0 ? round(($pwdCount / $registeredCount) * 100) : 0;
+    $seniorShare = $registeredCount > 0 ? round(($seniorCount / $registeredCount) * 100) : 0;
+
+    $registeredProgress = 100;
+    $pwdProgress = min($pwdShare, 100);
+    $seniorProgress = min($seniorShare, 100);
+
     $totalGender = array_sum($sexData);
     $totalDisability = array_sum($disabilityData);
 
@@ -51,6 +58,25 @@
 
         <div class="card-sub card-anim-sub">{{ $rangeLabel }} records</div>
 
+        <div class="card-meta card-anim-sub">Overall registered data in selected range</div>
+
+        <div class="card-mini-progress card-anim-sub">
+          <div class="card-mini-progress-bar" data-width="{{ $registeredProgress }}"></div>
+        </div>
+
+        <div class="card-mini-stats card-anim-sub">
+          <div class="card-mini-box">
+            <span>PWD</span>
+            <strong>{{ $pwdCount }}</strong>
+          </div>
+          <div class="card-mini-box">
+            <span>Senior</span>
+            <strong>{{ $seniorCount }}</strong>
+          </div>
+        </div>
+
+        <div class="card-foot-note card-anim-sub">Updated based on selected range</div>
+
         <div class="card-filter-form card-anim-filter">
           <select wire:model.live="range" class="card-filter-select">
             <option value="day">This Day</option>
@@ -80,6 +106,25 @@
         </div>
 
         <div class="card-sub card-anim-sub">{{ $rangeLabel }} registered PWD</div>
+
+        <div class="card-meta card-anim-sub">{{ $pwdShare }}% of registered records</div>
+
+        <div class="card-mini-progress card-anim-sub">
+          <div class="card-mini-progress-bar" data-width="{{ $pwdProgress }}"></div>
+        </div>
+
+        <div class="card-mini-stats card-anim-sub">
+          <div class="card-mini-box">
+            <span>Count</span>
+            <strong>{{ $pwdCount }}</strong>
+          </div>
+          <div class="card-mini-box">
+            <span>Share</span>
+            <strong>{{ $pwdShare }}%</strong>
+          </div>
+        </div>
+
+        <div class="card-foot-note card-anim-sub">PWD portion of total registered</div>
       </div>
     </div>
 
@@ -100,6 +145,25 @@
         </div>
 
         <div class="card-sub card-anim-sub">{{ $rangeLabel }} senior citizens</div>
+
+        <div class="card-meta card-anim-sub">{{ $seniorShare }}% of registered records</div>
+
+        <div class="card-mini-progress card-anim-sub">
+          <div class="card-mini-progress-bar" data-width="{{ $seniorProgress }}"></div>
+        </div>
+
+        <div class="card-mini-stats card-anim-sub">
+          <div class="card-mini-box">
+            <span>Count</span>
+            <strong>{{ $seniorCount }}</strong>
+          </div>
+          <div class="card-mini-box">
+            <span>Share</span>
+            <strong>{{ $seniorShare }}%</strong>
+          </div>
+        </div>
+
+        <div class="card-foot-note card-anim-sub">Senior portion of total registered</div>
       </div>
     </div>
 
@@ -271,7 +335,6 @@
 
   </div>
 
-  {{-- PIE CHARTS --}}
   <div class="dash-panels dash-panels-two">
 
     {{-- MALE & FEMALE --}}
@@ -525,6 +588,14 @@
       });
     }
 
+    function applyCardProgressWidths() {
+      document.querySelectorAll('.card-mini-progress-bar[data-width]').forEach((el) => {
+        const raw = parseFloat(el.dataset.width || '0');
+        const safe = Number.isFinite(raw) ? Math.max(0, Math.min(raw, 100)) : 0;
+        el.style.width = safe + '%';
+      });
+    }
+
     function getWeatherDescription(code) {
       const map = {
         0: 'Clear',
@@ -577,61 +648,61 @@
       return date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
     }
 
-async function reverseGeocode(lat, lon) {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`,
-      {
-        headers: {
-          Accept: 'application/json'
+    async function reverseGeocode(lat, lon) {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=10&addressdetails=1`,
+          {
+            headers: {
+              Accept: 'application/json'
+            }
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Reverse geocode HTTP ${res.status}`);
         }
+
+        const data = await res.json();
+        console.log('Nominatim reverse result:', data);
+
+        const address = data.address || {};
+
+        const city =
+          address.city ||
+          address.town ||
+          address.municipality ||
+          address.village ||
+          address.suburb ||
+          address.county ||
+          data.name ||
+          '';
+
+        const province =
+          address.state ||
+          address.region ||
+          address.province ||
+          '';
+
+        const country = address.country || '';
+
+        const parts = [city, province, country]
+          .filter(Boolean)
+          .filter((value, index, arr) => arr.indexOf(value) === index);
+
+        if (parts.length > 0) {
+          return parts.join(', ');
+        }
+
+        if (data.display_name) {
+          return data.display_name;
+        }
+      } catch (error) {
+        console.error('Reverse geocoding failed:', error);
       }
-    );
 
-    if (!res.ok) {
-      throw new Error(`Reverse geocode HTTP ${res.status}`);
+      return 'Location unavailable';
     }
-
-    const data = await res.json();
-    console.log('Nominatim reverse result:', data);
-
-    const address = data.address || {};
-
-    const city =
-      address.city ||
-      address.town ||
-      address.municipality ||
-      address.village ||
-      address.suburb ||
-      address.county ||
-      data.name ||
-      '';
-
-    const province =
-      address.state ||
-      address.region ||
-      address.province ||
-      '';
-
-    const country = address.country || '';
-
-    const parts = [city, province, country]
-      .filter(Boolean)
-      .filter((value, index, arr) => arr.indexOf(value) === index);
-
-    if (parts.length > 0) {
-      return parts.join(', ');
-    }
-
-    if (data.display_name) {
-      return data.display_name;
-    }
-  } catch (error) {
-    console.error('Reverse geocoding failed:', error);
-  }
-
-  return 'Location unavailable';
-}
 
     function setMiniForecastDay(index, label, icon, temp) {
       const dayLabel = document.getElementById(`dayLabel${index}`);
@@ -643,81 +714,81 @@ async function reverseGeocode(lat, lon) {
       if (dayTemp) dayTemp.textContent = temp;
     }
 
-async function loadWeatherByCoords(lat, lon) {
-  const weatherText = document.getElementById('liveWeatherText');
-  const tempText = document.getElementById('liveTemperatureText');
-  const locationText = document.getElementById('liveLocationText');
-  const metaText = document.getElementById('liveWeatherMetaText');
-  const highText = document.getElementById('liveTempHigh');
-  const lowText = document.getElementById('liveTempLow');
+    async function loadWeatherByCoords(lat, lon) {
+      const weatherText = document.getElementById('liveWeatherText');
+      const tempText = document.getElementById('liveTemperatureText');
+      const locationText = document.getElementById('liveLocationText');
+      const metaText = document.getElementById('liveWeatherMetaText');
+      const highText = document.getElementById('liveTempHigh');
+      const lowText = document.getElementById('liveTempLow');
 
-  try {
-    if (locationText) {
-      locationText.textContent = 'Fetching location...';
+      try {
+        if (locationText) {
+          locationText.textContent = 'Fetching location...';
+        }
+
+        const locationName = await reverseGeocode(lat, lon);
+
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+          throw new Error(`Weather HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (!data || !data.current) {
+          throw new Error('Weather data unavailable');
+        }
+
+        const current = data.current;
+        const daily = data.daily || {};
+        const weatherCode = Number(current.weather_code || 0);
+        const weatherDesc = getWeatherDescription(weatherCode);
+        const temp = Math.round(Number(current.temperature_2m ?? 0));
+        const apparent = Math.round(Number(current.apparent_temperature ?? 0));
+        const humidity = current.relative_humidity_2m ?? '--';
+        const wind = current.wind_speed_10m ?? '--';
+        const tempUnit = data.current_units?.temperature_2m || '°C';
+        const windUnit = data.current_units?.wind_speed_10m || 'km/h';
+
+        const todayMax = daily.temperature_2m_max?.[0];
+        const todayMin = daily.temperature_2m_min?.[0];
+
+        if (weatherText) weatherText.textContent = weatherDesc;
+        if (tempText) tempText.textContent = `${temp}°`;
+        if (locationText) locationText.textContent = locationName;
+        if (metaText) metaText.textContent = `Feels like ${apparent}${tempUnit} • Humidity ${humidity}% • Wind ${wind} ${windUnit}`;
+        if (highText) highText.textContent = `↑ ${todayMax !== undefined ? Math.round(todayMax) : '--'}°`;
+        if (lowText) lowText.textContent = `↓ ${todayMin !== undefined ? Math.round(todayMin) : '--'}°`;
+
+        const times = daily.time || [];
+        const maxTemps = daily.temperature_2m_max || [];
+        const codes = daily.weather_code || [];
+
+        for (let i = 1; i <= 4; i++) {
+          const label = times[i] ? formatDayName(times[i]) : 'DAY';
+          const icon = codes[i] !== undefined ? getWeatherEmoji(Number(codes[i])) : '⛅';
+          const forecastTemp = maxTemps[i] !== undefined ? `${Math.round(maxTemps[i])}°` : '--°';
+          setMiniForecastDay(i, label, icon, forecastTemp);
+        }
+      } catch (error) {
+        console.error('Weather fetch failed:', error);
+
+        if (weatherText) weatherText.textContent = 'Weather unavailable';
+        if (tempText) tempText.textContent = '--°';
+        if (locationText) locationText.textContent = 'Location unavailable';
+        if (metaText) metaText.textContent = 'Check internet or location permission';
+        if (highText) highText.textContent = '↑ --°';
+        if (lowText) lowText.textContent = '↓ --°';
+
+        for (let i = 1; i <= 4; i++) {
+          setMiniForecastDay(i, 'DAY', '⛅', '--°');
+        }
+      }
     }
-
-    const locationName = await reverseGeocode(lat, lon);
-
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,weather_code,relative_humidity_2m,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=5`;
-
-    const res = await fetch(url);
-
-    if (!res.ok) {
-      throw new Error(`Weather HTTP ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    if (!data || !data.current) {
-      throw new Error('Weather data unavailable');
-    }
-
-    const current = data.current;
-    const daily = data.daily || {};
-    const weatherCode = Number(current.weather_code || 0);
-    const weatherDesc = getWeatherDescription(weatherCode);
-    const temp = Math.round(Number(current.temperature_2m ?? 0));
-    const apparent = Math.round(Number(current.apparent_temperature ?? 0));
-    const humidity = current.relative_humidity_2m ?? '--';
-    const wind = current.wind_speed_10m ?? '--';
-    const tempUnit = data.current_units?.temperature_2m || '°C';
-    const windUnit = data.current_units?.wind_speed_10m || 'km/h';
-
-    const todayMax = daily.temperature_2m_max?.[0];
-    const todayMin = daily.temperature_2m_min?.[0];
-
-    if (weatherText) weatherText.textContent = weatherDesc;
-    if (tempText) tempText.textContent = `${temp}°`;
-    if (locationText) locationText.textContent = locationName;
-    if (metaText) metaText.textContent = `Feels like ${apparent}${tempUnit} • Humidity ${humidity}% • Wind ${wind} ${windUnit}`;
-    if (highText) highText.textContent = `↑ ${todayMax !== undefined ? Math.round(todayMax) : '--'}°`;
-    if (lowText) lowText.textContent = `↓ ${todayMin !== undefined ? Math.round(todayMin) : '--'}°`;
-
-    const times = daily.time || [];
-    const maxTemps = daily.temperature_2m_max || [];
-    const codes = daily.weather_code || [];
-
-    for (let i = 1; i <= 4; i++) {
-      const label = times[i] ? formatDayName(times[i]) : 'DAY';
-      const icon = codes[i] !== undefined ? getWeatherEmoji(Number(codes[i])) : '⛅';
-      const forecastTemp = maxTemps[i] !== undefined ? `${Math.round(maxTemps[i])}°` : '--°';
-      setMiniForecastDay(i, label, icon, forecastTemp);
-    }
-  } catch (error) {
-    console.error('Weather fetch failed:', error);
-
-    if (weatherText) weatherText.textContent = 'Weather unavailable';
-    if (tempText) tempText.textContent = '--°';
-    if (locationText) locationText.textContent = 'Location unavailable';
-    if (metaText) metaText.textContent = 'Check internet or location permission';
-    if (highText) highText.textContent = '↑ --°';
-    if (lowText) lowText.textContent = '↓ --°';
-
-    for (let i = 1; i <= 4; i++) {
-      setMiniForecastDay(i, 'DAY', '⛅', '--°');
-    }
-  }
-}
 
     function loadDashboardWeather() {
       const weatherText = document.getElementById('liveWeatherText');
@@ -1024,6 +1095,7 @@ async function loadWeatherByCoords(lat, lon) {
       renderGenderPieChart();
       renderDisabilityPieChart();
       applyProgressWidths();
+      applyCardProgressWidths();
     }
 
     document.addEventListener('livewire:initialized', () => {

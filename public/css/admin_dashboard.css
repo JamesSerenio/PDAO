@@ -627,7 +627,79 @@ body.dash-admin{
   color:#334155;
   letter-spacing:.02em;
 }
+.card-meta{
+  margin-top:8px;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+  color:#64748b;
+}
 
+.card-mini-progress{
+  width:100%;
+  height:8px;
+  margin-top:10px;
+  border-radius:999px;
+  background:#e5e7eb;
+  overflow:hidden;
+}
+
+.card-mini-progress-bar{
+  height:100%;
+  border-radius:999px;
+  transition:width .45s ease;
+}
+
+.stat-card-registered .card-mini-progress-bar{
+  background:linear-gradient(90deg,#16a34a,#22c55e);
+}
+
+.stat-card-pwd .card-mini-progress-bar{
+  background:linear-gradient(90deg,#2563eb,#3b82f6);
+}
+
+.stat-card-senior .card-mini-progress-bar{
+  background:linear-gradient(90deg,#f59e0b,#fbbf24);
+}
+
+.card-foot-note{
+  margin-top:8px;
+  font-size:11px;
+  font-weight:700;
+  text-align:center;
+  color:#94a3b8;
+}
+
+.card-mini-stats{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+
+.card-mini-box{
+  padding:8px 10px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  text-align:center;
+}
+
+.card-mini-box span{
+  display:block;
+  font-size:11px;
+  color:#64748b;
+  font-weight:700;
+}
+
+.card-mini-box strong{
+  display:block;
+  margin-top:2px;
+  font-size:13px;
+  color:#0f172a;
+  font-weight:800;
+}
 /* ===========================
    SCOREBOARD
    =========================== */
