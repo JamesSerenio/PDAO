@@ -4,7 +4,7 @@
   --text:#0f172a;
   --muted:#64748b;
   --line:rgba(15,23,42,.10);
-  --shadow:0 20px 60px rgba(15,23,42,.16);
+  --shadow:0 18px 50px rgba(15,23,42,.12);
   --radius:24px;
 }
 
@@ -36,32 +36,36 @@ body.login{
   justify-content:center;
 }
 
-/* FULL BACKGROUND */
+/* MAIN BACKGROUND */
 .scene-bg{
   position:absolute;
   inset:0;
   background:url("/img/LGU.png") center center / cover no-repeat;
-  filter:blur(2px);
-  opacity:.32;
+  filter(none);
+  opacity:.9;
   z-index:0;
+  transform:scale(1);
+  animation:bgPulse 10s ease-in-out infinite;
   transition:
-    opacity .65s ease,
+    opacity .7s ease,
     transform 1s cubic-bezier(.22,.8,.2,1),
     filter 1s cubic-bezier(.22,.8,.2,1);
+}
+
+@keyframes bgPulse{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.04); }
 }
 
 .scene-overlay{
   position:absolute;
   inset:0;
   z-index:1;
-  background:
-    radial-gradient(900px 600px at 20% 10%, rgba(230,226,255,.78), transparent 60%),
-    radial-gradient(900px 600px at 80% 30%, rgba(216,210,255,.68), transparent 55%),
-    linear-gradient(180deg, rgba(255,255,255,.48), rgba(255,255,255,.68));
-  transition:opacity .65s ease;
+  background:rgba(255,255,255,0.15);
+  transition:opacity .7s ease;
 }
 
-/* ITO YUNG BACKGROUND NA PAPASOK SA LOGIN FORM */
+/* BACKGROUND NA PAPASOK SA CARD */
 .bg-to-card{
   position:absolute;
   left:50%;
@@ -71,47 +75,68 @@ body.login{
   transform:translate(-50%, -50%);
   border-radius:34px;
   background:url("/img/LGU.png") center center / cover no-repeat;
-  filter:blur(2px);
+  filter:blur(0.1px);
   opacity:0;
   z-index:3;
   pointer-events:none;
-  box-shadow:0 25px 80px rgba(15,23,42,.10);
-  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 25px 80px rgba(15,23,42,.08);
+  border:1px solid rgba(255,255,255,.24);
 }
 
-/* LOGOS */
-.travel-logo{
+/* ISANG SET LANG NG LOGOS */
+.travel-badge{
   position:absolute;
-  width:96px;
-  height:96px;
-  object-fit:contain;
   z-index:6;
+  width:108px;
+  height:108px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.24),
+    0 10px 24px rgba(15,23,42,.08);
+  backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   pointer-events:none;
-  filter:drop-shadow(0 10px 18px rgba(0,0,0,.12));
-  transition:all 1s cubic-bezier(.22,.8,.2,1);
+}
+
+.travel-badge img{
+  width:82px;
+  height:82px;
+  object-fit:contain;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.08));
 }
 
 .travel-left{
-  left:calc(50% - min(430px, 46vw));
-  top:34px;
+  left:calc(50% - 190px);
+  top:50%;
+  transform:translate(-50%, -132px);
 }
 
 .travel-right{
-  right:calc(50% - min(430px, 46vw));
-  top:34px;
+  left:calc(50% + 190px);
+  top:50%;
+  transform:translate(-50%, -132px);
 }
 
 .scene:not(.show-form) .travel-left{
-  animation:floatLogo 3s ease-in-out infinite;
+  animation:badgeBobLeft 3.4s ease-in-out infinite;
 }
 
 .scene:not(.show-form) .travel-right{
-  animation:floatLogo 3s ease-in-out infinite .35s;
+  animation:badgeBobRight 3.4s ease-in-out infinite .25s;
 }
 
-@keyframes floatLogo{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-8px); }
+@keyframes badgeBobLeft{
+  0%,100%{ transform:translate(-50%, -132px); }
+  50%{ transform:translate(-50%, -140px); }
+}
+
+@keyframes badgeBobRight{
+  0%,100%{ transform:translate(-50%, -132px); }
+  50%{ transform:translate(-50%, -140px); }
 }
 
 /* INTRO */
@@ -126,14 +151,14 @@ body.login{
 }
 
 .intro-panel{
-  width:min(860px, 92vw);
-  min-height:390px;
+  width:min(550px, 85vw);
+  min-height:350px;
   padding:36px;
   border-radius:34px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.30);
-  box-shadow:0 25px 80px rgba(15,23,42,.10);
-  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 22px 70px rgba(15,23,42,.08);
+  backdrop-filter:blur(6px);
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -167,13 +192,13 @@ body.login{
   color:#fff;
   cursor:pointer;
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  box-shadow:0 16px 30px rgba(106,90,205,.32);
+  box-shadow:0 14px 28px rgba(106,90,205,.28);
   transition:.18s;
 }
 
 .intro-btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 22px 40px rgba(106,90,205,.42);
+  box-shadow:0 18px 34px rgba(106,90,205,.36);
 }
 
 /* FORM */
@@ -195,11 +220,11 @@ body.login{
   border-radius:24px;
   box-shadow:var(--shadow);
   padding:30px;
-  border:1px solid rgba(255,255,255,.45);
+  border:1px solid rgba(255,255,255,.36);
   position:relative;
   overflow:hidden;
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(1px);
   opacity:0;
   transform:scale(.84) translateY(20px);
   transition:
@@ -207,13 +232,12 @@ body.login{
     transform .65s cubic-bezier(.22,.8,.2,1);
 }
 
-/* FINAL BG SA LOOB MISMO NG CARD */
 .card-bg{
   position:absolute;
   inset:0;
   background:url("/img/LGU.png") center center / cover no-repeat;
   opacity:0;
-  filter:blur(2px);
+  filter:blur(0.6px);
   z-index:0;
   transition:opacity .25s ease;
 }
@@ -221,7 +245,7 @@ body.login{
 .card-overlay{
   position:absolute;
   inset:0;
-  background:rgba(255,255,255,.68);
+  background:rgba(255,255,255,.35);
   z-index:1;
 }
 
@@ -268,7 +292,7 @@ body.login{
 /* ALERT */
 .login-alert{
   background:rgba(239,68,68,.08);
-  border:1px solid rgba(239,68,68,.2);
+  border:1px solid rgba(239,68,68,.18);
   color:#991b1b;
   padding:12px;
   border-radius:12px;
@@ -295,18 +319,18 @@ body.login{
   width:100%;
   padding:12px;
   border-radius:12px;
-  border:1px solid rgba(15,23,42,.12);
+  border:1px solid rgba(15,23,42,.10);
   font-size:14px;
   outline:none;
   transition:.15s;
-  background:rgba(226,232,240,.85);
-  backdrop-filter:blur(6px);
+  background:rgba(226,232,240,.80);
+  backdrop-filter:blur(3px);
 }
 
 .login-group input:focus{
   border-color:var(--primary);
-  box-shadow:0 0 0 4px rgba(106,90,205,.20);
-  background:rgba(255,255,255,.96);
+  box-shadow:0 0 0 4px rgba(106,90,205,.16);
+  background:rgba(255,255,255,.94);
 }
 
 .password-wrapper{
@@ -327,6 +351,9 @@ body.login{
   user-select:none;
   opacity:.65;
   transition:.15s;
+  background:transparent;
+  border:none;
+  padding:0;
 }
 
 .eye-icon:hover{
@@ -348,12 +375,12 @@ body.login{
 }
 
 .role-hint{
-  border:1px dashed rgba(106,90,205,.45);
+  border:1px dashed rgba(106,90,205,.36);
   padding:5px 10px;
   border-radius:999px;
   font-size:12px;
   color:var(--primary-dark);
-  background:rgba(255,255,255,.72);
+  background:rgba(255,255,255,.70);
 }
 
 .login-btn{
@@ -366,21 +393,21 @@ body.login{
   color:#fff;
   cursor:pointer;
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  box-shadow:0 14px 28px rgba(106,90,205,.30);
+  box-shadow:0 12px 24px rgba(106,90,205,.26);
   transition:.18s;
 }
 
 .login-btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 18px 35px rgba(106,90,205,.42);
+  box-shadow:0 16px 30px rgba(106,90,205,.34);
 }
 
 .back-btn{
   margin-top:2px;
   padding:11px 12px;
   border-radius:14px;
-  border:1px solid rgba(15,23,42,.08);
-  background:rgba(255,255,255,.88);
+  border:1px solid rgba(15,23,42,.06);
+  background:rgba(255,255,255,.90);
   color:#475569;
   font-size:14px;
   font-weight:800;
@@ -400,14 +427,14 @@ body.login{
 }
 
 .show-form .field{
-  animation:fieldIn .45s ease forwards;
+  animation:fieldIn .42s ease forwards;
 }
 
-.show-form .field-1{ animation-delay:1.00s; }
-.show-form .field-2{ animation-delay:1.12s; }
-.show-form .field-3{ animation-delay:1.24s; }
-.show-form .field-4{ animation-delay:1.36s; }
-.show-form .field-5{ animation-delay:1.46s; }
+.show-form .field-1{ animation-delay:.78s; }
+.show-form .field-2{ animation-delay:.88s; }
+.show-form .field-3{ animation-delay:.98s; }
+.show-form .field-4{ animation-delay:1.08s; }
+.show-form .field-5{ animation-delay:1.16s; }
 
 @keyframes fieldIn{
   to{
@@ -418,13 +445,14 @@ body.login{
 
 /* OPEN */
 .scene.show-form .scene-bg{
-  opacity:.05;
+  opacity:.85;
   transform:scale(1.08);
-  filter:blur(8px);
+  filter: none;
+  animation:none;
 }
 
 .scene.show-form .scene-overlay{
-  opacity:.10;
+  opacity:0;
 }
 
 .scene.show-form .intro-screen{
@@ -435,20 +463,15 @@ body.login{
 
 .scene.show-form .bg-to-card{
   opacity:1;
-  animation:bgIntoCard 1s cubic-bezier(.22,.8,.2,1) forwards;
-}
-
-.scene.show-form .travel-left,
-.scene.show-form .travel-right{
-  animation:none;
+  animation:bgIntoCard .95s cubic-bezier(.22,.8,.2,1) forwards;
 }
 
 .scene.show-form .travel-left{
-  animation:moveLeftLogo 1s cubic-bezier(.22,.8,.2,1) forwards;
+  animation:moveLeftBadge .92s cubic-bezier(.22,.8,.2,1) forwards;
 }
 
 .scene.show-form .travel-right{
-  animation:moveRightLogo 1s cubic-bezier(.22,.8,.2,1) forwards;
+  animation:moveRightBadge .92s cubic-bezier(.22,.8,.2,1) forwards;
 }
 
 .scene.show-form .form-screen{
@@ -458,18 +481,18 @@ body.login{
 .scene.show-form .login-card{
   opacity:1;
   transform:scale(1) translateY(0);
-  transition-delay:.72s;
+  transition-delay:.56s;
 }
 
 .scene.show-form .card-bg{
-  opacity:.22;
-  transition-delay:.82s;
+  opacity:.16;
+  transition-delay:.66s;
 }
 
 .scene.show-form .logo-left,
 .scene.show-form .logo-right{
   opacity:1;
-  transition-delay:.92s;
+  transition-delay:.80s;
 }
 
 @keyframes bgIntoCard{
@@ -478,7 +501,7 @@ body.login{
     top:50%;
     width:min(860px, 92vw);
     height:390px;
-    transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%) scale(1);
     border-radius:34px;
     opacity:1;
   }
@@ -487,64 +510,57 @@ body.login{
     top:50%;
     width:420px;
     height:500px;
-    transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%) scale(1.01);
     border-radius:28px;
-    opacity:1;
+    opacity:.7;
   }
   100%{
     left:50%;
     top:50%;
     width:330px;
     height:470px;
-    transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%) scale(1);
     border-radius:24px;
     opacity:0;
   }
 }
 
-@keyframes moveLeftLogo{
+@keyframes moveLeftBadge{
   0%{
-    left:calc(50% - min(430px, 46vw));
-    top:34px;
-    width:96px;
-    height:96px;
-    transform:none;
+    left:calc(50% - 165px);
+    top:50%;
+    width:108px;
+    height:108px;
+    transform:translate(-50%, -132px) scale(1);
     opacity:1;
   }
   100%{
     left:50%;
     top:50%;
-    width:52px;
-    height:52px;
-    transform:translate(-124px, -178px);
+    width:58px;
+    height:58px;
+    transform:translate(-124px, -178px) scale(1);
     opacity:0;
   }
 }
 
-@keyframes moveRightLogo{
+@keyframes moveRightBadge{
   0%{
-    right:calc(50% - min(430px, 46vw));
-    left:auto;
-    top:34px;
-    width:96px;
-    height:96px;
-    transform:none;
+    left:calc(50% + 165px);
+    top:50%;
+    width:108px;
+    height:108px;
+    transform:translate(-50%, -132px) scale(1);
     opacity:1;
   }
   100%{
-    right:auto;
     left:50%;
     top:50%;
-    width:52px;
-    height:52px;
-    transform:translate(72px, -178px);
+    width:58px;
+    height:58px;
+    transform:translate(72px, -178px) scale(1);
     opacity:0;
   }
-}
-
-/* CLOSE */
-.scene:not(.show-form) .card-bg{
-  opacity:0;
 }
 
 @media (max-width: 900px){
@@ -554,6 +570,14 @@ body.login{
 
   .intro-panel{
     min-height:340px;
+  }
+
+  .travel-left{
+    left:calc(50% - 140px);
+  }
+
+  .travel-right{
+    left:calc(50% + 140px);
   }
 }
 
@@ -579,18 +603,26 @@ body.login{
     border-radius:24px;
   }
 
-  .travel-logo{
-    width:64px;
-    height:64px;
-    top:20px;
+  .travel-badge{
+    width:76px;
+    height:76px;
+  }
+
+  .travel-badge img{
+    width:56px;
+    height:56px;
   }
 
   .travel-left{
-    left:18px;
+    left:calc(50% - 88px);
+    top:50%;
+    transform:translate(-50%, -104px);
   }
 
   .travel-right{
-    right:18px;
+    left:calc(50% + 88px);
+    top:50%;
+    transform:translate(-50%, -104px);
   }
 
   .login-card{
@@ -603,42 +635,40 @@ body.login{
     height:44px;
   }
 
-  @keyframes moveLeftLogo{
+  @keyframes moveLeftBadge{
     0%{
-      left:18px;
-      top:20px;
-      width:64px;
-      height:64px;
-      transform:none;
+      left:calc(50% - 88px);
+      top:50%;
+      width:76px;
+      height:76px;
+      transform:translate(-50%, -104px) scale(1);
       opacity:1;
     }
     100%{
       left:50%;
       top:50%;
-      width:44px;
-      height:44px;
-      transform:translate(-110px, -166px);
+      width:48px;
+      height:48px;
+      transform:translate(-110px, -166px) scale(1);
       opacity:0;
     }
   }
 
-  @keyframes moveRightLogo{
+  @keyframes moveRightBadge{
     0%{
-      right:18px;
-      left:auto;
-      top:20px;
-      width:64px;
-      height:64px;
-      transform:none;
+      left:calc(50% + 88px);
+      top:50%;
+      width:76px;
+      height:76px;
+      transform:translate(-50%, -104px) scale(1);
       opacity:1;
     }
     100%{
-      right:auto;
       left:50%;
       top:50%;
-      width:44px;
-      height:44px;
-      transform:translate(66px, -166px);
+      width:48px;
+      height:48px;
+      transform:translate(66px, -166px) scale(1);
       opacity:0;
     }
   }

@@ -13,16 +13,21 @@
 
     <div class="scene-bg"></div>
     <div class="scene-overlay"></div>
-
     <div class="bg-to-card"></div>
 
-    <img src="{{ asset('img/LOGOL.png') }}" alt="Left Logo" class="travel-logo travel-left">
-    <img src="{{ asset('img/LOGOP.png') }}" alt="Right Logo" class="travel-logo travel-right">
+    <!-- ITO LANG ANG ANIMATED LOGOS, WALA NANG DUPLICATE -->
+    <div class="travel-badge travel-left">
+      <img src="{{ asset('img/LOGOL.png') }}" alt="Left Logo">
+    </div>
+
+    <div class="travel-badge travel-right">
+      <img src="{{ asset('img/LOGOP.png') }}" alt="Right Logo">
+    </div>
 
     <section class="intro-screen">
       <div class="intro-panel">
         <h1 class="intro-title">Login</h1>
-        <p class="intro-subtitle">Provincial Persons with Disability Affairs Office</p>
+        <p class="intro-subtitle">Manalo Fortich Person With Disabilities Affairs Office</p>
         <button type="button" class="intro-btn" id="openLoginBtn">Login</button>
       </div>
     </section>
@@ -67,7 +72,6 @@
 
           <div class="login-group field field-2">
             <label for="passwordInput">Password</label>
-
             <div class="password-wrapper">
               <input
                 id="passwordInput"
@@ -124,17 +128,9 @@
         }
       }
 
-      if (openLoginBtn) {
-        openLoginBtn.addEventListener('click', openForm);
-      }
-
-      if (backBtn) {
-        backBtn.addEventListener('click', closeForm);
-      }
-
-      if (togglePasswordBtn) {
-        togglePasswordBtn.addEventListener('click', togglePassword);
-      }
+      if (openLoginBtn) openLoginBtn.addEventListener('click', openForm);
+      if (backBtn) backBtn.addEventListener('click', closeForm);
+      if (togglePasswordBtn) togglePasswordBtn.addEventListener('click', togglePassword);
 
       if (hasErrors) {
         scene.classList.add('show-form');
@@ -142,4 +138,4 @@
     });
   </script>
 </body>
-</html>
+</html> 
