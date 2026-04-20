@@ -1,5 +1,28 @@
 {{-- resources/views/livewire/admin/mapping.blade.php --}}
 
+@php
+    /*
+    IMPORTANT:
+    Dapat meron kang $barangayCounts na ipinapasa mula Livewire / controller, halimbawa:
+
+    $barangayCounts = \App\Models\LocalProfile::query()
+        ->selectRaw('barangay, COUNT(*) as total')
+        ->whereNotNull('barangay')
+        ->groupBy('barangay')
+        ->pluck('total', 'barangay')
+        ->toArray();
+
+    tapos i-pass mo sa view:
+    'barangayCounts' => $barangayCounts
+
+    Example result:
+    [
+      'Tankulan' => 1,
+      'Alae' => 1,
+    ]
+    */
+@endphp
+
 <div class="map-wrap">
 
   {{-- TOPBAR --}}
@@ -194,21 +217,6 @@
       line-height: 1.4;
     }
 
-    .leaflet-tooltip.barangay-label {
-      background: rgba(17, 24, 39, 0.92);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      box-shadow: 0 6px 18px rgba(0,0,0,.18);
-    }
-
-    .leaflet-tooltip.barangay-label::before {
-      display: none;
-    }
-
     .pulse {
       animation: pulseGlow .35s ease;
     }
@@ -220,8 +228,8 @@
     }
 
     .barangay-pin-wrap {
-      width: 28px;
-      height: 36px;
+      width: 32px;
+      height: 40px;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -229,20 +237,20 @@
 
     .barangay-pin {
       position: relative;
-      width: 22px;
-      height: 22px;
-      background: #ef4444;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #ff4d4f, #dc2626);
       border: 2px solid #ffffff;
       border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .22);
     }
 
     .barangay-pin::after {
       content: "";
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       background: #fff;
       border-radius: 50%;
       top: 5px;
@@ -302,11 +310,77 @@
       font-size: 12px;
       color: #111827;
     }
+
+    .leaflet-tooltip.barangay-tooltip-shell {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    .leaflet-tooltip.barangay-tooltip-shell::before {
+      display: none !important;
+    }
+
+    .barangay-tooltip-card {
+      min-width: 132px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(31,41,55,.96));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 14px 30px rgba(0,0,0,.26);
+      backdrop-filter: blur(8px);
+      animation: tooltipIn .18s ease;
+      text-align: center;
+    }
+
+    .barangay-tooltip-name {
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      letter-spacing: .2px;
+    }
+
+    .barangay-tooltip-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #d1fae5;
+      background: rgba(16, 185, 129, .14);
+      border: 1px solid rgba(52, 211, 153, .25);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .barangay-tooltip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #34d399;
+      box-shadow: 0 0 12px rgba(52, 211, 153, .7);
+    }
+
+    @keyframes tooltipIn {
+      from {
+        opacity: 0;
+        transform: translateY(7px) scale(.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
   </style>
 @endpush
 
 @push('scripts')
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="application/json" id="barangayCountsJson">@json($barangayCounts ?? [])</script>
 
   <script>
     function initAdminMap() {
@@ -370,6 +444,9 @@
       let barangayPointLayer = L.layerGroup();
       let polygonLayerMap = {};
 
+      const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
+      window.__barangayCounts = {};
+
       const map = L.map("map").setView([defaultLat, defaultLng], 12);
       window.__adminMap = map;
 
@@ -425,6 +502,29 @@
 
         return mapping[raw] || raw;
       }
+
+      function hydrateCounts(rawCounts) {
+        const normalized = {};
+
+        Object.entries(rawCounts || {}).forEach(([key, value]) => {
+          const name = normalizeBarangayName(key);
+          normalized[name] = Number(value || 0);
+        });
+
+        window.__barangayCounts = normalized;
+      }
+
+      function getBarangayCount(name) {
+        const normalized = normalizeBarangayName(name);
+        return Number(window.__barangayCounts?.[normalized] || 0);
+      }
+
+      function updateBarangayCount(name, count) {
+        const normalized = normalizeBarangayName(name);
+        window.__barangayCounts[normalized] = Number(count || 0);
+      }
+
+      hydrateCounts(initialBarangayCounts);
 
       function isValidBarangay(name) {
         return barangays.includes(normalizeBarangayName(name));
@@ -526,46 +626,46 @@
         };
       }
 
-    function getLayerCenter(layer) {
-      const barangayName = normalizeBarangayName(layer?.feature?.properties?.name || "");
+      function getLayerCenter(layer) {
+        const barangayName = normalizeBarangayName(layer?.feature?.properties?.name || "");
 
-      const manualCenters = {
-        "Dahilayan": L.latLng(8.199722, 124.859659),
-        "Maluko": L.latLng(8.385093, 124.947517),
-        "Guilang-guilang": L.latLng(8.471948, 124.985790),
-        "Dalirig": L.latLng(8.391885, 124.914217),
-        "Alae": L.latLng(8.424744, 124.818849),
-        "Mambatangan": L.latLng(8.474071, 124.800392),
-        "Mantibugao": L.latLng(8.470421, 124.824766),
-        "Lunocan": L.latLng(8.442489, 124.842101),
-        "Santo Niño": L.latLng(8.436206, 124.869232),
-      };
+        const manualCenters = {
+          "Dahilayan": L.latLng(8.199722, 124.859659),
+          "Maluko": L.latLng(8.385093, 124.947517),
+          "Guilang-guilang": L.latLng(8.471948, 124.985790),
+          "Dalirig": L.latLng(8.391885, 124.914217),
+          "Alae": L.latLng(8.424744, 124.818849),
+          "Mambatangan": L.latLng(8.474071, 124.800392),
+          "Mantibugao": L.latLng(8.470421, 124.824766),
+          "Lunocan": L.latLng(8.442489, 124.842101),
+          "Santo Niño": L.latLng(8.436206, 124.869232),
+        };
 
-      if (manualCenters[barangayName]) {
-        return manualCenters[barangayName];
+        if (manualCenters[barangayName]) {
+          return manualCenters[barangayName];
+        }
+
+        try {
+          if (typeof layer.getCenter === "function") {
+            const c = layer.getCenter();
+            if (c && isFinite(c.lat) && isFinite(c.lng)) {
+              return c;
+            }
+          }
+        } catch (e) {}
+
+        try {
+          const bounds = layer.getBounds();
+          if (bounds) {
+            const c = bounds.getCenter();
+            if (c && isFinite(c.lat) && isFinite(c.lng)) {
+              return c;
+            }
+          }
+        } catch (e) {}
+
+        return L.latLng(defaultLat, defaultLng);
       }
-
-      try {
-        if (typeof layer.getCenter === "function") {
-          const c = layer.getCenter();
-          if (c && isFinite(c.lat) && isFinite(c.lng)) {
-            return c;
-          }
-        }
-      } catch (e) {}
-
-      try {
-        const bounds = layer.getBounds();
-        if (bounds) {
-          const c = bounds.getCenter();
-          if (c && isFinite(c.lat) && isFinite(c.lng)) {
-            return c;
-          }
-        }
-      } catch (e) {}
-
-      return L.latLng(defaultLat, defaultLng);
-    }
 
       function createProfileIcon(profile) {
         const hasPhoto = !!profile.photo_url;
@@ -591,6 +691,20 @@
             <div class="meta">Barangay: <b>${escapeHtml(barangay)}</b></div>
             <div class="meta">Age: <b>${escapeHtml(profile.age ?? '—')}</b></div>
             <div class="type">Disability: ${escapeHtml(profile.disability_types || '—')}</div>
+          </div>
+        `;
+      }
+
+      function createBarangayTooltip(name) {
+        const count = getBarangayCount(name);
+
+        return `
+          <div class="barangay-tooltip-card">
+            <div class="barangay-tooltip-name">${escapeHtml(name)}</div>
+            <div class="barangay-tooltip-count">
+              <span class="barangay-tooltip-dot"></span>
+              ${count} person${count !== 1 ? "s" : ""}
+            </div>
           </div>
         `;
       }
@@ -721,17 +835,24 @@
                           <div class="barangay-pin"></div>
                         </div>
                       `,
-                      iconSize: [28, 36],
-                      iconAnchor: [14, 36],
-                      popupAnchor: [0, -30]
+                      iconSize: [32, 40],
+                      iconAnchor: [16, 40],
+                      popupAnchor: [0, -34]
                     })
                   });
 
-                  point.bindTooltip(name, {
-                    permanent: false,
-                    direction: "top",
-                    className: "barangay-label",
-                    offset: [0, -30]
+                  point.on("mouseover", function() {
+                    point.bindTooltip(createBarangayTooltip(name), {
+                      permanent: false,
+                      direction: "top",
+                      className: "barangay-tooltip-shell",
+                      offset: [0, -32],
+                      opacity: 1
+                    }).openTooltip();
+                  });
+
+                  point.on("mouseout", function() {
+                    point.closeTooltip();
                   });
 
                   point.on("click", function() {
@@ -745,16 +866,25 @@
                   barangayPointLayer.addLayer(point);
                 }
 
-                layer.on("mouseover", function() {
+                layer.on("mouseover", function(e) {
                   if (activePolygon !== layer) {
                     layer.setStyle(hoverPolygonStyle(feature));
                   }
+
+                  layer.bindTooltip(createBarangayTooltip(name), {
+                    sticky: true,
+                    direction: "top",
+                    className: "barangay-tooltip-shell",
+                    opacity: 1
+                  }).openTooltip(e.latlng);
                 });
 
                 layer.on("mouseout", function() {
                   if (geoJsonLayer && activePolygon !== layer) {
                     geoJsonLayer.resetStyle(layer);
                   }
+
+                  layer.closeTooltip();
                 });
 
                 layer.on("click", function() {
@@ -871,9 +1001,10 @@
         Livewire.on("mapProfilesLoaded", (event) => {
           const payload = Array.isArray(event) ? event[0] : event;
           const profiles = payload?.profiles || [];
-          const barangay = payload?.barangay || "";
+          const barangay = normalizeBarangayName(payload?.barangay || "");
 
           if (barangay) {
+            updateBarangayCount(barangay, profiles.length);
             selectBarangayOnMap(barangay);
           }
 

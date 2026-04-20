@@ -34,7 +34,7 @@
     ['label' => 'Local Profile Form', 'route' => 'admin.local_profile_form', 'icon' => 'form'],
     ['label' => 'Mapping',            'route' => 'admin.mapping',            'icon' => 'map'],
     ['label' => 'Registered Person',  'route' => 'admin.registered',         'icon' => 'users'],
-    ['label' => 'Senior Citizens',    'route' => 'admin.senior_citizens',    'icon' => 'elderly'],
+    ['label' => 'PWD Senior Citizens',    'route' => 'admin.senior_citizens',    'icon' => 'elderly'],
   ];
 @endphp
 

@@ -135,7 +135,7 @@
           <i class="fas fa-user-clock"></i>
         </div>
 
-        <div class="hover-title-only card-anim-title">Senior Citizens</div>
+        <div class="hover-title-only card-anim-title">PWD Senior Citizens</div>
 
         <div class="card-value card-anim-value" wire:loading.remove wire:target="range">
           {{ $seniorCount }}
