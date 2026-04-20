@@ -11,6 +11,7 @@ class Mapping extends Component
     public string $searchBarangay = '';
     public array $profiles = [];
     public bool $showResults = false;
+    public array $barangayCounts = [];
 
     public array $barangays = [
         "Agusan Canyon",
@@ -43,6 +44,7 @@ class Mapping extends Component
     {
         $this->profiles = [];
         $this->showResults = false;
+        $this->loadBarangayCounts();
     }
 
     public function closeResults(): void
@@ -103,6 +105,7 @@ class Mapping extends Component
                         WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
                         WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
                         WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
                         WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
                         WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
                         ELSE lp.barangay
@@ -187,12 +190,58 @@ class Mapping extends Component
         })->values()->toArray();
 
         $this->showResults = true;
+        $this->loadBarangayCounts();
 
         $this->dispatch(
             'mapProfilesLoaded',
             profiles: $this->profiles,
             barangay: $normalizedBarangay
         );
+    }
+
+    private function loadBarangayCounts(): void
+    {
+        $rows = DB::table('local_profiles as lp')
+            ->selectRaw("
+                TRIM(
+                    CASE
+                        WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
+                        WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
+                        ELSE lp.barangay
+                    END
+                ) as normalized_barangay,
+                COUNT(*) as total
+            ")
+            ->whereNotNull('lp.barangay')
+            ->groupByRaw("
+                TRIM(
+                    CASE
+                        WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
+                        WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
+                        WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
+                        ELSE lp.barangay
+                    END
+                )
+            ")
+            ->get();
+
+        $counts = [];
+
+        foreach ($rows as $row) {
+            $name = trim((string) ($row->normalized_barangay ?? ''));
+            if ($name !== '') {
+                $counts[$name] = (int) ($row->total ?? 0);
+            }
+        }
+
+        $this->barangayCounts = $counts;
     }
 
     private function normalizeBarangayName(string $name): string
@@ -213,6 +262,8 @@ class Mapping extends Component
 
     public function render()
     {
-        return view('livewire.admin.mapping');
+        return view('livewire.admin.mapping', [
+            'barangayCounts' => $this->barangayCounts,
+        ]);
     }
 }
