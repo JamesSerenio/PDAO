@@ -148,9 +148,33 @@
     #map {
       width: 100%;
       min-height: 78vh;
-      border-radius: 18px;
+      border-radius: 22px;
       overflow: hidden;
       z-index: 1;
+      box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.18),
+        0 10px 24px rgba(15, 23, 42, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.45);
+      background: #dbeafe;
+    }
+
+    .map-panel {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+      backdrop-filter: blur(6px);
+    }
+
+    #map::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.00) 55%, rgba(0,0,0,0.12) 100%);
     }
 
     .hidden {
@@ -239,11 +263,13 @@
       position: relative;
       width: 24px;
       height: 24px;
-      background: linear-gradient(135deg, #ff4d4f, #dc2626);
+      background: linear-gradient(135deg, #ff6b6b, #dc2626);
       border: 2px solid #ffffff;
       border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, .22);
+      box-shadow:
+        0 12px 24px rgba(220, 38, 38, 0.35),
+        0 4px 10px rgba(0, 0, 0, 0.18);
     }
 
     .barangay-pin::after {
@@ -255,6 +281,17 @@
       border-radius: 50%;
       top: 5px;
       left: 5px;
+    }
+
+    .barangay-pin-wrap::after {
+      content: "";
+      position: absolute;
+      bottom: 1px;
+      width: 18px;
+      height: 8px;
+      background: rgba(0,0,0,0.22);
+      filter: blur(5px);
+      border-radius: 999px;
     }
 
     .profile-marker-wrap {
@@ -447,13 +484,32 @@
       const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
       window.__barangayCounts = {};
 
-      const map = L.map("map").setView([defaultLat, defaultLng], 12);
+      const map = L.map("map", {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true,
+        dragging: true,
+        zoomSnap: 0.25,
+        zoomDelta: 0.25,
+        wheelPxPerZoomLevel: 80,
+        minZoom: 10,
+        maxZoom: 22
+      }).setView([defaultLat, defaultLng], 12);
+
       window.__adminMap = map;
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors"
-      }).addTo(map);
+      const premiumBase = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          maxZoom: 22,
+          maxNativeZoom: 18,
+          attribution: "Tiles &copy; Esri"
+        }
+      );
+
+      premiumBase.addTo(map);
 
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
       profileMarkersLayer.addTo(map);
@@ -587,44 +643,44 @@
         return colors[Math.abs(hash) % colors.length];
       }
 
-      function defaultPolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
-        const color = getColor(name);
+        function defaultPolygonStyle(feature) {
+          const name = normalizeBarangayName(feature?.properties?.name || "");
+          const color = getColor(name);
 
-        return {
-          color: color,
-          weight: 3,
-          opacity: 1,
-          fillColor: color,
-          fillOpacity: 0
-        };
-      }
+          return {
+            color: color,
+            weight: 3.5,
+            opacity: 0.95,
+            fillColor: color,
+            fillOpacity: 0.10
+          };
+        }
 
-      function hoverPolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
-        const color = getColor(name);
+        function hoverPolygonStyle(feature) {
+          const name = normalizeBarangayName(feature?.properties?.name || "");
+          const color = getColor(name);
 
-        return {
-          color: color,
-          weight: 5,
-          opacity: 1,
-          fillColor: color,
-          fillOpacity: 0
-        };
-      }
+          return {
+            color: "#ffffff",
+            weight: 5.5,
+            opacity: 1,
+            fillColor: color,
+            fillOpacity: 0.18
+          };
+        }
 
-      function activePolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
-        const color = getColor(name);
+        function activePolygonStyle(feature) {
+          const name = normalizeBarangayName(feature?.properties?.name || "");
+          const color = getColor(name);
 
-        return {
-          color: "#111827",
-          weight: 6,
-          opacity: 1,
-          fillColor: color,
-          fillOpacity: 0
-        };
-      }
+          return {
+            color: "#0f172a",
+            weight: 6.5,
+            opacity: 1,
+            fillColor: color,
+            fillOpacity: 0.24
+          };
+        }
 
       function getLayerCenter(layer) {
         const barangayName = normalizeBarangayName(layer?.feature?.properties?.name || "");
@@ -745,7 +801,10 @@
       function zoomToPolygon(layer) {
         try {
           const bounds = layer.getBounds();
-          map.fitBounds(bounds, { padding: [20, 20] });
+          map.fitBounds(bounds, {
+            padding: [20, 20],
+            maxZoom: 18
+          });
 
           const center = getLayerCenter(layer);
           marker.setLatLng(center);
@@ -815,12 +874,14 @@
                 const name = normalizeBarangayName(rawName);
                 const isInvalidBoundary = invalidBoundaryNames.includes(rawName) || !isValidBarangay(name);
 
-                layer.bindPopup(`
-                  <div style="min-width:170px;">
-                    <strong>${escapeHtml(name)}</strong><br>
-                    <small>${isInvalidBoundary ? 'Boundary only (not searchable)' : 'Click polygon to search this barangay'}</small>
-                  </div>
-                `);
+                if (!isInvalidBoundary) {
+                  layer.bindPopup(`
+                    <div style="min-width:170px;">
+                      <strong>${escapeHtml(name)}</strong><br>
+                      <small>Click polygon to search this barangay</small>
+                    </div>
+                  `);
+                }
 
                 if (!isInvalidBoundary) {
                   polygonLayerMap[name] = layer;
@@ -867,16 +928,19 @@
                 }
 
                 layer.on("mouseover", function(e) {
+                    if (isInvalidBoundary) return;
                   if (activePolygon !== layer) {
                     layer.setStyle(hoverPolygonStyle(feature));
                   }
 
-                  layer.bindTooltip(createBarangayTooltip(name), {
-                    sticky: true,
-                    direction: "top",
-                    className: "barangay-tooltip-shell",
-                    opacity: 1
-                  }).openTooltip(e.latlng);
+                    if (!isInvalidBoundary) {
+                      layer.bindTooltip(createBarangayTooltip(name), {
+                        sticky: true,
+                        direction: "top",
+                        className: "barangay-tooltip-shell",
+                        opacity: 1
+                      }).openTooltip(e.latlng);
+                    }
                 });
 
                 layer.on("mouseout", function() {
