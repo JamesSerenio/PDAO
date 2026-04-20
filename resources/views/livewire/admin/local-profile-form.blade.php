@@ -38,7 +38,6 @@
       onkeydown="if(event.key==='Enter' && event.target.tagName!=='TEXTAREA'){ event.preventDefault(); }"
     >
 
-      {{-- SECTION 1 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Basic Identification</div>
 
@@ -214,7 +213,6 @@
         </div>
       </div>
 
-      {{-- SECTION 2 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Complete Address & Contact</div>
 
@@ -225,13 +223,8 @@
           </div>
 
           <div class="lpf-field">
-            <label class="lpf-label" for="sitio_purok">Sitio/Purok</label>
-            <input id="sitio_purok" class="lpf-input" type="text" wire:model.defer="sitio_purok">
-          </div>
-
-          <div class="lpf-field">
             <label class="lpf-label" for="barangay">Barangay</label>
-            <select id="barangay" class="lpf-select" wire:model.defer="barangay">
+            <select id="barangay" class="lpf-select" wire:model.live="barangay">
               <option value="">-- Select Barangay --</option>
               <option value="Agusan Canyon">Agusan Canyon</option>
               <option value="Alae">Alae</option>
@@ -256,7 +249,27 @@
               <option value="Tankulan">Tankulan</option>
               <option value="Ticala">Ticala</option>
             </select>
-            <small class="lpf-help">Choose from the official barangay list.</small>
+            <small class="lpf-help">Choose from the official barangay list first.</small>
+          </div>
+
+          <div class="lpf-field">
+            <label class="lpf-label" for="sitio_purok">Sitio / Purok / Zone</label>
+            <select
+              id="sitio_purok"
+              class="lpf-select"
+              wire:model.defer="sitio_purok"
+              @disabled(empty($barangay))
+            >
+              <option value="">
+                {{ empty($barangay) ? '-- Select Barangay First --' : '-- Select Sitio / Purok / Zone --' }}
+              </option>
+
+              @foreach($sitioPurokOptions as $option)
+                <option value="{{ $option }}">{{ $option }}</option>
+              @endforeach
+            </select>
+
+            <small class="lpf-help">Auto-loaded based on the selected barangay.</small>
           </div>
 
           <div class="lpf-field">
@@ -291,7 +304,6 @@
         </div>
       </div>
 
-      {{-- SECTION 3 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Disability Information</div>
 
@@ -344,7 +356,6 @@
         </div>
       </div>
 
-      {{-- SECTION 4 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Education & Employment</div>
 
@@ -421,7 +432,6 @@
         </div>
       </div>
 
-      {{-- SECTION 5 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Organization & ID References</div>
 
@@ -489,7 +499,6 @@
         </div>
       </div>
 
-      {{-- SECTION 6 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Household Membership</div>
 
@@ -556,7 +565,6 @@
         </div>
       </div>
 
-      {{-- SECTION 7 --}}
       <div class="lpf-section">
         <div class="lpf-section-title">Interview / Accomplishment / Approval</div>
 

@@ -5,6 +5,7 @@ namespace App\Livewire\admin;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -27,14 +28,12 @@ class LocalProfileForm extends Component
     public $education_level, $employment_status, $employment_category, $specific_occupation, $employment_type, $registered_voter;
     public $special_skills, $sporting_talent;
 
-    // ✅ organization / group name
     public $pwd_org_affiliated;
 
     public $org_contact_person, $org_office_address, $org_tel_mobile;
 
     public $pwd_id_no, $id_reference_no, $sss_no, $gsis_no, $pagibig_no, $phn_no, $philhealth_no;
 
-    // ✅ will be auto-summed from household monthly incomes
     public $total_family_income;
 
     public $interviewee_name, $interviewee_relationship;
@@ -43,13 +42,13 @@ class LocalProfileForm extends Component
     public $reporting_unit_office_section;
     public $approved_by;
 
-    // ✅ age display (UI only)
     public $age = '';
 
     // ---------- uploads ----------
     public $photo_1x1;
     public $signature_thumbmark;
     public $interviewee_signature_thumbmark;
+    public $accomplished_signature;
     public $approved_signature;
 
     // ---------- disability checkboxes ----------
@@ -62,11 +61,16 @@ class LocalProfileForm extends Component
     // ---------- household ----------
     public $household_members = [];
 
+    // ---------- barangay -> sitio/purok/zone ----------
+    public array $sitioPurokOptions = [];
+    public array $barangaySitioMap = [];
+
     public function mount()
     {
         $this->household_members = [$this->blankHouseholdRow()];
         $this->age = $this->computeAge($this->date_of_birth);
-        $this->recomputeTotalFamilyIncome(); // ✅ init total
+        $this->recomputeTotalFamilyIncome();
+        $this->loadBarangaySitioMap();
     }
 
     private function blankHouseholdRow(): array
@@ -84,7 +88,84 @@ class LocalProfileForm extends Component
         ];
     }
 
-    // ✅ auto compute age
+    protected function normalizeBarangayName(string $name): string
+    {
+        $name = trim($name);
+
+        $map = [
+            'Tankulan (Pob.)' => 'Tankulan',
+            'Tankulan Pob.' => 'Tankulan',
+            'Tankulan Poblacion' => 'Tankulan',
+            'Tankulan (Poblacion)' => 'Tankulan',
+            'Guilangguilang' => 'Guilang-guilang',
+            'Santo Nino' => 'Santo Niño',
+        ];
+
+        return $map[$name] ?? $name;
+    }
+
+    protected function loadBarangaySitioMap(): void
+    {
+        $this->barangaySitioMap = [];
+        $this->sitioPurokOptions = [];
+
+        $path = public_path('geojson/purok_boundary.geojson');
+
+        if (!File::exists($path)) {
+            return;
+        }
+
+        $json = json_decode(File::get($path), true);
+
+        if (!is_array($json) || !isset($json['features']) || !is_array($json['features'])) {
+            return;
+        }
+
+        $grouped = [];
+
+        foreach ($json['features'] as $feature) {
+            $props = $feature['properties'] ?? [];
+
+            $barangay = $this->normalizeBarangayName((string) ($props['BarangayNa'] ?? ''));
+            $zoneName = trim((string) ($props['Zone Name'] ?? ''));
+            $zoneNo = trim((string) ($props['Zone '] ?? ($props['Zone'] ?? '')));
+
+            if ($barangay === '' || $zoneName === '') {
+                continue;
+            }
+
+            $label = $zoneName;
+
+            if ($zoneNo !== '') {
+                $label .= ' (Zone ' . $zoneNo . ')';
+            }
+
+            $key = mb_strtolower($label);
+            $grouped[$barangay][$key] = $label;
+        }
+
+        foreach ($grouped as $barangay => $items) {
+            $values = array_values($items);
+            sort($values, SORT_NATURAL | SORT_FLAG_CASE);
+            $this->barangaySitioMap[$barangay] = $values;
+        }
+
+        if (!empty($this->barangay)) {
+            $normalized = $this->normalizeBarangayName((string) $this->barangay);
+            $this->barangay = $normalized;
+            $this->sitioPurokOptions = $this->barangaySitioMap[$normalized] ?? [];
+        }
+    }
+
+    public function updatedBarangay($value): void
+    {
+        $normalized = $this->normalizeBarangayName((string) $value);
+
+        $this->barangay = $normalized;
+        $this->sitio_purok = '';
+        $this->sitioPurokOptions = $this->barangaySitioMap[$normalized] ?? [];
+    }
+
     public function updatedDateOfBirth($value)
     {
         $this->age = $this->computeAge($value);
@@ -101,7 +182,6 @@ class LocalProfileForm extends Component
         }
     }
 
-    // ✅ converts '' -> null, "1,234.50" -> 1234.50
     private function normalizeDecimal($value)
     {
         if ($value === null) return null;
@@ -116,7 +196,6 @@ class LocalProfileForm extends Component
         return $v;
     }
 
-    // ✅ recompute total family income from household monthly_income
     private function recomputeTotalFamilyIncome(): void
     {
         $sum = 0;
@@ -128,17 +207,11 @@ class LocalProfileForm extends Component
             }
         }
 
-        // if no incomes entered, keep it null (not 0) para clean sa DB
         $this->total_family_income = ($sum > 0) ? number_format($sum, 2, '.', '') : null;
     }
 
-    /**
-     * ✅ Livewire hook: any time household_members changes, auto total.
-     * This catches typing, adding rows, removing rows, etc.
-     */
     public function updatedHouseholdMembers($value = null, $name = null)
     {
-        // only recompute if monthly_income changed or any row changed (safe to always recompute)
         $this->recomputeTotalFamilyIncome();
     }
 
@@ -165,98 +238,95 @@ class LocalProfileForm extends Component
     public function rules()
     {
         return [
-            'ldr_number' => ['nullable','string','max:50', Rule::unique('local_profiles','ldr_number')],
-            'profiling_date' => ['nullable','date'],
+            'ldr_number' => ['nullable', 'string', 'max:50', Rule::unique('local_profiles', 'ldr_number')],
+            'profiling_date' => ['nullable', 'date'],
 
-            'last_name' => ['required','string','max:100'],
-            'first_name' => ['required','string','max:100'],
-            'middle_name' => ['nullable','string','max:100'],
-            'suffix' => ['nullable','string','max:20'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'suffix' => ['nullable', 'string', 'max:20'],
 
-            'date_of_birth' => ['nullable','date'],
-            'blood_type' => ['nullable', Rule::in(['A+','A-','B+','B-','AB+','AB-','O+','O-'])],
-            'religion' => ['nullable','string','max:100'],
-            'ethnic_group' => ['nullable','string','max:100'],
-            'sex' => ['nullable', Rule::in(['MALE','FEMALE'])],
-            'civil_status' => ['nullable', Rule::in(['Single','Separated','Cohabitation (Live-in)','Married','Widow','Widower'])],
+            'date_of_birth' => ['nullable', 'date'],
+            'blood_type' => ['nullable', Rule::in(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])],
+            'religion' => ['nullable', 'string', 'max:100'],
+            'ethnic_group' => ['nullable', 'string', 'max:100'],
+            'sex' => ['nullable', Rule::in(['MALE', 'FEMALE'])],
+            'civil_status' => ['nullable', Rule::in(['Single', 'Separated', 'Cohabitation (Live-in)', 'Married', 'Widow', 'Widower'])],
 
-            'house_no_street' => ['nullable','string','max:200'],
-            'sitio_purok' => ['nullable','string','max:100'],
-            'barangay' => ['nullable','string','max:100'],
-            'municipality' => ['nullable','string','max:100'],
-            'province' => ['nullable','string','max:100'],
-            'region' => ['nullable','string','max:100'],
+            'house_no_street' => ['nullable', 'string', 'max:200'],
+            'sitio_purok' => ['nullable', 'string', 'max:100'],
+            'barangay' => ['nullable', 'string', 'max:100'],
+            'municipality' => ['nullable', 'string', 'max:100'],
+            'province' => ['nullable', 'string', 'max:100'],
+            'region' => ['nullable', 'string', 'max:100'],
 
-            'landline' => ['nullable','string','max:50'],
-            'mobile' => ['nullable','string','max:50'],
-            'email' => ['nullable','email','max:150'],
+            'landline' => ['nullable', 'string', 'max:50'],
+            'mobile' => ['nullable', 'string', 'max:50'],
+            'email' => ['nullable', 'email', 'max:150'],
 
-            'education_level' => ['nullable', Rule::in(['None','Kindergarten','Elementary','Junior High School','Senior High','College','Vocational','Post Graduate'])],
-            'employment_status' => ['nullable', Rule::in(['Employed','Unemployed','Self-employed'])],
-            'employment_category' => ['nullable', Rule::in(['Government','Private'])],
-            'specific_occupation' => ['nullable','string','max:150'],
-            'employment_type' => ['nullable', Rule::in(['Permanent','Seasonal','Contractual','Job Order','On Call'])],
-            'registered_voter' => ['nullable', Rule::in(['1','0',1,0])],
+            'education_level' => ['nullable', Rule::in(['None', 'Kindergarten', 'Elementary', 'Junior High School', 'Senior High', 'College', 'Vocational', 'Post Graduate'])],
+            'employment_status' => ['nullable', Rule::in(['Employed', 'Unemployed', 'Self-employed'])],
+            'employment_category' => ['nullable', Rule::in(['Government', 'Private'])],
+            'specific_occupation' => ['nullable', 'string', 'max:150'],
+            'employment_type' => ['nullable', Rule::in(['Permanent', 'Seasonal', 'Contractual', 'Job Order', 'On Call'])],
+            'registered_voter' => ['nullable', Rule::in(['1', '0', 1, 0])],
 
-            'special_skills' => ['nullable','string'],
-            'sporting_talent' => ['nullable','string'],
+            'special_skills' => ['nullable', 'string'],
+            'sporting_talent' => ['nullable', 'string'],
 
-            // ✅ input only, but still validate allowed values
-            'pwd_org_affiliated' => ['nullable','string','max:150'],
-            'org_contact_person' => ['nullable','string','max:150'],
-            'org_office_address' => ['nullable','string','max:255'],
-            'org_tel_mobile' => ['nullable','string','max:80'],
+            'pwd_org_affiliated' => ['nullable', 'string', 'max:150'],
+            'org_contact_person' => ['nullable', 'string', 'max:150'],
+            'org_office_address' => ['nullable', 'string', 'max:255'],
+            'org_tel_mobile' => ['nullable', 'string', 'max:80'],
 
-            'pwd_id_no' => ['nullable','string','max:30'],
-            'id_reference_no' => ['nullable','string','max:80'],
-            'sss_no' => ['nullable','string','max:30'],
-            'gsis_no' => ['nullable','string','max:30'],
-            'pagibig_no' => ['nullable','string','max:30'],
-            'phn_no' => ['nullable','string','max:30'],
-            'philhealth_no' => ['nullable','string','max:30'],
+            'pwd_id_no' => ['nullable', 'string', 'max:30'],
+            'id_reference_no' => ['nullable', 'string', 'max:80'],
+            'sss_no' => ['nullable', 'string', 'max:30'],
+            'gsis_no' => ['nullable', 'string', 'max:30'],
+            'pagibig_no' => ['nullable', 'string', 'max:30'],
+            'phn_no' => ['nullable', 'string', 'max:30'],
+            'philhealth_no' => ['nullable', 'string', 'max:30'],
 
-            // ✅ auto total, but still allow manual if you want later
             'total_family_income' => ['nullable'],
 
-            'interviewee_name' => ['nullable','string','max:150'],
-            'interviewee_relationship' => ['nullable','string','max:100'],
+            'interviewee_name' => ['nullable', 'string', 'max:150'],
+            'interviewee_relationship' => ['nullable', 'string', 'max:100'],
 
-            'accomplished_by_name' => ['nullable','string','max:150'],
-            'accomplished_by_position' => ['nullable','string','max:100'],
-            'reporting_unit_office_section' => ['nullable','string','max:150'],
-            'approved_by' => ['nullable','string','max:150'],
+            'accomplished_by_name' => ['nullable', 'string', 'max:150'],
+            'accomplished_by_position' => ['nullable', 'string', 'max:100'],
+            'reporting_unit_office_section' => ['nullable', 'string', 'max:150'],
+            'approved_by' => ['nullable', 'string', 'max:150'],
 
-            'photo_1x1' => ['nullable','image','max:2048'],
-            'signature_thumbmark' => ['nullable','image','max:2048'],
-            'interviewee_signature_thumbmark' => ['nullable','image','max:2048'],
-            'approved_signature' => ['nullable','image','max:2048'],
+            'photo_1x1' => ['nullable', 'image', 'max:2048'],
+            'signature_thumbmark' => ['nullable', 'image', 'max:2048'],
+            'interviewee_signature_thumbmark' => ['nullable', 'image', 'max:2048'],
+            'accomplished_signature' => ['nullable', 'image', 'max:2048'],
+            'approved_signature' => ['nullable', 'image', 'max:2048'],
 
             'household_members' => ['array'],
-            'household_members.*._key' => ['nullable','string'],
-            'household_members.*.name' => ['nullable','string','max:150'],
-            'household_members.*.date_of_birth' => ['nullable','date'],
-            'household_members.*.civil_status' => ['nullable','string','max:80'],
-            'household_members.*.educational_attainment' => ['nullable','string','max:120'],
-            'household_members.*.relationship_to_pwd' => ['nullable','string','max:120'],
-            'household_members.*.occupation' => ['nullable','string','max:150'],
-            'household_members.*.social_pension_affiliation' => ['nullable','string','max:120'],
+            'household_members.*._key' => ['nullable', 'string'],
+            'household_members.*.name' => ['nullable', 'string', 'max:150'],
+            'household_members.*.date_of_birth' => ['nullable', 'date'],
+            'household_members.*.civil_status' => ['nullable', 'string', 'max:80'],
+            'household_members.*.educational_attainment' => ['nullable', 'string', 'max:120'],
+            'household_members.*.relationship_to_pwd' => ['nullable', 'string', 'max:120'],
+            'household_members.*.occupation' => ['nullable', 'string', 'max:150'],
+            'household_members.*.social_pension_affiliation' => ['nullable', 'string', 'max:120'],
             'household_members.*.monthly_income' => ['nullable'],
         ];
     }
 
-
     public function save()
     {
-        // ✅ always recompute before saving (final correct total)
         $this->recomputeTotalFamilyIncome();
 
         $this->validate();
 
         DB::transaction(function () {
-
             $photoPath    = $this->photo_1x1 ? $this->photo_1x1->store('local_profiles/photos', 'public') : null;
             $signPath     = $this->signature_thumbmark ? $this->signature_thumbmark->store('local_profiles/signatures', 'public') : null;
             $intSignPath  = $this->interviewee_signature_thumbmark ? $this->interviewee_signature_thumbmark->store('local_profiles/interviewee_sign', 'public') : null;
+            $accSignPath  = $this->accomplished_signature ? $this->accomplished_signature->store('local_profiles/accomplished_sign', 'public') : null;
             $apprSignPath = $this->approved_signature ? $this->approved_signature->store('local_profiles/approved_sign', 'public') : null;
 
             $profileId = DB::table('local_profiles')->insertGetId([
@@ -300,7 +370,6 @@ class LocalProfileForm extends Component
                 'special_skills' => $this->special_skills,
                 'sporting_talent' => $this->sporting_talent,
 
-                // ✅ FIX: input-only Yes/No -> store 1/0
                 'pwd_org_affiliated' => $this->pwd_org_affiliated,
 
                 'org_contact_person' => $this->org_contact_person,
@@ -315,7 +384,6 @@ class LocalProfileForm extends Component
                 'phn_no' => $this->phn_no,
                 'philhealth_no' => $this->philhealth_no,
 
-                // ✅ FIX: never insert '' to decimal (auto computed)
                 'total_family_income' => $this->normalizeDecimal($this->total_family_income),
 
                 'interviewee_name' => $this->interviewee_name,
@@ -324,6 +392,7 @@ class LocalProfileForm extends Component
 
                 'accomplished_by_name' => $this->accomplished_by_name,
                 'accomplished_by_position' => $this->accomplished_by_position,
+                'accomplished_signature' => $accSignPath,
                 'reporting_unit_office_section' => $this->reporting_unit_office_section,
 
                 'approved_by' => $this->approved_by,
@@ -333,7 +402,6 @@ class LocalProfileForm extends Component
                 'updated_at' => now(),
             ]);
 
-            // disability types pivot
             if (!empty($this->disability_types)) {
                 $typeIds = DB::table('disability_types')
                     ->whereIn('name', $this->disability_types)
@@ -344,27 +412,27 @@ class LocalProfileForm extends Component
                 foreach ($typeIds as $tid) {
                     $rows[] = [
                         'local_profile_id' => $profileId,
-                        'disability_type_id' => $tid
+                        'disability_type_id' => $tid,
                     ];
                 }
-                if ($rows) DB::table('local_profile_disability_types')->insert($rows);
+
+                if ($rows) {
+                    DB::table('local_profile_disability_types')->insert($rows);
+                }
             }
 
-            // disability causes pivot
             $this->insertCauses($profileId, 'CONGENITAL/INBORN', $this->cause_congenital, $this->cause_congenital_other);
             $this->insertCauses($profileId, 'ACQUIRED', $this->cause_acquired, $this->cause_acquired_other);
 
-            // household members
             $hmRows = [];
             foreach ($this->household_members as $row) {
-
-                $name = trim((string)($row['name'] ?? ''));
+                $name = trim((string) ($row['name'] ?? ''));
                 $dob = $row['date_of_birth'] ?? null;
-                $civil = trim((string)($row['civil_status'] ?? ''));
-                $edu = trim((string)($row['educational_attainment'] ?? ''));
-                $rel = trim((string)($row['relationship_to_pwd'] ?? ''));
-                $occ = trim((string)($row['occupation'] ?? ''));
-                $spa = trim((string)($row['social_pension_affiliation'] ?? ''));
+                $civil = trim((string) ($row['civil_status'] ?? ''));
+                $edu = trim((string) ($row['educational_attainment'] ?? ''));
+                $rel = trim((string) ($row['relationship_to_pwd'] ?? ''));
+                $occ = trim((string) ($row['occupation'] ?? ''));
+                $spa = trim((string) ($row['social_pension_affiliation'] ?? ''));
                 $income = $this->normalizeDecimal($row['monthly_income'] ?? null);
 
                 $anyFilled = ($name !== '')
@@ -389,11 +457,12 @@ class LocalProfileForm extends Component
                     'social_pension_affiliation' => $spa ?: null,
                     'monthly_income' => $income,
                     'created_at' => now(),
-                    // no updated_at (schema has only created_at)
                 ];
             }
 
-            if ($hmRows) DB::table('household_members')->insert($hmRows);
+            if ($hmRows) {
+                DB::table('household_members')->insert($hmRows);
+            }
         });
 
         session()->flash('success', 'Local Profile Form saved successfully.');
@@ -404,7 +473,7 @@ class LocalProfileForm extends Component
 
     private function insertCauses($profileId, $category, $names, $otherText)
     {
-        $otherText = trim((string)$otherText);
+        $otherText = trim((string) $otherText);
 
         if (empty($names) && $otherText === '') return;
 
@@ -441,10 +510,11 @@ class LocalProfileForm extends Component
             }
         }
 
-        if ($rows) DB::table('local_profile_disability_causes')->insert($rows);
+        if ($rows) {
+            DB::table('local_profile_disability_causes')->insert($rows);
+        }
     }
 
-    // computed options
     public function getDisabilityTypeOptionsProperty()
     {
         return [
@@ -484,9 +554,9 @@ class LocalProfileForm extends Component
     public function render()
     {
         return view('livewire.admin.local-profile-form', [
-            'disabilityTypeOptions'   => $this->disabilityTypeOptions,
-            'causeCongenitalOptions'  => $this->causeCongenitalOptions,
-            'causeAcquiredOptions'    => $this->causeAcquiredOptions,
+            'disabilityTypeOptions' => $this->disabilityTypeOptions,
+            'causeCongenitalOptions' => $this->causeCongenitalOptions,
+            'causeAcquiredOptions' => $this->causeAcquiredOptions,
         ]);
     }
 }
