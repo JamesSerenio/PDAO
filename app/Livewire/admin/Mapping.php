@@ -189,8 +189,7 @@ class Mapping extends Component
             ];
         })->values()->toArray();
 
-        $this->showResults = true;
-        $this->loadBarangayCounts();
+        $this->showResults = count($this->profiles) > 0;
 
         $this->dispatch(
             'mapProfilesLoaded',
