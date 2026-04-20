@@ -397,6 +397,14 @@
       box-shadow: 0 0 12px rgba(52, 211, 153, .7);
     }
 
+    .leaflet-control-attribution {
+      display: none !important;
+    }
+
+    .leaflet-control-container {
+      display: none !important;
+    }
+
     @keyframes tooltipIn {
       from {
         opacity: 0;
@@ -506,7 +514,8 @@
         zoomDelta: 0.25,
         wheelPxPerZoomLevel: 80,
         minZoom: 10,
-        maxZoom: 22
+        maxZoom: 22,
+        attributionControl: false
       }).setView([defaultLat, defaultLng], 12);
 
       window.__adminMap = map;
