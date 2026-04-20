@@ -75,8 +75,8 @@
 
       {{-- RESULTS DRAWER --}}
       <aside id="resultsDrawer"
-            class="results-drawer {{ ($showResults && count($profiles) > 0) ? '' : 'is-hidden' }}"
-            aria-label="Results Panel">
+             class="results-drawer {{ $showResults ? '' : 'is-hidden' }}"
+             aria-label="Results Panel">
 
         <div class="results-head">
           <div class="results-title">
@@ -103,32 +103,38 @@
           </div>
         </div>
 
-                <div class="results-body">
-          <div class="cards">
-            @foreach($profiles as $p)
-              <div class="card">
-                <div class="card-top">
-                  <div class="avatar">
-                    @if(!empty($p['photo_url']))
-                      <img src="{{ $p['photo_url'] }}" alt="Photo">
-                    @else
-                      <span>{{ $p['initials'] ?? 'NP' }}</span>
-                    @endif
+        <div class="results-body">
+          @if (count($profiles) === 0)
+            <div class="empty">
+              No results. Search a barangay (example: <b>Tankulan</b>).
+            </div>
+          @else
+            <div class="cards">
+              @foreach($profiles as $p)
+                <div class="card">
+                  <div class="card-top">
+                    <div class="avatar">
+                      @if(!empty($p['photo_url']))
+                        <img src="{{ $p['photo_url'] }}" alt="Photo">
+                      @else
+                        <span>{{ $p['initials'] ?? 'NP' }}</span>
+                      @endif
+                    </div>
+
+                    <div class="person">
+                      <div class="name">{{ $p['last_name'] }}, {{ $p['first_name'] }}</div>
+                      <div class="age">Age: <b>{{ $p['age'] ?? '—' }}</b></div>
+                    </div>
                   </div>
 
-                  <div class="person">
-                    <div class="name">{{ $p['last_name'] }}, {{ $p['first_name'] }}</div>
-                    <div class="age">Age: <b>{{ $p['age'] ?? '—' }}</b></div>
+                  <div class="card-mid">
+                    <div class="label">Types of Disability</div>
+                    <div class="value">{{ $p['disability_types'] }}</div>
                   </div>
                 </div>
-
-                <div class="card-mid">
-                  <div class="label">Types of Disability</div>
-                  <div class="value">{{ $p['disability_types'] }}</div>
-                </div>
-              </div>
-            @endforeach
-          </div>
+              @endforeach
+            </div>
+          @endif
         </div>
       </aside>
     </div>
@@ -150,7 +156,6 @@
         0 10px 24px rgba(15, 23, 42, 0.10),
         inset 0 1px 0 rgba(255,255,255,0.18);
       border: 1px solid rgba(255,255,255,0.45);
-      background: #dbeafe;
     }
 
     .map-panel {
@@ -170,7 +175,6 @@
       background:
         radial-gradient(circle at center, rgba(255,255,255,0.00) 55%, rgba(0,0,0,0.12) 100%);
     }
-    
 
     .hidden {
       display: none !important;
@@ -415,7 +419,6 @@
         transform: translateY(0) scale(1);
       }
     }
-
     .leaflet-interactive:focus {
       outline: none !important;
     }
@@ -515,9 +518,8 @@
         wheelPxPerZoomLevel: 80,
         minZoom: 10,
         maxZoom: 22,
-        attributionControl: false
+        attributionControl: true
       }).setView([defaultLat, defaultLng], 12);
-
       window.__adminMap = map;
 
       const premiumBase = L.tileLayer(
@@ -876,34 +878,25 @@
         pulse(microTip);
       }
 
-        function attachGeoJson() {
-          fetch("{{ asset('geojson/map.geojson') }}")
-            .then(response => {
-              if (!response.ok) {
-                throw new Error("Failed to load GeoJSON");
-              }
-              return response.json();
-            })
-            .then(data => {
-              const cleanedData = {
-                ...data,
-                features: (data.features || []).filter((feature) => {
-                  const rawName = feature?.properties?.name || "Unknown";
-                  const name = normalizeBarangayName(rawName);
-                  const isInvalidBoundary =
-                    invalidBoundaryNames.includes(rawName) || !isValidBarangay(name);
+      function attachGeoJson() {
+        fetch("{{ asset('geojson/map.geojson') }}")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to load GeoJSON");
+            }
+            return response.json();
+          })
+          .then(data => {
+            geoJsonLayer = L.geoJSON(data, {
+              style: function(feature) {
+                return defaultPolygonStyle(feature);
+              },
+              onEachFeature: function(feature, layer) {
+                const rawName = feature?.properties?.name || "Unknown";
+                const name = normalizeBarangayName(rawName);
+                const isInvalidBoundary = invalidBoundaryNames.includes(rawName) || !isValidBarangay(name);
 
-                  return !isInvalidBoundary;
-                })
-              };
-
-              geoJsonLayer = L.geoJSON(cleanedData, {
-                style: function(feature) {
-                  return defaultPolygonStyle(feature);
-                },
-                onEachFeature: function(feature, layer) {
-                  const rawName = feature?.properties?.name || "Unknown";
-                  const name = normalizeBarangayName(rawName);
+                if (!isInvalidBoundary) {
                   polygonLayerMap[name] = layer;
 
                   const center = getLayerCenter(layer);
@@ -945,31 +938,35 @@
                   });
 
                   barangayPointLayer.addLayer(point);
+                }
 
-                  layer.on("mouseover", function(e) {
-                    if (activePolygon !== layer) {
-                      layer.setStyle(hoverPolygonStyle(feature));
-                    }
+                layer.on("mouseover", function(e) {
+                  if (activePolygon !== layer) {
+                    layer.setStyle(hoverPolygonStyle(feature));
+                  }
 
-                    layer.bindTooltip(createBarangayTooltip(name), {
-                      sticky: true,
-                      direction: "top",
-                      className: "barangay-tooltip-shell",
-                      opacity: 1
-                    }).openTooltip(e.latlng);
-                  });
+                  layer.bindTooltip(createBarangayTooltip(name), {
+                    sticky: true,
+                    direction: "top",
+                    className: "barangay-tooltip-shell",
+                    opacity: 1
+                  }).openTooltip(e.latlng);
+                });
 
-                  layer.on("mouseout", function() {
-                    if (geoJsonLayer && activePolygon !== layer) {
-                      geoJsonLayer.resetStyle(layer);
-                    }
+                layer.on("mouseout", function() {
+                  if (geoJsonLayer && activePolygon !== layer) {
+                    geoJsonLayer.resetStyle(layer);
+                  }
 
-                    layer.closeTooltip();
-                  });
+                  layer.closeTooltip();
+                });
 
-                layer.on("click", function(e) {
-                  if (e.originalEvent?.target?.blur) {
-                    e.originalEvent.target.blur();
+                layer.on("click", function() {
+                  if (isInvalidBoundary) {
+                    setHint(`"${rawName}" is boundary-only and not searchable.`);
+                    microTip.textContent = "⚠️ Please click an official barangay polygon.";
+                    pulse(microTip);
+                    return;
                   }
 
                   activatePolygon(layer, feature);
@@ -978,18 +975,18 @@
                   setHint(`Selected barangay: ${name}`);
                   doSearchFlow(name);
                 });
-                }
-              }).addTo(map);
+              }
+            }).addTo(map);
 
-              try {
-                map.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
-              } catch (e) {}
-            })
-            .catch(error => {
-              console.error("GeoJSON load error:", error);
-              setHint("Hindi ma-load ang polygon boundary. Check public/geojson/map.geojson");
-            });
-        }
+            try {
+              map.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+            } catch (e) {}
+          })
+          .catch(error => {
+            console.error("GeoJSON load error:", error);
+            setHint("Hindi ma-load ang polygon boundary. Check public/geojson/map.geojson");
+          });
+      }
 
       suggestionsEl.addEventListener("click", function(e) {
         const btn = e.target.closest(".sug-item");
