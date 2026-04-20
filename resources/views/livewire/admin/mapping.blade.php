@@ -1,31 +1,7 @@
 {{-- resources/views/livewire/admin/mapping.blade.php --}}
 
-@php
-    /*
-    IMPORTANT:
-    Dapat meron kang $barangayCounts na ipinapasa mula Livewire / controller, halimbawa:
-
-    $barangayCounts = \App\Models\LocalProfile::query()
-        ->selectRaw('barangay, COUNT(*) as total')
-        ->whereNotNull('barangay')
-        ->groupBy('barangay')
-        ->pluck('total', 'barangay')
-        ->toArray();
-
-    tapos i-pass mo sa view:
-    'barangayCounts' => $barangayCounts
-
-    Example result:
-    [
-      'Tankulan' => 1,
-      'Alae' => 1,
-    ]
-    */
-@endphp
-
 <div class="map-wrap">
 
-  {{-- TOPBAR --}}
   <div class="map-topbar anim-in">
     <div class="left">
       <h2 class="welcome">Welcome, {{ auth()->user()->name }}</h2>
@@ -61,19 +37,22 @@
     </div>
   </div>
 
-  {{-- COORDS CARD --}}
   <div class="coords-card anim-in" style="animation-delay:.06s">
     <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
     <div class="hint" id="hint"></div>
     <div class="micro" id="microTip">Tip: Press Enter to search faster.</div>
   </div>
 
-  {{-- MAP --}}
   <div class="map-shell anim-in" style="animation-delay:.12s">
     <div class="map-panel">
       <div wire:ignore id="map"></div>
 
-      {{-- RESULTS DRAWER --}}
+      <div id="purokLegend" class="purok-legend is-hidden">
+        <div class="legend-title">Zone / Purok / Sitio</div>
+        <div class="legend-sub" id="legendBarangay">Select a barangay first</div>
+        <div class="legend-list" id="legendList"></div>
+      </div>
+
       <aside id="resultsDrawer"
              class="results-drawer {{ $showResults ? '' : 'is-hidden' }}"
              aria-label="Results Panel">
@@ -151,11 +130,12 @@
       border-radius: 22px;
       overflow: hidden;
       z-index: 1;
+      border: 1px solid rgba(255,255,255,0.32);
       box-shadow:
-        0 24px 60px rgba(15, 23, 42, 0.18),
-        0 10px 24px rgba(15, 23, 42, 0.10),
+        0 28px 70px rgba(15, 23, 42, 0.20),
+        0 10px 28px rgba(15, 23, 42, 0.10),
         inset 0 1px 0 rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.45);
+      background: #dbeafe;
     }
 
     .map-panel {
@@ -172,11 +152,11 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.00) 55%, rgba(0,0,0,0.12) 100%);
+      background: radial-gradient(circle at center, rgba(255,255,255,0) 55%, rgba(0,0,0,0.12) 100%);
     }
 
-    .hidden {
+    .hidden,
+    .is-hidden {
       display: none !important;
     }
 
@@ -231,13 +211,150 @@
       color: #6b7280;
     }
 
-    .results-drawer.is-hidden {
-      display: none;
+    .results-drawer {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: min(360px, calc(100% - 32px));
+      max-height: calc(100% - 32px);
+      overflow: hidden;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(15,23,42,.08);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, .18);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
     }
 
-    .leaflet-popup-content {
+    .results-head {
+      padding: 18px 18px 10px;
+      border-bottom: 1px solid rgba(15,23,42,.06);
+      background: linear-gradient(180deg, rgba(255,255,255,1), rgba(248,250,252,.95));
+    }
+
+    .results-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .results-meta {
+      margin-top: 6px;
       font-size: 13px;
-      line-height: 1.4;
+      color: #64748b;
+    }
+
+    .results-meta .dot {
+      margin: 0 6px;
+    }
+
+    .drawer-close {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .drawer-close:hover {
+      background: #e2e8f0;
+    }
+
+    .results-sub {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .results-body {
+      padding: 14px;
+      overflow-y: auto;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid rgba(15,23,42,.06);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 8px 22px rgba(15,23,42,.06);
+    }
+
+    .card-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex: 0 0 54px;
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .person .name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+
+    .person .age {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .card-mid {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(15,23,42,.06);
+    }
+
+    .card-mid .label {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .card-mid .value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .empty {
+      padding: 18px;
+      border-radius: 18px;
+      background: #f8fafc;
+      color: #475569;
+      border: 1px dashed rgba(15,23,42,.12);
     }
 
     .pulse {
@@ -256,6 +373,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
+      position: relative;
     }
 
     .barangay-pin {
@@ -347,18 +465,21 @@
       color: #111827;
     }
 
-    .leaflet-tooltip.barangay-tooltip-shell {
+    .leaflet-tooltip.barangay-tooltip-shell,
+    .leaflet-tooltip.purok-tooltip-shell {
       background: transparent !important;
       border: none !important;
       box-shadow: none !important;
       padding: 0 !important;
     }
 
-    .leaflet-tooltip.barangay-tooltip-shell::before {
+    .leaflet-tooltip.barangay-tooltip-shell::before,
+    .leaflet-tooltip.purok-tooltip-shell::before {
       display: none !important;
     }
 
-    .barangay-tooltip-card {
+    .barangay-tooltip-card,
+    .purok-tooltip-card {
       min-width: 132px;
       padding: 10px 12px;
       border-radius: 16px;
@@ -371,7 +492,8 @@
       text-align: center;
     }
 
-    .barangay-tooltip-name {
+    .barangay-tooltip-name,
+    .purok-tooltip-name {
       font-size: 13px;
       font-weight: 800;
       line-height: 1.2;
@@ -379,7 +501,8 @@
       letter-spacing: .2px;
     }
 
-    .barangay-tooltip-count {
+    .barangay-tooltip-count,
+    .purok-tooltip-sub {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -401,11 +524,81 @@
       box-shadow: 0 0 12px rgba(52, 211, 153, .7);
     }
 
-    .leaflet-control-attribution {
-      display: none !important;
+    .purok-legend {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      width: min(320px, calc(100% - 32px));
+      max-height: 220px;
+      overflow: hidden;
+      border-radius: 22px;
+      background: rgba(15,23,42,.86);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 20px 40px rgba(2,6,23,.28);
+      z-index: 850;
+      backdrop-filter: blur(10px);
     }
 
-    .leaflet-control-container {
+    .legend-title {
+      padding: 14px 16px 4px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .legend-sub {
+      padding: 0 16px 10px;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .legend-list {
+      max-height: 140px;
+      overflow-y: auto;
+      padding: 0 10px 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .legend-item {
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .legend-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: 0 0 12px;
+    }
+
+    .legend-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .legend-zone {
+      font-size: 11px;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .leaflet-control-attribution {
       display: none !important;
     }
 
@@ -419,12 +612,14 @@
         transform: translateY(0) scale(1);
       }
     }
-    .leaflet-interactive:focus {
-      outline: none !important;
-    }
 
-    .leaflet-container svg path:focus {
+    .leaflet-interactive:focus,
+    .leaflet-container svg path:focus,
+    .leaflet-container .leaflet-popup:focus,
+    .leaflet-container .leaflet-popup-content-wrapper:focus,
+    .leaflet-container .leaflet-popup-tip-container:focus {
       outline: none !important;
+      box-shadow: none !important;
     }
 
     .leaflet-container a:focus,
@@ -433,6 +628,27 @@
     .leaflet-container .leaflet-pane svg *:focus {
       outline: none !important;
       box-shadow: none !important;
+    }
+
+    @media (max-width: 980px) {
+      .results-drawer {
+        position: static;
+        width: 100%;
+        max-height: none;
+        margin-top: 14px;
+      }
+
+      .map-panel {
+        display: grid;
+        gap: 14px;
+      }
+
+      .purok-legend {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        bottom: 12px;
+      }
     }
   </style>
 @endpush
@@ -496,12 +712,18 @@
       const searchInput = document.getElementById("searchInput");
       const searchBtn = document.getElementById("searchBtn");
       const suggestionsEl = document.getElementById("suggestions");
+      const legendEl = document.getElementById("purokLegend");
+      const legendBarangayEl = document.getElementById("legendBarangay");
+      const legendListEl = document.getElementById("legendList");
 
       let geoJsonLayer = null;
       let activePolygon = null;
       let profileMarkersLayer = L.layerGroup();
       let barangayPointLayer = L.layerGroup();
+      let purokLayerGroup = L.layerGroup();
       let polygonLayerMap = {};
+      let purokGeoJsonRaw = null;
+      let activeBarangayName = "";
 
       const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
       window.__barangayCounts = {};
@@ -518,8 +740,9 @@
         wheelPxPerZoomLevel: 80,
         minZoom: 10,
         maxZoom: 22,
-        attributionControl: true
+        attributionControl: false
       }).setView([defaultLat, defaultLng], 12);
+
       window.__adminMap = map;
 
       const premiumBase = L.tileLayer(
@@ -527,7 +750,7 @@
         {
           maxZoom: 22,
           maxNativeZoom: 18,
-          attribution: "Tiles &copy; Esri"
+          attribution: "Tiles © Esri"
         }
       );
 
@@ -536,6 +759,7 @@
       const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
       profileMarkersLayer.addTo(map);
       barangayPointLayer.addTo(map);
+      purokLayerGroup.addTo(map);
 
       setTimeout(() => map.invalidateSize(true), 60);
       setTimeout(() => map.invalidateSize(true), 250);
@@ -583,12 +807,10 @@
 
       function hydrateCounts(rawCounts) {
         const normalized = {};
-
         Object.entries(rawCounts || {}).forEach(([key, value]) => {
           const name = normalizeBarangayName(key);
           normalized[name] = Number(value || 0);
         });
-
         window.__barangayCounts = normalized;
       }
 
@@ -665,8 +887,33 @@
         return colors[Math.abs(hash) % colors.length];
       }
 
+      function getPurokColor(name) {
+        const colors = [
+          "#60a5fa", "#34d399", "#fbbf24", "#f87171", "#a78bfa",
+          "#f472b6", "#22d3ee", "#fb7185", "#4ade80", "#f59e0b"
+        ];
+
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+
+        return colors[Math.abs(hash) % colors.length];
+      }
+
       function defaultPolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
+        const rawName = feature?.properties?.name || "";
+        const name = normalizeBarangayName(rawName);
+
+        if (invalidBoundaryNames.includes(rawName)) {
+          return {
+            color: "#94a3b8",
+            weight: 2,
+            opacity: 0.55,
+            fillOpacity: 0
+          };
+        }
+
         const color = getColor(name);
 
         return {
@@ -679,7 +926,8 @@
       }
 
       function hoverPolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
+        const rawName = feature?.properties?.name || "";
+        const name = normalizeBarangayName(rawName);
         const color = getColor(name);
 
         return {
@@ -692,7 +940,8 @@
       }
 
       function activePolygonStyle(feature) {
-        const name = normalizeBarangayName(feature?.properties?.name || "");
+        const rawName = feature?.properties?.name || "";
+        const name = normalizeBarangayName(rawName);
         const color = getColor(name);
 
         return {
@@ -701,6 +950,32 @@
           opacity: 1,
           fillColor: color,
           fillOpacity: 0
+        };
+      }
+
+      function purokPolygonStyle(feature) {
+        const purokName = feature?.properties?.["Zone Name"] || "Unknown";
+        const color = getPurokColor(purokName);
+
+        return {
+          color: color,
+          weight: 2.4,
+          opacity: 0.95,
+          fillColor: color,
+          fillOpacity: 0.06
+        };
+      }
+
+      function purokHoverStyle(feature) {
+        const purokName = feature?.properties?.["Zone Name"] || "Unknown";
+        const color = getPurokColor(purokName);
+
+        return {
+          color: "#ffffff",
+          weight: 3.6,
+          opacity: 1,
+          fillColor: color,
+          fillOpacity: 0.16
         };
       }
 
@@ -787,8 +1062,28 @@
         `;
       }
 
+      function createPurokTooltip(feature) {
+        const purokName = feature?.properties?.["Zone Name"] || "Unknown";
+        const barangayName = normalizeBarangayName(feature?.properties?.BarangayNa || "");
+        const zoneNo = feature?.properties?.["Zone "] ?? feature?.properties?.Zone ?? "—";
+
+        return `
+          <div class="purok-tooltip-card">
+            <div class="purok-tooltip-name">${escapeHtml(purokName)}</div>
+            <div class="purok-tooltip-sub">${escapeHtml(barangayName)} • Zone ${escapeHtml(zoneNo)}</div>
+          </div>
+        `;
+      }
+
       function clearProfileMarkers() {
         profileMarkersLayer.clearLayers();
+      }
+
+      function clearPurokLayer() {
+        purokLayerGroup.clearLayers();
+        legendBarangayEl.textContent = "Select a barangay first";
+        legendListEl.innerHTML = "";
+        legendEl.classList.add("is-hidden");
       }
 
       function renderBarangayProfileMarkers(barangayName, profiles) {
@@ -820,12 +1115,12 @@
         });
       }
 
-      function zoomToPolygon(layer) {
+      function zoomToPolygon(layer, maxZoom = 18) {
         try {
           const bounds = layer.getBounds();
           map.fitBounds(bounds, {
             padding: [20, 20],
-            maxZoom: 18
+            maxZoom
           });
 
           const center = getLayerCenter(layer);
@@ -853,10 +1148,98 @@
           return false;
         }
 
+        activeBarangayName = normalized;
         activatePolygon(layer, layer.feature);
         zoomToPolygon(layer);
         setHint(`Selected barangay: ${normalized}`);
         return true;
+      }
+
+      function renderLegend(barangayName, features) {
+        if (!features?.length) {
+          clearPurokLayer();
+          return;
+        }
+
+        legendBarangayEl.textContent = barangayName;
+        legendListEl.innerHTML = features.map((feature) => {
+          const purokName = feature?.properties?.["Zone Name"] || "Unknown";
+          const zoneNo = feature?.properties?.["Zone "] ?? feature?.properties?.Zone ?? "—";
+          const color = getPurokColor(purokName);
+
+          return `
+            <div class="legend-item">
+              <div class="legend-item-left">
+                <span class="legend-swatch" style="background:${color}"></span>
+                <div class="legend-name">${escapeHtml(purokName)}</div>
+              </div>
+              <div class="legend-zone">Zone ${escapeHtml(zoneNo)}</div>
+            </div>
+          `;
+        }).join("");
+
+        legendEl.classList.remove("is-hidden");
+      }
+
+      function renderPurokForBarangay(barangayName) {
+        clearPurokLayer();
+
+        if (!purokGeoJsonRaw || !barangayName) return;
+
+        const normalizedBarangay = normalizeBarangayName(barangayName);
+
+        const features = (purokGeoJsonRaw.features || []).filter((feature) => {
+          const rawBarangay = feature?.properties?.BarangayNa || "";
+          return normalizeBarangayName(rawBarangay) === normalizedBarangay;
+        });
+
+        if (!features.length) {
+          legendBarangayEl.textContent = normalizedBarangay;
+          legendListEl.innerHTML = `<div class="legend-item"><div class="legend-name">No zone / purok / sitio found</div></div>`;
+          legendEl.classList.remove("is-hidden");
+          return;
+        }
+
+        const layer = L.geoJSON({
+          type: "FeatureCollection",
+          features
+        }, {
+          style: purokPolygonStyle,
+          onEachFeature: function(feature, layer) {
+            layer.on("mouseover", function(e) {
+              layer.setStyle(purokHoverStyle(feature));
+              layer.bringToFront();
+
+              layer.bindTooltip(createPurokTooltip(feature), {
+                sticky: true,
+                direction: "top",
+                className: "purok-tooltip-shell",
+                opacity: 1
+              }).openTooltip(e.latlng);
+            });
+
+            layer.on("mouseout", function() {
+              layer.setStyle(purokPolygonStyle(feature));
+              layer.closeTooltip();
+            });
+
+            layer.on("click", function(e) {
+              if (e.originalEvent?.target?.blur) {
+                e.originalEvent.target.blur();
+              }
+
+              try {
+                map.fitBounds(layer.getBounds(), {
+                  padding: [30, 30],
+                  maxZoom: 19
+                });
+              } catch (_) {}
+            });
+          }
+        });
+
+        purokLayerGroup.addLayer(layer);
+        renderLegend(normalizedBarangay, features);
       }
 
       async function doSearchFlow(v) {
@@ -871,11 +1254,23 @@
         }
 
         selectBarangayOnMap(value);
+        renderPurokForBarangay(value);
         syncToLivewireInput(value);
         searchBtn?.click();
 
-        microTip.textContent = `✅ Showing records for: ${value}`;
+        microTip.textContent = `✅ Showing records and zone/purok/sitio for: ${value}`;
         pulse(microTip);
+      }
+
+      async function loadPurokGeoJson() {
+        try {
+          const response = await fetch("{{ asset('geojson/purok_boundary.geojson') }}");
+          if (!response.ok) throw new Error("Failed to load purok boundary GeoJSON");
+          purokGeoJsonRaw = await response.json();
+        } catch (error) {
+          console.error("Purok GeoJSON load error:", error);
+          purokGeoJsonRaw = null;
+        }
       }
 
       function attachGeoJson() {
@@ -910,8 +1305,7 @@
                         </div>
                       `,
                       iconSize: [32, 40],
-                      iconAnchor: [16, 40],
-                      popupAnchor: [0, -34]
+                      iconAnchor: [16, 40]
                     })
                   });
 
@@ -932,6 +1326,7 @@
                   point.on("click", function() {
                     activatePolygon(layer, feature);
                     zoomToPolygon(layer);
+                    renderPurokForBarangay(name);
                     hideSuggestions();
                     setHint(`Selected barangay: ${name}`);
                     doSearchFlow(name);
@@ -961,7 +1356,11 @@
                   layer.closeTooltip();
                 });
 
-                layer.on("click", function() {
+                layer.on("click", function(e) {
+                  if (e.originalEvent?.target?.blur) {
+                    e.originalEvent.target.blur();
+                  }
+
                   if (isInvalidBoundary) {
                     setHint(`"${rawName}" is boundary-only and not searchable.`);
                     microTip.textContent = "⚠️ Please click an official barangay polygon.";
@@ -971,6 +1370,7 @@
 
                   activatePolygon(layer, feature);
                   zoomToPolygon(layer);
+                  renderPurokForBarangay(name);
                   hideSuggestions();
                   setHint(`Selected barangay: ${name}`);
                   doSearchFlow(name);
@@ -1064,7 +1464,11 @@
         pulse(microTip);
       });
 
-      attachGeoJson();
+      Promise.all([
+        loadPurokGeoJson()
+      ]).finally(() => {
+        attachGeoJson();
+      });
 
       document.addEventListener("livewire:navigated", function() {
         setTimeout(() => map.invalidateSize(true), 60);
@@ -1080,6 +1484,9 @@
           if (barangay) {
             updateBarangayCount(barangay, profiles.length);
             selectBarangayOnMap(barangay);
+            renderPurokForBarangay(barangay);
+          } else {
+            clearPurokLayer();
           }
 
           renderBarangayProfileMarkers(barangay, profiles);
