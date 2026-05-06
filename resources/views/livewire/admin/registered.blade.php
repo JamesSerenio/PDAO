@@ -238,11 +238,15 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
             <tr class="{{ $isOpen ? 'is-open' : '' }}">
               <td>
-                @if($r->photo_1x1)
-                  <img class="reg-photo" src="{{ Storage::url($r->photo_1x1) }}" alt="Photo">
-                @else
-                  <div class="reg-photo placeholder">No Photo</div>
-                @endif
+              @if($r->photo_1x1)
+                <img 
+                  class="reg-photo"
+                  src="{{ asset('storage/' . ltrim($r->photo_1x1, '/')) }}"
+                  alt="Photo"
+                >
+              @else
+                <div class="reg-photo placeholder">No Photo</div>
+              @endif
               </td>
 
               <td>
@@ -347,9 +351,14 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                       </div>
 
                       <div class="reg-details-photo">
-                        @if($open->photo_1x1)
-                          <img id="photoPreview" class="reg-photo big" src="{{ Storage::url($open->photo_1x1) }}" alt="Photo">
-                        @else
+                          @if($open->photo_1x1)
+                            <img 
+                              id="photoPreview"
+                              class="reg-photo big"
+                              src="{{ asset('storage/' . ltrim($open->photo_1x1, '/')) }}"
+                              alt="Photo"
+                            >
+                          @else
                           <img id="photoPreview" class="reg-photo big" src="" alt="Photo" style="display:none;">
                         @endif
                       </div>
