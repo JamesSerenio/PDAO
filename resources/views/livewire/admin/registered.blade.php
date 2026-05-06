@@ -155,6 +155,53 @@ $withQuery = function(array $extra = [], array $remove = []) {
 };
 
 $closeViewUrl = $withQuery([], ['open','editMode']);
+
+/* ===== BARANGAY + PUROK OPTIONS FROM PUROK GEOJSON ===== */
+$geojsonPaths = [
+  public_path('geojson/purok_boundary.geojson'),
+  public_path('geojson/map.geojson'),
+
+  public_path('purok_boundary.geojson'),
+  public_path('map.geojson'),
+
+  base_path('purok_boundary.geojson'),
+  base_path('map.geojson'),
+];
+
+$geojsonPath = null;
+
+foreach ($geojsonPaths as $path) {
+  if (file_exists($path)) {
+    $geojsonPath = $path;
+    break;
+  }
+}
+
+$barangayPuroks = [];
+
+if ($geojsonPath) {
+  $geo = json_decode(file_get_contents($geojsonPath), true);
+
+  foreach (($geo['features'] ?? []) as $feature) {
+    $props = $feature['properties'] ?? [];
+
+    $bgy = trim((string)($props['BarangayNa'] ?? ''));
+    $purok = trim((string)($props['Zone Name'] ?? ''));
+
+    if ($bgy !== '' && $purok !== '') {
+      $barangayPuroks[$bgy][] = $purok;
+    }
+  }
+}
+
+foreach ($barangayPuroks as $bgy => $list) {
+  $barangayPuroks[$bgy] = array_values(array_unique($list));
+  sort($barangayPuroks[$bgy], SORT_NATURAL | SORT_FLAG_CASE);
+}
+
+ksort($barangayPuroks, SORT_NATURAL | SORT_FLAG_CASE);
+
+$mappingBarangays = array_keys($barangayPuroks);
 @endphp
 
 <div class="reg-wrap">
@@ -467,10 +514,44 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
 
                         <div class="reg-box">
                           <h4>Address</h4>
+
+                          <div class="reg-kv">
+                            <span>House No./Street</span>
+                            @if($isEditing)
+                              <input class="reg-input" name="house_no_street" value="{{ $val($open->house_no_street) }}">
+                            @else
+                              <b>{{ $open->house_no_street ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Barangay</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="barangay" id="editBarangaySelect">
+                                <option value="">— Select Barangay —</option>
+                                @foreach($mappingBarangays as $bgy)
+                                  <option value="{{ $bgy }}" {{ $open->barangay === $bgy ? 'selected' : '' }}>
+                                    {{ $bgy }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            @else
+                              <b>{{ $open->barangay ?: '—' }}</b>
+                            @endif
+                          </div>
+
+                          <div class="reg-kv">
+                            <span>Sitio/Purok</span>
+                            @if($isEditing)
+                              <select class="reg-input" name="sitio_purok" id="editPurokSelect" data-current="{{ $val($open->sitio_purok) }}">
+                                <option value="">— Select Sitio/Purok —</option>
+                              </select>
+                            @else
+                              <b>{{ $open->sitio_purok ?: '—' }}</b>
+                            @endif
+                          </div>
+
                           @foreach([
-                            ['House No./Street','house_no_street'],
-                            ['Sitio/Purok','sitio_purok'],
-                            ['Barangay','barangay'],
                             ['Municipality','municipality'],
                             ['Province','province'],
                             ['Region','region'],
@@ -479,24 +560,6 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
                               <span>{{ $label }}</span>
                               @if($isEditing)
                                 <input class="reg-input" name="{{ $key }}" value="{{ $val($open->$key) }}">
-                              @else
-                                <b>{{ $open->$key ?: '—' }}</b>
-                              @endif
-                            </div>
-                          @endforeach
-                        </div>
-
-                        <div class="reg-box">
-                          <h4>Contact</h4>
-                          @foreach([
-                            ['Landline','landline','text'],
-                            ['Mobile','mobile','text'],
-                            ['Email','email','email'],
-                          ] as [$label,$key,$type])
-                            <div class="reg-kv">
-                              <span>{{ $label }}</span>
-                              @if($isEditing)
-                                <input class="reg-input" type="{{ $type }}" name="{{ $key }}" value="{{ $val($open->$key) }}">
                               @else
                                 <b>{{ $open->$key ?: '—' }}</b>
                               @endif
@@ -881,6 +944,10 @@ $closeViewUrl = $withQuery([], ['open','editMode']);
   </div>
 </div>
 
+<script type="application/json" id="barangayPuroksJson">
+{!! json_encode($barangayPuroks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+</script>
+
 <script>
 function previewPhoto(e){
   const file = e.target.files && e.target.files[0];
@@ -986,6 +1053,43 @@ if (barangayFilter) {
 if (disabilityTypeFilter) {
   disabilityTypeFilter.addEventListener('change', function () {
     searchForm.submit();
+  });
+}
+
+const barangayPuroksJson = document.getElementById('barangayPuroksJson');
+const barangayPuroks = barangayPuroksJson ? JSON.parse(barangayPuroksJson.textContent || '{}') : {};
+
+const editBarangaySelect = document.getElementById('editBarangaySelect');
+const editPurokSelect = document.getElementById('editPurokSelect');
+
+function loadEditPuroks() {
+  if (!editBarangaySelect || !editPurokSelect) return;
+
+  const selectedBarangay = editBarangaySelect.value;
+  const currentPurok = editPurokSelect.dataset.current || '';
+  const puroks = barangayPuroks[selectedBarangay] || [];
+
+  editPurokSelect.innerHTML = '<option value="">— Select Sitio/Purok —</option>';
+
+  puroks.forEach(function (purok) {
+    const opt = document.createElement('option');
+    opt.value = purok;
+    opt.textContent = purok;
+
+    if (purok === currentPurok) {
+      opt.selected = true;
+    }
+
+    editPurokSelect.appendChild(opt);
+  });
+}
+
+if (editBarangaySelect && editPurokSelect) {
+  loadEditPuroks();
+
+  editBarangaySelect.addEventListener('change', function () {
+    editPurokSelect.dataset.current = '';
+    loadEditPuroks();
   });
 }
 </script>

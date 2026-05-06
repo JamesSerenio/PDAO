@@ -12,6 +12,8 @@ class Mapping extends Component
     public array $profiles = [];
     public bool $showResults = false;
     public array $barangayCounts = [];
+    public array $purokCounts = [];
+    public string $selectedPurok = '';
 
     public array $barangays = [
         "Agusan Canyon",
@@ -38,7 +40,7 @@ class Mapping extends Component
         "Ticala",
     ];
 
-    protected $listeners = ['setBarangay'];
+    protected $listeners = ['setBarangay', 'setPurokFilter'];
 
     public function mount(): void
     {
@@ -51,6 +53,8 @@ class Mapping extends Component
     {
         $this->profiles = [];
         $this->showResults = false;
+        $this->selectedPurok = '';
+        $this->purokCounts = [];
 
         $this->dispatch(
             'mapProfilesLoaded',
@@ -77,84 +81,114 @@ class Mapping extends Component
         $this->search();
     }
 
-    public function search(): void
-    {
-        $barangayInput = trim($this->searchBarangay);
+        public function search(): void
+        {
+            $barangayInput = trim($this->searchBarangay);
 
-        if ($barangayInput === '') {
-            $this->profiles = [];
-            $this->showResults = false;
+            if ($barangayInput === '') {
+                $this->profiles = [];
+                $this->showResults = false;
+                $this->selectedPurok = '';
+                $this->purokCounts = [];
 
-            $this->dispatch(
-                'mapProfilesLoaded',
-                profiles: [],
-                barangay: ''
-            );
-            return;
-        }
-
-        $normalizedBarangay = $this->normalizeBarangayName($barangayInput);
-        $normalizedBarangayLower = mb_strtolower($normalizedBarangay);
-
-        $rows = DB::table('local_profiles as lp')
-            ->leftJoin('local_profile_disability_types as lpdt', 'lpdt.local_profile_id', '=', 'lp.id')
-            ->leftJoin('disability_types as dt', 'dt.id', '=', 'lpdt.disability_type_id')
-            ->whereRaw(
-                "LOWER(TRIM(
-                    CASE
-                        WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
-                        WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
-                        WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
-                        WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
-                        WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
-                        WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
-                        ELSE lp.barangay
-                    END
-                )) = ?",
-                [$normalizedBarangayLower]
-            )
-            ->groupBy(
-                'lp.id',
-                'lp.photo_1x1',
-                'lp.last_name',
-                'lp.first_name',
-                'lp.date_of_birth'
-            )
-            ->orderBy('lp.last_name')
-            ->orderBy('lp.first_name')
-            ->select(
-                'lp.id',
-                'lp.photo_1x1',
-                'lp.last_name',
-                'lp.first_name',
-                'lp.date_of_birth',
-                DB::raw("GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ', ') as disability_types")
-            )
-            ->get();
-
-        $this->profiles = $rows->map(function ($p) {
-            $age = null;
-
-            if (!empty($p->date_of_birth)) {
-                try {
-                    $age = Carbon::parse($p->date_of_birth)->age;
-                } catch (\Throwable $e) {
-                    $age = null;
-                }
+                $this->dispatch('mapProfilesLoaded', profiles: [], barangay: '');
+                return;
             }
 
-            $photoUrl = null;
+            $normalizedBarangay = $this->normalizeBarangayName($barangayInput);
+            $normalizedBarangayLower = mb_strtolower($normalizedBarangay);
 
-            if (!empty($p->photo_1x1)) {
-                $path = trim((string) $p->photo_1x1);
+            $baseQuery = DB::table('local_profiles as lp')
+                ->whereRaw(
+                    "LOWER(TRIM(
+                        CASE
+                            WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
+                            WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
+                            ELSE lp.barangay
+                        END
+                    )) = ?",
+                    [$normalizedBarangayLower]
+                );
 
-                if ($path !== '') {
-                    $path = ltrim($path, '/');
+            $countRows = (clone $baseQuery)
+                ->selectRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') as purok_name, COUNT(*) as total")
+                ->groupByRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified')")
+                ->orderBy('purok_name')
+                ->get();
 
-                    if (
-                        str_starts_with($path, 'http://') ||
-                        str_starts_with($path, 'https://')
-                    ) {
+            $this->purokCounts = $countRows
+                ->mapWithKeys(fn($r) => [(string)$r->purok_name => (int)$r->total])
+                ->toArray();
+
+            $rowsQuery = DB::table('local_profiles as lp')
+                ->leftJoin('local_profile_disability_types as lpdt', 'lpdt.local_profile_id', '=', 'lp.id')
+                ->leftJoin('disability_types as dt', 'dt.id', '=', 'lpdt.disability_type_id')
+                ->whereRaw(
+                    "LOWER(TRIM(
+                        CASE
+                            WHEN lp.barangay = 'Tankulan (Pob.)' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan Pob.' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan Poblacion' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Tankulan (Poblacion)' THEN 'Tankulan'
+                            WHEN lp.barangay = 'Guilangguilang' THEN 'Guilang-guilang'
+                            WHEN lp.barangay = 'Santo Nino' THEN 'Santo Niño'
+                            ELSE lp.barangay
+                        END
+                    )) = ?",
+                    [$normalizedBarangayLower]
+                );
+
+            if ($this->selectedPurok !== '') {
+                $rowsQuery->whereRaw(
+                    "COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') = ?",
+                    [$this->selectedPurok]
+                );
+            }
+
+            $rows = $rowsQuery
+                ->groupBy(
+                    'lp.id',
+                    'lp.photo_1x1',
+                    'lp.last_name',
+                    'lp.first_name',
+                    'lp.date_of_birth',
+                    'lp.sitio_purok'
+                )
+                ->orderBy('lp.sitio_purok')
+                ->orderBy('lp.last_name')
+                ->orderBy('lp.first_name')
+                ->select(
+                    'lp.id',
+                    'lp.photo_1x1',
+                    'lp.last_name',
+                    'lp.first_name',
+                    'lp.date_of_birth',
+                    'lp.sitio_purok',
+                    DB::raw("GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ', ') as disability_types")
+                )
+                ->get();
+
+            $this->profiles = $rows->map(function ($p) {
+                $age = null;
+
+                if (!empty($p->date_of_birth)) {
+                    try {
+                        $age = Carbon::parse($p->date_of_birth)->age;
+                    } catch (\Throwable $e) {
+                        $age = null;
+                    }
+                }
+
+                $photoUrl = null;
+
+                if (!empty($p->photo_1x1)) {
+                    $path = ltrim(trim((string) $p->photo_1x1), '/');
+
+                    if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
                         $photoUrl = $path;
                     } elseif (str_starts_with($path, 'storage/')) {
                         $photoUrl = asset($path);
@@ -162,41 +196,51 @@ class Mapping extends Component
                         $photoUrl = asset('storage/' . $path);
                     }
                 }
-            }
 
-            $firstName = trim((string) $p->first_name);
-            $lastName = trim((string) $p->last_name);
+                $firstName = trim((string) $p->first_name);
+                $lastName = trim((string) $p->last_name);
 
-            $initials = '';
+                $initials = '';
+                if ($firstName !== '') $initials .= mb_strtoupper(mb_substr($firstName, 0, 1));
+                if ($lastName !== '') $initials .= mb_strtoupper(mb_substr($lastName, 0, 1));
 
-            if ($firstName !== '') {
-                $initials .= mb_strtoupper(mb_substr($firstName, 0, 1));
-            }
+                return [
+                    'id' => $p->id,
+                    'last_name' => $lastName,
+                    'first_name' => $firstName,
+                    'full_name' => trim($lastName . ', ' . $firstName, ', '),
+                    'age' => $age,
+                    'sitio_purok' => trim((string)($p->sitio_purok ?? '')) ?: 'Unspecified',
+                    'photo_url' => $photoUrl,
+                    'initials' => $initials !== '' ? $initials : 'NP',
+                    'disability_types' => $p->disability_types ?: '—',
+                ];
+            })->values()->toArray();
 
-            if ($lastName !== '') {
-                $initials .= mb_strtoupper(mb_substr($lastName, 0, 1));
-            }
+            $this->showResults = true;
 
-            return [
-                'id' => $p->id,
-                'last_name' => $lastName,
-                'first_name' => $firstName,
-                'full_name' => trim($lastName . ', ' . $firstName, ', '),
-                'age' => $age,
-                'photo_url' => $photoUrl,
-                'initials' => $initials !== '' ? $initials : 'NP',
-                'disability_types' => $p->disability_types ?: '—',
-            ];
-        })->values()->toArray();
+            $this->dispatch(
+                'mapProfilesLoaded',
+                profiles: $this->profiles,
+                barangay: $normalizedBarangay,
+                selectedPurok: $this->selectedPurok,
+                purokCounts: $this->purokCounts
+            );
+        }
 
-        $this->showResults = count($this->profiles) > 0;
+        public function setPurokFilter($payload = null): void
+{
+    $purok = '';
 
-        $this->dispatch(
-            'mapProfilesLoaded',
-            profiles: $this->profiles,
-            barangay: $normalizedBarangay
-        );
+    if (is_array($payload) && isset($payload['purok'])) {
+        $purok = trim((string) $payload['purok']);
+    } elseif (is_string($payload)) {
+        $purok = trim($payload);
     }
+
+    $this->selectedPurok = $purok === 'ALL' ? '' : $purok;
+    $this->search();
+}
 
     private function loadBarangayCounts(): void
     {
@@ -263,6 +307,8 @@ class Mapping extends Component
     {
         return view('livewire.admin.mapping', [
             'barangayCounts' => $this->barangayCounts,
+            'purokCounts' => $this->purokCounts,
+            'selectedPurok' => $this->selectedPurok,
         ]);
     }
 }
