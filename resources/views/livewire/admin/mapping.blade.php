@@ -37,11 +37,11 @@
     </div>
   </div>
 
-  <div class="coords-card anim-in" style="animation-delay:.06s">
-    <div class="coords" id="coords">Click the map to get latitude & longitude.</div>
-    <div class="hint" id="hint"></div>
-    <div class="micro" id="microTip">Tip: Press Enter to search faster.</div>
-  </div>
+<div class="coords-card anim-in hidden-coords-card">
+  <div id="coords"></div>
+  <div id="hint"></div>
+  <div id="microTip"></div>
+</div>
 
   <div class="map-shell anim-in" style="animation-delay:.12s">
     <div class="map-panel">
@@ -64,7 +64,9 @@
               <div class="results-meta">
                 Barangay: <b>{{ $searchBarangay ?: '—' }}</b>
                 <span class="dot">•</span>
-                Records: <b>{{ count($profiles) }}</b>
+                Barangay Overall: <b>{{ array_sum($purokCounts ?? []) ?: count($profiles) }}</b>
+                    <span class="dot">•</span>
+                    Showing: <b>{{ count($profiles) }}</b>
                 <span wire:loading class="loading">(Loading...)</span>
               </div>
             </div>
@@ -77,9 +79,31 @@
             >×</button>
           </div>
 
-          <div class="results-sub">
-            Showing: <code>Photo, Lastname, Firstname, Age, Disability Types</code>
+        <div class="results-sub">
+          <div class="purok-filter-title">Filter by Sitio/Purok</div>
+
+          <div class="purok-filter-list">
+            <button
+              type="button"
+              class="purok-filter-btn {{ $selectedPurok === '' ? 'active' : '' }}"
+              wire:click="setPurokFilter('ALL')"
+            >
+              <span>All</span>
+              <b>{{ array_sum($purokCounts ?? []) }}</b>
+            </button>
+
+            @foreach(($purokCounts ?? []) as $purokName => $purokTotal)
+              <button
+                type="button"
+                class="purok-filter-btn {{ $selectedPurok === $purokName ? 'active' : '' }}"
+                wire:click="setPurokFilter(@js($purokName))"
+              >
+                <span>{{ $purokName }}</span>
+                <b>{{ $purokTotal }}</b>
+              </button>
+            @endforeach
           </div>
+        </div>
         </div>
 
         <div class="results-body">
@@ -103,6 +127,7 @@
                     <div class="person">
                       <div class="name">{{ $p['last_name'] }}, {{ $p['first_name'] }}</div>
                       <div class="age">Age: <b>{{ $p['age'] ?? '—' }}</b></div>
+                      <div class="age">Sitio/Purok: <b>{{ $p['sitio_purok'] ?? '—' }}</b></div>
                     </div>
                   </div>
 
@@ -160,6 +185,17 @@
       display: none !important;
     }
 
+.hidden-coords-card{
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
     .search-box {
       position: relative;
     }
@@ -194,6 +230,59 @@
 
     .sug-item:hover {
       background: #f3f4f6;
+    }
+
+    .purok-filter-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .purok-filter-list {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .purok-filter-btn {
+      border: 1px solid rgba(15,23,42,.10);
+      background: #fff;
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 8px 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 6px 14px rgba(15,23,42,.06);
+    }
+
+    .purok-filter-btn b {
+      min-width: 22px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #16a34a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .purok-filter-btn.active {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+    }
+
+    .purok-filter-btn.active b {
+      background: rgba(255,255,255,.22);
+      color: #fff;
     }
 
     .sug-pin {
@@ -727,6 +816,7 @@
 
       const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
       window.__barangayCounts = {};
+      window.__purokCounts = {};
 
       const map = L.map("map", {
         zoomControl: true,
@@ -1173,7 +1263,7 @@
                 <span class="legend-swatch" style="background:${color}"></span>
                 <div class="legend-name">${escapeHtml(purokName)}</div>
               </div>
-              <div class="legend-zone">Zone ${escapeHtml(zoneNo)}</div>
+              <div class="legend-zone">Zone ${escapeHtml(zoneNo)} • ${Number(window.__purokCounts?.[purokName] || 0)} person</div>
             </div>
           `;
         }).join("");
@@ -1480,6 +1570,7 @@
           const payload = Array.isArray(event) ? event[0] : event;
           const profiles = payload?.profiles || [];
           const barangay = normalizeBarangayName(payload?.barangay || "");
+          window.__purokCounts = payload?.purokCounts || {};
 
           if (barangay) {
             updateBarangayCount(barangay, profiles.length);

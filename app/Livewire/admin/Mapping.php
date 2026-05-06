@@ -115,13 +115,14 @@ class Mapping extends Component
                 );
 
             $countRows = (clone $baseQuery)
-                ->selectRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') as purok_name, COUNT(*) as total")
-                ->groupByRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified')")
+                ->selectRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') as purok_name")
+                ->selectRaw("COUNT(*) as total")
+                ->groupBy('purok_name')
                 ->orderBy('purok_name')
                 ->get();
 
             $this->purokCounts = $countRows
-                ->mapWithKeys(fn($r) => [(string)$r->purok_name => (int)$r->total])
+                ->mapWithKeys(fn($r) => [(string) $r->purok_name => (int) $r->total])
                 ->toArray();
 
             $rowsQuery = DB::table('local_profiles as lp')
