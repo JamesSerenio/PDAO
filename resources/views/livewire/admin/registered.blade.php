@@ -7,6 +7,7 @@ $q = trim((string) request('q', ''));
 $barangay = trim((string) request('barangay', ''));
 $disabilityType = trim((string) request('disability_type', ''));
 $ageGroup = trim((string) request('age_group', ''));
+$pwdStatus = trim((string) request('pwd_status', ''));
 
 // view open
 $openId = (int) request('open', 0);
@@ -36,6 +37,8 @@ $query = DB::table('local_profiles as lp')
     'lp.barangay',
     'lp.mobile',
     'lp.email',
+    'lp.is_bedridden',
+    'lp.is_indigent',
     'lp.created_at',
     DB::raw('GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ", ") as disabilities')
   )
@@ -53,6 +56,8 @@ $query = DB::table('local_profiles as lp')
     'lp.barangay',
     'lp.mobile',
     'lp.email',
+    'lp.is_bedridden',
+    'lp.is_indigent',
     'lp.created_at'
   );
 
@@ -351,6 +356,16 @@ $mappingBarangays = array_keys($barangayPuroks);
                     </svg>
                   </a>
                 @endif
+                
+                  <button
+                    type="button"
+                    class="reg-icon-btn status"
+                    title="PWD Status"
+                    data-pwd-id="{{ $r->id }}"
+                    onclick="togglePwdStatus(this.dataset.pwdId)"
+                  >
+                    ♿
+                  </button>
 
                 <a
                   class="reg-icon-btn pdf"
@@ -364,6 +379,8 @@ $mappingBarangays = array_keys($barangayPuroks);
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 15h6M9 11h3"/>
                   </svg>
                 </a>
+
+                
 
                 <form
                   method="POST"
@@ -384,6 +401,49 @@ $mappingBarangays = array_keys($barangayPuroks);
                 </form>
               </div>
             </td>
+
+            <tr id="pwdStatusRow{{ $r->id }}" class="reg-details-row" style="display:none;">
+              <td colspan="10">
+                <form
+                  method="POST"
+                  action="{{ route('admin.registered.status-tags', $r->id) }}"
+                  class="reg-details"
+                  style="padding:16px;"
+                >
+                  @csrf
+                  @method('PUT')
+
+                  <h3 class="reg-h3" style="margin-bottom:10px;">PWD Status</h3>
+
+                  <div class="reg-check-grid">
+                    <label class="reg-check">
+                      <input
+                        type="checkbox"
+                        name="is_bedridden"
+                        value="1"
+                        {{ !empty($r->is_bedridden) ? 'checked' : '' }}
+                      >
+                      <span>PWD Bedridden</span>
+                    </label>
+
+                    <label class="reg-check">
+                      <input
+                        type="checkbox"
+                        name="is_indigent"
+                        value="1"
+                        {{ !empty($r->is_indigent) ? 'checked' : '' }}
+                      >
+                      <span>PWD Indigent</span>
+                    </label>
+                  </div>
+
+                  <div style="margin-top:14px; display:flex; gap:8px;">
+                    <button class="reg-btn mini" type="submit">Save</button>
+                    <button class="reg-btn mini ghost" type="button" data-pwd-id="{{ $r->id }}" onclick="togglePwdStatus(this.dataset.pwdId)">Cancel</button>
+                  </div>
+                </form>
+              </td>
+            </tr>
 
             @if($isOpen && $open)
               @php
@@ -977,6 +1037,15 @@ function previewPhoto(e){
   if(!img) return;
   img.style.display = 'block';
   img.src = URL.createObjectURL(file);
+}
+
+function togglePwdStatus(id){
+  const row = document.getElementById('pwdStatusRow' + id);
+  if (!row) return;
+
+  row.style.display = row.style.display === 'none' || row.style.display === ''
+    ? 'table-row'
+    : 'none';
 }
 
 function previewSignature(e){

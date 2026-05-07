@@ -449,4 +449,17 @@ class AdminRegisteredController extends Controller
 
         return $pdf->stream('local-profile-' . $id . '.pdf');
     }
-}
+        public function updateStatusTags(Request $request, int $id)
+        {
+            DB::table('local_profiles')
+                ->where('id', $id)
+                ->update([
+                    'is_bedridden' => $request->has('is_bedridden') ? 1 : 0,
+                    'is_indigent' => $request->has('is_indigent') ? 1 : 0,
+                    'updated_at' => now(),
+                ]);
+
+            return back()->with('success', 'PWD status updated successfully.');
+        }
+
+        }

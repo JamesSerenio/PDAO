@@ -32,6 +32,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::put('/registered/{id}', [AdminRegisteredController::class, 'update'])
         ->name('registered.update');
+        
+    Route::put('/registered/{id}/status-tags', [AdminRegisteredController::class, 'updateStatusTags'])
+    ->name('registered.status-tags');
 
     Route::delete('/registered/{id}', [AdminRegisteredController::class, 'destroy'])
         ->name('registered.destroy');
