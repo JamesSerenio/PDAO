@@ -813,6 +813,7 @@
       let polygonLayerMap = {};
       let purokGeoJsonRaw = null;
       let activeBarangayName = "";
+      let lastZoomedBarangayName = "";
 
       const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
       window.__barangayCounts = {};
@@ -1232,7 +1233,7 @@
         layer.bringToFront();
       }
 
-      function selectBarangayOnMap(name) {
+      function selectBarangayOnMap(name, shouldZoom = true) {
         const normalized = normalizeBarangayName(name);
         const layer = polygonLayerMap[normalized];
 
@@ -1241,9 +1242,16 @@
           return false;
         }
 
+        const isSameBarangay = lastZoomedBarangayName === normalized;
+
         activeBarangayName = normalized;
         activatePolygon(layer, layer.feature);
-        zoomToPolygon(layer);
+
+        if (shouldZoom && !isSameBarangay) {
+          zoomToPolygon(layer);
+          lastZoomedBarangayName = normalized;
+        }
+
         setHint(`Selected barangay: ${normalized}`);
         return true;
       }
@@ -1346,7 +1354,7 @@
           return;
         }
 
-        selectBarangayOnMap(value);
+        selectBarangayOnMap(value, true);
         renderPurokForBarangay(value);
         syncToLivewireInput(value);
         searchBtn?.click();
@@ -1583,7 +1591,7 @@
 
           if (barangay) {
             updateBarangayCount(barangay, profiles.length);
-            selectBarangayOnMap(barangay);
+            selectBarangayOnMap(barangay, false);
             renderPurokForBarangay(barangay);
             } else {
               clearPurokLayer(true);

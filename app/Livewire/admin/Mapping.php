@@ -115,16 +115,16 @@ class Mapping extends Component
                     [$normalizedBarangayLower]
                 );
 
-            $countRows = (clone $baseQuery)
-                ->selectRaw("COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') as purok_name")
-                ->selectRaw("COUNT(*) as total")
-                ->groupBy('purok_name')
-                ->orderBy('purok_name')
+            $purokRows = (clone $baseQuery)
+                ->select('lp.sitio_purok')
                 ->get();
 
-            $this->purokCounts = $countRows
-                ->mapWithKeys(fn($r) => [(string) $r->purok_name => (int) $r->total])
+            $this->purokCounts = $purokRows
+                ->groupBy(fn($r) => $this->normalizePurokName((string) ($r->sitio_purok ?? '')))
+                ->map(fn($group) => $group->count())
                 ->toArray();
+
+            ksort($this->purokCounts, SORT_NATURAL | SORT_FLAG_CASE);
 
             $rowsQuery = DB::table('local_profiles as lp')
                 ->leftJoin('local_profile_disability_types as lpdt', 'lpdt.local_profile_id', '=', 'lp.id')
@@ -144,12 +144,7 @@ class Mapping extends Component
                     [$normalizedBarangayLower]
                 );
 
-            if ($this->selectedPurok !== '') {
-                $rowsQuery->whereRaw(
-                    "COALESCE(NULLIF(TRIM(lp.sitio_purok), ''), 'Unspecified') = ?",
-                    [$this->selectedPurok]
-                );
-            }
+        // Purok filtering is handled after query using normalizePurokName()
 
             $rows = $rowsQuery
                 ->groupBy(
@@ -174,7 +169,13 @@ class Mapping extends Component
                 )
                 ->get();
 
-            $this->profiles = $rows->map(function ($p) {
+            if ($this->selectedPurok !== '') {
+                    $rows = $rows->filter(function ($p) {
+                        return $this->normalizePurokName((string) ($p->sitio_purok ?? '')) === $this->selectedPurok;
+                    });
+                }
+
+                $this->profiles = $rows->map(function ($p) {
                 $age = null;
 
                 if (!empty($p->date_of_birth)) {
@@ -240,7 +241,7 @@ class Mapping extends Component
         $purok = trim($payload);
     }
 
-    $this->selectedPurok = $purok === 'ALL' ? '' : $purok;
+    $this->selectedPurok = $purok === 'ALL' ? '' : $this->normalizePurokName($purok);
     $this->search();
 }
 
@@ -287,6 +288,23 @@ class Mapping extends Component
         }
 
         $this->barangayCounts = $counts;
+    }
+
+        private function normalizePurokName(string $name): string
+    {
+        $name = trim($name);
+
+        if ($name === '') {
+            return 'Unspecified';
+        }
+
+        $lower = mb_strtolower($name);
+
+        if (preg_match('/^(zone|purok)\s*[-#:]?\s*(\d+)$/i', $name, $m)) {
+            return 'Purok ' . $m[2];
+        }
+
+        return ucwords($lower);
     }
 
     private function normalizeBarangayName(string $name): string
