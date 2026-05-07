@@ -89,6 +89,16 @@ if ($ageGroup !== '') {
   }
 }
 
+if ($pwdStatus !== '') {
+  if ($pwdStatus === 'bedridden') {
+    $query->where('lp.is_bedridden', 1);
+  } elseif ($pwdStatus === 'indigent') {
+    $query->where('lp.is_indigent', 1);
+  } elseif ($pwdStatus === 'both') {
+    $query->where('lp.is_bedridden', 1)
+          ->where('lp.is_indigent', 1);
+  }
+}
 $rows = $query->orderByDesc('lp.created_at')->paginate($perPage)->appends(request()->query());
 
 $barangays = DB::table('local_profiles')
@@ -227,7 +237,7 @@ $mappingBarangays = array_keys($barangayPuroks);
         <h2>Registered Persons</h2>
         <p class="reg-sub">
           Total records: <b>{{ number_format($total) }}</b>
-          @if($q !== '' || $barangay !== '' || $disabilityType !== '' || $ageGroup !== '')
+          @if($q !== '' || $barangay !== '' || $disabilityType !== '' || $ageGroup !== '' || $pwdStatus !== '')
             <span class="reg-muted">• filtered</span>
           @endif
         </p>
@@ -274,6 +284,29 @@ $mappingBarangays = array_keys($barangayPuroks);
             <option value="children" {{ $ageGroup === 'children' ? 'selected' : '' }}>Children 18 below</option>
             <option value="youth" {{ $ageGroup === 'youth' ? 'selected' : '' }}>Youth 19-30</option>
             <option value="adult" {{ $ageGroup === 'adult' ? 'selected' : '' }}>Adult 31-59</option>
+        </select>
+      </div>
+
+      <div class="reg-field">
+        <label>PWD Status</label>
+
+        <select name="pwd_status" id="pwdStatusFilter">
+          <option value="">All Status</option>
+
+          <option value="bedridden"
+            {{ $pwdStatus === 'bedridden' ? 'selected' : '' }}>
+            PWD Bedridden
+          </option>
+
+          <option value="indigent"
+            {{ $pwdStatus === 'indigent' ? 'selected' : '' }}>
+            PWD Indigent
+          </option>
+
+          <option value="both"
+            {{ $pwdStatus === 'both' ? 'selected' : '' }}>
+            Bedridden & Indigent
+          </option>
         </select>
       </div>
 
@@ -1134,6 +1167,7 @@ const searchForm = document.getElementById('searchForm');
 const barangayFilter = document.getElementById('barangayFilter');
 const disabilityTypeFilter = document.getElementById('disabilityTypeFilter');
 const ageGroupFilter = document.getElementById('ageGroupFilter');
+const pwdStatusFilter = document.getElementById('pwdStatusFilter');
 
 if (barangayFilter) {
   barangayFilter.addEventListener('change', function () {
@@ -1148,6 +1182,11 @@ if (disabilityTypeFilter) {
 }
 if (ageGroupFilter) {
   ageGroupFilter.addEventListener('change', function () {
+    searchForm.submit();
+  });
+}
+if (pwdStatusFilter) {
+  pwdStatusFilter.addEventListener('change', function () {
     searchForm.submit();
   });
 }
