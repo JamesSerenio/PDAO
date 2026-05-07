@@ -47,11 +47,10 @@
     <div class="map-panel">
       <div wire:ignore id="map"></div>
 
-      <div id="purokLegend" class="purok-legend is-hidden">
-        <div class="legend-title">Zone / Purok / Sitio</div>
-        <div class="legend-sub" id="legendBarangay">Select a barangay first</div>
-        <div class="legend-list" id="legendList"></div>
-      </div>
+    <div id="purokLegend" class="purok-legend is-hidden" style="display:none !important;">
+      <div class="legend-sub" id="legendBarangay"></div>
+      <div class="legend-list" id="legendList"></div>
+    </div>
 
       <aside id="resultsDrawer"
              class="results-drawer {{ $showResults ? '' : 'is-hidden' }}"
@@ -185,16 +184,16 @@
       display: none !important;
     }
 
-.hidden-coords-card{
-  display:none !important;
-  height:0 !important;
-  min-height:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-}
+    .hidden-coords-card{
+      display:none !important;
+      height:0 !important;
+      min-height:0 !important;
+      margin:0 !important;
+      padding:0 !important;
+      overflow:hidden !important;
+      opacity:0 !important;
+      pointer-events:none !important;
+    }
 
     .search-box {
       position: relative;
@@ -614,6 +613,7 @@
     }
 
     .purok-legend {
+      display: none !important;
       position: absolute;
       left: 16px;
       bottom: 16px;
@@ -1169,12 +1169,15 @@
         profileMarkersLayer.clearLayers();
       }
 
-      function clearPurokLayer() {
-        purokLayerGroup.clearLayers();
+    function clearPurokLayer(forceHideLegend = false) {
+      purokLayerGroup.clearLayers();
+
+      if (forceHideLegend) {
         legendBarangayEl.textContent = "Select a barangay first";
         legendListEl.innerHTML = "";
         legendEl.classList.add("is-hidden");
       }
+    }
 
       function renderBarangayProfileMarkers(barangayName, profiles) {
         clearProfileMarkers();
@@ -1268,11 +1271,11 @@
           `;
         }).join("");
 
-        legendEl.classList.remove("is-hidden");
+        // legend hidden
       }
 
       function renderPurokForBarangay(barangayName) {
-        clearPurokLayer();
+        clearPurokLayer(false); 
 
         if (!purokGeoJsonRaw || !barangayName) return;
 
@@ -1572,13 +1575,19 @@
           const barangay = normalizeBarangayName(payload?.barangay || "");
           window.__purokCounts = payload?.purokCounts || {};
 
+          if (payload?.closeAll) {
+            clearPurokLayer(true);
+            clearProfileMarkers();
+            return;
+          }
+
           if (barangay) {
             updateBarangayCount(barangay, profiles.length);
             selectBarangayOnMap(barangay);
             renderPurokForBarangay(barangay);
-          } else {
-            clearPurokLayer();
-          }
+            } else {
+              clearPurokLayer(true);
+            }
 
           renderBarangayProfileMarkers(barangay, profiles);
         });

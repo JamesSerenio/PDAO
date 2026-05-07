@@ -56,11 +56,12 @@ class Mapping extends Component
         $this->selectedPurok = '';
         $this->purokCounts = [];
 
-        $this->dispatch(
-            'mapProfilesLoaded',
-            profiles: [],
-            barangay: ''
-        );
+            $this->dispatch(
+                'mapProfilesLoaded',
+                profiles: [],
+                barangay: '',
+                closeAll: true
+            );
     }
 
     public function setBarangay($payload = null): void
