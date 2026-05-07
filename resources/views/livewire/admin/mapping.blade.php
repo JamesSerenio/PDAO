@@ -814,6 +814,7 @@
       let purokGeoJsonRaw = null;
       let activeBarangayName = "";
       let lastZoomedBarangayName = "";
+      let purokLayerMap = {};
 
       const initialBarangayCounts = JSON.parse(document.getElementById('barangayCountsJson').textContent);
       window.__barangayCounts = {};
@@ -895,6 +896,48 @@
 
         return mapping[raw] || raw;
       }
+
+      function normalizePurokName(name) {
+      const raw = String(name || "").trim();
+
+      if (!raw) return "Unspecified";
+
+      const match = raw.match(/^(zone|purok)\s*[-#:]?\s*(\d+)$/i);
+      if (match) return `Purok ${match[2]}`;
+
+      return raw
+        .toLowerCase()
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function getPurokCount(name) {
+      const normalized = normalizePurokName(name);
+      const lower = normalized.toLowerCase();
+
+      if (window.__purokCounts?.[normalized] !== undefined) {
+        return Number(window.__purokCounts[normalized] || 0);
+      }
+
+      for (const [key, value] of Object.entries(window.__purokCounts || {})) {
+        if (normalizePurokName(key).toLowerCase() === lower) {
+          return Number(value || 0);
+        }
+      }
+
+      // fallback: kunin count sa right modal button
+      const buttons = document.querySelectorAll(".purok-filter-btn");
+
+      for (const btn of buttons) {
+        const label = btn.querySelector("span")?.textContent?.trim() || "";
+        const countText = btn.querySelector("b")?.textContent?.trim() || "0";
+
+        if (normalizePurokName(label).toLowerCase() === lower) {
+          return Number(countText || 0);
+        }
+      }
+
+      return 0;
+    }
 
       function hydrateCounts(rawCounts) {
         const normalized = {};
@@ -1157,11 +1200,12 @@
         const purokName = feature?.properties?.["Zone Name"] || "Unknown";
         const barangayName = normalizeBarangayName(feature?.properties?.BarangayNa || "");
         const zoneNo = feature?.properties?.["Zone "] ?? feature?.properties?.Zone ?? "—";
+        const count = getPurokCount(purokName);
 
         return `
           <div class="purok-tooltip-card">
             <div class="purok-tooltip-name">${escapeHtml(purokName)}</div>
-            <div class="purok-tooltip-sub">${escapeHtml(barangayName)} • Zone ${escapeHtml(zoneNo)}</div>
+            <div class="purok-tooltip-sub">${escapeHtml(barangayName)} • Zone ${escapeHtml(zoneNo)} • ${count} person${count !== 1 ? "s" : ""}</div>
           </div>
         `;
       }
@@ -1274,7 +1318,7 @@
                 <span class="legend-swatch" style="background:${color}"></span>
                 <div class="legend-name">${escapeHtml(purokName)}</div>
               </div>
-              <div class="legend-zone">Zone ${escapeHtml(zoneNo)} • ${Number(window.__purokCounts?.[purokName] || 0)} person</div>
+              <div class="legend-zone">Zone ${escapeHtml(zoneNo)} • ${getPurokCount(purokName)} person</div>
             </div>
           `;
         }).join("");
@@ -1282,8 +1326,9 @@
         // legend hidden
       }
 
-      function renderPurokForBarangay(barangayName) {
-        clearPurokLayer(false); 
+    function renderPurokForBarangay(barangayName) {
+      clearPurokLayer(false);
+      purokLayerMap = {};
 
         if (!purokGeoJsonRaw || !barangayName) return;
 
@@ -1307,6 +1352,8 @@
         }, {
           style: purokPolygonStyle,
           onEachFeature: function(feature, layer) {
+            const purokKey = normalizePurokName(feature?.properties?.["Zone Name"] || "Unspecified");
+              purokLayerMap[purokKey] = layer;
             layer.on("mouseover", function(e) {
               layer.setStyle(purokHoverStyle(feature));
               layer.bringToFront();
@@ -1329,6 +1376,15 @@
                 e.originalEvent.target.blur();
               }
 
+              const purokName = normalizePurokName(feature?.properties?.["Zone Name"] || "Unspecified");
+              const barangayName = normalizeBarangayName(feature?.properties?.BarangayNa || activeBarangayName || "");
+
+              syncToLivewireInput(barangayName);
+
+              if (window.Livewire) {
+                Livewire.dispatch("setPurokFilter", { purok: purokName });
+              }
+
               try {
                 map.fitBounds(layer.getBounds(), {
                   padding: [30, 30],
@@ -1341,6 +1397,34 @@
 
         purokLayerGroup.addLayer(layer);
         renderLegend(normalizedBarangay, features);
+      }
+
+      function zoomToPurok(purokName) {
+        const key = normalizePurokName(purokName);
+        const layer = purokLayerMap[key];
+
+        if (!layer) return false;
+
+        try {
+          map.fitBounds(layer.getBounds(), {
+            padding: [30, 30],
+            maxZoom: 19
+          });
+
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      function zoomToActiveBarangay() {
+        if (!activeBarangayName) return false;
+
+        const layer = polygonLayerMap[activeBarangayName];
+        if (!layer) return false;
+
+        zoomToPolygon(layer, 16);
+        return true;
       }
 
       async function doSearchFlow(v) {
@@ -1571,10 +1655,25 @@
         attachGeoJson();
       });
 
-      document.addEventListener("livewire:navigated", function() {
-        setTimeout(() => map.invalidateSize(true), 60);
-        setTimeout(() => map.invalidateSize(true), 250);
-      });
+    document.addEventListener("click", function(e) {
+      const btn = e.target.closest(".purok-filter-btn");
+      if (!btn) return;
+
+      const label = btn.querySelector("span")?.textContent?.trim() || "";
+
+      setTimeout(() => {
+        if (label === "All") {
+          zoomToActiveBarangay();
+        } else {
+          zoomToPurok(label);
+        }
+      }, 120);
+    });
+
+    document.addEventListener("livewire:navigated", function() {
+      setTimeout(() => map.invalidateSize(true), 60);
+      setTimeout(() => map.invalidateSize(true), 250);
+    });
 
       document.addEventListener("livewire:init", () => {
         Livewire.on("mapProfilesLoaded", (event) => {
@@ -1582,6 +1681,12 @@
           const profiles = payload?.profiles || [];
           const barangay = normalizeBarangayName(payload?.barangay || "");
           window.__purokCounts = payload?.purokCounts || {};
+
+          setTimeout(() => {
+            if (barangay) {
+              renderPurokForBarangay(barangay);
+            }
+          }, 80);
 
           if (payload?.closeAll) {
             clearPurokLayer(true);

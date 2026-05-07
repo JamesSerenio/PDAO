@@ -231,17 +231,18 @@ class Mapping extends Component
             );
         }
 
-        public function setPurokFilter($payload = null): void
+public function setPurokFilter($purok = null): void
 {
-    $purok = '';
-
-    if (is_array($payload) && isset($payload['purok'])) {
-        $purok = trim((string) $payload['purok']);
-    } elseif (is_string($payload)) {
-        $purok = trim($payload);
+    if (is_array($purok)) {
+        $purok = $purok['purok'] ?? '';
     }
 
-    $this->selectedPurok = $purok === 'ALL' ? '' : $this->normalizePurokName($purok);
+    $purok = trim((string) $purok);
+
+    $this->selectedPurok = ($purok === '' || $purok === 'ALL')
+        ? ''
+        : $this->normalizePurokName($purok);
+
     $this->search();
 }
 
