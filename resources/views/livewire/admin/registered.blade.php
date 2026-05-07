@@ -6,6 +6,7 @@ use Carbon\Carbon;
 $q = trim((string) request('q', ''));
 $barangay = trim((string) request('barangay', ''));
 $disabilityType = trim((string) request('disability_type', ''));
+$ageGroup = trim((string) request('age_group', ''));
 
 // view open
 $openId = (int) request('open', 0);
@@ -71,6 +72,16 @@ if ($barangay !== '') {
 
 if ($disabilityType !== '') {
   $query->where('dt.id', (int) $disabilityType);
+}
+
+if ($ageGroup !== '') {
+  if ($ageGroup === 'children') {
+    $query->whereRaw('TIMESTAMPDIFF(YEAR, lp.date_of_birth, CURDATE()) <= 18');
+  } elseif ($ageGroup === 'youth') {
+    $query->whereRaw('TIMESTAMPDIFF(YEAR, lp.date_of_birth, CURDATE()) BETWEEN 19 AND 30');
+  } elseif ($ageGroup === 'adult') {
+    $query->whereRaw('TIMESTAMPDIFF(YEAR, lp.date_of_birth, CURDATE()) BETWEEN 31 AND 59');
+  }
 }
 
 $rows = $query->orderByDesc('lp.created_at')->paginate($perPage)->appends(request()->query());
@@ -211,7 +222,7 @@ $mappingBarangays = array_keys($barangayPuroks);
         <h2>Registered Persons</h2>
         <p class="reg-sub">
           Total records: <b>{{ number_format($total) }}</b>
-          @if($q !== '' || $barangay !== '' || $disabilityType !== '')
+          @if($q !== '' || $barangay !== '' || $disabilityType !== '' || $ageGroup !== '')
             <span class="reg-muted">• filtered</span>
           @endif
         </p>
@@ -250,6 +261,16 @@ $mappingBarangays = array_keys($barangayPuroks);
             @endforeach
           </select>
         </div>
+
+        <div class="reg-field">
+        <label>Age Group</label>
+        <select name="age_group" id="ageGroupFilter">
+          <option value="">All ages</option>
+            <option value="children" {{ $ageGroup === 'children' ? 'selected' : '' }}>Children 18 below</option>
+            <option value="youth" {{ $ageGroup === 'youth' ? 'selected' : '' }}>Youth 19-30</option>
+            <option value="adult" {{ $ageGroup === 'adult' ? 'selected' : '' }}>Adult 31-59</option>
+        </select>
+      </div>
 
         <div class="reg-actions">
           <button class="reg-btn" type="submit">Search</button>
@@ -1043,6 +1064,7 @@ function removeRow(btn){
 const searchForm = document.getElementById('searchForm');
 const barangayFilter = document.getElementById('barangayFilter');
 const disabilityTypeFilter = document.getElementById('disabilityTypeFilter');
+const ageGroupFilter = document.getElementById('ageGroupFilter');
 
 if (barangayFilter) {
   barangayFilter.addEventListener('change', function () {
@@ -1052,6 +1074,11 @@ if (barangayFilter) {
 
 if (disabilityTypeFilter) {
   disabilityTypeFilter.addEventListener('change', function () {
+    searchForm.submit();
+  });
+}
+if (ageGroupFilter) {
+  ageGroupFilter.addEventListener('change', function () {
     searchForm.submit();
   });
 }
