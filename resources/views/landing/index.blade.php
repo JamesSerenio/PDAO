@@ -18,10 +18,6 @@
                 assistance programs, and real-time tracking of support systems.
             </p>
 
-            <div class="hero-buttons">
-                <a href="#services" class="btn-primary">Explore Services</a>
-                <a href="#inquiry" class="btn-secondary">Contact Us</a>
-            </div>
         </div>
 
         <div class="hero-card">
