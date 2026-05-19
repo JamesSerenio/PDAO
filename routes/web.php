@@ -7,9 +7,7 @@ use App\Http\Controllers\AdminRegisteredController;
 // Livewire Admin Pages
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 
-Route::get('/', function () {
-    return redirect()->route('login.form');
-});
+Route::view('/', 'landing.index')->name('home');
 
 // ======================
 // AUTH
