@@ -349,6 +349,7 @@ body.dash-admin{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
   gap:14px;
+  align-items:start;
 }
 
 .dash-card,
@@ -1353,6 +1354,62 @@ body.dash-admin{
   .sidebar-collapsed .dash-brand{
     justify-content:flex-start;
   }
+}
+
+/* ===========================
+   STATUS SUMMARY CARD
+   =========================== */
+.status-summary-card{
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.status-one-line{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.status-box{
+  background:linear-gradient(180deg,#ffffff,#f8fafc);
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:18px;
+  padding:14px 10px;
+  text-align:center;
+  box-shadow:0 6px 18px rgba(15,23,42,.04);
+  transition:all .25s ease;
+}
+
+.status-box:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(15,23,42,.08);
+}
+
+.status-box span{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#64748b;
+}
+
+.status-box strong{
+  display:block;
+  margin-top:4px;
+  font-size:28px;
+  font-weight:900;
+  color:#0f172a;
+  line-height:1;
+}
+
+.status-box small{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+  font-weight:700;
+  color:#94a3b8;
 }
 
 @media (max-width:768px){
