@@ -466,8 +466,6 @@
 
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <div class="dash-panels dash-panels-two">
 
   <div class="panel panel-glass">
@@ -510,11 +508,15 @@
 
 </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   @script
   <script>
     let dashboardChartInstance = null;
     let dashboardGenderPieInstance = null;
     let dashboardDisabilityPieInstance = null;
+    let dashboardAgeGroupPieInstance = null;
+    let dashboardPwdStatusPieInstance = null;
 
 
     const centerTextPlugin = {
@@ -762,12 +764,14 @@
   const ctx = canvas.getContext('2d');
   const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
 
-  if (dashboardAgeGroupPieInstance) dashboardAgeGroupPieInstance.destroy();
+  if (dashboardAgeGroupPieInstance) {
+    dashboardAgeGroupPieInstance.destroy();
+  }
 
   dashboardAgeGroupPieInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels,
+      labels: labels,
       datasets: [{
         data: values,
         backgroundColor: ['#3b82f6', '#6366f1', '#22c55e'],
@@ -781,6 +785,7 @@
       responsive: true,
       maintainAspectRatio: false,
       cutout: '64%',
+      animation: { duration: 650 },
       plugins: {
         centerTextPlugin: {
           title: 'Age Group',
@@ -788,7 +793,16 @@
           titleColor: '#64748b',
           valueColor: '#0f172a'
         },
-        legend: { position: 'bottom' }
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            usePointStyle: false,
+            boxWidth: 36,
+            color: '#475569',
+            font: { size: 12, weight: '700' }
+          }
+        }
       }
     }
   });
@@ -803,12 +817,14 @@ function renderPwdStatusPieChart() {
   const ctx = canvas.getContext('2d');
   const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
 
-  if (dashboardPwdStatusPieInstance) dashboardPwdStatusPieInstance.destroy();
+  if (dashboardPwdStatusPieInstance) {
+    dashboardPwdStatusPieInstance.destroy();
+  }
 
   dashboardPwdStatusPieInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels,
+      labels: labels,
       datasets: [{
         data: values,
         backgroundColor: ['#f59e0b', '#eab308', '#ef4444'],
@@ -822,6 +838,7 @@ function renderPwdStatusPieChart() {
       responsive: true,
       maintainAspectRatio: false,
       cutout: '64%',
+      animation: { duration: 650 },
       plugins: {
         centerTextPlugin: {
           title: 'PWD Status',
@@ -829,7 +846,16 @@ function renderPwdStatusPieChart() {
           titleColor: '#64748b',
           valueColor: '#0f172a'
         },
-        legend: { position: 'bottom' }
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 16,
+            usePointStyle: false,
+            boxWidth: 36,
+            color: '#475569',
+            font: { size: 12, weight: '700' }
+          }
+        }
       }
     }
   });
