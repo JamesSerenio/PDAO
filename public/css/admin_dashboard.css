@@ -1360,7 +1360,8 @@ body.dash-admin{
    STATUS SUMMARY CARD
    =========================== */
 .status-summary-card{
-  padding:16px;
+  min-height:215px;
+  padding:18px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1369,36 +1370,36 @@ body.dash-admin{
 .status-one-line{
   width:100%;
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
 .status-box{
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-  border:1px solid rgba(15,23,42,.08);
-  border-radius:18px;
-  padding:14px 10px;
+  min-height:72px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:12px;
+  padding:8px 6px;
   text-align:center;
-  box-shadow:0 6px 18px rgba(15,23,42,.04);
-  transition:all .25s ease;
+  box-shadow:none;
 }
 
 .status-box:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 22px rgba(15,23,42,.08);
+  transform:none;
+  box-shadow:none;
 }
 
 .status-box span{
   display:block;
-  font-size:12px;
-  font-weight:800;
+  font-size:11px;
+  font-weight:700;
   color:#64748b;
 }
 
 .status-box strong{
   display:block;
-  margin-top:4px;
-  font-size:28px;
+  margin-top:2px;
+  font-size:22px;
   font-weight:900;
   color:#0f172a;
   line-height:1;
@@ -1407,7 +1408,7 @@ body.dash-admin{
 .status-box small{
   display:block;
   margin-top:4px;
-  font-size:11px;
+  font-size:10px;
   font-weight:700;
   color:#94a3b8;
 }

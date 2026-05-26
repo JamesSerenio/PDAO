@@ -243,6 +243,39 @@ class Dashboard extends Component
         $sexPie = $this->getSexPieData();
         $disabilityPie = $this->getDisabilityTypesPieData();
 
+        $childrenCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->whereNotNull('date_of_birth')
+                ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 0 AND 17')
+        )->count();
+
+        $youthCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->whereNotNull('date_of_birth')
+                ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 18 AND 30')
+        )->count();
+
+        $adultCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->whereNotNull('date_of_birth')
+                ->whereRaw('TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) BETWEEN 31 AND 59')
+        )->count();
+
+        $bedriddenCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->where('is_bedridden', 1)
+        )->count();
+
+        $indigentCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->where('is_indigent', 1)
+        )->count();
+
+        $deceasedCount = $this->applyRangeFilter(
+            DB::table('local_profiles')
+                ->where('is_deceased', 1)
+        )->count();
+
         return view('livewire.admin.dashboard', [
             'registeredCount' => $registeredCount,
             'pwdCount' => $pwdCount,
@@ -255,6 +288,13 @@ class Dashboard extends Component
             'sexPieData' => $sexPie['data'],
             'disabilityPieLabels' => $disabilityPie['labels'],
             'disabilityPieData' => $disabilityPie['data'],
+
+            'childrenCount' => $childrenCount,
+            'youthCount' => $youthCount,
+            'adultCount' => $adultCount,
+            'bedriddenCount' => $bedriddenCount,
+            'indigentCount' => $indigentCount,
+            'deceasedCount' => $deceasedCount,
         ]);
     }
 }
