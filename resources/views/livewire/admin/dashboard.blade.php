@@ -403,13 +403,22 @@
         <div wire:loading.remove wire:target="range">
           <div class="pie-info-layout">
             <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
-              <canvas
-                id="dashboardDisabilityPieChart"
-                data-labels='@json($disabilityPieLabels)'
-                data-values='@json($disabilityPieData)'
-                data-center-title="Disability"
-                data-center-value="{{ $totalDisability }}">
-              </canvas>
+            <canvas
+              id="dashboardDisabilityPieChart"
+              data-labels='@json($disabilityPieLabels)'
+              data-values='@json($disabilityPieData)'
+              data-center-title="Disability"
+              data-center-value="{{ $totalDisability }}">
+            </canvas>
+
+            <div class="custom-chart-legend">
+              @foreach($disabilityLabelsSafe as $index => $label)
+                <div class="custom-legend-item">
+                  <span class="custom-legend-color"></span>
+                  <span class="custom-legend-text">{{ $label }}</span>
+                </div>
+              @endforeach
+            </div>
             </div>
 
             <div class="pie-side-description">
@@ -994,11 +1003,13 @@ function renderPwdStatusPieChart() {
               valueColor: '#0f172a'
             },
             legend: {
-              position: 'bottom',
+              display: false,
+              align: 'start',
               labels: {
                 padding: 16,
                 usePointStyle: false,
-                boxWidth: 36,
+                boxWidth: 18,
+                boxHeight: 8,
                 color: '#475569',
                 font: {
                   size: 12,
