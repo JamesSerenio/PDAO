@@ -456,6 +456,8 @@ class AdminRegisteredController extends Controller
                 ->update([
                     'is_bedridden' => $request->has('is_bedridden') ? 1 : 0,
                     'is_indigent' => $request->has('is_indigent') ? 1 : 0,
+                    'is_deceased' => $request->has('is_deceased') ? 1 : 0,
+                    'updated_at' => now(),
                     'updated_at' => now(),
                 ]);
 

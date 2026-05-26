@@ -469,6 +469,16 @@ $mappingBarangays = array_keys($barangayPuroks);
                     </label>
 
                     <label class="reg-check">
+                    <input
+                      type="checkbox"
+                      name="is_deceased"
+                      value="1"
+                      {{ !empty($r->is_deceased) ? 'checked' : '' }}
+                    >
+                    <span>Deceased</span>
+                  </label>
+
+                    <label class="reg-check">
                       <input
                         type="checkbox"
                         name="is_indigent"
