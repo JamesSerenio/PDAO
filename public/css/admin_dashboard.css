@@ -1534,10 +1534,19 @@ body.dash-admin{
 .pie-chart-box-small{
   height:320px;
   min-height:320px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:6px;
+}
+
+.pie-chart-box-small canvas{
+  max-width:100% !important;
 }
 
 #dashboardGenderPieChart,
-#dashboardDisabilityPieChart{
+#dashboardDisabilityPieChart,
+#dashboardAgeGroupPieChart,
+#dashboardPwdStatusPieChart{
   filter:drop-shadow(0 10px 20px rgba(15,23,42,.06));
 }
 /* ===========================

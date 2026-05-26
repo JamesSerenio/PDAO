@@ -475,14 +475,55 @@
     </div>
 
     <div class="panel-body">
-      <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
-        <canvas
-          id="dashboardAgeGroupPieChart"
-          data-labels='@json($ageGroupPieLabels)'
-          data-values='@json($ageGroupPieData)'
-          data-center-title="Age Group"
-          data-center-value="{{ array_sum($ageGroupPieData) }}">
-        </canvas>
+      <div class="pie-info-layout">
+        <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
+          <canvas
+            id="dashboardAgeGroupPieChart"
+            data-labels='@json($ageGroupPieLabels)'
+            data-values='@json($ageGroupPieData)'
+            data-center-title="Age Group"
+            data-center-value="{{ array_sum($ageGroupPieData) }}">
+          </canvas>
+        </div>
+
+        <div class="pie-side-description">
+          <div class="pie-desc-card">
+            <div class="pie-desc-title">Age Group Overview</div>
+            <p class="pie-desc-text">
+              This chart shows the age group distribution for
+              <strong>{{ strtolower($rangeLabel) }}</strong>. It includes Children,
+              Youth, and Adult registered records.
+            </p>
+
+            <div class="pie-stat-list">
+              @foreach($ageGroupPieLabels as $index => $label)
+                @php
+                  $count = (int) ($ageGroupPieData[$index] ?? 0);
+                  $total = array_sum($ageGroupPieData);
+                  $percent = $total > 0 ? round(($count / $total) * 100, 1) : 0;
+                @endphp
+
+                <div class="pie-stat-item">
+                  <span class="pie-dot pie-dot-disability"></span>
+                  <div class="pie-stat-content">
+                    <strong>{{ $label }}</strong>
+                    <small>{{ $count }} out of {{ $total }} total record(s)</small>
+                    <div class="pie-percent-row">
+                      <span>{{ $percent }}%</span>
+                      <div class="pie-progress">
+                        <div class="pie-progress-bar pie-progress-disability" data-width="{{ $percent }}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+
+            <div class="pie-note">
+              This helps quickly identify which age group has the highest number of registered profiles.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -494,21 +535,62 @@
     </div>
 
     <div class="panel-body">
-      <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
-        <canvas
-          id="dashboardPwdStatusPieChart"
-          data-labels='@json($pwdStatusPieLabels)'
-          data-values='@json($pwdStatusPieData)'
-          data-center-title="PWD Status"
-          data-center-value="{{ array_sum($pwdStatusPieData) }}">
-        </canvas>
+      <div class="pie-info-layout">
+        <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
+          <canvas
+            id="dashboardPwdStatusPieChart"
+            data-labels='@json($pwdStatusPieLabels)'
+            data-values='@json($pwdStatusPieData)'
+            data-center-title="PWD Status"
+            data-center-value="{{ array_sum($pwdStatusPieData) }}">
+          </canvas>
+        </div>
+
+        <div class="pie-side-description">
+          <div class="pie-desc-card">
+            <div class="pie-desc-title">PWD Status Overview</div>
+            <p class="pie-desc-text">
+              This chart summarizes PWD status records for
+              <strong>{{ strtolower($rangeLabel) }}</strong>, including Bedridden,
+              Indigent, and Deceased profiles.
+            </p>
+
+            <div class="pie-stat-list">
+              @foreach($pwdStatusPieLabels as $index => $label)
+                @php
+                  $count = (int) ($pwdStatusPieData[$index] ?? 0);
+                  $total = array_sum($pwdStatusPieData);
+                  $percent = $total > 0 ? round(($count / $total) * 100, 1) : 0;
+                @endphp
+
+                <div class="pie-stat-item">
+                  <span class="pie-dot pie-dot-disability"></span>
+                  <div class="pie-stat-content">
+                    <strong>{{ $label }}</strong>
+                    <small>{{ $count }} out of {{ $total }} total record(s)</small>
+                    <div class="pie-percent-row">
+                      <span>{{ $percent }}%</span>
+                      <div class="pie-progress">
+                        <div class="pie-progress-bar pie-progress-disability" data-width="{{ $percent }}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+
+            <div class="pie-note">
+              This helps monitor priority assistance categories and current PWD status tagging.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   @script
   <script>
