@@ -314,4 +314,203 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+
+    /* =========================================
+       NEWS SEARCH
+    ========================================= */
+
+    const newsSearchInput = document.querySelector('.sidebar-search input');
+    const newsItems = document.querySelectorAll('.news-item');
+
+    if (newsSearchInput) {
+
+        newsSearchInput.addEventListener('keyup', function () {
+
+            const value = this.value.toLowerCase();
+
+            newsItems.forEach(item => {
+
+                const text = item.innerText.toLowerCase();
+
+                if (text.includes(value)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+
+            });
+
+        });
+
+    }
+
+
+    /* =========================================
+       CATEGORY FILTER
+    ========================================= */
+
+    const categoryButtons = document.querySelectorAll('.category-list a[data-category]');
+
+    categoryButtons.forEach(button => {
+
+        button.addEventListener('click', function (e) {
+
+            e.preventDefault();
+
+            const category = this.dataset.category;
+
+            newsItems.forEach(item => {
+
+                if (item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+
+            });
+
+        });
+
+    });
+
+    /* =========================================
+       ALL UPDATES TOGGLE
+    ========================================= */
+
+    const allUpdatesToggle = document.getElementById('allUpdatesToggle');
+    const extraUpdateCards = document.querySelectorAll('.all-update-card.extra-update-card');
+
+    if (allUpdatesToggle && extraUpdateCards.length) {
+        allUpdatesToggle.addEventListener('click', function () {
+            const expanded = this.dataset.expanded === 'true';
+
+            extraUpdateCards.forEach(card => {
+                card.classList.toggle('hidden-update-card', expanded);
+            });
+
+            this.dataset.expanded = expanded ? 'false' : 'true';
+            this.textContent = expanded ? 'Show More Updates' : 'Show Less Updates';
+        });
+    }
+});
+
+/* =========================================
+   NEWS SEARCH FILTER
+========================================= */
+
+const newsSearch = document.getElementById("newsSearch");
+
+if (newsSearch) {
+
+    newsSearch.addEventListener("keyup", function () {
+
+        let value = this.value.toLowerCase();
+
+        let newsItems = document.querySelectorAll(".news-item");
+
+        newsItems.forEach(item => {
+
+            let text = item.innerText.toLowerCase();
+
+            if (text.includes(value)) {
+                item.style.display = "block";
+            } else {
+                item.style.display = "none";
+            }
+
+        });
+
+    });
+
+}
+
+
+
+/* =========================================
+   NEWS CATEGORY FILTER
+========================================= */
+
+const categoryButtons = document.querySelectorAll(".category-list a[data-category]");
+
+categoryButtons.forEach(button => {
+
+    button.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        const category = this.dataset.category;
+        if (!category) {
+            return;
+        }
+
+        const newsItems = document.querySelectorAll(".news-item");
+
+        newsItems.forEach(item => {
+
+            if (item.dataset.category === category) {
+
+                item.style.display = "block";
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+});
+
+/* =========================================
+   UPDATES CATEGORY FILTER
+========================================= */
+
+const updateButtons =
+document.querySelectorAll(".updates-category-btn");
+
+const updateCards =
+document.querySelectorAll(".news-card");
+
+updateButtons.forEach(button => {
+
+    button.addEventListener("click", function(e){
+
+        e.preventDefault();
+
+        const filter =
+        this.dataset.filter;
+
+        updateButtons.forEach(btn=>{
+            btn.classList.remove("active-update-category");
+        });
+
+        this.classList.add("active-update-category");
+
+        updateCards.forEach(card=>{
+
+            if(card.dataset.type === filter){
+
+                card.style.display = "flex";
+
+                card.classList.add("show-update-card");
+
+            }else{
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+        window.scrollTo({
+            top: document.querySelector(".news-year")
+                    .offsetTop - 120,
+            behavior: "smooth"
+        });
+
+    });
+
 });
