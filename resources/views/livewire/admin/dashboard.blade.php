@@ -427,7 +427,10 @@ $disabilityColors = [
             <div class="custom-chart-legend">
               @foreach($disabilityLabelsSafe as $index => $label)
                 <div class="custom-legend-item">
-                  <span class="custom-legend-color"></span>
+                  <span 
+                  class="custom-legend-color"
+                  data-color="{{ $disabilityColors[$index % count($disabilityColors)] }}">
+                </span>
                   <span class="custom-legend-text">{{ $label }}</span>
                 </div>
               @endforeach
@@ -455,21 +458,21 @@ $disabilityColors = [
 
                     @if($count > 0)
                       <div class="pie-stat-item">
-                        <span 
-                          class="pie-dot"
-                          style="background-color: {{ $disabilityColors[$index % count($disabilityColors)] }};">
-                        </span>
+                      <span 
+                        class="pie-dot"
+                        data-color="{{ $disabilityColors[$index % count($disabilityColors)] }}">
+                      </span>
                         <div class="pie-stat-content">
                           <strong>{{ $label }}</strong>
                           <small>{{ $count }} out of {{ $totalDisability }} total record(s)</small>
                           <div class="pie-percent-row">
                             <span>{{ $percent }}%</span>
                             <div class="pie-progress">
-                              <div 
-                                class="pie-progress-bar"
-                                data-width="{{ $percent }}"
-                                style="background-color: {{ $disabilityColors[$index % count($disabilityColors)] }};">
-                              </div>
+                            <div 
+                              class="pie-progress-bar"
+                              data-width="{{ $percent }}"
+                              data-color="{{ $disabilityColors[$index % count($disabilityColors)] }}">
+                            </div>
                             </div>
                           </div>
                         </div>
@@ -685,8 +688,18 @@ $disabilityColors = [
         const raw = parseFloat(el.dataset.width || '0');
         const safe = Number.isFinite(raw) ? Math.max(0, Math.min(raw, 100)) : 0;
         el.style.width = safe + '%';
+
+        if (el.dataset.color) {
+          el.style.backgroundColor = el.dataset.color;
+        }
       });
     }
+
+function applyDotColors() {
+  document.querySelectorAll('.pie-dot[data-color], .custom-legend-color[data-color]').forEach((el) => {
+    el.style.backgroundColor = el.dataset.color;
+  });
+}
 
     function applyCardProgressWidths() {
       document.querySelectorAll('.card-mini-progress-bar[data-width]').forEach((el) => {
@@ -1065,6 +1078,7 @@ function renderPwdStatusPieChart() {
       renderAgeGroupPieChart();
       renderPwdStatusPieChart();
       applyProgressWidths();
+      applyDotColors();
       applyCardProgressWidths();
     }
 
