@@ -6,7 +6,7 @@
     <div class="office-container">
 
         <div class="office-header">
-            <span class="office-badge">e-PDAO Connect</span>
+            <span class="office-badge">e-PDAO Manolo Fortich</span>
             <h1>Office Location</h1>
             <p>
                 Persons with Disability Affairs Office (PDAO) – Manolo Fortich
