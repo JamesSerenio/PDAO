@@ -469,6 +469,16 @@ $mappingBarangays = array_keys($barangayPuroks);
                     </label>
 
                     <label class="reg-check">
+                      <input
+                        type="checkbox"
+                        name="is_indigent"
+                        value="1"
+                        {{ !empty($r->is_indigent) ? 'checked' : '' }}
+                      >
+                      <span>PWD Indigent</span>
+                    </label>
+
+                    <label class="reg-check">
                     <input
                       type="checkbox"
                       name="is_deceased"
@@ -478,15 +488,6 @@ $mappingBarangays = array_keys($barangayPuroks);
                     <span>Deceased</span>
                   </label>
 
-                    <label class="reg-check">
-                      <input
-                        type="checkbox"
-                        name="is_indigent"
-                        value="1"
-                        {{ !empty($r->is_indigent) ? 'checked' : '' }}
-                      >
-                      <span>PWD Indigent</span>
-                    </label>
                   </div>
 
                   <div style="margin-top:14px; display:flex; gap:8px;">

@@ -167,70 +167,48 @@
       </div>
     </div>
 
-    {{-- WEATHER WIDGET + CLOCK --}}
-    <div class="scoreboard-card weather-scoreboard-card">
-      <span class="scoreboard-live-dot"></span>
-
-      <div class="weather-widget-card">
-        <div class="weather-widget-left">
-          <div class="weather-main-temp" id="liveTemperatureText">--°</div>
-
-          <div class="weather-range-row">
-            <span class="weather-range-high" id="liveTempHigh">↑ --°</span>
-            <span class="weather-range-low" id="liveTempLow">↓ --°</span>
-          </div>
-
-          <div class="weather-main-desc" id="liveWeatherText">Loading...</div>
-          <div class="weather-main-location" id="liveLocationText">Detecting location...</div>
-        </div>
-
-        <div class="weather-widget-right">
-          <div class="weather-visual">
-            <div class="weather-sun"></div>
-            <div class="weather-cloud cloud-back"></div>
-            <div class="weather-cloud cloud-front"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="weather-mini-days">
-        <div class="weather-day-card">
-          <div class="weather-day-name" id="dayLabel1">DAY</div>
-          <div class="weather-day-icon" id="dayIcon1">⛅</div>
-          <div class="weather-day-temp" id="dayTemp1">--°</div>
-        </div>
-
-        <div class="weather-day-card">
-          <div class="weather-day-name" id="dayLabel2">DAY</div>
-          <div class="weather-day-icon" id="dayIcon2">⛅</div>
-          <div class="weather-day-temp" id="dayTemp2">--°</div>
-        </div>
-
-        <div class="weather-day-card">
-          <div class="weather-day-name" id="dayLabel3">DAY</div>
-          <div class="weather-day-icon" id="dayIcon3">⛅</div>
-          <div class="weather-day-temp" id="dayTemp3">--°</div>
-        </div>
-
-        <div class="weather-day-card">
-          <div class="weather-day-name" id="dayLabel4">DAY</div>
-          <div class="weather-day-icon" id="dayIcon4">⛅</div>
-          <div class="weather-day-temp" id="dayTemp4">--°</div>
-        </div>
-      </div>
-
-      <div class="scoreboard-main weather-clock-box">
-        <div class="scoreboard-title">System Clock</div>
-
-        <div class="scoreboard-clock-row">
-          <div class="scoreboard-time" id="liveTimeText">{{ now()->format('h:i:s') }}</div>
-          <div class="scoreboard-ampm" id="liveAmPm">{{ now()->format('A') }}</div>
-        </div>
-
-        <div class="scoreboard-date" id="liveDateText">{{ now()->format('l, F d, Y') }}</div>
-        <div class="scoreboard-sub" id="liveWeatherMetaText">Real-time dashboard display</div>
-      </div>
+    {{-- AGE GROUPS + PWD STATUS --}}
+<div class="dash-card status-summary-card">
+  <div class="status-row">
+    <div class="status-box">
+      <span>Children</span>
+      <strong>{{ $childrenCount ?? 0 }}</strong>
+      <small>0-17 yrs</small>
     </div>
+
+    <div class="status-box">
+      <span>Youth</span>
+      <strong>{{ $youthCount ?? 0 }}</strong>
+      <small>18-30 yrs</small>
+    </div>
+
+    <div class="status-box">
+      <span>Adult</span>
+      <strong>{{ $adultCount ?? 0 }}</strong>
+      <small>31-59 yrs</small>
+    </div>
+  </div>
+
+  <div class="status-row">
+    <div class="status-box">
+      <span>Bedridden</span>
+      <strong>{{ $bedriddenCount ?? 0 }}</strong>
+      <small>PWD Bedridden</small>
+    </div>
+
+    <div class="status-box">
+      <span>Indigent</span>
+      <strong>{{ $indigentCount ?? 0 }}</strong>
+      <small>PWD Indigent</small>
+    </div>
+
+    <div class="status-box">
+      <span>Deceased</span>
+      <strong>{{ $deceasedCount ?? 0 }}</strong>
+      <small>Deceased</small>
+    </div>
+  </div>
+</div>
 
   </div>
 
@@ -497,8 +475,6 @@
     let dashboardChartInstance = null;
     let dashboardGenderPieInstance = null;
     let dashboardDisabilityPieInstance = null;
-    let dashboardClockStarted = false;
-    let weatherLoaded = false;
 
     const centerTextPlugin = {
       id: 'centerTextPlugin',
