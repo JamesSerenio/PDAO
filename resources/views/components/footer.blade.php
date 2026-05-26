@@ -75,7 +75,7 @@
         <div class="footer-bottom-modern">
             <p>
                 Copyright © 2026
-                <span>e-PDAO Connect</span>,
+                <span>e-PDAO Manolo Fortich</span>,
                 All Rights Reserved.
             </p>
 

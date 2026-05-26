@@ -25,7 +25,7 @@
 
         <div class="search-modal-box" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
             <div class="search-modal-header">
-                <h3 id="searchModalTitle">Search e-PDAO Connect</h3>
+                <h3 id="searchModalTitle">Search e-PDAO Manolo Fortich</h3>
                 <button class="search-close-btn" id="closeSearch" type="button" aria-label="Close search">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -71,6 +71,6 @@
     {{-- FOOTER --}}
     @include('components.footer')
 
-   <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
 </body>
 </html>
