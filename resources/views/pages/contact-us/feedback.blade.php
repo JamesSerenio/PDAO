@@ -6,7 +6,7 @@
     <div class="contact-pro-container">
 
         <div class="contact-pro-header">
-            <span class="contact-pro-badge">e-PDAO Connect</span>
+            <span class="contact-pro-badge">e-PDAO Manolo Fortich</span>
             <h1>Feedback</h1>
             <p>
                 Share your experience, suggestions, and comments to help improve the quality
