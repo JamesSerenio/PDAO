@@ -6,7 +6,7 @@
     <div class="contact-pro-container">
 
         <div class="contact-pro-header">
-            <span class="contact-pro-badge">e-PDAO Connect</span>
+            <span class="contact-pro-badge">e-PDAO Manolo Fortich</span>
             <h1>Inquiry</h1>
             <p>
                 Reach out to the Persons with Disability Affairs Office (PDAO) for questions,
