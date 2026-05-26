@@ -1,7 +1,20 @@
 @php
     $sexData = is_array($sexPieData ?? null) ? $sexPieData : [];
     $disabilityData = is_array($disabilityPieData ?? null) ? $disabilityPieData : [];
-    $disabilityLabelsSafe = is_array($disabilityPieLabels ?? null) ? $disabilityPieLabels : [];
+$disabilityLabelsSafe = is_array($disabilityPieLabels ?? null) ? $disabilityPieLabels : [];
+
+$disabilityColors = [
+    '#16a34a',
+    '#22c55e',
+    '#84cc16',
+    '#eab308',
+    '#f59e0b',
+    '#f97316',
+    '#ef4444',
+    '#8b5cf6',
+    '#06b6d4',
+    '#3b82f6',
+];
 
     $pwdShare = $registeredCount > 0 ? round(($pwdCount / $registeredCount) * 100) : 0;
     $seniorShare = $registeredCount > 0 ? round(($seniorCount / $registeredCount) * 100) : 0;
@@ -442,14 +455,21 @@
 
                     @if($count > 0)
                       <div class="pie-stat-item">
-                        <span class="pie-dot pie-dot-disability"></span>
+                        <span 
+                          class="pie-dot"
+                          style="background-color: {{ $disabilityColors[$index % count($disabilityColors)] }};">
+                        </span>
                         <div class="pie-stat-content">
                           <strong>{{ $label }}</strong>
                           <small>{{ $count }} out of {{ $totalDisability }} total record(s)</small>
                           <div class="pie-percent-row">
                             <span>{{ $percent }}%</span>
                             <div class="pie-progress">
-                              <div class="pie-progress-bar pie-progress-disability" data-width="{{ $percent }}"></div>
+                              <div 
+                                class="pie-progress-bar"
+                                data-width="{{ $percent }}"
+                                style="background-color: {{ $disabilityColors[$index % count($disabilityColors)] }};">
+                              </div>
                             </div>
                           </div>
                         </div>
