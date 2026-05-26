@@ -39,6 +39,7 @@ $query = DB::table('local_profiles as lp')
     'lp.email',
     'lp.is_bedridden',
     'lp.is_indigent',
+    'lp.is_deceased',
     'lp.created_at',
     DB::raw('GROUP_CONCAT(DISTINCT dt.name ORDER BY dt.name SEPARATOR ", ") as disabilities')
   )
@@ -58,6 +59,7 @@ $query = DB::table('local_profiles as lp')
     'lp.email',
     'lp.is_bedridden',
     'lp.is_indigent',
+    'lp.is_deceased',
     'lp.created_at'
   );
 
@@ -92,10 +94,12 @@ if ($ageGroup !== '') {
 if ($pwdStatus !== '') {
   if ($pwdStatus === 'bedridden') {
     $query->where('lp.is_bedridden', 1);
-  } elseif ($pwdStatus === 'indigent') {
-    $query->where('lp.is_indigent', 1);
-  } elseif ($pwdStatus === 'both') {
-    $query->where('lp.is_bedridden', 1)
+    } elseif ($pwdStatus === 'indigent') {
+      $query->where('lp.is_indigent', 1);
+    } elseif ($pwdStatus === 'deceased') {
+      $query->where('lp.is_deceased', 1);
+    } elseif ($pwdStatus === 'both') {
+        $query->where('lp.is_bedridden', 1)
           ->where('lp.is_indigent', 1);
   }
 }
@@ -303,10 +307,15 @@ $mappingBarangays = array_keys($barangayPuroks);
             PWD Indigent
           </option>
 
-          <option value="both"
-            {{ $pwdStatus === 'both' ? 'selected' : '' }}>
-            Bedridden & Indigent
-          </option>
+      <option value="deceased"
+        {{ $pwdStatus === 'deceased' ? 'selected' : '' }}>
+        Deceased
+      </option>
+
+      <option value="both"
+        {{ $pwdStatus === 'both' ? 'selected' : '' }}>
+        Bedridden & Indigent
+      </option>
         </select>
       </div>
 
