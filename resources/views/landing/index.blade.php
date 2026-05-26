@@ -18,6 +18,7 @@
                 assistance programs, and real-time tracking of support systems.
             </p>
 
+
         </div>
 
         <div class="hero-card">
@@ -32,16 +33,49 @@
    GET TO KNOW US
 ========================= -->
 <section class="section" id="history">
+
     <div class="container">
+
         <div class="section-header">
+
             <span>Get To Know Us</span>
-            <h2>History</h2>
-            <p>Background and development of the PDAO system.</p>
+
+            <h2>Historical Background</h2>
+
+            <p>
+                Timeline and development of the e-PDAO Manolo Fortich system.
+            </p>
+
         </div>
+
         <div class="info-card">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+            <p>
+                The Persons with Disability Affairs Office (PDAO) of
+                Manolo Fortich was established to strengthen programs,
+                services, and protection for Persons with Disabilities
+                within the municipality. Through continuous coordination
+                with barangays, organizations, and partner agencies,
+                the office expanded its efforts in registration,
+                identification, assistance distribution, and community
+                support programs.
+            </p>
+
+            <p>
+                In 2022, the municipality began the consolidation and
+                digitization of PWD records to improve accessibility,
+                monitoring, and service delivery. This initiative led
+                to the development of the <strong>e-PDAO Manolo Fortich</strong>
+                system — a modern digital platform designed to support
+                online verification, registration monitoring, reporting
+                concerns, and centralized management of PWD information
+                across all barangays.
+            </p>
+
         </div>
+
     </div>
+
 </section>
 
 <section class="section" id="vision">
