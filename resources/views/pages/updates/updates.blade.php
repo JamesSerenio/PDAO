@@ -6,14 +6,16 @@
     <div class="news-overlay"></div>
 
     <div class="news-hero-content">
-        <span class="hero-badge">e-PDAO Connect</span>
+        <span class="hero-badge">e-PDAO Manolo Fortich</span>
 
         <h1>Updates & Activities</h1>
 
         <div class="breadcrumb">
             <a href="/">Home</a>
             <span>›</span>
-            <a href="#">Updates</a>
+            <a href="{{ route('updates') }}">Updates</a>
+            <span>›</span>
+            <a href="{{ route('news') }}">News</a>
         </div>
 
         <p>
@@ -409,21 +411,35 @@
                 <h3>Categories</h3>
 
                 <ul class="category-list">
-                    <li>
-                        <a href="#">Programs</a>
-                        <span>(12)</span>
-                    </li>
 
-                    <li>
-                        <a href="#">Announcements</a>
-                        <span>(8)</span>
-                    </li>
+         <li>
+        <a href="{{ route('updates.programs') }}">
+            <i class="fa-solid fa-angle-right"></i>
+            Programs
+        </a>
 
-                    <li>
-                        <a href="#">Activities</a>
-                        <span>(15)</span>
-                    </li>
-                </ul>
+        <span>(12)</span>
+        </li>
+
+        <li>
+        <a href="{{ route('updates.announcements') }}">
+            <i class="fa-solid fa-angle-right"></i>
+            Announcements
+        </a>
+
+        <span>(8)</span>
+        </li>
+
+        <li>
+        <a href="{{ route('updates.activities') }}">
+            <i class="fa-solid fa-angle-right"></i>
+            Activities
+        </a>
+
+        <span>(15)</span>
+        </li>
+
+        </ul>
             </div>
 
             <!-- RECENT -->
@@ -431,7 +447,7 @@
                 <h3>Recent Posts</h3>
 
                 <div class="recent-post">
-                    <img src="{{ asset('images/news/WOMENS.jpg') }}" alt="">
+                    <img src="{{ asset('images/update/WOMENS.jpg') }}" alt="">
 
                     <div>
                         <h4>PWD Community Program</h4>
@@ -440,7 +456,7 @@
                 </div>
 
                 <div class="recent-post">
-                    <img src="{{ asset('images/news/AIDS.jpg') }}" alt="">
+                    <img src="{{ asset('images/update/AIDS.jpg') }}" alt="">
 
                     <div>
                         <h4>Medical Assistance Activity</h4>
@@ -450,6 +466,84 @@
             </div>
 
         </aside>
+    </div>
+</section>
+
+<section class="all-updates-section hidden-all-updates" id="all-updates">
+    <div class="all-updates-header">
+        <div class="all-updates-inner">
+            <span>All Updates</span>
+            <h2>All Update Topics</h2>
+            <p>
+                Browse every update topic in one place. Each card includes an image so you can
+                later replace it with the actual photo for that update.
+            </p>
+            <button id="allUpdatesToggle" class="all-updates-toggle-btn" type="button">
+                Show More Updates
+            </button>
+        </div>
+    </div>
+
+    <div class="all-updates-grid">
+        <div class="all-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/SEEDS.jpg') }}" alt="Seed Capital Monitoring">
+            </div>
+            <div class="all-update-info">
+                <h3>Seed Capital – PWD Monitoring</h3>
+                <span>Livelihood Program</span>
+            </div>
+        </div>
+
+        <div class="all-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/WOMENS.jpg') }}" alt="Women's Disability Day Celebration">
+            </div>
+            <div class="all-update-info">
+                <h3>Women's Disability Day Celebration</h3>
+                <span>Women Empowerment</span>
+            </div>
+        </div>
+
+        <div class="all-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/PARAGAMES.jpg') }}" alt="National Disability Rights Week">
+            </div>
+            <div class="all-update-info">
+                <h3>National Disability Rights Week – Paragames</h3>
+                <span>Sports Event</span>
+            </div>
+        </div>
+
+        <div class="all-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/SPED.jpg') }}" alt="Distribution of School Supplies">
+            </div>
+            <div class="all-update-info">
+                <h3>Distribution of School Supplies to SPED Students</h3>
+                <span>Educational Assistance</span>
+            </div>
+        </div>
+
+        <div class="all-update-card hidden-update-card extra-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/ANTI.jpg') }}" alt="Anti-Bullying Symposium">
+            </div>
+            <div class="all-update-info">
+                <h3>Anti-Bullying Symposium</h3>
+                <span>Awareness Campaign</span>
+            </div>
+        </div>
+
+        <div class="all-update-card hidden-update-card extra-update-card">
+            <div class="all-update-image">
+                <img src="{{ asset('images/update/AID.jpg') }}" alt="Hearing Aid Assistance Program">
+            </div>
+            <div class="all-update-info">
+                <h3>Audibly Hearing Aid Assistance Program</h3>
+                <span>Medical Assistance</span>
+            </div>
+        </div>
     </div>
 </section>
 
