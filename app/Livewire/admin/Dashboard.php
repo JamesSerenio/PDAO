@@ -271,10 +271,24 @@ class Dashboard extends Component
                 ->where('is_indigent', 1)
         )->count();
 
-        $deceasedCount = $this->applyRangeFilter(
-            DB::table('local_profiles')
-                ->where('is_deceased', 1)
-        )->count();
+        $deceasedQuery = DB::table('local_profiles')
+            ->where('is_deceased', 1);
+
+        if ($this->range === 'day') {
+            $deceasedQuery->whereDate('updated_at', Carbon::today());
+        } elseif ($this->range === 'week') {
+            $deceasedQuery->whereBetween('updated_at', [
+                Carbon::now()->startOfWeek(),
+                Carbon::now()->endOfWeek(),
+            ]);
+        } elseif ($this->range === 'month') {
+            $deceasedQuery->whereYear('updated_at', Carbon::now()->year)
+                ->whereMonth('updated_at', Carbon::now()->month);
+        } elseif ($this->range === 'year') {
+            $deceasedQuery->whereYear('updated_at', Carbon::now()->year);
+        }
+
+        $deceasedCount = $deceasedQuery->count();
 
         return view('livewire.admin.dashboard', [
             'registeredCount' => $registeredCount,
@@ -295,6 +309,12 @@ class Dashboard extends Component
             'bedriddenCount' => $bedriddenCount,
             'indigentCount' => $indigentCount,
             'deceasedCount' => $deceasedCount,
+
+            'ageGroupPieLabels' => ['Children', 'Youth', 'Adult'],
+            'ageGroupPieData' => [$childrenCount, $youthCount, $adultCount],
+
+            'pwdStatusPieLabels' => ['Bedridden', 'Indigent', 'Deceased'],
+            'pwdStatusPieData' => [$bedriddenCount, $indigentCount, $deceasedCount],
         ]);
     }
 }

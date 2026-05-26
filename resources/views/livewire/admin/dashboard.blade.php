@@ -468,6 +468,48 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <div class="dash-panels dash-panels-two">
+
+  <div class="panel panel-glass">
+    <div class="panel-head">
+      <h2>Age Group Summary</h2>
+      <span class="panel-pill">{{ $rangeLabel }}</span>
+    </div>
+
+    <div class="panel-body">
+      <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
+        <canvas
+          id="dashboardAgeGroupPieChart"
+          data-labels='@json($ageGroupPieLabels)'
+          data-values='@json($ageGroupPieData)'
+          data-center-title="Age Group"
+          data-center-value="{{ array_sum($ageGroupPieData) }}">
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-glass">
+    <div class="panel-head">
+      <h2>PWD Status Summary</h2>
+      <span class="panel-pill">{{ $rangeLabel }}</span>
+    </div>
+
+    <div class="panel-body">
+      <div class="pie-chart-box pie-chart-box-small pie-chart-box-center">
+        <canvas
+          id="dashboardPwdStatusPieChart"
+          data-labels='@json($pwdStatusPieLabels)'
+          data-values='@json($pwdStatusPieData)'
+          data-center-title="PWD Status"
+          data-center-value="{{ array_sum($pwdStatusPieData) }}">
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
   @script
   <script>
     let dashboardChartInstance = null;
@@ -711,6 +753,88 @@
       });
     }
 
+    function renderAgeGroupPieChart() {
+  const canvas = document.getElementById('dashboardAgeGroupPieChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const labels = JSON.parse(canvas.dataset.labels || '[]');
+  const values = JSON.parse(canvas.dataset.values || '[]');
+  const ctx = canvas.getContext('2d');
+  const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
+
+  if (dashboardAgeGroupPieInstance) dashboardAgeGroupPieInstance.destroy();
+
+  dashboardAgeGroupPieInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: ['#3b82f6', '#6366f1', '#22c55e'],
+        borderColor: '#ffffff',
+        borderWidth: 3,
+        hoverOffset: 10
+      }]
+    },
+    plugins: [centerTextPlugin],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '64%',
+      plugins: {
+        centerTextPlugin: {
+          title: 'Age Group',
+          value: total,
+          titleColor: '#64748b',
+          valueColor: '#0f172a'
+        },
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+}
+
+function renderPwdStatusPieChart() {
+  const canvas = document.getElementById('dashboardPwdStatusPieChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const labels = JSON.parse(canvas.dataset.labels || '[]');
+  const values = JSON.parse(canvas.dataset.values || '[]');
+  const ctx = canvas.getContext('2d');
+  const total = values.reduce((sum, n) => sum + Number(n || 0), 0);
+
+  if (dashboardPwdStatusPieInstance) dashboardPwdStatusPieInstance.destroy();
+
+  dashboardPwdStatusPieInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: ['#f59e0b', '#eab308', '#ef4444'],
+        borderColor: '#ffffff',
+        borderWidth: 3,
+        hoverOffset: 10
+      }]
+    },
+    plugins: [centerTextPlugin],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '64%',
+      plugins: {
+        centerTextPlugin: {
+          title: 'PWD Status',
+          value: total,
+          titleColor: '#64748b',
+          valueColor: '#0f172a'
+        },
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+}
+
     function renderDisabilityPieChart() {
       const canvas = document.getElementById('dashboardDisabilityPieChart');
       if (!canvas || typeof Chart === 'undefined') return;
@@ -799,6 +923,8 @@
       renderDashboardLineChart();
       renderGenderPieChart();
       renderDisabilityPieChart();
+      renderAgeGroupPieChart();
+      renderPwdStatusPieChart();
       applyProgressWidths();
       applyCardProgressWidths();
     }
