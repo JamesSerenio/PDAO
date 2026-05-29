@@ -117,6 +117,30 @@ Route::get('/updates', function () {
     return view('pages.updates.updates');
 })->name('updates');
 
+// ======================
+// ADMIN
+// ======================
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::view('/dashboard', 'pages.admin.dashboard')->name('dashboard');
+
+    Route::view('/mapping', 'pages.admin.mapping')->name('mapping');
+    Route::view('/local-profile-form', 'pages.admin.local_profile_form')->name('local_profile_form');
+    Route::view('/registered', 'pages.admin.registered')->name('registered');
+    Route::view('/senior-citizens', 'pages.admin.senior_citizens')->name('senior_citizens');
+
+    Route::put('/registered/{id}', [AdminRegisteredController::class, 'update'])
+        ->name('registered.update');
+
+    Route::put('/registered/{id}/status-tags', [AdminRegisteredController::class, 'updateStatusTags'])
+        ->name('registered.status-tags');
+
+    Route::delete('/registered/{id}', [AdminRegisteredController::class, 'destroy'])
+        ->name('registered.destroy');
+
+    Route::get('/registered/{id}/pdf', [AdminRegisteredController::class, 'pdf'])
+        ->name('registered.pdf');
+});
+
 /* ========================================
    UPDATE CATEGORIES
 ======================================== */
