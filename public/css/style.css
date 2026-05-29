@@ -6376,3 +6376,2202 @@ main {
     }
 
 }
+
+/* =========================================
+   MISSION SECTION (UPDATED TO VISION THEME)
+========================================= */
+
+.mission-section{
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background:
+        /* Binago ang kulay para katugma ng Vision Section */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('../images/update/SPED.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.mission-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang gold radial glow sa top right mula sa Vision style */
+    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+.mission-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Ginawang grid para parehong-pareho ang layout sa Vision */
+    gap: 60px;
+    align-items: center;
+}
+
+/* LEFT SIDE */
+
+.mission-content{
+    text-align: left;
+}
+
+.mission-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Vision Yellow */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.mission-content h2{
+    font-size: 52px; /* Itinugma sa 52px ng Vision */
+    line-height: 1.15;
+    color: #fff;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.mission-content p{
+    color: rgba(255,255,255,.85);
+    line-height: 1.9;
+    font-size: 17px; /* Itinugma sa 17px ng Vision */
+    margin-bottom: 35px;
+}
+
+/* BUTTONS */
+
+.mission-buttons{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.mission-btn{
+    padding: 14px 26px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+/* Primary Button para sa Read Full Mission */
+.primary-btn{
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+}
+
+.primary-btn:hover{
+    transform: translateY(-3px);
+}
+
+/* TINANGGAL DITO ANG .secondary-btn PARA PAREHONG WALA NG EXPLORE SERVICES BUTTON */
+
+/* RIGHT SIDE (CARDS DESIGN) */
+
+.mission-cards{
+    display: grid;
+    gap: 20px;
+}
+
+.mission-card{
+    background: rgba(255,255,255,.08); /* Exact Vision card opacity */
+    border: 1px solid rgba(255,255,255,.12);
+    padding: 28px; /* Exact Vision padding */
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+}
+
+.mission-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border */
+}
+
+.mission-icon{
+    width: 65px;  /* Exact Vision size */
+    height: 65px;
+    border-radius: 18px;
+    background: #FFD447;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.mission-icon i{
+    font-size: 26px;
+    color: #002B5B;
+}
+
+.mission-card h3{
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.mission-card p{
+    color: rgba(255,255,255,.80);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+/* =========================================
+   MOBILE & TABLET RESPONSIVE
+========================================= */
+
+@media(max-width: 991px){
+    .mission-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag maliit ang screen */
+    }
+    .mission-content h2{
+        font-size: 38px;
+    }
+}
+
+@media(max-width: 768px){
+    .mission-section{
+        padding: 80px 14px; /* Binawasan ang malalaking padding para sa phone screen */
+    }
+    .mission-content h2{
+        font-size: 30px; /* Eksaktong size ng vision kapag nasa cellphone */
+    }
+    .mission-content p{
+        font-size: 15px;
+    }
+    .mission-card{
+        padding: 22px 18px;
+    }
+    .mission-buttons{
+        flex-direction: column;
+    }
+    .mission-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+
+/* =========================================
+   VISION SECTION (FINAL CLEAN VERSION)
+========================================= */
+
+.vision-section{
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background:
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/bg-pattern.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.vision-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at top right,
+        rgba(255,193,7,.15),
+        transparent 40%);
+}
+
+.vision-wrapper{
+    position: relative;
+    z-index: 2;
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+}
+
+.vision-badge{
+    display:inline-block;
+    padding:10px 18px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:50px;
+    color:#FFD447;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.vision-content h2{
+    font-size:52px;
+    line-height:1.15;
+    color:#fff;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.vision-content p{
+    color:rgba(255,255,255,.85);
+    line-height:1.9;
+    font-size:17px;
+    margin-bottom:35px;
+}
+
+.vision-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.vision-btn{
+    padding:14px 26px;
+    border-radius:12px;
+    font-weight:700;
+    text-decoration:none;
+    transition:.3s ease;
+}
+
+/* Primary Button para sa Read Full Vision */
+.primary-btn{
+    background:#FFD447;
+    color:#002B5B;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* CARDS DESIGN */
+.vision-cards{
+    display:grid;
+    gap:20px;
+}
+
+.vision-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    padding:28px;
+    border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.3s ease;
+}
+
+.vision-card:hover{
+    transform:translateY(-5px);
+    border-color:#FFD447;
+}
+
+.vision-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:#FFD447;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.vision-icon i{
+    font-size:26px;
+    color:#002B5B;
+}
+
+.vision-card h3{
+    color:#fff;
+    margin-bottom:12px;
+    font-size:22px;
+}
+
+.vision-card p{
+    color:rgba(255,255,255,.80);
+    line-height:1.7;
+}
+
+/* MOBILE & TABLET RESPONSIVE */
+@media(max-width:991px){
+    .vision-wrapper{
+        grid-template-columns:1fr; /* Ginawang isang column kapag maliit ang screen */
+    }
+    .vision-content h2{
+        font-size:38px;
+    }
+}
+
+@media(max-width:768px){
+    .vision-section{
+        padding: 80px 14px; /* Binawasan ang padding para hindi kainin ang screen ng phone */
+    }
+    .vision-content h2{
+        font-size: 30px; /* Mas maliit na heading para swak sa screen */
+    }
+    .vision-content p{
+        font-size: 15px;
+    }
+    .vision-card{
+        padding: 22px 18px; /* Mas maliit na card padding para sa phone */
+    }
+}
+
+/* =========================================
+   HISTORY SECTION
+========================================= */
+
+.history-section{
+    position:relative;
+    padding:110px 20px;
+    overflow:hidden;
+    background:
+        linear-gradient(rgba(0,43,91,.92), rgba(0,43,91,.92)),
+        url('/images/bg-pattern.png');
+    background-size:cover;
+    background-position:center;
+}
+
+.history-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at top left,
+        rgba(255,212,71,.18),
+        transparent 40%);
+}
+
+.history-wrapper{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+}
+
+.history-badge{
+    display:inline-block;
+    padding:10px 18px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:50px;
+    color:#FFD447;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.history-content h2{
+    font-size:52px;
+    line-height:1.15;
+    color:#fff;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.history-content p{
+    color:rgba(255,255,255,.85);
+    line-height:1.9;
+    font-size:17px;
+    margin-bottom:20px;
+}
+
+.history-buttons{
+    margin-top:35px;
+}
+
+.history-btn{
+    display:inline-block;
+    padding:14px 26px;
+    border-radius:12px;
+    background:#FFD447;
+    color:#002B5B;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s ease;
+}
+
+.history-btn:hover{
+    transform:translateY(-3px);
+}
+
+.history-cards{
+    display:grid;
+    gap:20px;
+}
+
+.history-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    padding:28px;
+    border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.3s ease;
+}
+
+.history-card:hover{
+    transform:translateY(-5px);
+    border-color:#FFD447;
+}
+
+.history-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:#FFD447;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.history-icon i{
+    font-size:26px;
+    color:#002B5B;
+}
+
+.history-card h3{
+    color:#fff;
+    margin-bottom:12px;
+    font-size:22px;
+}
+
+.history-card p{
+    color:rgba(255,255,255,.80);
+    line-height:1.7;
+}
+
+/* MOBILE */
+@media(max-width:991px){
+
+    .history-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .history-content h2{
+        font-size:38px;
+    }
+
+}
+
+/* =========================================
+   GOALS SECTION
+========================================= */
+
+.goals-section{
+    position:relative;
+    padding:110px 20px;
+    overflow:hidden;
+    background:
+        linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)),
+        url('/images/bg-pattern.png');
+    background-size:cover;
+    background-position:center;
+}
+
+.goals-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at top right,
+        rgba(255,212,71,.18),
+        transparent 40%);
+}
+
+.goals-wrapper{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+}
+
+.goals-badge{
+    display:inline-block;
+    padding:10px 18px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:50px;
+    color:#FFD447;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.goals-content h2{
+    font-size:52px;
+    line-height:1.15;
+    color:#fff;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.goals-content p{
+    color:rgba(255,255,255,.85);
+    line-height:1.9;
+    font-size:17px;
+    margin-bottom:20px;
+}
+
+.goals-buttons{
+    margin-top:35px;
+}
+
+.goals-btn{
+    display:inline-block;
+    padding:14px 26px;
+    border-radius:12px;
+    background:#FFD447;
+    color:#002B5B;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s ease;
+}
+
+.goals-btn:hover{
+    transform:translateY(-3px);
+}
+
+.goals-cards{
+    display:grid;
+    gap:20px;
+}
+
+.goals-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    padding:28px;
+    border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.3s ease;
+}
+
+.goals-card:hover{
+    transform:translateY(-5px);
+    border-color:#FFD447;
+}
+
+.goals-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:#FFD447;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.goals-icon i{
+    font-size:26px;
+    color:#002B5B;
+}
+
+.goals-card h3{
+    color:#fff;
+    margin-bottom:12px;
+    font-size:22px;
+}
+
+.goals-card p{
+    color:rgba(255,255,255,.80);
+    line-height:1.7;
+}
+
+/* MOBILE */
+@media(max-width:991px){
+
+    .goals-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .goals-content h2{
+        font-size:38px;
+    }
+
+}
+
+/* =========================================
+   ORGANIZATIONAL STRUCTURE
+========================================= */
+
+.org-section{
+    position:relative;
+    padding:110px 20px;
+    overflow:hidden;
+    background:
+        linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)),
+        url('/images/bg-pattern.png');
+    background-size:cover;
+    background-position:center;
+}
+
+.org-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at top left,
+        rgba(255,212,71,.18),
+        transparent 40%);
+}
+
+.org-wrapper{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+}
+
+.org-badge{
+    display:inline-block;
+    padding:10px 18px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:50px;
+    color:#FFD447;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.org-content h2{
+    font-size:52px;
+    line-height:1.15;
+    color:#fff;
+    font-weight:800;
+    margin-bottom:25px;
+}
+
+.org-content p{
+    color:rgba(255,255,255,.85);
+    line-height:1.9;
+    font-size:17px;
+    margin-bottom:20px;
+}
+
+.org-buttons{
+    margin-top:35px;
+}
+
+.org-btn{
+    display:inline-block;
+    padding:14px 26px;
+    border-radius:12px;
+    background:#FFD447;
+    color:#002B5B;
+    text-decoration:none;
+    font-weight:700;
+    transition:.3s ease;
+}
+
+.org-btn:hover{
+    transform:translateY(-3px);
+}
+
+.org-cards{
+    display:grid;
+    gap:20px;
+}
+
+.org-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    padding:28px;
+    border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.3s ease;
+}
+
+.org-card:hover{
+    transform:translateY(-5px);
+    border-color:#FFD447;
+}
+
+.org-icon{
+    width:65px;
+    height:65px;
+    border-radius:18px;
+    background:#FFD447;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.org-icon i{
+    font-size:26px;
+    color:#002B5B;
+}
+
+.org-card h3{
+    color:#fff;
+    margin-bottom:12px;
+    font-size:22px;
+}
+
+.org-card p{
+    color:rgba(255,255,255,.80);
+    line-height:1.7;
+}
+
+/* MOBILE */
+@media(max-width:991px){
+
+    .org-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .org-content h2{
+        font-size:38px;
+    }
+
+}
+
+/* =========================================
+   REPORT CONCERN SECTION (VISION THEME)
+========================================= */
+
+.report-section{
+    position: relative;
+    padding: 110px 20px; /* Nilagyan ng 20px padding sa gilid gaya ng Vision */
+    overflow: hidden;
+    background:
+        /* Eksaktong kulay at timpla ng Vision Section background */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/bg-pattern.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.report-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40
+        );
+    z-index: 1;
+}
+
+.report-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Itinugma sa grid ratio ng Vision */
+    gap: 60px;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.report-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.report-content h2{
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.report-content p{
+    color: rgba(255,255,255,0.85);
+    line-height: 1.9;
+    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+    margin-bottom: 35px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.report-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 12px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.report-btn:hover{
+    background: #FFD447; /* Pinapanatili ang dilaw */
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RIGHT CARDS
+========================================= */
+
+.report-cards{
+    display: grid;
+    gap: 20px; /* Itinugma sa gap spacing ng Vision cards */
+}
+
+.report-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    transition: 0.3s ease;
+}
+
+.report-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+    background: rgba(255,255,255,0.08);
+}
+
+.report-icon{
+    width: 65px;  /* Exact Vision sizing */
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: #FFD447; /* Swak sa Vision theme yellow background */
+    color: #002B5B;      /* Dark blue icon color placement */
+    font-size: 26px;
+    margin-bottom: 18px;
+}
+
+.report-card h3{
+    color: #fff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.report-card p{
+    color: rgba(255,255,255,0.80);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media (max-width: 991px){
+    .report-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
+    }
+
+    .report-content{
+        text-align: left; /* Pinapanatiling left aligned para sumunod sa bagong responsive flow ng Vision */
+    }
+
+    .report-content h2{
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 768px){
+    .report-section{
+        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+    }
+
+    .report-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .report-content p{
+        font-size: 15px;
+    }
+
+    .report-card{
+        padding: 22px 18px;
+    }
+
+    .report-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+
+/* =========================================
+   PWD REGISTRATION SECTION (VISION THEME)
+========================================= */
+
+.registration-section{
+    position: relative;
+    padding: 110px 20px; /* Nilagyan ng 20px padding para pantay sa vision */
+    overflow: hidden;
+    background:
+        /* Eksaktong dark blue gradient ng Vision Section */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/bg-pattern.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.registration-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40%
+        );
+    z-index: 1;
+}
+
+.registration-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: .9fr 1.1fr; /* Inireverse ang grid ratio para mas malawak ang content sa kanan */
+    gap: 60px;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT CARDS
+========================================= */
+
+.registration-cards{
+    display: grid;
+    gap: 20px; /* Swak sa gap spacing ng Vision cards */
+}
+
+.registration-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    transition: 0.3s ease;
+}
+
+.registration-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+    background: rgba(255,255,255,0.08);
+}
+
+.registration-icon{
+    width: 65px;  /* Exact Vision sizing */
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: #FFD447; /* Swak sa Vision theme yellow background */
+    color: #002B5B;      /* Dark blue icon color placement */
+    font-size: 26px;
+    margin-bottom: 18px;
+}
+
+.registration-card h3{
+    color: #fff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.registration-card p{
+    color: rgba(255,255,255,0.80);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+/* =========================================
+   RIGHT CONTENT
+========================================= */
+
+.registration-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.registration-content h2{
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.registration-content p{
+    color: rgba(255,255,255,0.85);
+    line-height: 1.9;
+    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+    margin-bottom: 35px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.registration-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 12px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.registration-btn:hover{
+    background: #FFD447;
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media (max-width: 991px){
+    .registration-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
+    }
+
+    /* Inalis ang pag-center para pormal at sumunod sa bagong left-aligned design ng Vision */
+    .registration-content{
+        text-align: left;
+    }
+
+    .registration-content h2{
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 768px){
+    .registration-section{
+        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+    }
+
+    .registration-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .registration-content p{
+        font-size: 15px;
+    }
+
+    .registration-card{
+        padding: 22px 18px;
+    }
+
+    .registration-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+
+/* =========================================
+   PWD DIRECTORY SECTION (VISION THEME)
+========================================= */
+
+.directory-section{
+    position: relative;
+    padding: 110px 20px; /* Itinugma sa 110px top/bottom at 20px sides ng Vision */
+    overflow: hidden;
+    background:
+        /* Eksaktong dark blue premium tint ng Vision */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/bg/pdao-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.directory-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40%
+        );
+    z-index: 1;
+}
+
+.directory-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Eksaktong grid structure ng Vision */
+    gap: 60px; /* Standardized gap para maluwag tingnan */
+    align-items: center;
+}
+
+.directory-content{
+    color: #fff;
+    text-align: left;
+}
+
+/* =========================================
+   BADGE & CONTENT TYPOGRAPHY
+========================================= */
+
+.directory-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.directory-content h2{
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    line-height: 1.15;
+    font-weight: 800;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.directory-content p{
+    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+    line-height: 1.9;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 35px;
+}
+
+/* =========================================
+   HIGHLIGHT ITEMS
+========================================= */
+
+.directory-highlight{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.highlight-item{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.08); /* Glass layout list backgrounds */
+    padding: 16px 20px;
+    border-radius: 16px;
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.highlight-item i{
+    color: #FFD447; /* Ginamit ang Vision yellow sa list check icons/bullet marks */
+    font-size: 18px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.directory-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 12px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+.directory-btn:hover{
+    background: #FFD447;
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RIGHT SIDE CARDS
+========================================= */
+
+.directory-cards{
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Itinugma sa gap spacing ng Vision cards list */
+}
+
+.directory-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    transition: 0.3s ease;
+}
+
+.directory-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+    background: rgba(255,255,255,0.08);
+}
+
+.directory-icon{
+    width: 65px;  /* Exact Vision sizing */
+    height: 65px;
+    border-radius: 18px;
+    background: #FFD447; /* Swak sa Vision theme yellow background */
+    color: #002B5B;      /* Dark blue icon color placement */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 18px;
+}
+
+.directory-card h3{
+    color: #fff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.directory-card p{
+    color: rgba(255,255,255,0.80);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media(max-width: 991px){
+    .directory-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
+    }
+
+    .directory-content h2{
+        font-size: 38px;
+    }
+}
+
+@media(max-width: 768px){
+    .directory-section{
+        padding: 80px 14px; /* Binago mula sa 600px breakpoint para pareho silang lahat ng kilos sa mobile phone nung ibang sections */
+    }
+
+    .directory-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .directory-content p{
+        font-size: 15px;
+    }
+
+    .directory-card{
+        padding: 22px 18px;
+    }
+
+    .directory-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+/* =========================================
+   SERVICES SECTION (CSS ANIMATION CAROUSEL)
+========================================= */
+.services-section{
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background:
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/backgrounds/pdao-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.services-overlay{
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right,
+        rgba(255,193,7,0.15),
+        transparent 40%);
+}
+
+.services-header{
+    text-align: left;
+    margin-bottom: 45px;
+    position: relative;
+    z-index: 2;
+}
+
+.services-badge{
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    color: #FFD447; /* Vision Gold */
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.18);
+}
+
+.services-header h2{
+    color: #ffffff;
+    font-size: 52px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.15;
+}
+
+.services-header p {
+    color: #ffffff !important;
+    font-size: 17px;
+    line-height: 1.9;
+    max-width: 750px;
+    margin: 0;
+}
+
+/* =========================================
+   CSS CAROUSEL TRACK & ANIMATION SPEED
+========================================= */
+.services-carousel-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    padding: 15px 0;
+}
+
+.services-grid{
+    display: flex;
+    gap: 25px;
+    width: max-content; /* Kailangan ito para humaba nang walang limitasyon ang flex track */
+    /* Patatakbuhin ang animation: 25 segundo, linear, walang katapusan */
+    animation: scrollCarousel 25s linear infinite;
+}
+
+/* Hihinto ang buong ikot kapag hino-hover ng mouse */
+.services-carousel-container:hover .services-grid {
+    animation-play-state: paused;
+}
+
+.service-card{
+    width: 360px; /* Eksaktong permanenteng lapad ng bawat card sa desktop */
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 35px 28px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447;
+}
+
+.service-icon{
+    width: 65px;
+    height: 65px;
+    margin: 0 0 22px 0;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFD447;
+    color: #002B5B;
+    font-size: 26px;
+}
+
+.service-card h3{
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.service-card p{
+    color: rgba(255,255,255,0.85) !important;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.service-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    color: #FFD447;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    transition: 0.25s ease;
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+.service-btn i{
+    transition: 0.25s ease;
+}
+
+.service-btn:hover{
+    background: transparent;
+    color: #ffffff;
+    transform: none;
+}
+
+.service-btn:hover i{
+    transform: translateX(5px);
+}
+
+/* =========================================
+   KEYFRAMES AUTOMATIC INFINITE LOOP
+   (Uurong pakaliwa ang track ng eksaktong
+   kalahati ng kabuuang haba nito, sabay reset)
+========================================= */
+@keyframes scrollCarousel {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Gumagalaw pakaliwa para magmukhang umuusod pakanan ang mga card */
+        transform: translateX(calc(-50% - 12.5px));
+    }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+@media (max-width: 991px){
+    .services-header h2{ font-size: 38px; }
+    .services-header p{ font-size: 16px; }
+}
+
+@media (max-width: 768px){
+    .services-section{ padding: 80px 14px; }
+    .services-header h2{ font-size: 30px; }
+    .services-header p{ font-size: 15px; }
+
+    .service-card{
+        width: 290px; /* Mas maliit na lapad para magkasya sa mobile screens */
+        padding: 22px 18px;
+    }
+}
+
+/* =========================================
+   INQUIRY SECTION (VISION THEME)
+========================================= */
+.inquiry-section{
+    position: relative;
+    padding: 110px 20px; /* Standardized vision paddings */
+    overflow: hidden;
+    background:
+        /* Eksaktong premium dark blue tint ng Vision Section */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/backgrounds/pdao-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.inquiry-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40%
+        );
+    z-index: 1;
+}
+
+.inquiry-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    gap: 60px;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.inquiry-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Exact Vision yellow text color */
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.inquiry-content h2{
+    color: #ffffff;
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    line-height: 1.15;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+.inquiry-content p{
+    color: #ffffff !important; /* Pwersahang solid white text gaya ng Report Concern update */
+    font-size: 17px;
+    line-height: 1.9;
+    margin-bottom: 35px;
+    max-width: 700px;
+}
+
+.inquiry-features{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.inquiry-feature{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.inquiry-feature i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.inquiry-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    padding: 14px 26px;
+    border-radius: 12px; /* Binago mula 50px para swak sa primary-btn format */
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+.inquiry-btn:hover{
+    background: #FFD447;
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RIGHT SIDE CARD & CONTACTS
+========================================= */
+
+.inquiry-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 28px; /* Standardized card padding base sa Vision */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
+    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    transition: 0.3s ease;
+}
+
+.inquiry-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+}
+
+.inquiry-icon{
+    width: 65px;  /* Exact Vision icon frame sizing */
+    height: 65px;
+    margin: 0 0 18px 0; /* Inalis ang auto alignment */
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFD447;
+    color: #002B5B;
+    font-size: 26px;
+    box-shadow: none;
+}
+
+.inquiry-card h3{
+    color: #ffffff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.inquiry-card p{
+    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text para laging malinaw */
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.inquiry-contact-box{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa contacts */
+    padding: 16px 18px;
+    border-radius: 16px;
+    color: #ffffff;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.contact-item i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media (max-width: 991px){
+    .inquiry-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
+    }
+
+    .inquiry-content{
+        text-align: left; /* Sumusunod sa responsive flow ng Vision */
+    }
+
+    .inquiry-features{
+        align-items: flex-start;
+    }
+
+    .inquiry-content h2{
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 768px){
+    .inquiry-section{
+        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+    }
+
+    .inquiry-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .inquiry-content p{
+        font-size: 15px;
+    }
+
+    .inquiry-card{
+        padding: 22px 18px;
+    }
+
+    .inquiry-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+
+/* =========================================
+   FEEDBACK SECTION (VISION THEME)
+========================================= */
+.feedback-section{
+    position: relative;
+    padding: 110px 20px; /* Standardized vision paddings */
+    overflow: hidden;
+    background:
+        /* Eksaktong premium dark blue tint ng Vision Section */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/backgrounds/pdao-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.feedback-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40%
+        );
+    z-index: 1;
+}
+
+.feedback-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    gap: 60px;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.feedback-badge{
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 50px;
+    color: #FFD447; /* Exact Vision yellow text color */
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.feedback-content h2{
+    color: #ffffff;
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    line-height: 1.15;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+.feedback-content p{
+    color: #ffffff !important; /* Pwersahang solid white text para laging madaling basahin */
+    font-size: 17px;
+    line-height: 1.9;
+    margin-bottom: 35px;
+    max-width: 700px;
+}
+
+.feedback-features{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.feedback-feature{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.feedback-feature i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.feedback-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    padding: 14px 26px;
+    border-radius: 12px; /* Binago mula 50px para sumunod sa primary-btn format */
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+.feedback-btn:hover{
+    background: #FFD447;
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RIGHT SIDE CARD & FEEDBACK BOXES
+========================================= */
+
+.feedback-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 28px; /* Standardized card padding base sa Vision */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
+    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    transition: 0.3s ease;
+}
+
+.feedback-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+}
+
+.feedback-icon{
+    width: 65px;  /* Exact Vision icon frame sizing */
+    height: 65px;
+    margin: 0 0 18px 0; /* Tinanggal ang auto alignment para pumunta sa kaliwa */
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFD447;
+    color: #002B5B;
+    font-size: 26px;
+    box-shadow: none;
+}
+
+.feedback-card h3{
+    color: #ffffff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.feedback-card p{
+    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text sa loob ng card */
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.feedback-box{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.feedback-item{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa list items */
+    padding: 16px 18px;
+    border-radius: 16px;
+    color: #ffffff;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.feedback-item i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media (max-width: 991px){
+    .feedback-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
+    }
+
+    .feedback-content{
+        text-align: left; /* Sumusunod sa responsive flow ng Vision */
+    }
+
+    .feedback-features{
+        align-items: flex-start;
+    }
+
+    .feedback-content h2{
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 768px){
+    .feedback-section{
+        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+    }
+
+    .feedback-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .feedback-content p{
+        font-size: 15px;
+    }
+
+    .feedback-card{
+        padding: 22px 18px;
+    }
+
+    .feedback-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
+
+/* =========================================
+   OFFICE LOCATION SECTION (VISION THEME)
+========================================= */
+.office-section{
+    position: relative;
+    padding: 110px 20px; /* Standardized vision paddings */
+    overflow: hidden;
+    background:
+        /* Premium dark blue tint ng Vision Section */
+        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
+        url('/images/backgrounds/pdao-bg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.office-overlay{
+    position: absolute;
+    inset: 0;
+    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255,193,7,.15),
+            transparent 40%
+        );
+    z-index: 1;
+}
+
+.office-wrapper{
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    gap: 60px;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.office-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .12) !important; /* Glass effect ng Vision badge */
+    border: 1px solid rgba(255, 255, 255, .18) !important;
+    color: #FFD447 !important; /* Exact Vision yellow text color */
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.office-content h2{
+    color: #ffffff;
+    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+    line-height: 1.15;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+.office-content p{
+    color: #ffffff !important; /* Pwersahang solid white text gaya ng Inquiry at Feedback update */
+    font-size: 17px;
+    line-height: 1.9;
+    margin-bottom: 35px;
+    max-width: 700px;
+}
+
+.office-features{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.office-feature{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.office-feature i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   BUTTON (Katugma ng Vision Primary Button)
+========================================= */
+
+.office-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #FFD447; /* Vision Yellow background */
+    color: #002B5B;      /* Dark Blue text */
+    padding: 14px 26px;
+    border-radius: 12px; /* Binago mula 50px para sumunod sa primary-btn format */
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s ease;
+}
+
+.office-btn:hover{
+    background: #FFD447;
+    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+}
+
+/* =========================================
+   RIGHT SIDE CARD & LOCATION DETAILS
+========================================= */
+
+.office-card{
+    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 28px; /* Standardized card padding base sa Vision */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
+    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    transition: 0.3s ease;
+}
+
+.office-card:hover{
+    transform: translateY(-5px);
+    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+}
+
+.office-icon{
+    width: 65px;  /* Exact Vision icon frame sizing */
+    height: 65px;
+    margin: 0 0 18px 0; /* Tinanggal ang auto center para pumunta sa kaliwa */
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFD447;
+    color: #002B5B;
+    font-size: 26px;
+    box-shadow: none;
+}
+
+.office-card h3{
+    color: #ffffff;
+    font-size: 22px; /* Itinugma sa card titles ng Vision */
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.office-card p{
+    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text sa loob ng card */
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.office-box{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.office-item{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa mga detalye */
+    padding: 16px 18px;
+    border-radius: 16px;
+    color: #ffffff;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.office-item i{
+    color: #FFD447;
+    font-size: 18px;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (MOBILE ADAPTATION)
+========================================= */
+
+@media (max-width: 991px){
+    .office-wrapper{
+        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
+    }
+
+    .office-content{
+        text-align: left; /* Sumusunod sa responsive flow ng Vision */
+    }
+
+    .office-features{
+        align-items: flex-start;
+    }
+
+    .office-content h2{
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 768px){
+    .office-section{
+        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+    }
+
+    .office-content h2{
+        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    }
+
+    .office-content p{
+        font-size: 15px;
+    }
+
+    .office-card{
+        padding: 22px 18px;
+    }
+
+    .office-btn{
+        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    }
+}
