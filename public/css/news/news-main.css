@@ -1,0 +1,388 @@
+/* ==========================================================================
+   DISABILITY WEEK ALIGNED UNIFORM STRUCTURAL THEME
+   ========================================================================== */
+
+.news-page-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background: #f8fafc;
+    font-family: inherit;
+}
+
+/* TOP TRACK TITLE SYSTEM */
+.news-page-header {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.news-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(11, 61, 145, 0.08);
+    color: #0b3d91;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.news-page-header h1 {
+    font-size: 2.5rem;
+    color: #0f172a;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+}
+
+.news-page-header p {
+    color: #64748b;
+    font-size: 1.05rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* CONTAINER FLEX/GRID STRUCTURE */
+.news-layout-wrapper {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 35px;
+    align-items: start;
+}
+
+.news-main-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* ==========================================================================
+   THE UNIFORM DISABILITY PAGE CARD MODEL
+   ========================================================================== */
+
+.news-card-disability {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    border-left: 5px solid #0b3d91; /* Default Uniform Navy Blue Border */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 1px solid #f1f5f9;
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Bukod na indicator para sa Featured Program card */
+.news-featured-item {
+    border-left: 5px solid #0B5D3B; /* Green Left Border for Featured Only */
+}
+
+.news-card-disability:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.09);
+}
+
+.news-card-banner {
+    width: 100%;
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+}
+
+.news-card-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* UNIFORM BADGE TAG CONTROLS */
+.news-card-badge-tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 50px;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    text-transform: none;
+}
+
+/* Cleaned Uniform Palette Tags */
+.news-card-badge-tag.tag-green { background: #0B5D3B; }
+.news-card-badge-tag.tag-blue { background: #0b3d91; }
+
+/* Content space details */
+.news-card-content {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.news-card-header-block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 12px;
+}
+
+.news-card-header-block i { font-size: 24px; }
+.news-card-header-block.mini i { font-size: 18px; }
+
+/* Icon Theme Colors */
+.icon-green { color: #0B5D3B; }
+.icon-blue { color: #0b3d91; }
+
+.news-card-header-block h2 {
+    font-size: 1.6rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin: 0;
+}
+
+.news-card-header-block h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.news-card-header-block h3 a {
+    color: #0f172a;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.news-card-header-block h3 a:hover { color: #0b3d91; }
+
+.news-card-content p {
+    color: #475569;
+    font-size: 0.98rem;
+    line-height: 1.75;
+    margin: 0 0 20px 0;
+}
+
+/* ==========================================================================
+   FIXED OFFICIAL PDAO COLORS BUTTON SNIPPET (WHITE, BLUE, YELLOW)
+   ========================================================================== */
+
+.news-card-footer {
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.news-fixed-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%; /* Selyado at pantay sa gilid ng card */
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-radius: 8px; /* Malinis at seryosong rectangular layout */
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.news-fixed-btn i {
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+}
+
+.news-fixed-btn:hover i {
+    transform: translateX(4px);
+}
+
+/* OFFICIAL PDAO COLOR TRACKS */
+/* Yellow/Amber Button - Para sa Featured Card */
+.btn-pdao-yellow {
+    background-color: #f59e0b; /* Vibrant PDAO Amber/Yellow */
+    color: #0f172a !important; /* Madilim na teksto para litaw sa dilaw */
+}
+.btn-pdao-yellow:hover {
+    background-color: #d97706;
+}
+
+/* Blue Button - Para sa mga Regular Grid Cards */
+.btn-pdao-blue {
+    background-color: #0b3d91; /* Official PDAO Navy Blue */
+    color: #ffffff !important; /* Puting teksto para sa high-contrast visibility */
+}
+.btn-pdao-blue:hover {
+    background-color: #082d6b;
+}
+
+/* GRID CONTAINER MODULE FOR MAIN LIST */
+.news-grid-stream {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+/* ==========================================================================
+   SIDEBAR COMPONENT SCHEMATICS
+   ========================================================================== */
+
+.news-right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.sidebar-widget-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.sidebar-widget-card h3 {
+    font-size: 1.2rem;
+    color: #0f172a;
+    margin: 0 0 20px 0;
+    font-weight: 700;
+    border-left: 4px solid #0b3d91;
+    padding-left: 10px;
+}
+
+.sidebar-search-group {
+    display: flex;
+}
+
+.sidebar-search-group input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 12px 0 0 12px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.sidebar-search-group input:focus { border-color: #0b3d91; }
+
+.sidebar-search-group button {
+    width: 52px;
+    border: none;
+    background: #0b3d91;
+    color: #fff;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.sidebar-category-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-category-links li a {
+    color: #475569;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.sidebar-category-links li a:hover {
+    background: #f1f5f9;
+    color: #0b3d91;
+}
+
+.sidebar-category-links li a.active {
+    background: rgba(11, 61, 145, 0.08);
+    color: #0b3d91;
+}
+
+.sidebar-recent-item {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    text-decoration: none;
+    margin-bottom: 12px;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-recent-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sidebar-recent-item:hover { transform: translateX(3px); }
+
+.sidebar-recent-item img {
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.recent-item-info h4 {
+    font-size: 0.9rem;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.recent-item-info span {
+    color: #94a3b8;
+    font-size: 0.78rem;
+}
+
+.news-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff;
+    border-radius: 20px;
+    border: 2px dashed #cbd5e1;
+}
+
+.news-empty-state i {
+    font-size: 2rem;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT RESPONSES
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .news-layout-wrapper {
+        grid-template-columns: 1fr;
+    }
+    .news-right-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .news-grid-stream {
+        grid-template-columns: 1fr;
+    }
+    .news-page-header h1 {
+        font-size: 2rem;
+    }
+}

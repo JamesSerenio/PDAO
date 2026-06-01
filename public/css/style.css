@@ -4869,541 +4869,11 @@ body.dark-mode .contact-pro-field select:focus {
    NEWS MAIN CONTENT STRUCTURE
 ========================= */
 
-.news-main-content{
-    display:flex;
-    flex-direction:column;
-    gap:40px;
-}
-
-.news-year{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
-}
-
-.news-year h2{
-    font-size:2rem;
-    color:#0f172a;
-    border-bottom:3px solid #0b3d91;
-    padding-bottom:12px;
-    margin-bottom:14px;
-}
-
-.news-card{
-    background:#fff;
-    border-radius:20px;
-    padding:24px;
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-    display:flex;
-    gap:24px;
-    align-items:flex-start;
-    transition:.3s ease;
-    border-left:5px solid #0b3d91;
-}
-
-.news-card:hover{
-    box-shadow:0 12px 30px rgba(0,0,0,.1);
-    transform:translateX(4px);
-}
-
-.news-date{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    min-width:70px;
-    padding:12px;
-    background:linear-gradient(135deg, #0b3d91, #1e5bb8);
-    color:#fff;
-    border-radius:12px;
-    flex-shrink:0;
-}
-
-.news-date span{
-    font-size:1.8rem;
-    font-weight:800;
-    line-height:1;
-}
-
-.news-date small{
-    font-size:.75rem;
-    margin-top:4px;
-    font-weight:600;
-}
-
-.news-info{
-    flex:1;
-}
-
-.news-info h3{
-    font-size:1.2rem;
-    color:#0f172a;
-    margin-bottom:8px;
-    font-weight:700;
-}
-
-.news-info p{
-    color:#475569;
-    line-height:1.6;
-    margin-bottom:12px;
-    font-size:.95rem;
-}
-
-.news-tags{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:12px;
-}
-
-.news-tags span{
-    display:inline-block;
-    background:#f0f4ff;
-    color:#0b3d91;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:.85rem;
-    font-weight:600;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-    .news-card{
-        flex-direction:column;
-        gap:16px;
-    }
-
-    .news-year h2{
-        font-size:1.5rem;
-    }
-}
 
 /* =========================
    NEWS PAGE STYLES
 ========================= */
 
-.news-hero-section{
-    position:relative;
-    padding:120px 20px 80px;
-    background:linear-gradient(rgba(11,61,145,.85), rgba(6,36,95,.9)), url('../images/news/news-banner.jpg') center/cover;
-    overflow:hidden;
-    color:#fff;
-}
-
-.news-hero-overlay{
-    position:absolute;
-    inset:0;
-    backdrop-filter:blur(2px);
-}
-
-.news-hero-content{
-    position:relative;
-    z-index:2;
-    max-width:900px;
-    margin:auto;
-    text-align:center;
-}
-
-.news-badge{
-    display:inline-block;
-    padding:10px 20px;
-    border-radius:50px;
-    background:rgba(255,255,255,.15);
-    color:#facc15;
-    font-weight:600;
-    margin-bottom:16px;
-}
-
-.news-hero-section h1{
-    font-size:3.5rem;
-    margin-bottom:16px;
-    font-weight:800;
-}
-
-.news-hero-section p{
-    font-size:1.05rem;
-    color:#dbeafe;
-    line-height:1.7;
-    max-width:700px;
-    margin:0 auto;
-}
-
-/* NEWS PAGE SECTION */
-.news-page-section{
-    padding:80px 20px;
-    background:#f8fafc;
-}
-
-.news-layout{
-    display:grid;
-    grid-template-columns:2.5fr 380px;
-    gap:40px;
-    max-width:1400px;
-    margin:auto;
-}
-
-/* =========================================
-   FEATURED NEWS CARD
-========================================= */
-
-.featured-news-card{
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    gap: 30px;
-
-    background: #ffffff;
-    border-radius: 24px;
-
-    overflow: hidden;
-
-    box-shadow:
-    0 10px 30px rgba(0,0,0,0.08);
-
-    margin-bottom: 40px;
-}
-
-
-/* IMAGE */
-.featured-image{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.featured-image img{
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-    display: block;
-
-    min-height: 350px;
-    max-height: 420px;
-}
-
-
-/* CONTENT */
-.featured-content{
-    padding: 35px 35px 35px 0;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.featured-tag{
-    display: inline-block;
-
-    width: fit-content;
-
-    background: #0B5D3B;
-    color: #fff;
-
-    padding: 8px 18px;
-    border-radius: 50px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    margin-bottom: 18px;
-}
-
-.featured-content h2{
-    font-size: 32px;
-    line-height: 1.3;
-
-    margin-bottom: 18px;
-
-    color: #111827;
-}
-
-.featured-content p{
-    font-size: 16px;
-    line-height: 1.8;
-
-    color: #555;
-
-    margin-bottom: 25px;
-}
-
-
-/* BUTTON */
-.read-more-btn{
-    width: fit-content;
-
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-
-    background: #0B5D3B;
-    color: #fff;
-
-    padding: 14px 24px;
-
-    border-radius: 50px;
-
-    text-decoration: none;
-    font-weight: 600;
-
-    transition: 0.3s ease;
-}
-
-.read-more-btn:hover{
-    background: #08472d;
-    transform: translateY(-2px);
-}
-
-
-/* =========================================
-   TABLET
-========================================= */
-@media(max-width: 991px){
-
-    .featured-news-card{
-        grid-template-columns: 1fr;
-    }
-
-    .featured-image img{
-        min-height: 280px;
-        max-height: 320px;
-    }
-
-    .featured-content{
-        padding: 30px;
-    }
-
-    .featured-content h2{
-        font-size: 26px;
-    }
-
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-@media(max-width: 600px){
-
-    .featured-image img{
-        min-height: 220px;
-        max-height: 250px;
-    }
-
-    .featured-content{
-        padding: 22px;
-    }
-
-    .featured-content h2{
-        font-size: 22px;
-    }
-
-    .featured-content p{
-        font-size: 14px;
-    }
-
-    .read-more-btn{
-        width: 100%;
-        justify-content: center;
-    }
-
-}
-
-/* NEWS GRID WITH MODERN CARDS */
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:28px;
-    margin-bottom:40px;
-}
-
-.news-card-modern{
-    background:#fff;
-    border-radius:22px;
-    overflow:hidden;
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
-    transition:.35s ease;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-}
-
-.news-card-modern:hover{
-    transform:translateY(-8px);
-    box-shadow:0 14px 40px rgba(0,0,0,.12);
-}
-
-.news-card-modern img{
-    width:100%;
-    height:220px;
-    object-fit:cover;
-}
-
-.news-card-body{
-    padding:22px;
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
-
-.news-card-body span{
-    color:#facc15;
-    font-weight:700;
-    font-size:.85rem;
-    text-transform:uppercase;
-    margin-bottom:8px;
-}
-
-.news-card-body h3{
-    font-size:1.1rem;
-    color:#0f172a;
-    margin-bottom:10px;
-    font-weight:700;
-    line-height:1.4;
-}
-
-.news-card-body p{
-    color:#64748b;
-    font-size:.95rem;
-    line-height:1.6;
-    margin-bottom:14px;
-    flex:1;
-}
-
-/* SIDEBAR */
-.news-sidebar{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
-}
-
-.sidebar-card{
-    background:#fff;
-    border-radius:22px;
-    padding:24px;
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
-}
-
-.sidebar-card h3{
-    font-size:1.3rem;
-    color:#0f172a;
-    margin-bottom:18px;
-    font-weight:700;
-}
-
-.sidebar-search{
-    display:flex;
-    gap:0;
-}
-
-.sidebar-search input{
-    flex:1;
-    border:none;
-    background:#f1f5f9;
-    padding:12px 16px;
-    border-radius:10px 0 0 10px;
-    font-size:.95rem;
-}
-
-.sidebar-search button{
-    width:50px;
-    border:none;
-    background:#0b3d91;
-    color:#fff;
-    border-radius:0 10px 10px 0;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.sidebar-search button:hover{
-    background:#082c73;
-}
-
-.category-list{
-    list-style:none;
-    padding:0;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-
-.category-list li a{
-    color:#0f172a;
-    font-weight:600;
-    text-decoration:none;
-}
-
-.recent-post{
-    display:flex;
-    gap:14px;
-    padding-bottom:14px;
-    border-bottom:1px solid #e2e8f0;
-}
-
-.recent-post:last-child{
-    border-bottom:none;
-}
-
-.recent-post img{
-    width:80px;
-    height:80px;
-    border-radius:12px;
-    object-fit:cover;
-    flex-shrink:0;
-}
-
-.recent-post h4{
-    font-size:.95rem;
-    color:#0f172a;
-    margin-bottom:4px;
-    font-weight:700;
-    line-height:1.35;
-}
-
-.recent-post span{
-    color:#64748b;
-    font-size:.85rem;
-}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
-    .news-layout{
-        grid-template-columns:1fr;
-    }
-}
-
-@media(max-width:768px){
-    .news-hero-section{
-        padding:80px 20px 60px;
-    }
-
-    .news-hero-section h1{
-        font-size:2.4rem;
-    }
-
-    .news-hero-section p{
-        font-size:.95rem;
-    }
-
-    .news-grid{
-        grid-template-columns:1fr;
-    }
-
-    .featured-news-card .featured-content{
-        padding:24px;
-    }
-
-    .featured-news-card h2{
-        font-size:1.6rem;
-    }
-
-    .featured-news-card .featured-image img{
-        height:240px;
-    }
-
-    .news-card-modern img{
-        height:180px;
-    }
-}
 
 /* ====================================
    CATEGORY PAGES
@@ -5542,146 +5012,6 @@ body.dark-mode .contact-pro-field select:focus {
 /* =========================================
    NEWS MOBILE RESPONSIVE
 ========================================= */
-
-.news-layout{
-    display:grid;
-    grid-template-columns: 2fr 1fr;
-    gap:30px;
-}
-
-.news-grid{
-    display:grid;
-    grid-template-columns: repeat(2,1fr);
-    gap:24px;
-}
-
-.news-card-modern{
-    display:block;
-    background:#fff;
-    border-radius:24px;
-    overflow:hidden;
-    text-decoration:none;
-    transition:0.35s ease;
-    box-shadow:0 10px 24px rgba(0,0,0,0.06);
-    color:inherit;
-}
-
-.news-card-modern:hover{
-    transform:translateY(-8px);
-}
-
-.news-card-modern, .recent-post{
-    color:inherit;
-}
-
-.news-card-modern img{
-    width:100%;
-    height:240px;
-    object-fit:cover;
-}
-
-.news-card-body{
-    padding:22px;
-}
-
-.news-card-body span{
-    display:inline-block;
-    background:#fef3c7;
-    color:#b45309;
-    padding:8px 14px;
-    border-radius:999px;
-    font-size:0.85rem;
-    font-weight:700;
-    margin-bottom:14px;
-}
-
-.news-card-body h3{
-    font-size:1.15rem;
-    color:#0f172a;
-    margin-bottom:14px;
-    line-height:1.5;
-}
-
-.news-card-body p{
-    color:#475569;
-    line-height:1.8;
-}
-
-.recent-post{
-    display:flex;
-    gap:14px;
-    text-decoration:none;
-    margin-bottom:18px;
-    transition:0.3s ease;
-}
-
-.recent-post:hover{
-    transform:translateX(6px);
-}
-
-.recent-post img{
-    width:85px;
-    height:85px;
-    border-radius:16px;
-    object-fit:cover;
-}
-
-.recent-post h4{
-    color:#0f172a;
-    line-height:1.4;
-    margin-bottom:6px;
-}
-
-.recent-post span{
-    color:#64748b;
-    font-size:0.85rem;
-}
-
-/* TABLET */
-@media(max-width:991px){
-
-    .news-layout{
-        grid-template-columns:1fr;
-    }
-
-    .news-sidebar{
-        order:-1;
-    }
-
-}
-
-/* MOBILE */
-@media(max-width:680px){
-
-    .news-grid{
-        grid-template-columns:1fr;
-    }
-
-    .featured-news-card{
-        flex-direction:column;
-    }
-
-    .featured-image img{
-        height:260px;
-    }
-
-    .news-hero-content h1{
-        font-size:2rem;
-        line-height:1.3;
-    }
-
-    .featured-content{
-        padding:24px;
-    }
-
-    .news-card-body{
-        padding:20px;
-    }
-
-}
-
-
-
 .so-card h3 {
     margin-bottom: 6px;
 }
@@ -8574,4 +7904,746 @@ main {
     .office-btn{
         width: 100%; /* Punuin ang lapad ng screen sa mobile */
     }
+}
+
+/* ========================================================
+   GOALS SECTION STYLE (E-PDAO VISION THEME)
+======================================================== */
+.goals-bg {
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background: linear-gradient(rgba(0, 40, 85, 0.90), rgba(0, 40, 85, 0.90)),
+                url('/images/update/SPED.jpg'); /* Siguraduhing tama ang local folder fallback mo rito kung hindi dadaan sa blade asset */
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.simple-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* HEADER STYLE */
+.goals-header {
+    text-align: left;
+    margin-bottom: 45px;
+    position: relative;
+    z-index: 2;
+}
+
+.goals-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFD447;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.section-title {
+    color: #ffffff;
+    font-size: 52px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.15;
+}
+
+.goals-description {
+    color: #ffffff !important;
+    font-size: 17px;
+    line-height: 1.9;
+    max-width: 750px;
+    margin: 0;
+}
+
+/* CAROUSEL TRACK FLOW */
+.goals-carousel-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    padding: 15px 0;
+}
+
+.goals-grid {
+    display: flex;
+    gap: 25px;
+    width: max-content;
+    animation: scrollGoals 25s linear infinite;
+}
+
+.goals-carousel-container:hover .goals-grid {
+    animation-play-state: paused;
+}
+
+/* GOAL CARD DESIGN (Kasing sukat ng e-PDAO Services) */
+.goal-card {
+    width: 360px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 35px 28px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: 0.3s ease;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.goal-card:hover {
+    transform: translateY(-5px);
+    border-color: #FFD447;
+}
+
+.goal-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 0 22px 0;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFD447;
+    color: #002B5B;
+    font-size: 26px;
+}
+
+.goal-card h3 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.goal-text {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* CARD BUTTON */
+.goal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #FFD447;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+.goal-btn i {
+    transition: 0.25s ease;
+}
+
+.goal-btn:hover {
+    color: #ffffff;
+}
+
+.goal-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* ========================================================
+   MODAL POPUP SYSTEM OVERLAYS
+======================================================== */
+.goal-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 20, 40, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.goal-modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.goal-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    padding: 45px 35px;
+    border-radius: 28px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transform: translateY(30px);
+    transition: transform 0.3s ease;
+    text-align: left;
+}
+
+.goal-modal-overlay.open .goal-modal-card {
+    transform: translateY(0);
+}
+
+.goal-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    color: #a0aec0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.goal-modal-close:hover {
+    color: #002B5B;
+}
+
+.goal-modal-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: #002B5B;
+    color: #FFD447;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.goal-modal-card h3 {
+    font-size: 28px;
+    color: #002B5B;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.goal-modal-card p {
+    color: #4a5568;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+/* KEYFRAMES FOR INFINITE CAROUSEL ENGINE */
+@keyframes scrollGoals {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 12.5px)); }
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 991px) {
+    .section-title { font-size: 38px; }
+    .goals-description { font-size: 16px; }
+}
+
+@media (max-width: 768px) {
+    .goals-bg { padding: 80px 14px; }
+    .section-title { font-size: 30px; }
+    .goal-card { width: 290px; padding: 22px 18px; }
+    .goal-modal-card { width: 90%; padding: 30px 20px; }
+}
+
+/* ========================================================
+   REPORT CONCERN SECTION STYLE (VISION ACCENT DARK THEME)
+======================================================== */
+.report-vision-section {
+    padding: 110px 20px;
+    /* Deep Corporate Navy Blue background gaya ng Vision at Goals area */
+    background: linear-gradient(rgba(0, 40, 85, 0.93), rgba(0, 40, 85, 0.93)),
+                url('/images/update/SPED.jpg'); /* O kung anong default background image ng inyong app */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.report-vision-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.report-vision-grid {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+/* LEFT COLUMN: TEXT & INFO AREA */
+.report-vision-info {
+    flex: 1;
+    min-width: 320px;
+}
+
+/* TRACKING MAP MODULE INDICATOR IN THE DARK THEME */
+.report-vision-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 25px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.report-vision-indicator .track-parent-vision {
+    color: rgba(255, 255, 255, 0.75);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.report-vision-indicator .track-parent-vision i {
+    font-size: 15px;
+    color: #FFD447; /* Vision Gold Accent */
+}
+
+.report-vision-indicator .track-divider-vision {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.report-vision-indicator .track-current-vision {
+    color: #FFD447; /* Vision Gold Text */
+    background: rgba(255, 212, 71, 0.15); /* Translucent gold badge wrapper */
+    padding: 4px 12px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 212, 71, 0.2);
+}
+
+/* TYPOGRAPHY */
+.report-vision-title {
+    font-size: 48px;
+    color: #ffffff; /* Puting pamagat para sa madilim na canvas */
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 25px;
+}
+
+.report-vision-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85) !important; /* Bahagyang malambot na puti */
+    line-height: 1.9;
+    margin-bottom: 15px;
+}
+
+/* BOTTOM CONTACT META */
+.report-vision-meta {
+    margin-top: 35px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 25px;
+}
+
+.meta-vision-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+}
+
+.meta-vision-item i {
+    color: #FFD447; /* Gold Icons */
+    font-size: 18px;
+    width: 24px;
+}
+
+/* RIGHT COLUMN: GLASSMORPHISM CARD (Gaya ng malalapad na modern vision cards) */
+.report-vision-form-card {
+    flex: 1;
+    min-width: 320px;
+    background: rgba(255, 255, 255, 0.07); /* Semi-transparent white card */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 45px 35px;
+    backdrop-filter: blur(15px); /* Swabeng blur effect sa likod */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* INPUT FORM ELEMENTS CONTROL */
+.form-vision-group-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.form-vision-group-row .form-vision-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-vision-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-vision-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff; /* Puti ang labels para madaling basahin */
+    margin-bottom: 8px;
+}
+
+.form-vision-group input,
+.form-vision-group select,
+.form-vision-group textarea {
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.05); /* Madilim na input boxes */
+    transition: all 0.25s ease;
+    outline: none;
+    font-family: inherit;
+}
+
+/* Placeholder color custom filter */
+.form-vision-group input::placeholder,
+.form-vision-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Kapag pumili sa dropdown select option tag */
+.form-vision-group select option {
+    background-color: #002855; /* Pinipigilan ang puting flash sa drop options */
+    color: #ffffff;
+}
+
+/* FOCUS ANIMATION EFFECT (Nagiging Vision Gold ang border kapag may tinatype) */
+.form-vision-group input:focus,
+.form-vision-group select:focus,
+.form-vision-group textarea:focus {
+    border-color: #FFD447;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 212, 71, 0.2);
+}
+
+/* SUBMIT BUTTON (Solid Gold na magiging White/Blue text layout) */
+.report-vision-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: #FFD447; /* Primary Gold theme clickers */
+    color: #002855; /* Navy Text core contrast */
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.25s ease;
+}
+
+.report-vision-submit-btn:hover {
+    background: #ffffff; /* Nagiging puti kapag hino-hover */
+    color: #002855;
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE RESPONSIVENESS MEDIA ADJUSTMENTS */
+@media (max-width: 991px) {
+    .report-vision-grid {
+        flex-direction: column;
+        gap: 45px;
+    }
+    .report-vision-title {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 576px) {
+    .report-vision-section {
+        padding: 70px 15px;
+    }
+    .report-vision-form-card {
+        padding: 30px 20px;
+    }
+    .form-vision-group-row {
+        gap: 0;
+    }
+}
+
+/* ========================================================
+   HISTORY PAGE STYLES (VISION ACCENT DARK GLASSMOPHISM THEME)
+======================================================== */
+/* ========================================================
+   HISTORY PAGE - DEFAULT LIGHT MODE (WHITE & BLUE)
+======================================================== */
+.vision-theme-page {
+    background: linear-gradient(135deg, #ffffff 0%, #e8f1fc 100%);
+    min-height: 100vh;
+    padding: 90px 20px;
+    overflow-x: hidden;
+    transition: background 0.3s ease;
+}
+
+/* HERO SECTION */
+.vision-theme-hero {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+.vision-theme-badge {
+    display: inline-block;
+    background: rgba(0, 87, 184, 0.08);
+    color: #0057B8;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    border: 1px solid #d2e3f7;
+    text-transform: none;
+}
+
+.vision-theme-title {
+    font-size: 3.8rem;
+    font-weight: 900;
+    color: #002B5B;
+    line-height: 1.15;
+}
+
+.vision-theme-sub {
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin-top: 10px;
+}
+
+/* ABOUT BOX CARD */
+.vision-theme-card {
+    max-width: 850px;
+    margin: 0 auto 60px auto;
+    background: #ffffff;
+    border: 1px solid #d2e3f7;
+    padding: 40px;
+    border-left: 8px solid #0057B8; /* Blue accent bar */
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0, 43, 91, 0.06);
+}
+
+.vision-theme-card h2 {
+    color: #002B5B;
+    font-weight: 800;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.vision-theme-card p {
+    color: #4a5568;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+/* TIMELINE CONTAINER STYLING */
+.smooth-vision-timeline {
+    max-width: 850px;
+    margin: 60px auto;
+    position: relative;
+    padding-left: 20px;
+}
+
+.smooth-timeline-item {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.smooth-timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    padding-top: 8px;
+}
+
+.marker-dot {
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border: 4px solid #0057B8;
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(0, 87, 184, 0.15);
+}
+
+.marker-line {
+    width: 3px;
+    flex-grow: 1;
+    background: #d2e3f7;
+    position: absolute;
+    top: 24px;
+    bottom: -50px;
+    z-index: 1;
+}
+
+/* TIMELINE CONTENT CARDS */
+.smooth-timeline-card {
+    background: #ffffff;
+    border: 1px solid #d2e3f7;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    box-shadow: 0 15px 35px rgba(0, 43, 91, 0.06);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.smooth-timeline-card:hover {
+    transform: translateX(8px);
+    border-color: #0057B8;
+}
+
+.smooth-timeline-year {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #002B5B;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.smooth-timeline-subtitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0057B8;
+    margin-bottom: 15px;
+}
+
+.smooth-timeline-text {
+    font-size: 15px;
+    color: #4a5568;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* TIMELINE OFFICER BADGE ELEMENT */
+.smooth-officer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 87, 184, 0.08);
+    padding: 6px 16px 6px 8px;
+    border-radius: 50px;
+    margin-bottom: 15px;
+    border: 1px solid #d2e3f7;
+}
+
+.smooth-officer-badge img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0057B8;
+}
+
+.smooth-officer-badge span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #002B5B;
+}
+
+.vision-theme-footer {
+    text-align: center;
+    margin-top: 100px;
+    color: #4a5568;
+    opacity: 0.6;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* ========================================================
+   ⚫ OVERRIDE SYSTEM FOR DARK MODE (VISION CARD STYLE)
+======================================================== */
+body.dark-mode .vision-theme-page {
+    background: linear-gradient(rgba(0, 40, 85, 0.95), rgba(0, 40, 85, 0.95)),
+                url('/images/update/SPED.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+body.dark-mode .vision-theme-badge {
+    background: rgba(255, 212, 71, 0.15);
+    color: #FFD447;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .vision-theme-title { color: #ffffff; }
+body.dark-mode .vision-theme-sub { color: rgba(255, 255, 255, 0.7); }
+
+body.dark-mode .vision-theme-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 8px solid #FFD447; /* Gold Highlight */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+body.dark-mode .vision-theme-card h2 { color: #ffffff; }
+body.dark-mode .vision-theme-card p { color: rgba(255, 255, 255, 0.85); }
+
+body.dark-mode .marker-dot {
+    background: #002855;
+    border-color: #FFD447;
+    box-shadow: 0 0 12px rgba(255, 212, 71, 0.5);
+}
+body.dark-mode .marker-line { background: rgba(255, 255, 255, 0.15); }
+
+body.dark-mode .smooth-timeline-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+body.dark-mode .smooth-timeline-card:hover { border-color: #FFD447; }
+body.dark-mode .smooth-timeline-year { color: #ffffff; }
+body.dark-mode .smooth-timeline-subtitle { color: #FFD447; }
+body.dark-mode .smooth-timeline-text { color: rgba(255, 255, 255, 0.8); }
+
+body.dark-mode .smooth-officer-badge {
+    background: rgba(255, 212, 71, 0.15);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .smooth-officer-badge img { border-color: #FFD447; }
+body.dark-mode .smooth-officer-badge span { color: #ffffff; }
+body.dark-mode .vision-theme-footer { color: rgba(255, 255, 255, 0.4); }
+
+/* ========================================================
+   RESPONSIVE VIEWPORTS
+======================================================== */
+@media(max-width: 991px) {
+    .vision-theme-title { font-size: 3rem; }
+}
+@media(max-width: 768px){
+    .vision-theme-page { padding: 60px 15px; }
+    .vision-theme-title { font-size: 2.3rem; }
+    .vision-theme-card { padding: 25px; margin-bottom: 50px; }
+    .smooth-vision-timeline { padding-left: 10px; }
+    .smooth-timeline-item { gap: 15px; }
+    .smooth-timeline-card { padding: 20px; }
+    .smooth-timeline-year { font-size: 1.8rem; }
+    .smooth-officer-badge { border-radius: 14px; padding: 8px; }
 }
