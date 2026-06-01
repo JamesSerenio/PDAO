@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminRegisteredController;
+use Illuminate\Http\Request;
 
 Route::view('/', 'landing.index')->name('home');
 
@@ -52,16 +53,121 @@ Route::get('/report-concern', function () {
 Route::get('/pwd-registration', function () {
     $total_pwd = DB::table('local_profiles')->count();
 
-    $total_barangays = DB::table('local_profiles')
-        ->whereNotNull('barangay')
-        ->distinct()
-        ->count('barangay');
-
     return view('pages.trackingmap.pwd-registration', [
         'total_pwd' => $total_pwd,
-        'total_barangays' => $total_barangays,
     ]);
 })->name('pwd-registration');
+
+Route::get('/pwd-directory', function () {
+    return view('pages.trackingmap.pwd-directory');
+})->name('pwd-directory');
+
+/*
+|--------------------------------------------------------------------------
+| PWD DIRECTORY DATABASE SEARCH
+|--------------------------------------------------------------------------
+*/
+Route::get('/pwd-directory/search', function (Request $request) {
+    $query = trim($request->get('query', ''));
+
+    if ($query === '') {
+        return response()->json([]);
+    }
+
+    $results = DB::table('local_profiles')
+        ->select(
+            'id',
+            'pwd_id_no',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'suffix',
+            'barangay',
+            'municipality',
+            'province'
+        )
+        ->where(function ($q) use ($query) {
+            $q->where('pwd_id_no', 'LIKE', "%{$query}%")
+              ->orWhere('id', 'LIKE', "%{$query}%")
+              ->orWhere('first_name', 'LIKE', "%{$query}%")
+              ->orWhere('middle_name', 'LIKE', "%{$query}%")
+              ->orWhere('last_name', 'LIKE', "%{$query}%")
+              ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$query}%"])
+              ->orWhereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?", ["%{$query}%"])
+              ->orWhereRaw("CONCAT(last_name, ', ', first_name) LIKE ?", ["%{$query}%"]);
+        })
+        ->orderBy('last_name')
+        ->orderBy('first_name')
+        ->limit(10)
+        ->get();
+
+    return response()->json($results);
+})->name('pwd-directory.search');
+
+Route::get('/pwd-directory/verify', function (Request $request) {
+    $query = trim($request->get('query', ''));
+
+    if ($query === '') {
+        return response()->json([
+            'found' => false,
+            'record' => null,
+        ]);
+    }
+
+    $record = DB::table('local_profiles')
+        ->select(
+            'id',
+            'pwd_id_no',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'suffix',
+            'barangay',
+            'municipality',
+            'province'
+        )
+        ->where(function ($q) use ($query) {
+            $q->where('pwd_id_no', $query)
+              ->orWhere('id', $query)
+              ->orWhereRaw("CONCAT(first_name, ' ', last_name) = ?", [$query])
+              ->orWhereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) = ?", [$query])
+              ->orWhereRaw("CONCAT(last_name, ', ', first_name) = ?", [$query]);
+        })
+        ->first();
+
+    if (!$record) {
+        $record = DB::table('local_profiles')
+            ->select(
+                'id',
+                'pwd_id_no',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'suffix',
+                'barangay',
+                'municipality',
+                'province'
+            )
+            ->where(function ($q) use ($query) {
+                $q->where('pwd_id_no', 'LIKE', "%{$query}%")
+                  ->orWhere('id', 'LIKE', "%{$query}%")
+                  ->orWhere('first_name', 'LIKE', "%{$query}%")
+                  ->orWhere('middle_name', 'LIKE', "%{$query}%")
+                  ->orWhere('last_name', 'LIKE', "%{$query}%")
+                  ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$query}%"])
+                  ->orWhereRaw("CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?", ["%{$query}%"])
+                  ->orWhereRaw("CONCAT(last_name, ', ', first_name) LIKE ?", ["%{$query}%"]);
+            })
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->first();
+    }
+
+    return response()->json([
+        'found' => $record ? true : false,
+        'record' => $record,
+    ]);
+})->name('pwd-directory.verify');
 
 Route::get('/pwd-directory', function () {
     return view('pages.trackingmap.pwd-directory');

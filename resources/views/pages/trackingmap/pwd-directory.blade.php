@@ -1,8 +1,50 @@
 @extends('layouts.app')
 
 @push('styles')
-    {{-- Tinatawag natin ang in-update nating css kanina --}}
     <link rel="stylesheet" href="{{ asset('css/trackingmap/pwd-directory.css') }}">
+
+    <style>
+        .suggestion-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-top: 8px;
+            z-index: 999;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            overflow: hidden;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .suggestion-item:hover {
+            background: #f1f5f9;
+        }
+
+        .suggestion-name {
+            font-weight: 700;
+            color: #002855;
+        }
+
+        .suggestion-id {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -28,28 +70,31 @@
     <div class="container">
         <div class="directory-wrapper">
 
-            {{-- KALIWANG BAHAGI: ANG PINAG-ISANG SEARCH CARD --}}
             <div class="directory-left">
                 <div class="directory-search-card">
                     <div class="card-top-accent"></div>
+
                     <span class="small-title">
-                        PWD VERIFICATION PORTAL
+                        <i class="fa-solid fa-building-shield"></i> PWD VERIFICATION PORTAL
                     </span>
+
                     <h2>Verify PWD Records</h2>
                     <p class="search-description">
-                        Type the **PWD ID Number** or the person's **Full Name** in the input field below to validate registration logs inside the local e-PDAO system.
+                        Search by PWD ID Number or Full Name. Matching names and ID numbers will appear while typing.
                     </p>
 
                     <div class="search-box">
-                        <label class="unified-search-label" for="pwdUnifiedInput">Search Query</label>
-                        <div class="search-input-wrapper">
+                        <div class="search-input-wrapper" style="flex: 1;">
                             <i class="fa-solid fa-magnifying-glass"></i>
+
                             <input
                                 type="text"
                                 id="pwdUnifiedInput"
-                                placeholder="Enter PWD ID (e.g., 10-1234-000) or Full Name..."
+                                placeholder="Enter PWD ID Number or Full Name..."
                                 autocomplete="off"
                             >
+
+                            <div id="pwdSuggestionBox" class="suggestion-box"></div>
                         </div>
 
                         <button
@@ -57,12 +102,11 @@
                             id="pwdSearchBtn"
                             class="verify-btn"
                         >
-                            <i class="fa-solid fa-shield-halved"></i>
+                            <i class="fa-solid fa-magnifying-glass"></i>
                             Verify Record
                         </button>
                     </div>
 
-                    {{-- DYNAMIC RESULT BOX --}}
                     <div class="result-container" id="pwdResultBox">
                         <div class="default-result">
                             <i class="fa-solid fa-circle-info"></i>
@@ -76,7 +120,6 @@
                 </div>
             </div>
 
-            {{-- KANANG BAHAGI: SIDEBAR INFO CARDS --}}
             <div class="directory-right">
                 <div class="info-card yellow-card">
                     <div class="card-icon">
@@ -95,9 +138,9 @@
                     </div>
                     <h3>How to Verify</h3>
                     <ul>
-                        <li>Type the complete ID Number OR Full Name</li>
-                        <li>Ensure standard spelling or correct format</li>
-                        <li>Click the Verify Record button</li>
+                        <li>Type a name or PWD ID number</li>
+                        <li>Select from the suggested result</li>
+                        <li>Or press Enter to search</li>
                         <li>Check the active database feedback</li>
                     </ul>
                 </div>
@@ -133,72 +176,179 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.getElementById("pwdSearchBtn");
     const unifiedInput = document.getElementById("pwdUnifiedInput");
     const resultBox = document.getElementById("pwdResultBox");
+    const suggestionBox = document.getElementById("pwdSuggestionBox");
 
-    searchBtn.addEventListener("click", verifyPWD);
+    let selectedQuery = "";
 
-    // Nakikinig sa Enter key para sa madaling pag-search
-    unifiedInput.addEventListener("keypress", (e) => {
-        if(e.key === "Enter") verifyPWD();
+    unifiedInput.addEventListener("input", fetchSuggestions);
+
+    searchBtn.addEventListener("click", () => {
+        verifyPWD(unifiedInput.value.trim());
     });
 
-    function verifyPWD() {
-        const queryValue = unifiedInput.value.trim();
+    unifiedInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            suggestionBox.style.display = "none";
+            verifyPWD(unifiedInput.value.trim());
+        }
+    });
 
-        // 1. INPUT VALIDATION (Kapag walang laman)
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest(".search-input-wrapper")) {
+            suggestionBox.style.display = "none";
+        }
+    });
+
+    function fetchSuggestions() {
+        const query = unifiedInput.value.trim();
+
+        if (query.length < 1) {
+            suggestionBox.innerHTML = "";
+            suggestionBox.style.display = "none";
+            return;
+        }
+
+        fetch(`/pwd-directory/search?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                suggestionBox.innerHTML = "";
+
+                if (!data.length) {
+                    suggestionBox.innerHTML = `
+                        <div class="suggestion-item">
+                            <div class="suggestion-name">No matching record found</div>
+                            <div class="suggestion-id">Try another name or PWD ID number</div>
+                        </div>
+                    `;
+                    suggestionBox.style.display = "block";
+                    return;
+                }
+
+                data.forEach(item => {
+                    const fullName = formatFullName(item);
+                    const pwdId = item.pwd_id_no ? item.pwd_id_no : "No PWD ID encoded";
+
+                    const div = document.createElement("div");
+                    div.classList.add("suggestion-item");
+
+                    div.innerHTML = `
+                        <div class="suggestion-name">${escapeHtml(fullName)}</div>
+                        <div class="suggestion-id">PWD ID: ${escapeHtml(pwdId)}</div>
+                    `;
+
+                    div.addEventListener("click", () => {
+                        selectedQuery = item.pwd_id_no ? item.pwd_id_no : fullName;
+                        unifiedInput.value = selectedQuery;
+                        suggestionBox.style.display = "none";
+                        verifyPWD(selectedQuery);
+                    });
+
+                    suggestionBox.appendChild(div);
+                });
+
+                suggestionBox.style.display = "block";
+            })
+            .catch(() => {
+                suggestionBox.innerHTML = "";
+                suggestionBox.style.display = "none";
+            });
+    }
+
+    function verifyPWD(queryValue) {
         if (queryValue === "") {
             showError(
-                "Please Enter Your Search Query",
-                "Input a valid PWD ID number or a Person's Name before initializing the verification sequence."
+                "Please Enter a Query",
+                "Input a valid PWD ID number or Full Name before running the verification system."
             );
             return;
         }
 
-        // 2. SMART IDENTIFICATION (Awtomatikong tinitignan kung ID o Pangalan gamit ang Regex)
-        const hasNumbers = /\d/.test(queryValue);
-        let detectedTypeHTML = "";
-
-        if (hasNumbers) {
-            detectedTypeHTML = `Detected Input Type: <strong>PWD ID Number</strong><br>Query: <strong>${queryValue}</strong>`;
-        } else {
-            detectedTypeHTML = `Detected Input Type: <strong>Full Name Query</strong><br>Query: <strong>${queryValue}</strong>`;
-        }
-
-        // 3. LOADING STATE ANIMATION
         resultBox.innerHTML = `
             <div class="default-result">
-                <i class="fa-solid fa-spinner fa-spin"></i>
+                <i class="fa-solid fa-spinner fa-spin" style="color: #002855;"></i>
                 <h3 style="margin-top:15px;">Scanning PDAO Database...</h3>
-                <p>Please wait while checking registration logs for any matching records.</p>
+                <p>Please wait while checking registration records.</p>
             </div>
         `;
 
-        // 4. SIMULATED BACKEND RESPONSE (1.8s Timeout)
-        setTimeout(() => {
-            resultBox.innerHTML = `
-                <div class="default-result">
-                    <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
-                    <h3>Record Match Found</h3>
-                    <p style="margin-bottom: 12px;">The system successfully processed your tracking inquiry across the database registry.</p>
-                    <div style="background: rgba(0,40,85,0.04); padding: 14px; border-radius: 12px; margin-bottom: 15px; font-size: 14px; text-align: left; line-height: 1.6; color: #334155;">
-                        ${detectedTypeHTML} <br>
-                        Verification Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered Member</span>
-                    </div>
-                    <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
-                        Cross-Check with National DOH
-                    </a>
-                </div>
-            `;
-        }, 1800);
+        fetch(`/pwd-directory/verify?query=${encodeURIComponent(queryValue)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.found) {
+                    const record = data.record;
+                    const fullName = formatFullName(record);
+                    const pwdId = record.pwd_id_no ? record.pwd_id_no : "No PWD ID encoded";
+
+                    resultBox.innerHTML = `
+                        <div class="default-result">
+                            <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
+                            <h3>Record Match Found</h3>
+                            <p style="margin-bottom: 12px;">This person is found in the PDAO database.</p>
+
+                            <div style="background: rgba(0,40,85,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; text-align: left;">
+                                Name: <strong>${escapeHtml(fullName)}</strong><br>
+                                PWD ID Number: <strong>${escapeHtml(pwdId)}</strong><br>
+                                Barangay: <strong>${escapeHtml(record.barangay ?? "Not encoded")}</strong><br>
+                                Municipality: <strong>${escapeHtml(record.municipality ?? "Not encoded")}</strong><br>
+                                Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered</span>
+                            </div>
+
+                            <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
+                                Cross-Check with National DOH
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    resultBox.innerHTML = `
+                        <div class="default-result">
+                            <i class="fa-solid fa-circle-xmark" style="color: #dc2626;"></i>
+                            <h3>No Record Found</h3>
+                            <p style="margin-bottom: 12px;">The system cannot find any record matching your inquiry.</p>
+
+                            <div style="background: rgba(220,38,38,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; border: 1px solid rgba(220,38,38,0.1); text-align: left;">
+                                Search Query: <strong>${escapeHtml(queryValue)}</strong><br>
+                                Status: <span style="color: #dc2626; font-weight: 700;">● Unverified / Not in Database</span>
+                            </div>
+
+                            <p style="font-size: 13.5px; color: #6b7280;">
+                                Please double-check the spelling or PWD ID number and try again.
+                            </p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(() => {
+                showError(
+                    "Database Connection Error",
+                    "Unable to verify record. Please check your route, database connection, or server."
+                );
+            });
+    }
+
+    function formatFullName(item) {
+        let middle = item.middle_name ? ` ${item.middle_name}` : "";
+        let suffix = item.suffix ? ` ${item.suffix}` : "";
+        return `${item.first_name ?? ""}${middle} ${item.last_name ?? ""}${suffix}`.replace(/\s+/g, " ").trim();
     }
 
     function showError(title, description) {
         resultBox.innerHTML = `
             <div class="default-result">
                 <i class="fa-solid fa-circle-exclamation" style="color: #dc2626;"></i>
-                <h3>${title}</h3>
-                <p>${description}</p>
+                <h3>${escapeHtml(title)}</h3>
+                <p>${escapeHtml(description)}</p>
             </div>
         `;
+    }
+
+    function escapeHtml(text) {
+        return String(text)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
     }
 });
 </script>

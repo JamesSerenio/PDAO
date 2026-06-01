@@ -96,8 +96,11 @@ body {
     background: linear-gradient(90deg, var(--yellow), var(--blue));
 }
 
+/* SMALL TITLE (WITH ICON FIX) */
 .small-title {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: #eef4ff;
     color: var(--blue);
     padding: 8px 18px;
@@ -111,33 +114,22 @@ body {
 .search-description { color: #6b7280; line-height: 1.7; margin-bottom: 35px; font-size: 15px; }
 
 /* ========================================================
-    🆕 PINAG-ISANG SEARCH BOX AT INPUT FIELDS
+    SEARCH BOX AT INPUT FIELD (UNIFIED SIDE-BY-SIDE)
 ======================================================== */
-.unified-search-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--blue);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
 .search-box {
     display: flex;
-    flex-direction: column;
     gap: 15px;
 }
 
 .search-input-wrapper {
-    width: 100%;
+    flex: 1;
     display: flex;
     align-items: center;
     background: #f9fafb;
     border: 2px solid #e5e7eb;
     border-radius: 18px;
-    padding: 0 20px;
-    transition: 0.3s ease;
+    padding: 0 18px;
+    transition: 0.3s;
 }
 
 .search-input-wrapper:focus-within {
@@ -146,14 +138,14 @@ body {
     background: #fff;
 }
 
-.search-input-wrapper i { color: var(--blue); font-size: 20px; margin-right: 15px; }
+.search-input-wrapper i { color: var(--blue); font-size: 20px; margin-right: 12px; }
 .search-input-wrapper input { width: 100%; height: 65px; border: none; outline: none; background: transparent; font-size: 17px; color: var(--dark); }
 
 /* VERIFY BUTTON */
 .verify-btn {
     background: linear-gradient(135deg, var(--yellow), #ffbf00);
     border: none;
-    height: 60px;
+    padding: 0 35px;
     border-radius: 18px;
     font-weight: 800;
     color: #000;
@@ -162,19 +154,29 @@ body {
     transition: 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
-    width: 100%;
 }
-.verify-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3); }
+.verify-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3); }
 
-/* RESULT CONTAINER */
+/* ========================================================
+    DYNAMIC RESULT CONTAINER & STATUS ICONS
+======================================================== */
 .result-container {
-    margin-top: 35px; background: #f9fafb; border-radius: 22px;
-    padding: 40px; text-align: center; border: 2px dashed #d1d5db;
+    margin-top: 35px;
+    background: #f9fafb;
+    border-radius: 22px;
+    padding: 40px;
+    text-align: center;
+    border: 2px dashed #d1d5db;
 }
-.default-result i { font-size: 48px; color: var(--blue); margin-bottom: 18px; }
-.default-result i.fa-spin { color: var(--blue); }
+
+.default-result i { font-size: 48px; margin-bottom: 18px; display: inline-block; }
+.default-result i.fa-circle-info { color: var(--blue); }
+.default-result i.fa-spinner { color: #002855; }
+.default-result i.fa-circle-check { color: #16a34a; }
+.default-result i.fa-circle-xmark { color: #dc2626; }
+.default-result i.fa-circle-exclamation { color: #dc2626; }
+
 .default-result h3 { font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
 .default-result p { color: #6b7280; font-size: 15px; }
 
@@ -233,14 +235,10 @@ body.dark-mode .directory-search-card {
 body.dark-mode .directory-search-card h2 { color: #ffffff; }
 body.dark-mode .search-description { color: rgba(255, 255, 255, 0.6); }
 body.dark-mode .small-title { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
-body.dark-mode .unified-search-label { color: #ffd400; }
 
 body.dark-mode .search-input-wrapper {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.1);
-}
-body.dark-mode .search-input-wrapper:focus-within {
-    border-color: #ffd400;
 }
 body.dark-mode .search-input-wrapper input { color: #ffffff; }
 body.dark-mode .search-input-wrapper i { color: #ffd400; }
@@ -251,7 +249,13 @@ body.dark-mode .result-container {
 }
 body.dark-mode .default-result h3 { color: #ffffff; }
 body.dark-mode .default-result p { color: rgba(255, 255, 255, 0.5); }
-body.dark-mode .default-result i { color: #ffd400; }
+
+/* Dark mode overrides for Dynamic Script Indicators */
+body.dark-mode .default-result i.fa-circle-info { color: #ffd400; }
+body.dark-mode .default-result i.fa-spinner { color: #ffd400; }
+body.dark-mode .default-result i.fa-circle-check { color: #16a34a; }
+body.dark-mode .default-result i.fa-circle-xmark { color: #ef4444; }
+body.dark-mode .default-result i.fa-circle-exclamation { color: #ef4444; }
 
 body.dark-mode .white-card {
     background: rgba(255, 255, 255, 0.05);
@@ -285,5 +289,6 @@ body.dark-mode .blue-card { background: linear-gradient(135deg, rgba(11, 77, 162
 
 @media(max-width: 576px) {
     .hero-content h1 { font-size: 28px; line-height: 1.25; }
-    .verify-btn { height: 60px; justify-content: center; width: 100%; }
+    .search-box { flex-direction: column; }
+    .verify-btn { height: 60px; justify-content: center; }
 }

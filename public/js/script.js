@@ -434,4 +434,92 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    /* ========================================================
+        🆕🛡️ PWD DIRECTORY UNIFIED VERIFICATION LOGIC
+    ======================================================== */
+    const pwdSearchBtn = document.getElementById("pwdSearchBtn");
+    const pwdUnifiedInput = document.getElementById("pwdUnifiedInput");
+    const pwdResultBox = document.getElementById("pwdResultBox");
+
+    // Gagana lang ang logic na ito kapag nasa page ka ng PWD Directory kung saan nandoon ang mga elements na ito
+    if (pwdSearchBtn && pwdUnifiedInput && pwdResultBox) {
+
+        pwdSearchBtn.addEventListener("click", runPwdVerification);
+
+        pwdUnifiedInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") runPwdVerification();
+        });
+
+        function runPwdVerification() {
+            const queryValue = pwdUnifiedInput.value.trim();
+
+            // 1. Kapag walang laman ang input box
+            if (queryValue === "") {
+                pwdResultBox.innerHTML = `
+                    <div class="default-result">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #dc2626;"></i>
+                        <h3>Please Enter a Query</h3>
+                        <p>Input a valid PWD ID number or Full Name before running the verification system.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Matalinong pag-parse kung ID o Name ang nilagay
+            const hasNumbers = /\d/.test(queryValue);
+            let searchMetaHTML = hasNumbers
+                ? `PWD ID Number: <strong>${queryValue}</strong>`
+                : `Queried Name: <strong>${queryValue}</strong>`;
+
+            // 2. Loading State Animation (May deep blue spinner)
+            pwdResultBox.innerHTML = `
+                <div class="default-result">
+                    <i class="fa-solid fa-spinner fa-spin" style="color: #002855;"></i>
+                    <h3 style="margin-top:15px;">Scanning PDAO Database...</h3>
+                    <p>Please wait while checking registration logs for any matching records.</p>
+                </div>
+            `;
+
+            // 3. Simulated Delay (1.8s) bago lumabas ang result box
+            setTimeout(() => {
+                // TESTING VALUES:
+                // Kung "juan dela cruz" o "10-1234-000" -> lalabas ang VERIFIED (Check)
+                // Kung kahit anong iba -> lalabas ang NOT FOUND (X)
+                if (queryValue.toLowerCase() === "juan dela cruz" || queryValue === "10-1234-000") {
+
+                    // ✔️ SUCCESS STATE (CHECK)
+                    pwdResultBox.innerHTML = `
+                        <div class="default-result">
+                            <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
+                            <h3>Record Match Found</h3>
+                            <p style="margin-bottom: 12px;">The system successfully processed your tracking inquiry.</p>
+                            <div style="background: rgba(0,40,85,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; text-align: left;">
+                                ${searchMetaHTML} <br>
+                                Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered</span>
+                            </div>
+                            <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
+                                Cross-Check with National DOH
+                            </a>
+                        </div>
+                    `;
+                } else {
+
+                    // ❌ FAILED STATE (X MARK)
+                    pwdResultBox.innerHTML = `
+                        <div class="default-result">
+                            <i class="fa-solid fa-circle-xmark" style="color: #dc2626;"></i>
+                            <h3>No Record Found</h3>
+                            <p style="margin-bottom: 12px;">The system cannot find any record matching your inquiry.</p>
+                            <div style="background: rgba(220,38,38,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; border: 1px solid rgba(220,38,38,0.1); text-align: left;">
+                                ${searchMetaHTML} <br>
+                                Status: <span style="color: #dc2626; font-weight: 700;">● Unverified / Not in Database</span>
+                            </div>
+                            <p style="font-size: 13.5px; color: #6b7280;">Please double-check the spelling or formatting and try again.</p>
+                        </div>
+                    `;
+                }
+            }, 1800);
+        }
+    }
 });
