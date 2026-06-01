@@ -1,0 +1,270 @@
+/* ========================================================
+   MEDICAL ASSISTANCE PROGRAM - LIGHT MODE BASE
+======================================================== */
+body {
+    background: #f5f8ff;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* HERO SECTION */
+.medical-hero {
+    position: relative;
+    padding: 80px 0 70px;
+    overflow: hidden;
+    background: linear-gradient(
+        rgba(0, 47, 134, 0.88),
+        rgba(0, 47, 134, 0.90)
+    ),
+    url('/images/update/AIDS.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.medical-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 212, 0, 0.15),
+        transparent
+    );
+}
+
+.medical-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    color: #fff;
+}
+
+/* 🔥 VISION STYLE BADGE (INTACT & ACCURATE) */
+.medical-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: max-content !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    padding: 8px 16px !important;
+    border-radius: 50px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    margin-bottom: 22px !important;
+    letter-spacing: .8px !important;
+    text-transform: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.medical-hero-content h1 {
+    font-size: 58px;
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 22px;
+}
+
+.medical-hero-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #e6ecff;
+}
+
+/* MAIN LAYOUT STRUCTURE */
+.medical-section {
+    padding: 80px 0;
+}
+
+.medical-layout {
+    display: grid;
+    grid-template-columns: 1.6fr .9fr;
+    gap: 35px;
+}
+
+.medical-main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* CARD MODULES */
+.medical-card {
+    background: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.medical-image img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+}
+
+.medical-content {
+    padding: 40px;
+}
+
+.medical-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.medical-icon {
+    width: 60px;
+    height: 60px;
+    background: #002f86;
+    color: #ffd400;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.yellow-icon {
+    background: #ffd400;
+    color: #002f86;
+}
+
+.medical-title h2 {
+    font-size: 30px;
+    color: #002f86;
+    font-weight: 800;
+}
+
+.medical-card p {
+    color: #5d6785;
+    line-height: 1.9;
+    margin-bottom: 18px;
+    padding: 0 40px 10px;
+}
+
+/* BENEFITS GRID CONFIGURATION */
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    padding: 0 40px 40px;
+}
+
+.benefit-box {
+    background: #f5f8ff;
+    border: 2px solid #edf2ff;
+    padding: 18px;
+    border-radius: 16px;
+    font-weight: 600;
+    color: #002f86;
+    transition: .3s;
+}
+
+.benefit-box:hover {
+    background: #002f86;
+    color: #fff;
+}
+
+.benefit-box i {
+    color: #f2b400;
+    margin-right: 8px;
+}
+
+/* SIDEBAR LAYOUT CONFIGURATION */
+.medical-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.sidebar-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-icon {
+    width: 65px;
+    height: 65px;
+    background: #002f86;
+    color: #ffd400;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.support-card {
+    background: linear-gradient(135deg, #002f86, #004ec2);
+}
+
+.support-card h3,
+.support-card p {
+    color: #ffffff !important;
+}
+
+.support-icon {
+    background: #fff;
+    color: #002f86;
+}
+
+.sidebar-card h3 {
+    font-size: 28px;
+    color: #002f86;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+
+.sidebar-card p {
+    color: #5d6785;
+    line-height: 1.8;
+}
+
+.requirement-list {
+    padding-left: 20px;
+    color: #5d6785;
+    line-height: 2;
+}
+
+/* ========================================================
+   RESPONSIVE MEDIA QUERIES
+======================================================== */
+@media (max-width: 991px) {
+    .medical-layout {
+        grid-template-columns: 1fr;
+    }
+    .medical-hero-content h1 {
+        font-size: 44px;
+    }
+}
+
+@media (max-width: 768px) {
+    .medical-hero {
+        padding: 70px 0 60px;
+    }
+    .medical-hero-content h1 {
+        font-size: 34px;
+    }
+    .medical-hero-content p {
+        font-size: 16px;
+    }
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    .medical-content {
+        padding: 28px;
+    }
+    .medical-card p {
+        padding: 0 28px 10px;
+    }
+    .benefits-grid {
+        padding: 0 28px 28px;
+    }
+    .medical-image img {
+        height: 260px;
+    }
+}
