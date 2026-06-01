@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/contact/feedback.css') }}">
 
 <section class="contact-pro-section">
     <div class="contact-pro-container">
