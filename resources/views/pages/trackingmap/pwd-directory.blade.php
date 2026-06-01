@@ -1,87 +1,100 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/trackingmap/pwd-directory.css') }}">
+    <style>
+        /* PANGALAWANG DAGDAG NA STYLE PARA SA SEARCH TOGGLE TABS */
+        .search-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 40, 85, 0.1);
+            padding-bottom: 10px;
+        }
+        .search-tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .search-tab-btn.active {
+            background: rgba(0, 40, 85, 0.08);
+            color: #002855;
+        }
+        .search-input-group {
+            display: none;
+        }
+        .search-input-group.active {
+            display: block;
+        }
+    </style>
+@endpush
+
 @section('content')
 
-<!-- =========================================
-    HERO SECTION
-========================================= -->
 <section class="pwd-directory-hero">
-
     <div class="hero-overlay"></div>
-
     <div class="container">
-
         <div class="hero-content">
-
-            <span class="hero-badge">
-                ePDAO MANOLO FORTICH
-            </span>
-
+            <span class="hero-badge">e-PDAO Manolo Fortich</span>
             <h1>
-                PWD DIRECTORY VERIFICATION SYSTEM
+                PWD DIRECTORY <br>VERIFICATION SYSTEM
             </h1>
-
             <p>
                 Verify registered Persons with Disabilities through the
                 official PWD identification verification portal.
                 Fast, secure, and accessible verification for everyone.
             </p>
-
         </div>
-
     </div>
-
 </section>
 
-
-
-<!-- =========================================
-    DIRECTORY SECTION
-========================================= -->
 <section class="directory-main-section">
-
     <div class="container">
-
         <div class="directory-wrapper">
 
-            <!-- =========================================
-                LEFT SIDE
-            ========================================== -->
             <div class="directory-left">
-
                 <div class="directory-search-card">
-
                     <div class="card-top-accent"></div>
-
                     <span class="small-title">
                         PWD VERIFICATION PORTAL
                     </span>
-
-                    <h2>
-                        Verify PWD ID Number
-                    </h2>
-
+                    <h2>Verify PWD Records</h2>
                     <p class="search-description">
-                        Enter the complete PWD ID number below
-                        to validate and verify registration status
-                        through the official verification system.
+                        Select your verification method below. You can now validate registration status using either the PWD ID Number or the Person's Full Name.
                     </p>
 
+                    <div class="search-tabs">
+                        <button type="button" class="search-tab-btn active" onclick="switchSearchTab('id-mode')">
+                            <i class="fa-solid fa-id-card-clip"></i> Search by ID
+                        </button>
+                        <button type="button" class="search-tab-btn" onclick="switchSearchTab('name-mode')">
+                            <i class="fa-solid fa-user-gear"></i> Search by Name
+                        </button>
+                    </div>
 
-
-                    <!-- SEARCH -->
                     <div class="search-box">
-
-                        <div class="search-input-wrapper">
-
+                        <div id="idInputGroup" class="search-input-wrapper search-input-group active">
                             <i class="fa-solid fa-id-card"></i>
-
                             <input
                                 type="text"
                                 id="pwdSearchInput"
-                                placeholder="Enter PWD ID Number..."
+                                placeholder="Enter PWD ID Number (e.g., 10-1234-000)..."
                             >
+                        </div>
 
+                        <div id="nameInputGroup" class="search-input-wrapper search-input-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input
+                                type="text"
+                                id="pwdNameInput"
+                                placeholder="Enter Full Name (e.g., Juan Dela Cruz)..."
+                            >
                         </div>
 
                         <button
@@ -90,104 +103,57 @@
                             class="verify-btn"
                         >
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            Verify ID
+                            Verify Record
                         </button>
-
                     </div>
 
-
-
-                    <!-- RESULT -->
                     <div class="result-container" id="pwdResultBox">
-
                         <div class="default-result">
-
                             <i class="fa-solid fa-circle-info"></i>
-
-                            <h3>
-                                Verification Result
-                            </h3>
-
+                            <h3>Verification Result</h3>
                             <p>
-                                Search a valid PWD ID number
+                                Search a valid PWD ID number or Full Name
                                 to display the verification result.
                             </p>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
-
-
-            <!-- =========================================
-                RIGHT SIDE
-            ========================================== -->
             <div class="directory-right">
-
-                <!-- CARD -->
                 <div class="info-card yellow-card">
-
                     <div class="card-icon">
                         <i class="fa-solid fa-shield-heart"></i>
                     </div>
-
-                    <h3>
-                        Secure Verification
-                    </h3>
-
+                    <h3>Secure Verification</h3>
                     <p>
                         This system helps verify and validate
                         official PWD Identification Cards.
                     </p>
-
                 </div>
 
-
-
-                <!-- CARD -->
                 <div class="info-card blue-card">
-
                     <div class="card-icon">
                         <i class="fa-solid fa-circle-question"></i>
                     </div>
-
-                    <h3>
-                        How to Verify
-                    </h3>
-
+                    <h3>How to Verify</h3>
                     <ul>
-
-                        <li>Enter complete PWD ID number</li>
-                        <li>Click Verify ID button</li>
-                        <li>Check verification status</li>
-                        <li>Visit PDAO office if needed</li>
-
+                        <li>Choose to search by ID or Full Name</li>
+                        <li>Enter the complete required details</li>
+                        <li>Click the Verify Record button</li>
+                        <li>Check the active database feedback</li>
                     </ul>
-
                 </div>
 
-
-
-                <!-- CARD -->
                 <div class="info-card white-card">
-
                     <div class="card-icon">
                         <i class="fa-solid fa-building-shield"></i>
                     </div>
-
-                    <h3>
-                        Official DOH Verification
-                    </h3>
-
+                    <h3>Official DOH Verification</h3>
                     <p>
                         Continue verification through the
                         official Department of Health website.
                     </p>
-
                     <a
                         href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php"
                         target="_blank"
@@ -195,538 +161,109 @@
                     >
                         Visit DOH Website
                     </a>
-
                 </div>
-
             </div>
 
         </div>
-
     </div>
-
 </section>
 
+@endsection
 
-
-<!-- =========================================
-    STYLE
-========================================= -->
-<style>
-
-:root{
-    --yellow:#FFD600;
-    --blue:#0B4DA2;
-    --dark:#111827;
-    --white:#ffffff;
-    --gray:#f3f4f6;
-}
-
-
-
-/* =========================================
-    HERO SECTION
-========================================= */
-
-.pwd-directory-hero{
-    position: relative;
-    min-height: 330px;
-    background:
-        linear-gradient(
-            rgba(11,77,162,0.82),
-            rgba(11,77,162,0.88)
-        ),
-        url('/images/pwd-directory-bg.jpg');
-
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    padding: 70px 0;
-    overflow: hidden;
-}
-
-.hero-overlay{
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,214,0,0.18),
-            transparent 60%
-        );
-}
-
-.hero-content{
-    position: relative;
-    z-index: 2;
-    max-width: 760px;
-    color: white;
-}
-
-.hero-badge{
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--yellow);
-    color: #1e3a8a;
-    padding: 10px 25px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    margin-bottom: 22px;
-    box-shadow: 0 15px 25px rgba(0,0,0,0.15);
-}
-
-.hero-content h1{
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1.15;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-}
-
-.hero-content p{
-    font-size: 17px;
-    line-height: 1.8;
-    color: rgba(255,255,255,0.92);
-    max-width: 650px;
-}
-
-
-
-/* =========================================
-    MAIN SECTION
-========================================= */
-
-.directory-main-section{
-    background: #f5f7fb;
-    padding: 80px 0;
-}
-
-.directory-wrapper{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 35px;
-}
-
-
-
-/* =========================================
-    LEFT CARD
-========================================= */
-
-.directory-search-card{
-    background: white;
-    border-radius: 28px;
-    padding: 50px;
-    position: relative;
-    overflow: hidden;
-
-    box-shadow:
-    0 15px 45px rgba(0,0,0,0.08);
-}
-
-.card-top-accent{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 8px;
-
-    background:
-    linear-gradient(
-        90deg,
-        var(--yellow),
-        var(--blue)
-    );
-}
-
-.small-title{
-    display: inline-block;
-    background: #eef4ff;
-    color: var(--blue);
-    padding: 8px 18px;
-    border-radius: 50px;
-    font-weight: 700;
-    margin-bottom: 18px;
-}
-
-.directory-search-card h2{
-    font-size: 38px;
-    font-weight: 800;
-    color: var(--dark);
-    margin-bottom: 15px;
-}
-
-.search-description{
-    color: #6b7280;
-    line-height: 1.7;
-    margin-bottom: 35px;
-}
-
-
-
-/* =========================================
-    SEARCH BOX
-========================================= */
-
-.search-box{
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.search-input-wrapper{
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: #f9fafb;
-    border: 2px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 0 18px;
-    transition: 0.3s;
-}
-
-.search-input-wrapper:focus-within{
-    border-color: var(--blue);
-
-    box-shadow:
-    0 0 0 4px rgba(11,77,162,0.10);
-}
-
-.search-input-wrapper i{
-    color: var(--blue);
-    font-size: 18px;
-    margin-right: 12px;
-}
-
-.search-input-wrapper input{
-    width: 100%;
-    height: 65px;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-size: 17px;
-}
-
-
-
-/* BUTTON */
-
-.verify-btn{
-    background:
-    linear-gradient(
-        135deg,
-        var(--yellow),
-        #ffbf00
-    );
-
-    border: none;
-    padding: 0 35px;
-    border-radius: 18px;
-    font-weight: 800;
-    color: black;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.verify-btn:hover{
-    transform: translateY(-3px);
-}
-
-
-
-/* =========================================
-    RESULT BOX
-========================================= */
-
-.result-container{
-    margin-top: 35px;
-    background: #f9fafb;
-    border-radius: 22px;
-    padding: 40px;
-    text-align: center;
-    border: 2px dashed #d1d5db;
-}
-
-.default-result i{
-    font-size: 50px;
-    color: var(--blue);
-    margin-bottom: 20px;
-}
-
-.default-result h3{
-    font-size: 24px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-
-.default-result p{
-    color: #6b7280;
-}
-
-
-
-/* =========================================
-    RIGHT SIDE
-========================================= */
-
-.directory-right{
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-
-
-/* =========================================
-    INFO CARD
-========================================= */
-
-.info-card{
-    border-radius: 28px;
-    padding: 35px;
-
-    box-shadow:
-    0 10px 35px rgba(0,0,0,0.06);
-}
-
-.yellow-card{
-    background: var(--yellow);
-    color: black;
-}
-
-.blue-card{
-    background: var(--blue);
-    color: white;
-}
-
-.white-card{
-    background: white;
-}
-
-.card-icon{
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 30px;
-    margin-bottom: 20px;
-
-    background:
-    rgba(255,255,255,0.20);
-}
-
-.white-card .card-icon{
-    background: #eef4ff;
-    color: var(--blue);
-}
-
-.info-card h3{
-    font-size: 24px;
-    font-weight: 800;
-    margin-bottom: 15px;
-}
-
-.info-card p{
-    line-height: 1.7;
-}
-
-.blue-card ul{
-    padding-left: 20px;
-}
-
-.blue-card li{
-    margin-bottom: 12px;
-}
-
-
-
-/* =========================================
-    BUTTON
-========================================= */
-
-.visit-btn{
-    display: inline-block;
-    margin-top: 20px;
-    background: var(--blue);
-    color: white;
-    padding: 14px 25px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: 0.3s;
-}
-
-.visit-btn:hover{
-    background: #083a7a;
-}
-
-
-
-/* =========================================
-    RESPONSIVE
-========================================= */
-
-@media(max-width:991px){
-
-    .directory-wrapper{
-        grid-template-columns: 1fr;
-    }
-
-    .hero-content h1{
-        font-size: 42px;
-    }
-
-    .directory-search-card{
-        padding: 35px;
-    }
-
-}
-
-@media(max-width:768px){
-
-    .pwd-directory-hero{
-        min-height: 280px;
-        padding: 55px 0;
-    }
-
-    .hero-content h1{
-        font-size: 36px;
-    }
-
-    .hero-content p{
-        font-size: 15px;
-    }
-
-}
-
-@media(max-width:576px){
-
-    .hero-content h1{
-        font-size: 30px;
-        line-height: 1.25;
-    }
-
-    .hero-badge{
-        font-size: 13px;
-        padding: 9px 18px;
-    }
-
-    .search-box{
-        flex-direction: column;
-    }
-
-    .verify-btn{
-        height: 60px;
-    }
-
-}
-
-</style>
-
-
-
-<!-- =========================================
-    SCRIPT
-========================================= -->
+@push('scripts')
 <script>
+// GLOBAL VARIABLE TO TRACK CURRENT SEARCH MODE
+let currentSearchMode = 'id-mode';
+
+// FUNCTION TO TOGGLE BETWEEN ID SEARCH AND NAME SEARCH
+function switchSearchTab(mode) {
+    currentSearchMode = mode;
+
+    // Manage active state of tab buttons
+    document.querySelectorAll('.search-tab-btn').forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    // Toggle the visible input box
+    if(mode === 'id-mode') {
+        document.getElementById('idInputGroup').classList.add('active');
+        document.getElementById('nameInputGroup').classList.remove('active');
+        document.getElementById('pwdSearchInput').focus();
+    } else {
+        document.getElementById('nameInputGroup').classList.add('active');
+        document.getElementById('idInputGroup').classList.remove('active');
+        document.getElementById('pwdNameInput').focus();
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-
     const searchBtn = document.getElementById("pwdSearchBtn");
-    const searchInput = document.getElementById("pwdSearchInput");
+    const idInput = document.getElementById("pwdSearchInput");
+    const nameInput = document.getElementById("pwdNameInput");
     const resultBox = document.getElementById("pwdResultBox");
 
     searchBtn.addEventListener("click", verifyPWD);
 
-    searchInput.addEventListener("keypress", function(e){
+    // Listen for Enter key on both input channels
+    idInput.addEventListener("keypress", (e) => { if(e.key === "Enter") verifyPWD(); });
+    nameInput.addEventListener("keypress", (e) => { if(e.key === "Enter") verifyPWD(); });
 
-        if(e.key === "Enter"){
-            verifyPWD();
-        }
+    function verifyPWD() {
+        // Read values based on active mode
+        const idValue = idInput.value.trim();
+        const nameValue = nameInput.value.trim();
 
-    });
-
-    function verifyPWD(){
-
-        const value = searchInput.value.trim();
-
-        if(value === ""){
-
-            resultBox.innerHTML = `
-                <div class="default-result">
-
-                    <i class="fa-solid fa-circle-exclamation"></i>
-
-                    <h3>Please Enter a PWD ID Number</h3>
-
-                    <p>
-                        Input a valid PWD ID number before verification.
-                    </p>
-
-                </div>
-            `;
-
+        // 1. VALIDATION OVERLAY
+        if (currentSearchMode === 'id-mode' && idValue === "") {
+            showError("Please Enter a PWD ID Number", "Input a valid PWD ID number before running the verification system.");
             return;
         }
 
+        if (currentSearchMode === 'name-mode' && nameValue === "") {
+            showError("Please Enter a Full Name", "Input a valid name query to search across the e-PDAO directory records.");
+            return;
+        }
+
+        // 2. LOADING STATE
         resultBox.innerHTML = `
             <div class="default-result">
-
-                <div class="spinner-border text-primary"></div>
-
-                <h3 style="margin-top:15px;">
-                    Verifying PWD ID...
-                </h3>
-
-                <p>
-                    Please wait while checking the verification database.
-                </p>
-
+                <i class="fa-solid fa-spinner fa-spin" style="color: #002855;"></i>
+                <h3 style="margin-top:15px;">Scanning PDAO Database...</h3>
+                <p>Please wait while checking registration logs for any matching records.</p>
             </div>
         `;
 
+        // 3. SIMULATED BACKEND RESPONSE (1.8s Timeout)
         setTimeout(() => {
+            let searchMetaHTML = currentSearchMode === 'id-mode'
+                ? `PWD ID Number: <strong>${idValue}</strong>`
+                : `Queried Name: <strong>${nameValue}</strong>`;
 
             resultBox.innerHTML = `
                 <div class="default-result">
-
-                    <i class="fa-solid fa-circle-check"
-                    style="color:#16a34a;"></i>
-
-                    <h3>
-                        Verification Submitted
-                    </h3>
-
-                    <p>
-                        PWD ID Number:
-                        <strong>${value}</strong>
-                    </p>
-
-                    <a
-                        href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php"
-                        target="_blank"
-                        class="visit-btn"
-                    >
-                        Continue Verification
+                    <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
+                    <h3>Record Match Found</h3>
+                    <p style="margin-bottom: 12px;">The system successfully processed your tracking inquiry.</p>
+                    <div style="background: rgba(0,40,85,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px;">
+                        ${searchMetaHTML} <br>
+                        Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered</span>
+                    </div>
+                    <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
+                        Cross-Check with National DOH
                     </a>
-
                 </div>
             `;
-
         }, 1800);
-
     }
 
+    function showError(title, description) {
+        resultBox.innerHTML = `
+            <div class="default-result">
+                <i class="fa-solid fa-circle-exclamation" style="color: #dc2626;"></i>
+                <h3>${title}</h3>
+                <p>${description}</p>
+            </div>
+        `;
+    }
 });
-
 </script>
-
-@endsection
+@endpush
