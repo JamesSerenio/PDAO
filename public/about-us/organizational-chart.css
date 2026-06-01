@@ -1,0 +1,287 @@
+/* =========================================
+   ORGANIZATIONAL CHART - MAIN STYLES
+========================================= */
+
+/* HEADER & SUBTITLE DESCRIPTION - NORMAL MODE */
+.org-subtitle,
+.setofficers-hero p,
+.office-header p,
+.setofficers-header-line2 {
+    color: #1e3a8a !important; /* Solid Dark Blue para kitang-kita sa puting background */
+    font-weight: 600 !important;
+    opacity: 1 !important;     /* Siguradong walang fade effect */
+    display: block !important;
+    text-align: center;
+    margin-top: 15px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* FEDERATION GRID */
+.federation-block {
+    margin-top: 10px;
+}
+
+.federation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    gap: 22px;
+    margin-bottom: 22px;
+}
+
+/* centered last row for remaining 2 cards */
+.federation-last-row {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+/* same width for last two cards */
+.federation-last-row .org-card {
+    width: 100%;
+    max-width: 280px;
+}
+
+/* same design for ALL federation cards */
+.federation-grid .org-card,
+.federation-last-row .org-card {
+    min-height: 250px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.15));
+    border: 1px solid rgba(251,191,36,0.4);
+    border-radius: 22px;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+}
+
+/* same internal spacing everywhere */
+.federation-grid .org-card.mini,
+.federation-last-row .org-card.mini {
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* same image size everywhere */
+.federation-grid .org-card.mini .org-photo-wrap,
+.federation-last-row .org-card.mini .org-photo-wrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 16px;
+    margin: 0 auto 14px;
+}
+
+/* same hover effect everywhere */
+.federation-grid .org-card:hover,
+.federation-last-row .org-card:hover {
+    background: #fbbf24;
+    color: #0f172a;
+    transform: translateY(-6px) scale(1.03);
+}
+
+.federation-grid .org-card:hover h3,
+.federation-grid .org-card:hover p,
+.federation-last-row .org-card:hover h3,
+.federation-last-row .org-card:hover p {
+    color: #0f172a;
+}
+
+/* REMOVE SECOND-SECTION SPECIAL EFFECT */
+.second-layout {
+    margin-top: 34px;
+    border: none;
+}
+
+.second-layout .org-card,
+.second-layout .federation-last-row .org-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.15));
+    border: 1px solid rgba(251,191,36,0.4);
+}
+
+.second-layout .org-card.mini {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.second-layout .org-card.mini h3 {
+    margin-bottom: 6px;
+}
+
+.second-layout .org-card.mini p {
+    margin-top: 0;
+}
+
+/* if second section has no image, keep spacing balanced */
+.second-layout .org-card.mini:not(:has(.org-photo-wrap)) {
+    justify-content: center;
+}
+
+/* PDAO OFFICE CHART LINES */
+.org-chart-office {
+    max-width: 920px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.office-two-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 280px));
+    justify-content: center;
+    gap: 40px 160px;
+    margin-top: 12px;
+    position: relative;
+}
+
+.office-card {
+    position: relative;
+}
+
+.org-connector-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 6px 0 10px;
+}
+
+.org-line.vertical {
+    width: 3px;
+    height: 42px;
+    background: rgba(255,255,255,0.55);
+}
+
+.org-line.vertical.short {
+    height: 26px;
+}
+
+.org-line.horizontal.office-cross {
+    width: 62%;
+    height: 3px;
+    background: rgba(255,255,255,0.55);
+}
+
+.lower-connectors {
+    width: 62%;
+    margin: 0 auto;
+    height: 34px;
+    position: relative;
+}
+
+.lower-connectors .down-left,
+.lower-connectors .down-right {
+    position: absolute;
+    top: 0;
+    width: 3px;
+    height: 34px;
+    background: rgba(255,255,255,0.55);
+}
+
+.lower-connectors .down-left { left: 0; }
+.lower-connectors .down-right { right: 0; }
+
+.org-level.lower-level {
+    margin-top: 10px;
+}
+
+.org-card.featured,
+.org-card.featured.secondary {
+    text-align: center;
+}
+
+/* GLOW EFFECT - ORG CHART LINES */
+.org-line {
+    position: relative;
+    background: rgba(255,255,255,0.8);
+    box-shadow:
+        0 0 6px rgba(255,255,255,0.6),
+        0 0 12px rgba(59,130,246,0.6),
+        0 0 20px rgba(37,99,235,0.5);
+    animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+.org-line.vertical,
+.org-line.horizontal {
+    box-shadow:
+        0 0 8px rgba(255,255,255,0.8),
+        0 0 16px rgba(59,130,246,0.7),
+        0 0 28px rgba(37,99,235,0.6);
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.7;
+        box-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(59,130,246,0.5), 0 0 18px rgba(37,99,235,0.4);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 10px rgba(255,255,255,1), 0 0 22px rgba(59,130,246,0.9), 0 0 36px rgba(37,99,235,0.8);
+    }
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+@media (max-width: 1100px) {
+    .federation-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 820px) {
+    .federation-grid { grid-template-columns: repeat(2, 1fr); }
+    .federation-last-row { gap: 18px; }
+}
+@media (max-width: 560px) {
+    .federation-grid { grid-template-columns: 1fr; }
+    .federation-last-row { flex-direction: column; align-items: center; }
+    .federation-last-row .org-card { max-width: 100%; }
+}
+
+/* =========================================
+   DARK MODE CONTROL - WHITE & BLUE THEME
+========================================= */
+body.dark-mode .org-subtitle,
+body.dark-mode .setofficers-hero p,
+body.dark-mode .office-header p,
+body.dark-mode .setofficers-header-line2 {
+    color: #93c5fd !important; /* Soft light blue para madaling basahin kapag madilim ang background */
+}
+
+body.dark-mode .federation-grid .org-card,
+body.dark-mode .federation-last-row .org-card,
+body.dark-mode .second-layout .org-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%) !important;
+    border: 2px solid #2563eb !important;
+    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.15);
+}
+
+body.dark-mode .org-card h3,
+body.dark-mode .org-card .org-title {
+    color: #1e3a8a !important;
+}
+
+body.dark-mode .org-card p,
+body.dark-mode .org-card .org-name {
+    color: #3b82f6 !important;
+}
+
+/* Hover State sa Dark Mode (White & Blue style pa rin) */
+body.dark-mode .federation-grid .org-card:hover,
+body.dark-mode .federation-last-row .org-card:hover,
+body.dark-mode .second-layout .org-card:hover {
+    background: #2563eb !important;
+    transform: translateY(-6px) scale(1.03);
+}
+
+body.dark-mode .org-card:hover h3,
+body.dark-mode .org-card:hover p {
+    color: #ffffff !important;
+}
+
+/* Lines Glow Control sa Dark Mode */
+body.dark-mode .org-line {
+    background: #3b82f6 !important;
+    box-shadow:
+        0 0 8px #3b82f6,
+        0 0 18px #2563eb,
+        0 0 30px #1d4ed8 !important;
+}
