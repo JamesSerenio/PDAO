@@ -1,0 +1,187 @@
+/* ========================================================
+   PWD REPORT PORTAL - LIGHT MODE BASE (NORMAL)
+======================================================== */
+:root {
+    --yellow: #FFD600;
+    --blue: #0B4DA2;
+    --dark: #111827;
+    --white: #ffffff;
+    --gray: #f3f4f6;
+}
+
+body {
+    background: #f5f8ff;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.3s ease;
+}
+
+/* HERO SECTION */
+.report-hero {
+    position: relative;
+    padding: 90px 0 70px;
+    background: linear-gradient(rgba(0, 40, 120, 0.82), rgba(0, 40, 120, 0.88)),
+                url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400') center/cover no-repeat;
+    overflow: hidden;
+}
+
+.report-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 214, 0, 0.15), transparent);
+}
+
+.report-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 750px;
+    color: #fff;
+}
+
+/* 🔥 KONEKTADO SA DESIGN NG VISION BADGE */
+.report-hero .report-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: max-content !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    padding: 8px 18px !important;
+    border-radius: 50px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    margin-bottom: 18px !important;
+    letter-spacing: .8px !important;
+    text-transform: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.report-hero-content h1 { font-size: 54px; line-height: 1.1; font-weight: 800; margin-bottom: 20px; }
+.report-hero-content p { font-size: 17px; line-height: 1.8; color: #e7ecff; }
+
+/* LAYOUT STRUCTURE */
+.report-section { padding: 80px 0; }
+.report-wrapper { display: grid; grid-template-columns: 1.5fr 1fr; gap: 35px; }
+.report-right { display: flex; flex-direction: column; gap: 25px; }
+
+/* THE CONTAINER CARD */
+.report-card {
+    background: #fff; border-radius: 25px; padding: 45px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.04); border: 1px solid #e2ecf7;
+}
+.report-small-title { color: var(--blue); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+.report-header h2 { font-size: 34px; color: #002f86; margin: 12px 0 15px; font-weight: 800; }
+.report-header p { color: #5d6785; line-height: 1.7; margin-bottom: 30px; font-size: 15px; }
+
+/* INTERACTIVE INPUT FORMS */
+.interactive-report-form { display: flex; flex-direction: column; gap: 20px; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-weight: 600; color: var(--dark); font-size: 14.5px; }
+.form-group label small { color: #9ca3af; font-weight: 400; }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%; padding: 14px 18px; background: #f8fafc;
+    border: 2px solid #e2e8f0; border-radius: 14px;
+    font-size: 15px; color: var(--dark); outline: none; transition: 0.3s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--blue); background: #fff;
+    box-shadow: 0 0 0 4px rgba(11, 77, 162, 0.08);
+}
+
+/* FORM SUBMIT PORTAL BUTTON */
+.submit-portal-btn {
+    background: linear-gradient(135deg, var(--blue) 0%, #1e40af 100%);
+    color: white; border: none; padding: 16px 30px; border-radius: 14px;
+    font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
+.submit-portal-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(11, 77, 162, 0.25); }
+
+/* ALERT INFRASTRUCTURE */
+.form-alert { padding: 18px; border-radius: 14px; margin-bottom: 25px; display: flex; gap: 12px; font-size: 15px; line-height: 1.6; }
+.success-alert { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.success-alert i { font-size: 22px; color: #16a34a; }
+.d-none { display: none; }
+
+/* INFO SIDEBAR SYSTEM */
+.info-card { background: #fff; border-radius: 22px; padding: 35px; box-shadow: 0 10px 30px rgba(0,0,0,.03); border: 1px solid #e2ecf7; }
+.info-icon { width: 55px; height: 55px; background: #eef4ff; color: var(--blue); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+.info-card h3 { font-size: 22px; color: #002f86; margin-bottom: 15px; font-weight: 800; }
+.info-list { padding-left: 18px; color: #5d6785; }
+.info-list li { margin-bottom: 12px; line-height: 1.7; font-size: 14.5px; }
+
+/* LAW PRIVILEGE CARD */
+.ra-card { background: linear-gradient(135deg, #002f86, #004ec2); color: #fff; border: none; }
+.ra-card h3, .ra-card p { color: #fff; }
+.ra-card .info-icon { background: rgba(255,255,255,0.15); color: var(--yellow); }
+.ra-benefits { margin-top: 20px; }
+.ra-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14.5px; }
+.ra-item i { color: var(--yellow); }
+.ra-reminder { margin-top: 25px; background: rgba(255, 255, 255, .12); border-left: 4px solid var(--yellow); padding: 15px; border-radius: 12px; display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; }
+.ra-reminder i { color: var(--yellow); margin-top: 2px; }
+
+/* ========================================================
+   ⚫ INTACT OVERRIDE SYSTEM FOR VISION DARK MODE (GABI)
+======================================================== */
+body.dark-mode { background: #0a192f; }
+
+body.dark-mode .report-hero {
+    background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.95)),
+                url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400') center/cover no-repeat;
+}
+
+body.dark-mode .report-hero .report-badge {
+    background: rgba(255, 212, 71, 0.15) !important;
+    color: #ffd400 !important;
+    border: 1px solid rgba(255, 212, 71, 0.35) !important;
+    box-shadow: 0 4px 20px rgba(255, 212, 71, 0.15) !important;
+}
+
+body.dark-mode .report-card,
+body.dark-mode .info-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+}
+
+body.dark-mode .report-header h2,
+body.dark-mode .info-card h3 { color: #ffffff; }
+body.dark-mode .report-small-title { color: #ffd400; }
+body.dark-mode .report-header p,
+body.dark-mode .info-list { color: rgba(255, 255, 255, 0.6); }
+
+body.dark-mode .form-group label { color: #ffffff; }
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: #ffd400;
+}
+
+body.dark-mode .info-icon { background: rgba(255,255,255,0.08); color: #ffd400; }
+body.dark-mode .submit-portal-btn { background: #ffd400; color: #0a192f; }
+
+body.dark-mode .ra-card { background: linear-gradient(135deg, rgba(11, 77, 162, 0.2), rgba(11, 77, 162, 0.05)); }
+
+/* RESPONSIVE LAYOUTS */
+@media(max-width: 991px) {
+    .report-wrapper { grid-template-columns: 1fr; }
+    .report-hero-content h1 { font-size: 42px; }
+    .report-card { padding: 35px; }
+}
+@media(max-width: 768px) {
+    .form-grid-2 { grid-template-columns: 1fr; }
+    .report-hero-content h1 { font-size: 34px; }
+}
