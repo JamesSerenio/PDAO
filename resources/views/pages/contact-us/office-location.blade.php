@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/contact/office-location.css') }}">
 
 <section class="office-section">
     <div class="office-container">
