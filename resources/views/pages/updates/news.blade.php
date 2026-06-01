@@ -1,426 +1,147 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/trackingmap/pwd-report.css') }}">
+@endpush
+
 @section('content')
 
-<!-- =========================================
-    HERO SECTION
-========================================= -->
-<section class="news-hero-section">
-
-    <div class="news-hero-overlay"></div>
-
+<section class="report-hero">
+    <div class="report-overlay"></div>
     <div class="container">
-
-        <div class="news-hero-content">
-
-            <span class="news-badge">
-                e-PDAO Manolo Fortich
-            </span>
-
-            <h1>
-                News & Community Highlights
-            </h1>
-
+        <div class="report-hero-content">
+            <span class="report-badge">e-PDAO Manolo Fortich</span>
+            <h1>REPORT A CONCERN</h1>
             <p>
-                Stay updated with the latest programs,
-                activities, announcements, and inclusive
-                community initiatives of the PDAO Office
-                of Manolo Fortich.
+                Submit complaints, concerns, accessibility issues,
+                discrimination reports, or requests related to
+                Persons with Disabilities (PWDs) in Manolo Fortich.
+                Your report helps improve accessibility and inclusivity.
             </p>
-
         </div>
-
     </div>
-
 </section>
 
-
-
-<!-- =========================================
-    NEWS SECTION
-========================================= -->
-<section class="news-page-section">
-
+<section class="report-section">
     <div class="container">
-
-        <div class="news-layout">
-
-
-            <!-- =========================================
-                LEFT CONTENT
-            ========================================= -->
-            <div class="news-main-content">
-
-
-                <!-- FEATURED NEWS -->
-<div class="featured-news-card news-item"
-     data-category="pwd">
-
-    <!-- IMAGE -->
-    <div class="featured-image">
-
-        <img src="{{ asset('images/update/PARAGAMES.jpg') }}"
-             alt="Paragames">
-
-    </div>
-
-
-    <!-- CONTENT -->
-    <div class="featured-content">
-
-        <span class="featured-tag">
-            Featured Program
-        </span>
-
-        <h2>
-            National Disability Rights Week 2025 Successfully Celebrated
-        </h2>
-
-        <p>
-            The Municipality of Manolo Fortich successfully celebrated
-            the National Disability Rights Week through inclusive
-            activities, Paragames, awareness campaigns, and community
-            empowerment programs for Persons with Disabilities.
-        </p>
-
-        <a href="{{ route('news.disability') }}"
-           class="read-more-btn">
-
-            Read Full Story
-
-            <i class="fa-solid fa-arrow-right"></i>
-
-        </a>
-
-    </div>
-
-</div>
-
-                <!-- =========================================
-                    NEWS GRID
-                ========================================= -->
-                <div class="news-grid">
-
-
-                    <!-- CARD 1 -->
-                    <a href="{{ route('news.school') }}"
-                       class="news-card-modern news-item"
-                       data-category="education">
-
-                        <img src="{{ asset('images/update/SPED.jpg') }}"
-                             alt="SPED">
-
-                        <div class="news-card-body">
-
-                            <span>
-                                Educational Assistance
-                            </span>
-
-                            <h3>
-                                Distribution of School Supplies for SPED Students
-                            </h3>
-
-                            <p>
-                                School supplies were distributed
-                                to SPED students to support accessible
-                                and inclusive education.
-                            </p>
-
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- CARD 2 -->
-                    <a href="{{ route('news.bullying') }}"
-                       class="news-card-modern news-item"
-                       data-category="community">
-
-                        <img src="{{ asset('images/update/ANTI.jpg') }}"
-                             alt="Anti Bullying">
-
-                        <div class="news-card-body">
-
-                            <span>
-                                Community Awareness
-                            </span>
-
-                            <h3>
-                                Anti-Bullying Symposium Conducted
-                            </h3>
-
-                            <p>
-                                Students and participants joined
-                                the Anti-Bullying Symposium promoting
-                                respect, inclusion, and awareness.
-                            </p>
-
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- CARD 3 -->
-                    <a href="{{ route('news.hearing') }}"
-                       class="news-card-modern news-item"
-                       data-category="medical">
-
-                        <img src="{{ asset('images/update/AID.jpg') }}"
-                             alt="Hearing Aid">
-
-                        <div class="news-card-body">
-
-                            <span>
-                                Medical Assistance
-                            </span>
-
-                            <h3>
-                                Hearing Aid Assistance Program for PWD Beneficiaries
-                            </h3>
-
-                            <p>
-                                Qualified beneficiaries received
-                                hearing aid assistance to improve
-                                communication and accessibility.
-                            </p>
-
-                        </div>
-
-                    </a>
-
-
-
-                    <!-- CARD 4 -->
-                    <a href="{{ route('news.seed') }}"
-                       class="news-card-modern news-item"
-                       data-category="livelihood">
-
-                        <img src="{{ asset('images/update/SEEDS.jpg') }}"
-                             alt="Seed Capital">
-
-                        <div class="news-card-body">
-
-                            <span>
-                                Livelihood Program
-                            </span>
-
-                            <h3>
-                                Seed Capital Monitoring for PWD Beneficiaries
-                            </h3>
-
-                            <p>
-                                The PDAO Office monitored seed capital
-                                beneficiaries to support sustainable
-                                livelihood opportunities.
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                </div>
-                <!-- END NEWS GRID -->
-
-            </div>
-            <!-- END LEFT CONTENT -->
-
-
-
-
-
-            <!-- =========================================
-                SIDEBAR
-            ========================================= -->
-            <aside class="news-sidebar">
-
-
-                <!-- SEARCH -->
-                <div class="sidebar-card">
-
-                    <h3>
-                        Search News
-                    </h3>
-
-                    <div class="sidebar-search">
-
-                        <input type="text"
-                               id="newsSearch"
-                               placeholder="Search news...">
-
-                        <button type="button">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                        </button>
-
+        <div class="report-wrapper">
+
+            <div class="report-left">
+                <div class="report-card">
+                    <div class="report-header">
+                        <span class="report-small-title">e-PDAO Reporting Portal</span>
+                        <h2>Reporting & Assistance Center</h2>
+                        <p>
+                            Please fill out the form below with accurate details. You may choose to submit this report anonymously if you wish to protect your privacy.
+                        </p>
                     </div>
 
+                    <div id="formAlert" class="form-alert d-none"></div>
+
+                    <form id="pwdConcernForm" class="interactive-report-form">
+                        @csrf
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="reporter_name">Full Name <small>(Optional)</small></label>
+                                <input type="text" id="reporter_name" name="name" placeholder="Juan Dela Cruz">
+                            </div>
+                            <div class="form-group">
+                                <label for="reporter_contact">Contact Number <small>(Required)</small></label>
+                                <input type="text" id="reporter_contact" name="contact" placeholder="0917XXXXXXX" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="concern_type">Nature of Concern</label>
+                            <select id="concern_type" name="concern_type" required>
+                                <option value="" disabled selected>Select the type of issue...</option>
+                                <option value="accessibility">Accessibility Barrier (Ramps, PWD Lanes, etc.)</option>
+                                <option value="discrimination">Discrimination / Unfair Treatment</option>
+                                <option value="abuse">Abuse or Exploitation Case</option>
+                                <option value="benefits">PWD Benefits & Discounts Issues</option>
+                                <option value="others">Other Concerns / General Assistance</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="concern_details">Detailed Description</label>
+                            <textarea id="concern_details" name="details" rows="5" placeholder="Provide as much details as possible (What happened, Where, When...)" required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-portal-btn">
+                            <i class="fa-solid fa-paper-plane"></i> Submit Report Securely
+                        </button>
+                    </form>
                 </div>
+            </div>
 
-
-
-
-                <!-- CATEGORIES -->
-                <div class="sidebar-card">
-
-                    <h3>
-                        Categories
-                    </h3>
-
-                    <ul class="category-list">
-
-                        <li>
-                            <a href="#" data-category="pwd">
-
-                                <i class="fa-solid fa-angle-right"></i>
-
-                                PWD Programs
-
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" data-category="medical">
-
-                                <i class="fa-solid fa-angle-right"></i>
-
-                                Medical Assistance
-
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" data-category="community">
-
-                                <i class="fa-solid fa-angle-right"></i>
-
-                                Community Activities
-
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" data-category="education">
-
-                                <i class="fa-solid fa-angle-right"></i>
-
-                                Educational Support
-
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" data-category="livelihood">
-
-                                <i class="fa-solid fa-angle-right"></i>
-
-                                Livelihood Programs
-
-                            </a>
-                        </li>
-
+            <div class="report-right">
+                <div class="info-card">
+                    <div class="info-icon"><i class="fa-solid fa-circle-info"></i></div>
+                    <h3>How it Works</h3>
+                    <ul class="info-list">
+                        <li>Fill out the secure online portal form accurately.</li>
+                        <li>Your report is immediately routed to the PDAO Officer.</li>
+                        <li>An official will review and reach out via your contact number.</li>
+                        <li>Strict confidentiality is maintained at all times.</li>
                     </ul>
-
                 </div>
 
-
-
-
-
-                <!-- RECENT POSTS -->
-                <div class="sidebar-card">
-
-                    <h3>
-                        Recent Posts
-                    </h3>
-
-
-
-                    <!-- POST 1 -->
-                    <a href="{{ route('news.school') }}"
-                       class="recent-post">
-
-                        <img src="{{ asset('images/update/SPED.jpg') }}"
-                             alt="SPED">
-
-                        <div>
-
-                            <h4>
-                                School Supplies Distribution for SPED Students
-                            </h4>
-
-                            <span>
-                                August 19, 2025
-                            </span>
-
-                        </div>
-
-                    </a>
-
-
-
-
-                    <!-- POST 2 -->
-                    <a href="{{ route('news.bullying') }}"
-                       class="recent-post">
-
-                        <img src="{{ asset('images/update/ANTI.jpg') }}"
-                             alt="Anti Bullying">
-
-                        <div>
-
-                            <h4>
-                                Anti-Bullying Symposium 2025
-                            </h4>
-
-                            <span>
-                                August 26, 2025
-                            </span>
-
-                        </div>
-
-                    </a>
-
-
-
-
-                    <!-- POST 3 -->
-                    <a href="{{ route('news.seed') }}"
-                       class="recent-post">
-
-                        <img src="{{ asset('images/update/SEEDS.jpg') }}"
-                             alt="Seed Capital">
-
-                        <div>
-
-                            <h4>
-                                SEED Capital Monitoring Activity
-                            </h4>
-
-                            <span>
-                                March 11, 2026
-                            </span>
-
-                        </div>
-
-                    </a>
-
+                <div class="info-card ra-card">
+                    <div class="info-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>Republic Act No. 10754</h3>
+                    <p>An Act expanding the benefits and privileges of Persons with Disability (PWD).</p>
+                    <div class="ra-benefits">
+                        <div class="ra-item"><i class="fa-solid fa-check"></i> <span>20% Discount & VAT Exemption</span></div>
+                        <div class="ra-item"><i class="fa-solid fa-check"></i> <span>Educational Assistance Priority</span></div>
+                        <div class="ra-item"><i class="fa-solid fa-check"></i> <span>Express / Priority Lane Privileges</span></div>
+                    </div>
+                    <div class="ra-reminder">
+                        <i class="fa-solid fa-thumbtack"></i>
+                        <span>Violations of RA 10754 can be reported directly through this portal for proper legal actions.</span>
+                    </div>
                 </div>
-                <!-- END SIDEBAR CARD -->
-
-
-            </aside>
-            <!-- END SIDEBAR -->
-
+            </div>
 
         </div>
-        <!-- END NEWS LAYOUT -->
-
-
     </div>
-
 </section>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("pwdConcernForm");
+    const alertBox = document.getElementById("formAlert");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // Disable target button simulation
+        const btn = form.querySelector('.submit-portal-btn');
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Submitting Report...`;
+
+        // Simulate AJAX request
+        setTimeout(() => {
+            alertBox.className = "form-alert success-alert";
+            alertBox.innerHTML = `
+                <i class="fa-solid fa-circle-check"></i>
+                <div>
+                    <strong>Report Submitted Successfully!</strong><br>
+                    Thank you for reaching out. A PDAO administrator will review your concern shortly.
+                </div>
+            `;
+
+            form.reset();
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Report Securely`;
+
+            // Auto scroll down to view alert smoothly
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 1500);
+    });
+});
+</script>
+@endpush
