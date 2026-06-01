@@ -1,38 +1,8 @@
 @extends('layouts.app')
 
 @push('styles')
+    {{-- Tinatawag natin ang in-update nating css kanina --}}
     <link rel="stylesheet" href="{{ asset('css/trackingmap/pwd-directory.css') }}">
-    <style>
-        /* PANGALAWANG DAGDAG NA STYLE PARA SA SEARCH TOGGLE TABS */
-        .search-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(0, 40, 85, 0.1);
-            padding-bottom: 10px;
-        }
-        .search-tab-btn {
-            background: none;
-            border: none;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #64748b;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        .search-tab-btn.active {
-            background: rgba(0, 40, 85, 0.08);
-            color: #002855;
-        }
-        .search-input-group {
-            display: none;
-        }
-        .search-input-group.active {
-            display: block;
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -58,6 +28,7 @@
     <div class="container">
         <div class="directory-wrapper">
 
+            {{-- KALIWANG BAHAGI: ANG PINAG-ISANG SEARCH CARD --}}
             <div class="directory-left">
                 <div class="directory-search-card">
                     <div class="card-top-accent"></div>
@@ -66,34 +37,18 @@
                     </span>
                     <h2>Verify PWD Records</h2>
                     <p class="search-description">
-                        Select your verification method below. You can now validate registration status using either the PWD ID Number or the Person's Full Name.
+                        Type the **PWD ID Number** or the person's **Full Name** in the input field below to validate registration logs inside the local e-PDAO system.
                     </p>
 
-                    <div class="search-tabs">
-                        <button type="button" class="search-tab-btn active" onclick="switchSearchTab('id-mode')">
-                            <i class="fa-solid fa-id-card-clip"></i> Search by ID
-                        </button>
-                        <button type="button" class="search-tab-btn" onclick="switchSearchTab('name-mode')">
-                            <i class="fa-solid fa-user-gear"></i> Search by Name
-                        </button>
-                    </div>
-
                     <div class="search-box">
-                        <div id="idInputGroup" class="search-input-wrapper search-input-group active">
-                            <i class="fa-solid fa-id-card"></i>
+                        <label class="unified-search-label" for="pwdUnifiedInput">Search Query</label>
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
                             <input
                                 type="text"
-                                id="pwdSearchInput"
-                                placeholder="Enter PWD ID Number (e.g., 10-1234-000)..."
-                            >
-                        </div>
-
-                        <div id="nameInputGroup" class="search-input-wrapper search-input-group">
-                            <i class="fa-solid fa-user"></i>
-                            <input
-                                type="text"
-                                id="pwdNameInput"
-                                placeholder="Enter Full Name (e.g., Juan Dela Cruz)..."
+                                id="pwdUnifiedInput"
+                                placeholder="Enter PWD ID (e.g., 10-1234-000) or Full Name..."
+                                autocomplete="off"
                             >
                         </div>
 
@@ -102,11 +57,12 @@
                             id="pwdSearchBtn"
                             class="verify-btn"
                         >
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i class="fa-solid fa-shield-halved"></i>
                             Verify Record
                         </button>
                     </div>
 
+                    {{-- DYNAMIC RESULT BOX --}}
                     <div class="result-container" id="pwdResultBox">
                         <div class="default-result">
                             <i class="fa-solid fa-circle-info"></i>
@@ -120,6 +76,7 @@
                 </div>
             </div>
 
+            {{-- KANANG BAHAGI: SIDEBAR INFO CARDS --}}
             <div class="directory-right">
                 <div class="info-card yellow-card">
                     <div class="card-icon">
@@ -138,8 +95,8 @@
                     </div>
                     <h3>How to Verify</h3>
                     <ul>
-                        <li>Choose to search by ID or Full Name</li>
-                        <li>Enter the complete required details</li>
+                        <li>Type the complete ID Number OR Full Name</li>
+                        <li>Ensure standard spelling or correct format</li>
                         <li>Click the Verify Record button</li>
                         <li>Check the active database feedback</li>
                     </ul>
@@ -172,80 +129,59 @@
 
 @push('scripts')
 <script>
-// GLOBAL VARIABLE TO TRACK CURRENT SEARCH MODE
-let currentSearchMode = 'id-mode';
-
-// FUNCTION TO TOGGLE BETWEEN ID SEARCH AND NAME SEARCH
-function switchSearchTab(mode) {
-    currentSearchMode = mode;
-
-    // Manage active state of tab buttons
-    document.querySelectorAll('.search-tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-
-    // Toggle the visible input box
-    if(mode === 'id-mode') {
-        document.getElementById('idInputGroup').classList.add('active');
-        document.getElementById('nameInputGroup').classList.remove('active');
-        document.getElementById('pwdSearchInput').focus();
-    } else {
-        document.getElementById('nameInputGroup').classList.add('active');
-        document.getElementById('idInputGroup').classList.remove('active');
-        document.getElementById('pwdNameInput').focus();
-    }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.getElementById("pwdSearchBtn");
-    const idInput = document.getElementById("pwdSearchInput");
-    const nameInput = document.getElementById("pwdNameInput");
+    const unifiedInput = document.getElementById("pwdUnifiedInput");
     const resultBox = document.getElementById("pwdResultBox");
 
     searchBtn.addEventListener("click", verifyPWD);
 
-    // Listen for Enter key on both input channels
-    idInput.addEventListener("keypress", (e) => { if(e.key === "Enter") verifyPWD(); });
-    nameInput.addEventListener("keypress", (e) => { if(e.key === "Enter") verifyPWD(); });
+    // Nakikinig sa Enter key para sa madaling pag-search
+    unifiedInput.addEventListener("keypress", (e) => {
+        if(e.key === "Enter") verifyPWD();
+    });
 
     function verifyPWD() {
-        // Read values based on active mode
-        const idValue = idInput.value.trim();
-        const nameValue = nameInput.value.trim();
+        const queryValue = unifiedInput.value.trim();
 
-        // 1. VALIDATION OVERLAY
-        if (currentSearchMode === 'id-mode' && idValue === "") {
-            showError("Please Enter a PWD ID Number", "Input a valid PWD ID number before running the verification system.");
+        // 1. INPUT VALIDATION (Kapag walang laman)
+        if (queryValue === "") {
+            showError(
+                "Please Enter Your Search Query",
+                "Input a valid PWD ID number or a Person's Name before initializing the verification sequence."
+            );
             return;
         }
 
-        if (currentSearchMode === 'name-mode' && nameValue === "") {
-            showError("Please Enter a Full Name", "Input a valid name query to search across the e-PDAO directory records.");
-            return;
+        // 2. SMART IDENTIFICATION (Awtomatikong tinitignan kung ID o Pangalan gamit ang Regex)
+        const hasNumbers = /\d/.test(queryValue);
+        let detectedTypeHTML = "";
+
+        if (hasNumbers) {
+            detectedTypeHTML = `Detected Input Type: <strong>PWD ID Number</strong><br>Query: <strong>${queryValue}</strong>`;
+        } else {
+            detectedTypeHTML = `Detected Input Type: <strong>Full Name Query</strong><br>Query: <strong>${queryValue}</strong>`;
         }
 
-        // 2. LOADING STATE
+        // 3. LOADING STATE ANIMATION
         resultBox.innerHTML = `
             <div class="default-result">
-                <i class="fa-solid fa-spinner fa-spin" style="color: #002855;"></i>
+                <i class="fa-solid fa-spinner fa-spin"></i>
                 <h3 style="margin-top:15px;">Scanning PDAO Database...</h3>
                 <p>Please wait while checking registration logs for any matching records.</p>
             </div>
         `;
 
-        // 3. SIMULATED BACKEND RESPONSE (1.8s Timeout)
+        // 4. SIMULATED BACKEND RESPONSE (1.8s Timeout)
         setTimeout(() => {
-            let searchMetaHTML = currentSearchMode === 'id-mode'
-                ? `PWD ID Number: <strong>${idValue}</strong>`
-                : `Queried Name: <strong>${nameValue}</strong>`;
-
             resultBox.innerHTML = `
                 <div class="default-result">
                     <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
                     <h3>Record Match Found</h3>
-                    <p style="margin-bottom: 12px;">The system successfully processed your tracking inquiry.</p>
-                    <div style="background: rgba(0,40,85,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px;">
-                        ${searchMetaHTML} <br>
-                        Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered</span>
+                    <p style="margin-bottom: 12px;">The system successfully processed your tracking inquiry across the database registry.</p>
+                    <div style="background: rgba(0,40,85,0.04); padding: 14px; border-radius: 12px; margin-bottom: 15px; font-size: 14px; text-align: left; line-height: 1.6; color: #334155;">
+                        ${detectedTypeHTML} <br>
+                        Verification Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered Member</span>
                     </div>
                     <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
                         Cross-Check with National DOH
