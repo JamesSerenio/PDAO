@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminRegisteredController;
 
@@ -49,7 +50,17 @@ Route::get('/report-concern', function () {
 })->name('report-concern');
 
 Route::get('/pwd-registration', function () {
-    return view('pages.trackingmap.pwd-registration');
+    $total_pwd = DB::table('local_profiles')->count();
+
+    $total_barangays = DB::table('local_profiles')
+        ->whereNotNull('barangay')
+        ->distinct()
+        ->count('barangay');
+
+    return view('pages.trackingmap.pwd-registration', [
+        'total_pwd' => $total_pwd,
+        'total_barangays' => $total_barangays,
+    ]);
 })->name('pwd-registration');
 
 Route::get('/pwd-directory', function () {
