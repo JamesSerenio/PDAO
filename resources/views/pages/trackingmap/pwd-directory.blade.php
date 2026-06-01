@@ -97,11 +97,7 @@
                             <div id="pwdSuggestionBox" class="suggestion-box"></div>
                         </div>
 
-                        <button
-                            type="button"
-                            id="pwdSearchBtn"
-                            class="verify-btn"
-                        >
+                        <button type="button" id="pwdSearchBtn" class="verify-btn">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             Verify Record
                         </button>
@@ -126,10 +122,7 @@
                         <i class="fa-solid fa-shield-heart"></i>
                     </div>
                     <h3>Secure Verification</h3>
-                    <p>
-                        This system helps verify and validate
-                        official PWD Identification Cards.
-                    </p>
+                    <p>This system helps verify and validate official PWD Identification Cards.</p>
                 </div>
 
                 <div class="info-card blue-card">
@@ -154,11 +147,7 @@
                         Continue verification through the
                         official Department of Health website.
                     </p>
-                    <a
-                        href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php"
-                        target="_blank"
-                        class="visit-btn"
-                    >
+                    <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
                         Visit DOH Website
                     </a>
                 </div>
@@ -177,8 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const unifiedInput = document.getElementById("pwdUnifiedInput");
     const resultBox = document.getElementById("pwdResultBox");
     const suggestionBox = document.getElementById("pwdSuggestionBox");
-
-    let selectedQuery = "";
 
     unifiedInput.addEventListener("input", fetchSuggestions);
 
@@ -234,33 +221,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     div.innerHTML = `
                         <div class="suggestion-name">${escapeHtml(fullName)}</div>
-                        <div class="suggestion-id">PWD ID: ${escapeHtml(pwdId)}</div>
+                        <div class="suggestion-id">PWD ID: ${escapeHtml(pwdId)} | Record ID: ${escapeHtml(item.id)}</div>
                     `;
 
                     div.addEventListener("click", () => {
-                        selectedQuery = item.pwd_id_no ? item.pwd_id_no : fullName;
-                        unifiedInput.value = selectedQuery;
+                        unifiedInput.value = item.pwd_id_no ? item.pwd_id_no : fullName;
                         suggestionBox.style.display = "none";
-                        verifyPWD(selectedQuery);
+                        verifyPWD(unifiedInput.value.trim());
                     });
 
                     suggestionBox.appendChild(div);
                 });
 
                 suggestionBox.style.display = "block";
-            })
-            .catch(() => {
-                suggestionBox.innerHTML = "";
-                suggestionBox.style.display = "none";
             });
     }
 
     function verifyPWD(queryValue) {
         if (queryValue === "") {
-            showError(
-                "Please Enter a Query",
-                "Input a valid PWD ID number or Full Name before running the verification system."
-            );
+            showError("Please Enter a Query", "Input a valid PWD ID number or Full Name before running the verification system.");
             return;
         }
 
@@ -280,18 +259,59 @@ document.addEventListener("DOMContentLoaded", () => {
                     const fullName = formatFullName(record);
                     const pwdId = record.pwd_id_no ? record.pwd_id_no : "No PWD ID encoded";
 
+                    const photoUrl = record.photo_1x1
+                        ? `/storage/${record.photo_1x1}`
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0B3D91&color=fff&size=200`;
+
                     resultBox.innerHTML = `
                         <div class="default-result">
                             <i class="fa-solid fa-circle-check" style="color:#16a34a;"></i>
                             <h3>Record Match Found</h3>
                             <p style="margin-bottom: 12px;">This person is found in the PDAO database.</p>
 
-                            <div style="background: rgba(0,40,85,0.04); padding: 12px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; text-align: left;">
-                                Name: <strong>${escapeHtml(fullName)}</strong><br>
-                                PWD ID Number: <strong>${escapeHtml(pwdId)}</strong><br>
-                                Barangay: <strong>${escapeHtml(record.barangay ?? "Not encoded")}</strong><br>
-                                Municipality: <strong>${escapeHtml(record.municipality ?? "Not encoded")}</strong><br>
-                                Status: <span style="color: #16a34a; font-weight: 700;">● Active Registered</span>
+                            <div style="
+                                max-width: 460px;
+                                margin: 0 auto 18px auto;
+                                background: linear-gradient(135deg, #ffffff, #eef5ff);
+                                border: 2px solid #0b3d91;
+                                border-radius: 18px;
+                                overflow: hidden;
+                                text-align: left;
+                                box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+                            ">
+                                <div style="
+                                    background: #0b3d91;
+                                    color: white;
+                                    padding: 10px 14px;
+                                    text-align: center;
+                                    font-weight: 800;
+                                    letter-spacing: .5px;
+                                ">
+                                    PWD IDENTIFICATION RECORD
+                                </div>
+
+                                <div style="display: flex; gap: 14px; padding: 16px; align-items: center;">
+                                    <img src="${photoUrl}" alt="PWD Photo" style="
+                                        width: 110px;
+                                        height: 110px;
+                                        object-fit: cover;
+                                        border-radius: 12px;
+                                        border: 3px solid #facc15;
+                                        background: #e5e7eb;
+                                    ">
+
+                                    <div style="font-size: 14px; line-height: 1.55;">
+                                        <div><strong>Name:</strong> ${escapeHtml(fullName)}</div>
+                                        <div><strong>PWD ID:</strong> ${escapeHtml(pwdId)}</div>
+                                        <div><strong>Record ID:</strong> ${escapeHtml(record.id)}</div>
+                                        <div><strong>Barangay:</strong> ${escapeHtml(record.barangay ?? "Not encoded")}</div>
+                                        <div><strong>Municipality:</strong> ${escapeHtml(record.municipality ?? "Not encoded")}</div>
+                                        <div>
+                                            <strong>Status:</strong>
+                                            <span style="color:#16a34a; font-weight:800;">● Active Registered</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <a href="https://pwd.doh.gov.ph/tbl_pwd_id_verificationlist.php" target="_blank" class="visit-btn">
@@ -310,19 +330,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 Search Query: <strong>${escapeHtml(queryValue)}</strong><br>
                                 Status: <span style="color: #dc2626; font-weight: 700;">● Unverified / Not in Database</span>
                             </div>
-
-                            <p style="font-size: 13.5px; color: #6b7280;">
-                                Please double-check the spelling or PWD ID number and try again.
-                            </p>
                         </div>
                     `;
                 }
             })
             .catch(() => {
-                showError(
-                    "Database Connection Error",
-                    "Unable to verify record. Please check your route, database connection, or server."
-                );
+                showError("Database Connection Error", "Unable to verify record. Please check your route, database connection, or server.");
             });
     }
 
