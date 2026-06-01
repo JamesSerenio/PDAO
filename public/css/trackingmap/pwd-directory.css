@@ -41,7 +41,6 @@ body {
     color: white;
 }
 
-/* EKSAKTONG DISENYO KATULAD SA VISION */
 .pwd-directory-hero .hero-badge {
     display: inline-flex !important;
     align-items: center !important;
@@ -112,70 +111,33 @@ body {
 .search-description { color: #6b7280; line-height: 1.7; margin-bottom: 35px; font-size: 15px; }
 
 /* ========================================================
-    🆕 NEW ADDITION: SEARCH NAVIGATION TABS
+    🆕 PINAG-ISANG SEARCH BOX AT INPUT FIELDS
 ======================================================== */
-.search-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 22px;
-    border-bottom: 2px solid #f1f5f9;
-    padding-bottom: 12px;
-}
-
-.search-tab-btn {
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14.5px;
-    font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-}
-
-.search-tab-btn i {
-    font-size: 16px;
-}
-
-.search-tab-btn:hover {
-    background: #f1f5f9;
-    color: var(--dark);
-}
-
-.search-tab-btn.active {
-    background: #eef4ff;
+.unified-search-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--blue);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* ========================================================
-    DYNAMIC INPUT HANDLING WITH THE SEARCH BOX
-======================================================== */
 .search-box {
     display: flex;
+    flex-direction: column;
     gap: 15px;
 }
 
-.search-input-group {
-    display: none !important; /* Nakatago ang field kapag hindi active */
-}
-
-.search-input-group.active {
-    display: flex !important; /* Lumilitaw kapag tinawag ng JavaScript */
-}
-
 .search-input-wrapper {
-    flex: 1;
+    width: 100%;
     display: flex;
     align-items: center;
     background: #f9fafb;
     border: 2px solid #e5e7eb;
     border-radius: 18px;
-    padding: 0 18px;
-    transition: 0.3s;
+    padding: 0 20px;
+    transition: 0.3s ease;
 }
 
 .search-input-wrapper:focus-within {
@@ -184,18 +146,27 @@ body {
     background: #fff;
 }
 
-.search-input-wrapper i { color: var(--blue); font-size: 20px; margin-right: 12px; }
+.search-input-wrapper i { color: var(--blue); font-size: 20px; margin-right: 15px; }
 .search-input-wrapper input { width: 100%; height: 65px; border: none; outline: none; background: transparent; font-size: 17px; color: var(--dark); }
 
 /* VERIFY BUTTON */
 .verify-btn {
     background: linear-gradient(135deg, var(--yellow), #ffbf00);
-    border: none; padding: 0 35px; border-radius: 18px;
-    font-weight: 800; color: #000; font-size: 16px;
-    cursor: pointer; transition: 0.3s ease;
-    display: flex; align-items: center; gap: 10px;
+    border: none;
+    height: 60px;
+    border-radius: 18px;
+    font-weight: 800;
+    color: #000;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
 }
-.verify-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3); }
+.verify-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3); }
 
 /* RESULT CONTAINER */
 .result-container {
@@ -262,16 +233,14 @@ body.dark-mode .directory-search-card {
 body.dark-mode .directory-search-card h2 { color: #ffffff; }
 body.dark-mode .search-description { color: rgba(255, 255, 255, 0.6); }
 body.dark-mode .small-title { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
-
-/* New Tab Adjustment for Dark Mode */
-body.dark-mode .search-tabs { border-color: rgba(255, 255, 255, 0.08); }
-body.dark-mode .search-tab-btn { color: rgba(255, 255, 255, 0.5); }
-body.dark-mode .search-tab-btn:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
-body.dark-mode .search-tab-btn.active { background: rgba(255, 212, 71, 0.12); color: #ffd400; }
+body.dark-mode .unified-search-label { color: #ffd400; }
 
 body.dark-mode .search-input-wrapper {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-mode .search-input-wrapper:focus-within {
+    border-color: #ffd400;
 }
 body.dark-mode .search-input-wrapper input { color: #ffffff; }
 body.dark-mode .search-input-wrapper i { color: #ffd400; }
@@ -316,8 +285,5 @@ body.dark-mode .blue-card { background: linear-gradient(135deg, rgba(11, 77, 162
 
 @media(max-width: 576px) {
     .hero-content h1 { font-size: 28px; line-height: 1.25; }
-    .search-box { flex-direction: column; }
-    .verify-btn { height: 60px; justify-content: center; }
-    .search-tabs { overflow-x: auto; padding-bottom: 5px; } /* Swipable tabs sa cellphone */
-    .search-tab-btn { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+    .verify-btn { height: 60px; justify-content: center; width: 100%; }
 }
