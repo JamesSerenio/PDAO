@@ -78,6 +78,7 @@ Route::get('/pwd-directory/search', function (Request $request) {
         ->select(
             'id',
             'pwd_id_no',
+            'photo_1x1',
             'first_name',
             'middle_name',
             'last_name',
@@ -118,6 +119,7 @@ Route::get('/pwd-directory/verify', function (Request $request) {
         ->select(
             'id',
             'pwd_id_no',
+            'photo_1x1',
             'first_name',
             'middle_name',
             'last_name',
@@ -140,6 +142,7 @@ Route::get('/pwd-directory/verify', function (Request $request) {
             ->select(
                 'id',
                 'pwd_id_no',
+                'photo_1x1',
                 'first_name',
                 'middle_name',
                 'last_name',
@@ -168,10 +171,6 @@ Route::get('/pwd-directory/verify', function (Request $request) {
         'record' => $record,
     ]);
 })->name('pwd-directory.verify');
-
-Route::get('/pwd-directory', function () {
-    return view('pages.trackingmap.pwd-directory');
-})->name('pwd-directory');
 
 /*
 |--------------------------------------------------------------------------
@@ -261,7 +260,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 /* ========================================
    UPDATE CATEGORIES
 ======================================== */
-
 Route::get('/updates/programs', function () {
     return view('pages.updates.categories.programs');
 })->name('updates.programs');
@@ -289,7 +287,6 @@ Route::get('/news', function () {
 /* ========================================
    NEWS WHOLE STORY PAGES
 ======================================== */
-
 Route::get('/news/disability-rights-week', function () {
     return view('pages.updates.news.disability-rights-week');
 })->name('news.disability');

@@ -551,9 +551,13 @@ if (pwdSearchBtn && pwdUnifiedInput && pwdResultBox) {
                     const record = data.record;
                     const fullName = formatFullName(record);
                     const pwdId = record.pwd_id_no ? record.pwd_id_no : "No PWD ID encoded";
-            const photoUrl = record.photo_1x1
-                ? `/storage/${record.photo_1x1}`
-                : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0B3D91&color=fff&size=200`;
+        const cleanPhotoPath = record.photo_1x1
+            ? record.photo_1x1.replace(/^\/+/, "")
+            : "";
+
+        const photoUrl = cleanPhotoPath
+            ? `${window.location.origin}/storage/${cleanPhotoPath}`
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0B3D91&color=fff&size=200`;
 
             pwdResultBox.innerHTML = `
                 <div class="default-result">
@@ -583,7 +587,11 @@ if (pwdSearchBtn && pwdUnifiedInput && pwdResultBox) {
                         </div>
 
                         <div style="display: flex; gap: 14px; padding: 16px; align-items: center;">
-                            <img src="${photoUrl}" alt="PWD Photo" style="
+                            <img 
+                                src="${photoUrl}" 
+                                alt="PWD Photo"
+                                onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0B3D91&color=fff&size=200';"
+                                style="
                                 width: 105px;
                                 height: 105px;
                                 object-fit: cover;
