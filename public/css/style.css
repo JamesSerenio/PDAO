@@ -338,7 +338,6 @@ body {
 /* =========================================
    STORY PAGE
 ========================================= */
-
 .story-hero {
     position: relative;
     min-height: 65vh;
@@ -1335,39 +1334,6 @@ body.dark-mode .submenu-arrow {
 /* =========================
    SECTIONS
 ========================= */
-.section {
-    padding: 80px 20px;
-}
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.section-header span {
-    color: #0b3d91;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.section-header h2 {
-    font-size: 2.3rem;
-    margin-bottom: 10px;
-}
-
-.section-header p {
-    color: #64748b;
-    line-height: 1.7;
-}
-
 .info-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -2668,1675 +2634,6 @@ body.dark-mode .footer-links-bar a:hover {
 }
 
 /* =========================
-   FEDERATION GRID - FINAL CLEAN VERSION
-========================= */
-.federation-block {
-    margin-top: 10px;
-}
-
-.federation-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(220px, 1fr));
-    gap: 22px;
-    margin-bottom: 22px;
-}
-
-/* centered last row for remaining 2 cards */
-.federation-last-row {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 22px;
-    flex-wrap: wrap;
-}
-
-/* same width for last two cards */
-.federation-last-row .org-card {
-    width: 100%;
-    max-width: 280px;
-}
-
-/* same design for ALL federation cards */
-.federation-grid .org-card,
-.federation-last-row .org-card {
-    min-height: 250px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.15));
-    border: 1px solid rgba(251,191,36,0.4);
-    border-radius: 22px;
-    box-shadow: 0 12px 26px rgba(0,0,0,0.15);
-}
-
-/* same internal spacing everywhere */
-.federation-grid .org-card.mini,
-.federation-last-row .org-card.mini {
-    padding: 14px 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-/* same image size everywhere */
-.federation-grid .org-card.mini .org-photo-wrap,
-.federation-last-row .org-card.mini .org-photo-wrap {
-    width: 100px;
-    height: 100px;
-    border-radius: 16px;
-    margin: 0 auto 14px;
-}
-
-/* same hover effect everywhere */
-.federation-grid .org-card:hover,
-.federation-last-row .org-card:hover {
-    background: #fbbf24;
-    color: #0f172a;
-    transform: translateY(-6px) scale(1.03);
-}
-
-.federation-grid .org-card:hover h3,
-.federation-grid .org-card:hover p,
-.federation-last-row .org-card:hover h3,
-.federation-last-row .org-card:hover p {
-    color: #0f172a;
-}
-
-/* =========================
-   REMOVE SECOND-SECTION SPECIAL EFFECT
-========================= */
-.second-layout {
-    margin-top: 34px;
-    border: none;
-}
-
-.second-layout .org-card,
-.second-layout .federation-last-row .org-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.15));
-    border: 1px solid rgba(251,191,36,0.4);
-}
-
-.second-layout .org-card.mini {
-    min-height: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.second-layout .org-card.mini h3 {
-    margin-bottom: 6px;
-}
-
-.second-layout .org-card.mini p {
-    margin-top: 0;
-}
-
-/* if second section has no image, keep spacing balanced */
-.second-layout .org-card.mini:not(:has(.org-photo-wrap)) {
-    justify-content: center;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 1100px) {
-    .federation-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 820px) {
-    .federation-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .federation-last-row {
-        gap: 18px;
-    }
-}
-
-@media (max-width: 560px) {
-    .federation-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .federation-last-row {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .federation-last-row .org-card {
-        max-width: 100%;
-    }
-}
-/* ===============================
-   OFFICE LOCATION - NEXT UPGRADE
-=============================== */
-
-.office-section {
-    padding: 100px 20px;
-    background: linear-gradient(180deg, #f4f7fb 0%, #eef4ff 100%);
-}
-
-.office-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.office-header {
-    text-align: center;
-    margin-bottom: 38px;
-}
-
-.office-badge {
-    display: inline-block;
-    background: #ffd400 !important;
-    color: #2c1a4d;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-
-.office-header h1 {
-    font-size: 38px;
-    font-weight: 800;
-    color: #2c1a4d;
-    margin-bottom: 10px;
-}
-
-.office-header p {
-    color: #5b6170;
-    font-size: 16px;
-}
-
-/* HERO CARD */
-.office-hero-card {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: 26px;
-    background: #ffffff;
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
-    margin-bottom: 34px;
-}
-
-.office-hero-image img {
-    width: 100%;
-    height: 100%;
-    min-height: 360px;
-    object-fit: cover;
-    display: block;
-}
-
-.office-hero-content {
-    padding: 34px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.office-hero-content h2 {
-    font-size: 28px;
-    color: #2c1a4d;
-    margin-bottom: 14px;
-    font-weight: 800;
-}
-
-.office-hero-content p {
-    font-size: 16px;
-    color: #444;
-    line-height: 1.8;
-}
-
-/* ACTION BUTTONS */
-.office-actions {
-    margin-top: 24px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.btn-map,
-.btn-direction,
-.btn-email {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: 0.25s ease;
-}
-
-.btn-map {
-    background: #2c1a4d;
-    color: #fff;
-}
-
-.btn-map:hover {
-    background: #3c2864;
-    transform: translateY(-2px);
-}
-
-.btn-direction {
-    background: #ffd84d;
-    color: #111;
-}
-
-.btn-direction:hover {
-    background: #ffcd1a;
-    transform: translateY(-2px);
-}
-
-.btn-email {
-    background: #eef1f7;
-    color: #2c1a4d;
-}
-
-.btn-email:hover {
-    background: #dde5f1;
-    transform: translateY(-2px);
-}
-
-/* QUICK GRID */
-.office-quick-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 34px;
-}
-
-.office-quick-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 24px 20px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-    text-align: center;
-    transition: 0.25s ease;
-}
-
-.office-quick-card:hover {
-    transform: translateY(-5px);
-}
-
-.quick-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(255, 216, 77, 0.22);
-    color: #2c1a4d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 14px;
-    font-size: 22px;
-}
-
-.office-quick-card h3 {
-    font-size: 18px;
-    color: #2c1a4d;
-    margin-bottom: 8px;
-    font-weight: 800;
-}
-
-.office-quick-card p {
-    color: #555;
-    line-height: 1.7;
-    font-size: 14px;
-}
-
-/* MAIN GRID */
-.office-main-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.15fr;
-    gap: 26px;
-    margin-bottom: 40px;
-}
-
-.office-info-card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-}
-
-.office-info-card h3 {
-    font-size: 24px;
-    color: #2c1a4d;
-    margin-bottom: 18px;
-    font-weight: 800;
-}
-
-.info-list {
-    margin-top: 10px;
-}
-
-.info-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 14px;
-    color: #333;
-    line-height: 1.7;
-}
-
-.info-item i {
-    color: #ffd84d;
-    margin-top: 4px;
-    font-size: 16px;
-}
-
-/* CONTACT PANEL */
-.office-contact-panel {
-    margin-top: 26px;
-    background: #f7f9fd;
-    border-radius: 16px;
-    padding: 22px;
-}
-
-.office-contact-panel h4 {
-    font-size: 20px;
-    color: #2c1a4d;
-    margin-bottom: 8px;
-    font-weight: 800;
-}
-
-.office-contact-panel p {
-    color: #555;
-    margin-bottom: 16px;
-}
-
-.office-contact-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.contact-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 16px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 700;
-    transition: 0.25s ease;
-}
-
-.light-btn {
-    background: #eef1f7;
-    color: #2c1a4d;
-}
-
-.light-btn:hover {
-    background: #dde5f1;
-}
-
-.dark-btn {
-    background: #2c1a4d;
-    color: #fff;
-}
-
-.dark-btn:hover {
-    background: #3c2864;
-}
-
-.yellow-btn {
-    background: #ffd84d;
-    color: #111;
-}
-
-.yellow-btn:hover {
-    background: #ffcd1a;
-}
-
-/* MAP CARD */
-.office-map-card {
-    background: #fff;
-    padding: 14px;
-    border-radius: 20px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-}
-
-.office-map-card iframe {
-    width: 100%;
-    min-height: 450px;
-    border: none;
-    border-radius: 14px;
-}
-
-/* GUIDE */
-.office-guide {
-    margin-top: 10px;
-    text-align: center;
-}
-
-.office-guide h3 {
-    font-size: 28px;
-    font-weight: 800;
-    color: #2c1a4d;
-    margin-bottom: 22px;
-}
-
-.guide-steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-}
-
-.step {
-    background: #fff;
-    padding: 24px 18px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-    transition: 0.25s ease;
-}
-
-.step:hover {
-    transform: translateY(-5px);
-}
-
-.step span {
-    display: inline-flex;
-    width: 46px;
-    height: 46px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #2c1a4d;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 12px;
-}
-
-.step p {
-    color: #555;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-/* DARK MODE */
-body.dark-mode .office-section {
-    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
-}
-
-body.dark-mode .office-header h1,
-body.dark-mode .office-hero-content h2,
-body.dark-mode .office-quick-card h3,
-body.dark-mode .office-info-card h3,
-body.dark-mode .office-contact-panel h4,
-body.dark-mode .office-guide h3 {
-    color: #f8fafc;
-}
-
-body.dark-mode .office-header p,
-body.dark-mode .office-hero-content p,
-body.dark-mode .office-quick-card p,
-body.dark-mode .office-contact-panel p,
-body.dark-mode .step p,
-body.dark-mode .info-item {
-    color: #d1d5db;
-}
-
-body.dark-mode .office-badge {
-    background: rgba(255, 216, 77, 0.18);
-    color: #ffd84d;
-}
-
-body.dark-mode .office-hero-card,
-body.dark-mode .office-quick-card,
-body.dark-mode .office-info-card,
-body.dark-mode .office-map-card,
-body.dark-mode .step {
-    background: #1e293b;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-}
-
-body.dark-mode .office-contact-panel {
-    background: #0f172a;
-}
-
-body.dark-mode .btn-email,
-body.dark-mode .light-btn {
-    background: #334155;
-    color: #f8fafc;
-}
-
-body.dark-mode .btn-email:hover,
-body.dark-mode .light-btn:hover {
-    background: #475569;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-    .office-quick-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .guide-steps {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 900px) {
-    .office-hero-card,
-    .office-main-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .office-hero-image img {
-        min-height: 280px;
-    }
-}
-
-@media (max-width: 640px) {
-    .office-section {
-        padding: 70px 14px;
-    }
-
-    .office-header h1 {
-        font-size: 30px;
-    }
-
-    .office-hero-content {
-        padding: 24px 20px;
-    }
-
-    .office-quick-grid,
-    .guide-steps {
-        grid-template-columns: 1fr;
-    }
-
-    .office-actions,
-    .office-contact-buttons {
-        flex-direction: column;
-    }
-}
-/* ===============================
-   CONTACT PAGES - INQUIRY / FEEDBACK
-=============================== */
-
-.contact-pro-section {
-    padding: 100px 20px;
-    background: linear-gradient(180deg, #f4f7fb 0%, #eef4ff 100%);
-}
-
-.contact-pro-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.contact-pro-header {
-    text-align: center;
-    margin-bottom: 38px;
-}
-
-.contact-pro-badge {
-    display: inline-block;
-    background: #ffd400;
-    color: #2c1a4d;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-
-.contact-pro-header h1 {
-    font-size: 38px;
-    font-weight: 800;
-    color: #2c1a4d;
-    margin-bottom: 10px;
-}
-
-.contact-pro-header p {
-    color: #5b6170;
-    font-size: 16px;
-    max-width: 760px;
-    margin: 0 auto;
-    line-height: 1.7;
-}
-
-.contact-pro-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 26px;
-}
-
-.contact-pro-info-card,
-.contact-pro-form-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-}
-
-.contact-pro-info-card h2,
-.contact-pro-form-card h2 {
-    font-size: 26px;
-    color: #2c1a4d;
-    margin-bottom: 14px;
-    font-weight: 800;
-}
-
-.contact-pro-info-card p {
-    color: #555;
-    line-height: 1.8;
-}
-
-.contact-pro-list {
-    margin-top: 24px;
-    display: grid;
-    gap: 16px;
-}
-
-.contact-pro-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    background: #f8faff;
-    border-radius: 14px;
-    padding: 16px;
-}
-
-.contact-pro-item i {
-    color: #ffd84d;
-    font-size: 18px;
-    margin-top: 4px;
-}
-
-.contact-pro-item div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.contact-pro-item strong {
-    color: #2c1a4d;
-    font-size: 15px;
-}
-
-.contact-pro-item span {
-    color: #555;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-.contact-pro-note {
-    margin-top: 24px;
-    background: #2c1a4d;
-    color: #fff;
-    border-radius: 16px;
-    padding: 22px;
-}
-
-.contact-pro-note h4 {
-    margin-bottom: 8px;
-    font-size: 18px;
-    font-weight: 800;
-}
-
-.contact-pro-note p {
-    color: #f1f5f9;
-    line-height: 1.7;
-}
-
-.contact-pro-form {
-    margin-top: 8px;
-    display: grid;
-    gap: 18px;
-}
-
-.contact-pro-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.contact-pro-field label {
-    font-size: 14px;
-    font-weight: 700;
-    color: #2c1a4d;
-}
-
-.contact-pro-field input,
-.contact-pro-field textarea,
-.contact-pro-field select {
-    width: 100%;
-    border: 1px solid #d9e2f0;
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 15px;
-    outline: none;
-    transition: 0.25s ease;
-    background: #fff;
-    color: #1f2937;
-}
-
-.contact-pro-field input:focus,
-.contact-pro-field textarea:focus,
-.contact-pro-field select:focus {
-    border-color: #2c1a4d;
-    box-shadow: 0 0 0 4px rgba(44, 26, 77, 0.08);
-}
-
-.contact-pro-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 13px 20px;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.25s ease;
-}
-
-.primary-btn {
-    background: #2c1a4d;
-    color: #fff;
-}
-
-.primary-btn:hover {
-    background: #3b255f;
-    transform: translateY(-2px);
-}
-
-.secondary-btn {
-    background: #2c1a4d;
-    color: #fff;
-}
-
-.secondary-btn:hover {
-    background: #ffcd1a;
-    transform: translateY(-2px);
-}
-
-/* DARK MODE */
-body.dark-mode .contact-pro-section {
-    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
-}
-
-body.dark-mode .contact-pro-badge {
-    background: rgba(255, 216, 77, 0.16);
-    color: #ffd84d;
-}
-
-body.dark-mode .contact-pro-header h1,
-body.dark-mode .contact-pro-info-card h2,
-body.dark-mode .contact-pro-form-card h2,
-body.dark-mode .contact-pro-item strong,
-body.dark-mode .contact-pro-field label {
-    color: #f8fafc;
-}
-
-body.dark-mode .contact-pro-header p,
-body.dark-mode .contact-pro-info-card p,
-body.dark-mode .contact-pro-item span {
-    color: #d1d5db;
-}
-
-body.dark-mode .contact-pro-info-card,
-body.dark-mode .contact-pro-form-card,
-body.dark-mode .contact-pro-item {
-    background: #1e293b;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-}
-
-body.dark-mode .contact-pro-item {
-    background: #0f172a;
-}
-
-body.dark-mode .contact-pro-field input,
-body.dark-mode .contact-pro-field textarea,
-body.dark-mode .contact-pro-field select {
-    background: #0f172a;
-    color: #f8fafc;
-    border-color: #334155;
-}
-
-body.dark-mode .contact-pro-field input:focus,
-body.dark-mode .contact-pro-field textarea:focus,
-body.dark-mode .contact-pro-field select:focus {
-    border-color: #ffd84d;
-    box-shadow: 0 0 0 4px rgba(255, 216, 77, 0.12);
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .contact-pro-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 640px) {
-    .contact-pro-section {
-        padding: 70px 14px;
-    }
-
-    .contact-pro-header h1 {
-        font-size: 30px;
-    }
-
-    .contact-pro-info-card,
-    .contact-pro-form-card {
-        padding: 22px 18px;
-    }
-}
-
-/* =========================
-   PDAO OFFICE CHART LINES
-========================= */
-.org-chart-office {
-    max-width: 920px;
-    margin: 0 auto;
-    position: relative;
-}
-
-.office-two-cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(240px, 280px));
-    justify-content: center;
-    gap: 40px 160px;
-    margin-top: 12px;
-    position: relative;
-}
-
-.office-card {
-    position: relative;
-}
-
-.org-connector-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    margin: 6px 0 10px;
-}
-
-.org-line.vertical {
-    width: 3px;
-    height: 42px;
-    background: rgba(255,255,255,0.55);
-}
-
-.org-line.vertical.short {
-    height: 26px;
-}
-
-.org-line.horizontal.office-cross {
-    width: 62%;
-    height: 3px;
-    background: rgba(255,255,255,0.55);
-}
-
-.lower-connectors {
-    width: 62%;
-    margin: 0 auto;
-    height: 34px;
-    position: relative;
-}
-
-.lower-connectors .down-left,
-.lower-connectors .down-right {
-    position: absolute;
-    top: 0;
-    width: 3px;
-    height: 34px;
-    background: rgba(255,255,255,0.55);
-}
-
-.lower-connectors .down-left {
-    left: 0;
-}
-
-.lower-connectors .down-right {
-    right: 0;
-}
-
-.org-level.lower-level {
-    margin-top: 10px;
-}
-
-/* better alignment for featured cards */
-.org-card.featured,
-.org-card.featured.secondary {
-    text-align: center;
-}
-
-/* =========================
-   GLOW EFFECT - ORG CHART LINES
-========================= */
-
-/* base glow */
-.org-line {
-    position: relative;
-    background: rgba(255,255,255,0.8);
-    box-shadow:
-        0 0 6px rgba(255,255,255,0.6),
-        0 0 12px rgba(59,130,246,0.6),
-        0 0 20px rgba(37,99,235,0.5);
-    animation: glowPulse 2.5s ease-in-out infinite;
-}
-
-/* stronger glow for main connections */
-.org-line.vertical,
-.org-line.horizontal {
-    box-shadow:
-        0 0 8px rgba(255,255,255,0.8),
-        0 0 16px rgba(59,130,246,0.7),
-        0 0 28px rgba(37,99,235,0.6);
-}
-
-/* animation pulse */
-@keyframes glowPulse {
-    0% {
-        opacity: 0.7;
-        box-shadow:
-            0 0 6px rgba(255,255,255,0.6),
-            0 0 12px rgba(59,130,246,0.5),
-            0 0 18px rgba(37,99,235,0.4);
-    }
-    50% {
-        opacity: 1;
-        box-shadow:
-            0 0 10px rgba(255,255,255,1),
-            0 0 22px rgba(59,130,246,0.9),
-            0 0 36px rgba(37,99,235,0.8);
-    }
-    100% {
-        opacity: 0.7;
-        box-shadow:
-            0 0 6px rgba(255,255,255,0.6),
-            0 0 12px rgba(59,130,246,0.5),
-            0 0 18px rgba(37,99,235,0.4);
-    }
-}
-
-/* =========================
-   SET OF OFFICERS MAIN
-========================= */
-.setofficers-section {
-    padding: 110px 20px 80px;
-    background:
-        linear-gradient(rgba(11,61,145,0.92), rgba(6,36,95,0.97));
-    color: #fff;
-}
-
-.setofficers-container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-/* HEADER */
-.setofficers-hero {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.setofficers-top-logos {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.setofficers-top-logos img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: #fff;
-    padding: 5px;
-}
-
-/* =========================
-   BLOCK
-========================= */
-.so-block {
-    position: relative;
-    background: rgba(255,255,255,0.08);
-    border-radius: 25px;
-    padding: 30px;
-    margin-bottom: 30px;
-    overflow: hidden;
-}
-
-/* WATERMARK */
-.so-block::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    opacity: 0.08;
-    pointer-events: none;
-}
-
-/* PDAO LOGO */
-.so-watermark-pdao::before {
-    background-image: url('/images/Logo.png');
-}
-
-/* DAPA LOGO (ikaw maglagay) */
-.so-watermark-dapa::before {
-    background-image: url('/images/dapa/Logo_PDAO.png');
-}
-
-/* PMAG LOGO (ikaw maglagay) */
-.so-watermark-pmag::before {
-    background-image: url('/images/pmag/Logo_PDAO.png');
-}
-
-/* =========================
-   CARDS
-========================= */
-.so-card {
-    background: rgba(255,255,255,0.12);
-    padding: 18px;
-    border-radius: 18px;
-    text-align: center;
-    transition: 0.3s;
-}
-
-.so-card:hover {
-    transform: translateY(-5px);
-}
-
-/* COLORS */
-.so-card.pdao {
-    border: 1px solid #fbbf24;
-}
-
-.so-card.dapa {
-    border: 1px solid #fbbf24;
-}
-
-.so-card.pmag {
-    border: 1px solid #60a5fa;
-}
-
-/* =========================
-   LINES (GLOW)
-========================= */
-.so-line {
-    margin: auto;
-    background: white;
-    box-shadow: 0 0 10px #3b82f6;
-}
-
-.so-line.vertical {
-    width: 3px;
-    height: 40px;
-}
-
-.so-line.horizontal {
-    height: 3px;
-    width: 60%;
-}
-
-.so-line.small {
-    height: 25px;
-}
-
-/* =========================
-   GRID
-========================= */
-.so-grid {
-    display: grid;
-    gap: 20px;
-    margin-top: 15px;
-}
-
-.two-cols {
-    grid-template-columns: repeat(2,1fr);
-}
-
-.three-cols {
-    grid-template-columns: repeat(3,1fr);
-}
-
-.four-cols {
-    grid-template-columns: repeat(4,1fr);
-}
-
-/* CENTER NODE */
-.so-node.center {
-    display: flex;
-    justify-content: center;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-    .two-cols,
-    .three-cols,
-    .four-cols {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* =========================
-   SET OF OFFICERS MAIN
-========================= */
-.setofficers-section {
-    padding: 110px 20px 80px;
-    background: linear-gradient(rgba(11,61,145,0.92), rgba(6,36,95,0.97));
-    min-height: 100vh;
-    color: #fff;
-}
-
-.setofficers-container {
-    max-width: 1200px;
-    margin: auto;
-}
-
-/* HEADER */
-.setofficers-hero {
-    text-align: center;
-    margin-bottom: 42px;
-    animation: fadeUp 0.8s ease;
-}
-
-.setofficers-header-top {
-    display: grid;
-    grid-template-columns: 80px 1fr 80px;
-    align-items: center;
-    gap: 16px;
-    max-width: 900px;
-    margin: 0 auto 12px;
-}
-
-.setofficers-header-logo {
-    width: 70px;
-    height: 70px;
-    display: block;
-    object-fit: contain;
-    object-position: center center;
-    border-radius: 50%;
-    background: transparent;
-    padding: 0;
-    border: 2px solid #000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    overflow: hidden;
-    box-sizing: border-box;
-    animation: logoGlow 4s ease-in-out infinite;
-}
-
-@keyframes logoGlow {
-    0%, 100% {
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 rgba(255,255,255,0);
-    }
-    50% {
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 18px rgba(255,255,255,0.35);
-    }
-}
-
-.setofficers-header-text {
-    text-align: center;
-}
-
-.setofficers-header-line1 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.setofficers-header-line2 {
-    font-size: 1rem;
-    color: #dbeafe;
-}
-
-.setofficers-title {
-    font-size: 3rem;
-    font-weight: 800;
-    margin: 10px 0 12px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-/* =========================
-   BLOCKS
-========================= */
-.so-block {
-    position: relative;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
-    backdrop-filter: blur(8px);
-    border-radius: 28px;
-    padding: 30px 24px;
-    margin-bottom: 34px;
-    overflow: hidden;
-    isolation: isolate;
-    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-}
-
-.so-block::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 500px;
-    height: 500px;
-    transform: translate(-50%, -50%);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    opacity: 0.10;
-    pointer-events: none;
-}
-
-.so-block > * {
-    position: relative;
-    z-index: 1;
-}
-
-/* same watermark size for all sections */
-.so-watermark-pdao::before {
-    background-image: url('/images/Logo.png');
-}
-
-.so-watermark-dapa::before {
-    background-image: url('/images/dapa/Logo_PDAO.png');
-}
-
-.so-watermark-pmag::before {
-    background-image: url('/images/pmag/Logo_PDAO.png');
-}
-
-.so-block-header {
-    text-align: center;
-    margin-bottom: 28px;
-}
-
-.so-block-header h2 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
-}
-
-.so-block-header p {
-    color: #fbbf24;
-    font-weight: 700;
-}
-
-/* =========================
-   SHARED CARDS
-========================= */
-.so-card {
-    padding: 20px 16px;
-    border-radius: 22px;
-    text-align: center;
-    min-height: 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    box-shadow: 0 12px 26px rgba(0,0,0,0.15);
-    transition: all 0.35s ease;
-}
-
-.so-card:hover {
-    transform: translateY(-6px) scale(1.02);
-}
-
-.so-card h3 {
-    font-size: 1rem;
-    margin-bottom: 8px;
-    color: #fff;
-    line-height: 1.35;
-}
-
-.so-card p {
-    color: #dbeafe;
-    font-weight: 600;
-    line-height: 1.5;
-}
-
-.so-card.featured {
-    min-height: 235px;
-}
-
-.so-card.mini {
-    min-height: 200px;
-}
-
-.so-photo-wrap {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 14px;
-    border-radius: 18px;
-    overflow: hidden;
-    background: rgba(255,255,255,0.12);
-    border: 3px solid rgba(255,255,255,0.18);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
-    flex-shrink: 0;
-}
-
-.so-photo-wrap.small-photo {
-    width: 90px;
-    height: 90px;
-}
-
-.so-photo-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* =========================
-   LINES
-========================= */
-.so-line {
-    margin: auto;
-    background: rgba(255,255,255,0.85);
-    position: relative;
-    box-shadow:
-        0 0 6px rgba(255,255,255,0.6),
-        0 0 12px rgba(59,130,246,0.6),
-        0 0 20px rgba(37,99,235,0.5);
-    animation: soGlowPulse 2.5s ease-in-out infinite;
-}
-
-.so-line.vertical {
-    width: 3px;
-    height: 40px;
-}
-
-.so-line.horizontal {
-    height: 3px;
-    width: 60%;
-    margin-top: 14px;
-    margin-bottom: 14px;
-}
-
-.so-line.short {
-    width: 38%;
-}
-
-.so-line.lower {
-    width: 38%;
-}
-
-.so-line.small {
-    height: 25px;
-}
-
-@keyframes soGlowPulse {
-    0% {
-        opacity: 0.7;
-        box-shadow:
-            0 0 6px rgba(255,255,255,0.6),
-            0 0 12px rgba(59,130,246,0.5),
-            0 0 18px rgba(37,99,235,0.4);
-    }
-    50% {
-        opacity: 1;
-        box-shadow:
-            0 0 10px rgba(255,255,255,1),
-            0 0 22px rgba(59,130,246,0.9),
-            0 0 36px rgba(37,99,235,0.8);
-    }
-    100% {
-        opacity: 0.7;
-        box-shadow:
-            0 0 6px rgba(255,255,255,0.6),
-            0 0 12px rgba(59,130,246,0.5),
-            0 0 18px rgba(37,99,235,0.4);
-    }
-}
-
-/* =========================
-   PDAO
-========================= */
-.so-card.pdao {
-    background: linear-gradient(180deg, rgba(251,191,36,0.20), rgba(255,255,255,0.10));
-    border: 2px solid rgba(251,191,36,0.35);
-}
-
-.so-card.pdao:hover {
-    background: #fbbf24;
-}
-
-.so-card.pdao:hover h3,
-.so-card.pdao:hover p {
-    color: #0f172a;
-}
-
-.so-tree {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-/* =========================
-   DAPA
-========================= */
-.so-card.dapa {
-    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.16));
-    border: 1px solid rgba(251,191,36,0.40);
-}
-
-.so-card.dapa:hover {
-    background: #fbbf24;
-}
-
-.so-card.dapa:hover h3,
-.so-card.dapa:hover p {
-    color: #0f172a;
-}
-
-.so-chart {
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-/* =========================
-   PMAG
-========================= */
-.pmag-tree {
-    max-width: 900px;
-    margin: auto;
-}
-
-.pmag-row {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 20px;
-    margin-top: 15px;
-}
-
-.pmag-row.four {
-    grid-template-columns: repeat(4,1fr);
-}
-
-/* PMAG unique color */
-.so-card.pmag {
-    border: 1px solid #60a5fa;
-    background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(96,165,250,0.15));
-}
-
-.so-card.pmag:hover {
-    background: #fbbf24;
-    color: #0f172a;
-}
-
-.so-pmag-chart {
-    max-width: 980px;
-    margin: 0 auto;
-}
-
-/* =========================
-   POLISHED DAPA + PMAG CONNECTOR LINES
-========================= */
-
-/* chart containers */
-.so-chart,
-.so-pmag-chart {
-    max-width: 980px;
-    margin: 0 auto;
-    position: relative;
-}
-
-/* center nodes */
-.so-node.center {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 4px;
-}
-
-/* make featured president cards feel more official */
-.so-card.featured {
-    max-width: 320px;
-    margin: 0 auto;
-}
-
-/* connector lines */
-.so-line {
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    background: rgba(255,255,255,0.9);
-    box-shadow:
-        0 0 6px rgba(255,255,255,0.65),
-        0 0 12px rgba(59,130,246,0.55),
-        0 0 20px rgba(37,99,235,0.45);
-    animation: soGlowPulse 2.5s ease-in-out infinite;
-    border-radius: 999px;
-}
-
-.so-line.vertical {
-    width: 3px;
-    height: 42px;
-}
-
-.so-line.vertical.small {
-    height: 26px;
-}
-
-.so-line.horizontal {
-    width: 42%;
-    height: 3px;
-    margin-top: 12px;
-    margin-bottom: 16px;
-}
-
-/* add subtle moving light */
-.so-line::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255,255,255,0.95) 50%,
-        transparent 100%
-    );
-    opacity: 0.65;
-    animation: soFlowLight 2.2s linear infinite;
-}
-
-@keyframes soFlowLight {
-    0% {
-        transform: translateX(-120%);
-    }
-    100% {
-        transform: translateX(120%);
-    }
-}
-
-/* row spacing */
-.so-chart .so-grid.two-cols,
-.so-pmag-chart .so-grid.two-cols {
-    margin-top: 0;
-    gap: 24px 80px;
-}
-
-.so-chart .so-grid.four-cols,
-.so-pmag-chart .so-grid.four-cols {
-    margin-top: 0;
-    gap: 18px;
-}
-
-/* DAPA specific polish */
-.so-chart .so-grid.two-cols {
-    max-width: 760px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.so-chart .so-grid.four-cols {
-    max-width: 1040px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* PMAG specific polish */
-.so-pmag-chart .so-grid.two-cols {
-    max-width: 760px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.so-pmag-chart .so-grid.four-cols {
-    max-width: 1040px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* make mini PIO rows centered and aligned */
-.so-chart .so-grid.two-cols:last-child,
-.so-pmag-chart .so-grid.two-cols:last-child {
-    max-width: 620px;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 22px;
-}
-
-/* stronger card polish */
-.so-card.dapa,
-.so-card.pmag {
-    backdrop-filter: blur(8px);
-    box-shadow:
-        0 12px 26px rgba(0,0,0,0.16),
-        0 0 0 1px rgba(255,255,255,0.04) inset;
-}
-
-/* improved hover */
-.so-card.dapa:hover,
-.so-card.pmag:hover {
-    transform: translateY(-8px) scale(1.025);
-}
-
-/* click highlight */
-.so-card.dapa:active,
-.so-card.pmag:active {
-    background: #fbbf24;
-}
-
-.so-card.dapa:active h3,
-.so-card.dapa:active p,
-.so-card.pmag:active h3,
-.so-card.pmag:active p {
-    color: #0f172a;
-}
-
-.so-card {
-    cursor: pointer;
-}
-
-/* align photo + text better */
-.so-card .so-photo-wrap {
-    margin-bottom: 12px;
-}
-
-/* =========================
    NEWS / UPDATES PAGE
 ========================= */
 
@@ -4868,13 +3165,6 @@ body.dark-mode .contact-pro-field select:focus {
 /* =========================
    NEWS MAIN CONTENT STRUCTURE
 ========================= */
-
-
-/* =========================
-   NEWS PAGE STYLES
-========================= */
-
-
 /* ====================================
    CATEGORY PAGES
 ==================================== */
@@ -5460,8 +3750,6 @@ main {
     color: rgba(255,255,255,0.9);
 }
 
-
-
 /* =========================================
    SECTION
 ========================================= */
@@ -5470,8 +3758,6 @@ main {
     padding: 80px 0;
     background: #f7f9fc;
 }
-
-
 
 /* STATS */
 .pwd-summary-stats{
@@ -5578,8 +3864,6 @@ main {
     margin-bottom: 18px;
 }
 
-
-
 /* DISABILITY GRID */
 .disability-grid{
     display: grid;
@@ -5599,9 +3883,6 @@ main {
 
     color: #333;
 }
-
-
-
 
 /* REQUIREMENTS */
 .requirements-list{
@@ -5625,9 +3906,6 @@ main {
 .requirement-item i{
     color: #0B5D3B;
 }
-
-
-
 
 /* SIDEBAR */
 .status-box{
@@ -5663,8 +3941,6 @@ main {
     background: #fff4ea;
 }
 
-
-
 /* =========================================
    RESPONSIVE
 ========================================= */
@@ -5684,7 +3960,6 @@ main {
     }
 
 }
-
 
 @media(max-width: 600px){
 
@@ -5708,78 +3983,104 @@ main {
 }
 
 /* =========================================
-   MISSION SECTION (UPDATED TO VISION THEME)
+   GLOBAL THEME VARIABLES & BASE STYLES
+   (Para sa madaling transition ng Light at Dark Mode)
 ========================================= */
+:root {
+    --section-bg: #ffffff;
+    --section-text: #0f172a;
+    --section-text-muted: #475569;
+    --card-bg: #ffffff;
+    --card-border: rgba(15, 23, 42, 0.08);
+    --card-text: #1e293b;
+    --card-p: #64748b;
+    --overlay-glow: radial-gradient(circle at top right, rgba(255, 193, 7, 0.08), transparent 50%);
+}
 
-.mission-section{
+/* Awtomatikong lilipat sa Dark Mode kapag ang body ay may class na .dark-mode */
+body.dark-mode {
+    --section-bg: linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90));
+    --section-text: #ffffff;
+    --section-text-muted: rgba(255,255,255,.85);
+    --card-bg: rgba(255,255,255,.08);
+    --card-border: rgba(255,255,255,.12);
+    --card-text: #ffffff;
+    --card-p: rgba(255,255,255,.80);
+    --overlay-glow: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+/* =========================================
+   MISSION SECTION
+========================================= */
+.mission-section {
     position: relative;
     padding: 110px 20px;
     overflow: hidden;
-    background:
-        /* Binago ang kulay para katugma ng Vision Section */
-        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
-        url('../images/update/SPED.jpg');
+    background: var(--section-bg);
     background-size: cover;
     background-position: center;
+    transition: background 0.3s ease;
 }
 
-.mission-overlay{
+body.dark-mode .mission-section {
+    background: linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)), url('../images/update/SPED.jpg') center/cover;
+}
+
+.mission-overlay {
     position: absolute;
     inset: 0;
-    /* Ang gold radial glow sa top right mula sa Vision style */
-    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+    background: var(--overlay-glow);
 }
 
-.mission-wrapper{
+.mission-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Ginawang grid para parehong-pareho ang layout sa Vision */
+    grid-template-columns: 1.1fr .9fr;
     gap: 60px;
     align-items: center;
 }
 
-/* LEFT SIDE */
+.mission-content { text-align: left; }
 
-.mission-content{
-    text-align: left;
-}
-
-.mission-badge{
+.mission-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0, 43, 91, 0.06); /* Banayad na blue background tint */
+    border: 1px solid rgba(0, 43, 91, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Vision Yellow */
+    color: #002B5B; /* Ginawang Dark Blue ang text */
     font-weight: 700;
     margin-bottom: 20px;
 }
+body.dark-mode .mission-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447; /* Balik Vision Yellow sa Dark Mode */
+}
 
-.mission-content h2{
-    font-size: 52px; /* Itinugma sa 52px ng Vision */
+.mission-content h2 {
+    font-size: 52px;
     line-height: 1.15;
-    color: #fff;
+    color: var(--section-text);
     font-weight: 800;
     margin-bottom: 25px;
 }
 
-.mission-content p{
-    color: rgba(255,255,255,.85);
+.mission-content p {
+    color: var(--section-text-muted);
     line-height: 1.9;
-    font-size: 17px; /* Itinugma sa 17px ng Vision */
+    font-size: 17px;
     margin-bottom: 35px;
 }
 
-/* BUTTONS */
-
-.mission-buttons{
+.mission-buttons {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
 }
 
-.mission-btn{
+.mission-btn {
     padding: 14px 26px;
     border-radius: 12px;
     font-weight: 700;
@@ -5787,41 +4088,34 @@ main {
     transition: 0.3s ease;
 }
 
-/* Primary Button para sa Read Full Mission */
-.primary-btn{
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+.primary-btn {
+    background: #FFD447;
+    color: #002B5B;
 }
 
-.primary-btn:hover{
-    transform: translateY(-3px);
-}
+.primary-btn:hover { transform: translateY(-3px); }
 
-/* TINANGGAL DITO ANG .secondary-btn PARA PAREHONG WALA NG EXPLORE SERVICES BUTTON */
+.mission-cards { display: grid; gap: 20px; }
 
-/* RIGHT SIDE (CARDS DESIGN) */
-
-.mission-cards{
-    display: grid;
-    gap: 20px;
-}
-
-.mission-card{
-    background: rgba(255,255,255,.08); /* Exact Vision card opacity */
-    border: 1px solid rgba(255,255,255,.12);
-    padding: 28px; /* Exact Vision padding */
+.mission-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 28px;
     border-radius: 24px;
     backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
     transition: 0.3s ease;
 }
+body.dark-mode .mission-card { box-shadow: none; }
 
-.mission-card:hover{
+.mission-card:hover {
     transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border */
+    border-color: #FFD447;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
 }
 
-.mission-icon{
-    width: 65px;  /* Exact Vision size */
+.mission-icon {
+    width: 65px;
     height: 65px;
     border-radius: 18px;
     background: #FFD447;
@@ -5831,1145 +4125,754 @@ main {
     margin-bottom: 18px;
 }
 
-.mission-icon i{
+.mission-icon i {
     font-size: 26px;
     color: #002B5B;
 }
 
-.mission-card h3{
-    color: #fff;
+.mission-card h3 {
+    color: var(--card-text);
     margin-bottom: 12px;
     font-size: 22px;
     font-weight: 700;
 }
 
-.mission-card p{
-    color: rgba(255,255,255,.80);
+.mission-card p {
+    color: var(--card-p);
     line-height: 1.7;
     font-size: 15px;
 }
 
 /* =========================================
-   MOBILE & TABLET RESPONSIVE
+   VISION SECTION
 ========================================= */
-
-@media(max-width: 991px){
-    .mission-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag maliit ang screen */
-    }
-    .mission-content h2{
-        font-size: 38px;
-    }
-}
-
-@media(max-width: 768px){
-    .mission-section{
-        padding: 80px 14px; /* Binawasan ang malalaking padding para sa phone screen */
-    }
-    .mission-content h2{
-        font-size: 30px; /* Eksaktong size ng vision kapag nasa cellphone */
-    }
-    .mission-content p{
-        font-size: 15px;
-    }
-    .mission-card{
-        padding: 22px 18px;
-    }
-    .mission-buttons{
-        flex-direction: column;
-    }
-    .mission-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
-}
-
-/* =========================================
-   VISION SECTION (FINAL CLEAN VERSION)
-========================================= */
-
-.vision-section{
+.vision-section {
     position: relative;
     padding: 110px 20px;
     overflow: hidden;
-    background:
-        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
-        url('/images/bg-pattern.png');
-    background-size: cover;
-    background-position: center;
+    background: var(--section-bg);
+    transition: background 0.3s ease;
 }
-
-.vision-overlay{
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at top right,
-        rgba(255,193,7,.15),
-        transparent 40%);
-}
-
-.vision-wrapper{
-    position: relative;
-    z-index: 2;
-    display:grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap:60px;
-    align-items:center;
-}
-
-.vision-badge{
-    display:inline-block;
-    padding:10px 18px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:50px;
-    color:#FFD447;
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-.vision-content h2{
-    font-size:52px;
-    line-height:1.15;
-    color:#fff;
-    font-weight:800;
-    margin-bottom:25px;
-}
-
-.vision-content p{
-    color:rgba(255,255,255,.85);
-    line-height:1.9;
-    font-size:17px;
-    margin-bottom:35px;
-}
-
-.vision-buttons{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-.vision-btn{
-    padding:14px 26px;
-    border-radius:12px;
-    font-weight:700;
-    text-decoration:none;
-    transition:.3s ease;
-}
-
-/* Primary Button para sa Read Full Vision */
-.primary-btn{
-    background:#FFD447;
-    color:#002B5B;
-}
-
-.primary-btn:hover{
-    transform:translateY(-3px);
-}
-
-/* CARDS DESIGN */
-.vision-cards{
-    display:grid;
-    gap:20px;
-}
-
-.vision-card{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    padding:28px;
-    border-radius:24px;
-    backdrop-filter:blur(10px);
-    transition:.3s ease;
-}
-
-.vision-card:hover{
-    transform:translateY(-5px);
-    border-color:#FFD447;
-}
-
-.vision-icon{
-    width:65px;
-    height:65px;
-    border-radius:18px;
-    background:#FFD447;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:18px;
-}
-
-.vision-icon i{
-    font-size:26px;
-    color:#002B5B;
-}
-
-.vision-card h3{
-    color:#fff;
-    margin-bottom:12px;
-    font-size:22px;
-}
-
-.vision-card p{
-    color:rgba(255,255,255,.80);
-    line-height:1.7;
-}
-
-/* MOBILE & TABLET RESPONSIVE */
-@media(max-width:991px){
-    .vision-wrapper{
-        grid-template-columns:1fr; /* Ginawang isang column kapag maliit ang screen */
-    }
-    .vision-content h2{
-        font-size:38px;
-    }
-}
-
-@media(max-width:768px){
-    .vision-section{
-        padding: 80px 14px; /* Binawasan ang padding para hindi kainin ang screen ng phone */
-    }
-    .vision-content h2{
-        font-size: 30px; /* Mas maliit na heading para swak sa screen */
-    }
-    .vision-content p{
-        font-size: 15px;
-    }
-    .vision-card{
-        padding: 22px 18px; /* Mas maliit na card padding para sa phone */
-    }
-}
-
-/* =========================================
-   HISTORY SECTION
-========================================= */
-
-.history-section{
-    position:relative;
-    padding:110px 20px;
-    overflow:hidden;
-    background:
-        linear-gradient(rgba(0,43,91,.92), rgba(0,43,91,.92)),
-        url('/images/bg-pattern.png');
-    background-size:cover;
-    background-position:center;
-}
-
-.history-overlay{
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at top left,
-        rgba(255,212,71,.18),
-        transparent 40%);
-}
-
-.history-wrapper{
-    position:relative;
-    z-index:2;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:60px;
-    align-items:center;
-}
-
-.history-badge{
-    display:inline-block;
-    padding:10px 18px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:50px;
-    color:#FFD447;
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-.history-content h2{
-    font-size:52px;
-    line-height:1.15;
-    color:#fff;
-    font-weight:800;
-    margin-bottom:25px;
-}
-
-.history-content p{
-    color:rgba(255,255,255,.85);
-    line-height:1.9;
-    font-size:17px;
-    margin-bottom:20px;
-}
-
-.history-buttons{
-    margin-top:35px;
-}
-
-.history-btn{
-    display:inline-block;
-    padding:14px 26px;
-    border-radius:12px;
-    background:#FFD447;
-    color:#002B5B;
-    text-decoration:none;
-    font-weight:700;
-    transition:.3s ease;
-}
-
-.history-btn:hover{
-    transform:translateY(-3px);
-}
-
-.history-cards{
-    display:grid;
-    gap:20px;
-}
-
-.history-card{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    padding:28px;
-    border-radius:24px;
-    backdrop-filter:blur(10px);
-    transition:.3s ease;
-}
-
-.history-card:hover{
-    transform:translateY(-5px);
-    border-color:#FFD447;
-}
-
-.history-icon{
-    width:65px;
-    height:65px;
-    border-radius:18px;
-    background:#FFD447;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:18px;
-}
-
-.history-icon i{
-    font-size:26px;
-    color:#002B5B;
-}
-
-.history-card h3{
-    color:#fff;
-    margin-bottom:12px;
-    font-size:22px;
-}
-
-.history-card p{
-    color:rgba(255,255,255,.80);
-    line-height:1.7;
-}
-
-/* MOBILE */
-@media(max-width:991px){
-
-    .history-wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .history-content h2{
-        font-size:38px;
-    }
-
-}
-
-/* =========================================
-   GOALS SECTION
-========================================= */
-
-.goals-section{
-    position:relative;
-    padding:110px 20px;
-    overflow:hidden;
-    background:
-        linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)),
-        url('/images/bg-pattern.png');
-    background-size:cover;
-    background-position:center;
-}
-
-.goals-overlay{
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at top right,
-        rgba(255,212,71,.18),
-        transparent 40%);
-}
-
-.goals-wrapper{
-    position:relative;
-    z-index:2;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:60px;
-    align-items:center;
-}
-
-.goals-badge{
-    display:inline-block;
-    padding:10px 18px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:50px;
-    color:#FFD447;
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-.goals-content h2{
-    font-size:52px;
-    line-height:1.15;
-    color:#fff;
-    font-weight:800;
-    margin-bottom:25px;
-}
-
-.goals-content p{
-    color:rgba(255,255,255,.85);
-    line-height:1.9;
-    font-size:17px;
-    margin-bottom:20px;
-}
-
-.goals-buttons{
-    margin-top:35px;
-}
-
-.goals-btn{
-    display:inline-block;
-    padding:14px 26px;
-    border-radius:12px;
-    background:#FFD447;
-    color:#002B5B;
-    text-decoration:none;
-    font-weight:700;
-    transition:.3s ease;
-}
-
-.goals-btn:hover{
-    transform:translateY(-3px);
-}
-
-.goals-cards{
-    display:grid;
-    gap:20px;
-}
-
-.goals-card{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    padding:28px;
-    border-radius:24px;
-    backdrop-filter:blur(10px);
-    transition:.3s ease;
-}
-
-.goals-card:hover{
-    transform:translateY(-5px);
-    border-color:#FFD447;
-}
-
-.goals-icon{
-    width:65px;
-    height:65px;
-    border-radius:18px;
-    background:#FFD447;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:18px;
-}
-
-.goals-icon i{
-    font-size:26px;
-    color:#002B5B;
-}
-
-.goals-card h3{
-    color:#fff;
-    margin-bottom:12px;
-    font-size:22px;
-}
-
-.goals-card p{
-    color:rgba(255,255,255,.80);
-    line-height:1.7;
-}
-
-/* MOBILE */
-@media(max-width:991px){
-
-    .goals-wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .goals-content h2{
-        font-size:38px;
-    }
-
-}
-
-/* =========================================
-   ORGANIZATIONAL STRUCTURE
-========================================= */
-
-.org-section{
-    position:relative;
-    padding:110px 20px;
-    overflow:hidden;
-    background:
-        linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)),
-        url('/images/bg-pattern.png');
-    background-size:cover;
-    background-position:center;
-}
-
-.org-overlay{
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(circle at top left,
-        rgba(255,212,71,.18),
-        transparent 40%);
-}
-
-.org-wrapper{
-    position:relative;
-    z-index:2;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:60px;
-    align-items:center;
-}
-
-.org-badge{
-    display:inline-block;
-    padding:10px 18px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:50px;
-    color:#FFD447;
-    font-weight:700;
-    margin-bottom:20px;
-}
-
-.org-content h2{
-    font-size:52px;
-    line-height:1.15;
-    color:#fff;
-    font-weight:800;
-    margin-bottom:25px;
-}
-
-.org-content p{
-    color:rgba(255,255,255,.85);
-    line-height:1.9;
-    font-size:17px;
-    margin-bottom:20px;
-}
-
-.org-buttons{
-    margin-top:35px;
-}
-
-.org-btn{
-    display:inline-block;
-    padding:14px 26px;
-    border-radius:12px;
-    background:#FFD447;
-    color:#002B5B;
-    text-decoration:none;
-    font-weight:700;
-    transition:.3s ease;
-}
-
-.org-btn:hover{
-    transform:translateY(-3px);
-}
-
-.org-cards{
-    display:grid;
-    gap:20px;
-}
-
-.org-card{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    padding:28px;
-    border-radius:24px;
-    backdrop-filter:blur(10px);
-    transition:.3s ease;
-}
-
-.org-card:hover{
-    transform:translateY(-5px);
-    border-color:#FFD447;
-}
-
-.org-icon{
-    width:65px;
-    height:65px;
-    border-radius:18px;
-    background:#FFD447;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:18px;
-}
-
-.org-icon i{
-    font-size:26px;
-    color:#002B5B;
-}
-
-.org-card h3{
-    color:#fff;
-    margin-bottom:12px;
-    font-size:22px;
-}
-
-.org-card p{
-    color:rgba(255,255,255,.80);
-    line-height:1.7;
-}
-
-/* MOBILE */
-@media(max-width:991px){
-
-    .org-wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .org-content h2{
-        font-size:38px;
-    }
-
-}
-
-/* =========================================
-   REPORT CONCERN SECTION (VISION THEME)
-========================================= */
-
-.report-section{
-    position: relative;
-    padding: 110px 20px; /* Nilagyan ng 20px padding sa gilid gaya ng Vision */
-    overflow: hidden;
-    background:
-        /* Eksaktong kulay at timpla ng Vision Section background */
-        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
-        url('/images/bg-pattern.png');
-    background-size: cover;
-    background-position: center;
+body.dark-mode .vision-section {
+    background: linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)), url('/images/bg-pattern.png') center/cover;
 }
 
-.report-overlay{
+.vision-overlay {
     position: absolute;
     inset: 0;
-    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40
-        );
-    z-index: 1;
+    background: var(--overlay-glow);
 }
 
-.report-wrapper{
+.vision-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Itinugma sa grid ratio ng Vision */
+    grid-template-columns: 1.1fr .9fr;
     gap: 60px;
     align-items: center;
 }
 
-/* =========================================
-   LEFT CONTENT
-========================================= */
-
-.report-badge{
+.vision-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0, 43, 91, 0.06);
+    border: 1px solid rgba(0, 43, 91, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    color: #002B5B; /* Ginawang Dark Blue ang text */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+body.dark-mode .vision-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447;
+}
+
+.vision-content h2 {
+    font-size: 52px;
+    line-height: 1.15;
+    color: var(--section-text);
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.vision-content p {
+    color: var(--section-text-muted);
+    line-height: 1.9;
+    font-size: 17px;
+    margin-bottom: 35px;
+}
+
+.vision-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.vision-btn {
+    padding: 14px 26px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .3s ease;
+}
+
+.vision-cards { display: grid; gap: 20px; }
+
+.vision-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 28px;
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    transition: .3s ease;
+}
+body.dark-mode .vision-card { box-shadow: none; }
+
+.vision-card:hover {
+    transform: translateY(-5px);
+    border-color: #FFD447;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+}
+
+.vision-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: #FFD447;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.vision-icon i {
+    font-size: 26px;
+    color: #002B5B;
+}
+
+.vision-card h3 {
+    color: var(--card-text);
+    margin-bottom: 12px;
+    font-size: 22px;
+}
+
+.vision-card p {
+    color: var(--card-p);
+    line-height: 1.7;
+}
+
+/* =========================================
+   HISTORY, GOALS, & ORG SECTIONS
+========================================= */
+.history-section, .goals-section, .org-section {
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background: var(--section-bg);
+    transition: background 0.3s ease;
+}
+body.dark-mode .history-section { background: linear-gradient(rgba(0,43,91,.92), rgba(0,43,91,.92)), url('/images/bg-pattern.png') center/cover; }
+body.dark-mode .goals-section { background: linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)), url('/images/bg-pattern.png') center/cover; }
+body.dark-mode .org-section { background: linear-gradient(rgba(0,43,91,.93), rgba(0,43,91,.93)), url('/images/bg-pattern.png') center/cover; }
+
+.history-overlay, .goals-overlay, .org-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-glow);
+}
+
+.history-wrapper, .goals-wrapper, .org-wrapper {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.history-badge, .goals-badge, .org-badge {
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(0, 43, 91, 0.06);
+    border: 1px solid rgba(0, 43, 91, 0.12);
+    border-radius: 50px;
+    color: #002B5B; /* Ginawang Dark Blue ang text */
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+body.dark-mode .history-badge, body.dark-mode .goals-badge, body.dark-mode .org-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #FFD447;
+}
+
+.history-content h2, .goals-content h2, .org-content h2 {
+    font-size: 52px;
+    line-height: 1.15;
+    color: var(--section-text);
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.history-content p, .goals-content p, .org-content p {
+    color: var(--section-text-muted);
+    line-height: 1.9;
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+
+.history-buttons, .goals-buttons, .org-buttons { margin-top: 35px; }
+
+.history-btn, .goals-btn, .org-btn {
+    display: inline-block;
+    padding: 14px 26px;
+    border-radius: 12px;
+    background: #FFD447;
+    color: #002B5B;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s ease;
+}
+.history-btn:hover, .goals-btn:hover, .org-btn:hover { transform: translateY(-3px); }
+
+.history-cards, .goals-cards, .org-cards { display: grid; gap: 20px; }
+
+.history-card, .goals-card, .org-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 28px;
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    transition: .3s ease;
+}
+body.dark-mode .history-card, body.dark-mode .goals-card, body.dark-mode .org-card { box-shadow: none; }
+
+.history-card:hover, .goals-card:hover, .org-card:hover {
+    transform: translateY(-5px);
+    border-color: #FFD447;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+}
+
+.history-icon, .goals-icon, .org-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    background: #FFD447;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+.history-icon i, .goals-icon i, .org-icon i { font-size: 26px; color: #002B5B; }
+
+.history-card h3, .goals-card h3, .org-card h3 { color: var(--card-text); margin-bottom: 12px; font-size: 22px; }
+.history-card p, .goals-card p, .org-card p { color: var(--card-p); line-height: 1.7; }
+
+/* =========================================
+   REPORT CONCERN SECTION
+========================================= */
+.report-section {
+    position: relative;
+    padding: 110px 20px;
+    overflow: hidden;
+    background: var(--section-bg);
+    transition: background 0.3s ease;
+}
+body.dark-mode .report-section {
+    background: linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)), url('/images/bg-pattern.png') center/cover;
+}
+
+.report-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-glow);
+    z-index: 1;
+}
+
+.report-wrapper {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.report-badge {
+    display: inline-block;
+    padding: 10px 18px;
+    background: rgba(0, 43, 91, 0.06);
+    border: 1px solid rgba(0, 43, 91, 0.12);
+    border-radius: 50px;
+    color: #002B5B; /* Ginawang Dark Blue ang text */
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
 }
+body.dark-mode .report-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447;
+}
 
-.report-content h2{
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+.report-content h2 {
+    font-size: 52px;
     font-weight: 800;
     line-height: 1.15;
-    color: #fff;
+    color: var(--section-text);
     margin-bottom: 25px;
 }
 
-.report-content p{
-    color: rgba(255,255,255,0.85);
+.report-content p {
+    color: var(--section-text-muted);
     line-height: 1.9;
-    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+    font-size: 17px;
     margin-bottom: 35px;
 }
 
-/* =========================================
-   BUTTON (Katugma ng Vision Primary Button)
-========================================= */
-
-.report-btn{
+.report-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 14px 26px;
     border-radius: 12px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #FFD447;
+    color: #002B5B;
     font-weight: 700;
     text-decoration: none;
     transition: 0.3s ease;
 }
+.report-btn:hover { transform: translateY(-3px); }
 
-.report-btn:hover{
-    background: #FFD447; /* Pinapanatili ang dilaw */
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
-}
+.report-cards { display: grid; gap: 20px; }
 
-/* =========================================
-   RIGHT CARDS
-========================================= */
-
-.report-cards{
-    display: grid;
-    gap: 20px; /* Itinugma sa gap spacing ng Vision cards */
-}
-
-.report-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
+.report-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 24px;
-    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
     transition: 0.3s ease;
 }
+body.dark-mode .report-card { box-shadow: none; }
 
-.report-card:hover{
+.report-card:hover {
     transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
-    background: rgba(255,255,255,0.08);
+    border-color: #FFD447;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
 }
 
-.report-icon{
-    width: 65px;  /* Exact Vision sizing */
+.report-icon {
+    width: 65px;
     height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 18px;
-    background: #FFD447; /* Swak sa Vision theme yellow background */
-    color: #002B5B;      /* Dark blue icon color placement */
+    background: #FFD447;
+    color: #002B5B;
     font-size: 26px;
     margin-bottom: 18px;
 }
 
-.report-card h3{
-    color: #fff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+.report-card h3 {
+    color: var(--card-text);
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 12px;
 }
 
-.report-card p{
-    color: rgba(255,255,255,0.80);
+.report-card p {
+    color: var(--card-p);
     line-height: 1.7;
     font-size: 15px;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (MOBILE ADAPTATION)
-========================================= */
-
-@media (max-width: 991px){
-    .report-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
+/* ========================================================
+   GLOBAL MULTI-SECTION MEDIA QUERY INTERCEPTORS (UPDATED)
+======================================================== */
+@media (max-width: 991px) {
+    /* Idinagdag ang .registration-wrapper */
+    .mission-wrapper, .vision-wrapper, .history-wrapper, .goals-wrapper, .org-wrapper, .report-wrapper, .registration-wrapper {
+        grid-template-columns: 1fr;
     }
-
-    .report-content{
-        text-align: left; /* Pinapanatiling left aligned para sumunod sa bagong responsive flow ng Vision */
-    }
-
-    .report-content h2{
+    /* Idinagdag ang .registration-content h2 */
+    .mission-content h2, .vision-content h2, .history-content h2, .goals-content h2, .org-content h2, .report-content h2, .registration-content h2 {
         font-size: 38px;
     }
 }
 
-@media (max-width: 768px){
-    .report-section{
-        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
+@media (max-width: 768px) {
+    /* Idinagdag ang .registration-section */
+    .mission-section, .vision-section, .history-section, .goals-section, .org-section, .report-section, .registration-section {
+        padding: 80px 14px;
     }
-
-    .report-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
+    /* Idinagdag ang .registration-content h2 */
+    .mission-content h2, .vision-content h2, .history-content h2, .goals-content h2, .org-content h2, .report-content h2, .registration-content h2 {
+        font-size: 30px;
     }
-
-    .report-content p{
+    /* Idinagdag ang .registration-content p */
+    .mission-content p, .vision-content p, .history-content p, .goals-content p, .org-content p, .report-content p, .registration-content p {
         font-size: 15px;
     }
-
-    .report-card{
+    /* Idinagdag ang .registration-card */
+    .mission-card, .vision-card, .history-card, .goals-card, .org-card, .report-card, .registration-card {
         padding: 22px 18px;
     }
-
-    .report-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
+    .mission-buttons, .vision-buttons {
+        flex-direction: column;
+    }
+    /* Idinagdag ang .registration-btn */
+    .mission-btn, .vision-btn, .history-btn, .goals-btn, .org-btn, .report-btn, .registration-btn {
+        width: 100%;
+        text-align: center;
     }
 }
 
 /* =========================================
    PWD REGISTRATION SECTION (VISION THEME)
 ========================================= */
-
-.registration-section{
+.registration-section {
     position: relative;
-    padding: 110px 20px; /* Nilagyan ng 20px padding para pantay sa vision */
+    padding: 110px 20px;
     overflow: hidden;
-    background:
-        /* Eksaktong dark blue gradient ng Vision Section */
-        linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
-        url('/images/bg-pattern.png');
+    background: var(--section-bg);
     background-size: cover;
     background-position: center;
+    transition: background 0.3s ease;
 }
 
-.registration-overlay{
+/* Kakapit sa global background configuration kapag naka-dark mode */
+body.dark-mode .registration-section {
+    background: linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)), url('/images/bg-pattern.png') center/cover;
+}
+
+.registration-overlay {
     position: absolute;
     inset: 0;
-    /* Ang gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40%
-        );
+    background: var(--overlay-glow);
     z-index: 1;
 }
 
-.registration-wrapper{
+.registration-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: .9fr 1.1fr; /* Inireverse ang grid ratio para mas malawak ang content sa kanan */
+    grid-template-columns: .9fr 1.1fr; /* Inireverse ang ratio para mas malawak ang kanang bahagi */
     gap: 60px;
     align-items: center;
 }
 
-/* =========================================
-   LEFT CARDS
-========================================= */
-
-.registration-cards{
+/* LEFT CARDS */
+.registration-cards {
     display: grid;
-    gap: 20px; /* Swak sa gap spacing ng Vision cards */
+    gap: 20px;
 }
 
-.registration-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
+.registration-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 24px;
-    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
     transition: 0.3s ease;
 }
+body.dark-mode .registration-card { box-shadow: none; }
 
-.registration-card:hover{
+.registration-card:hover {
     transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
-    background: rgba(255,255,255,0.08);
+    border-color: #FFD447;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
 }
 
-.registration-icon{
-    width: 65px;  /* Exact Vision sizing */
+.registration-icon {
+    width: 65px;
     height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 18px;
-    background: #FFD447; /* Swak sa Vision theme yellow background */
-    color: #002B5B;      /* Dark blue icon color placement */
+    background: #FFD447;
+    color: #002B5B;
     font-size: 26px;
     margin-bottom: 18px;
 }
 
-.registration-card h3{
-    color: #fff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+.registration-card h3 {
+    color: var(--card-text);
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 12px;
 }
 
-.registration-card p{
-    color: rgba(255,255,255,0.80);
+.registration-card p {
+    color: var(--card-p);
     line-height: 1.7;
     font-size: 15px;
 }
 
-/* =========================================
-   RIGHT CONTENT
-========================================= */
-
-.registration-badge{
+/* RIGHT CONTENT */
+.registration-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0, 43, 91, 0.06); /* Banayad na blue background tint sa Light Mode */
+    border: 1px solid rgba(0, 43, 91, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    color: #002B5B; /* Ginawang Dark Blue ang text katulad ng ibang badges niyo */
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
 }
+body.dark-mode .registration-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447; /* Babalik sa Vision Yellow kapag naka-Dark Mode */
+}
 
-.registration-content h2{
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+.registration-content h2 {
+    font-size: 52px;
     font-weight: 800;
     line-height: 1.15;
-    color: #fff;
+    color: var(--section-text);
     margin-bottom: 25px;
 }
 
-.registration-content p{
-    color: rgba(255,255,255,0.85);
+.registration-content p {
+    color: var(--section-text-muted);
     line-height: 1.9;
-    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+    font-size: 17px;
     margin-bottom: 35px;
 }
 
-/* =========================================
-   BUTTON (Katugma ng Vision Primary Button)
-========================================= */
-
-.registration-btn{
+/* BUTTON */
+.registration-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 14px 26px;
     border-radius: 12px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #FFD447;
+    color: #002B5B;
     font-weight: 700;
     text-decoration: none;
     transition: 0.3s ease;
 }
 
-.registration-btn:hover{
-    background: #FFD447;
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
-}
-
-/* =========================================
-   RESPONSIVE DESIGN (MOBILE ADAPTATION)
-========================================= */
-
-@media (max-width: 991px){
-    .registration-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
-    }
-
-    /* Inalis ang pag-center para pormal at sumunod sa bagong left-aligned design ng Vision */
-    .registration-content{
-        text-align: left;
-    }
-
-    .registration-content h2{
-        font-size: 38px;
-    }
-}
-
-@media (max-width: 768px){
-    .registration-section{
-        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
-    }
-
-    .registration-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
-    }
-
-    .registration-content p{
-        font-size: 15px;
-    }
-
-    .registration-card{
-        padding: 22px 18px;
-    }
-
-    .registration-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
+.registration-btn:hover {
+    transform: translateY(-3px);
 }
 
 /* =========================================
    PWD DIRECTORY SECTION (VISION THEME)
 ========================================= */
 
-.directory-section{
+.directory-section {
     position: relative;
-    padding: 110px 20px; /* Itinugma sa 110px top/bottom at 20px sides ng Vision */
+    padding: 110px 20px;
     overflow: hidden;
+    /* DEFAULT: Uniform Clean White Background */
+    background: #ffffff;
+    transition: background 0.3s ease;
+}
+
+/* DARK MODE LAYER HANDLING */
+body.dark-mode .directory-section {
     background:
-        /* Eksaktong dark blue premium tint ng Vision */
         linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
         url('/images/bg/pdao-bg.jpg');
     background-size: cover;
     background-position: center;
 }
 
-.directory-overlay{
+.directory-overlay {
     position: absolute;
     inset: 0;
-    /* Ang gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40%
-        );
+    background: radial-gradient(circle at top right, rgba(0,40,85,0.03), transparent 40%);
     z-index: 1;
 }
 
-.directory-wrapper{
+body.dark-mode .directory-overlay {
+    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+.directory-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Eksaktong grid structure ng Vision */
-    gap: 60px; /* Standardized gap para maluwag tingnan */
+    grid-template-columns: 1.1fr .9fr;
+    gap: 60px;
     align-items: center;
 }
 
-.directory-content{
-    color: #fff;
+.directory-content {
+    /* DEFAULT: Dark Text para sa White Background */
+    color: #1a202c;
     text-align: left;
+}
+
+body.dark-mode .directory-content {
+    color: #ffffff;
 }
 
 /* =========================================
    BADGE & CONTENT TYPOGRAPHY
 ========================================= */
 
-.directory-badge{
+.directory-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255,255,255,.18);
+    /* DEFAULT: Light Gray Glass Badge */
+    background: rgba(0, 40, 85, 0.06);
+    border: 1px solid rgba(0, 40, 85, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Ginamit ang exact Vision yellow text color */
+    color: #002B5B;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
 }
 
-.directory-content h2{
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+body.dark-mode .directory-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447;
+}
+
+.directory-content h2 {
+    font-size: 52px;
     line-height: 1.15;
     font-weight: 800;
     margin-bottom: 25px;
-    color: #fff;
+    color: #002B5B; /* Primary Dark Blue Text */
 }
 
-.directory-content p{
-    font-size: 17px; /* Itinugma sa sukat ng Vision description */
+body.dark-mode .directory-content h2 {
+    color: #ffffff;
+}
+
+.directory-content p {
+    font-size: 17px;
     line-height: 1.9;
-    color: rgba(255,255,255,0.85);
+    color: #4a5568; /* Readable slate gray */
     margin-bottom: 35px;
+}
+
+body.dark-mode .directory-content p {
+    color: rgba(255,255,255,0.85);
 }
 
 /* =========================================
    HIGHLIGHT ITEMS
 ========================================= */
 
-.directory-highlight{
+.directory-highlight {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 35px;
 }
 
-.highlight-item{
+.highlight-item {
     display: flex;
     align-items: center;
     gap: 14px;
-    background: rgba(255,255,255,0.08); /* Glass layout list backgrounds */
+    /* DEFAULT: Delicate light list item */
+    background: #f7fafc;
     padding: 16px 20px;
     border-radius: 16px;
-    color: #fff;
+    color: #2d3748;
     font-weight: 600;
+    border: 1px solid #e2e8f0;
+}
+
+body.dark-mode .highlight-item {
+    background: rgba(255,255,255,0.08);
+    color: #ffffff;
     border: 1px solid rgba(255,255,255,0.08);
 }
 
-.highlight-item i{
-    color: #FFD447; /* Ginamit ang Vision yellow sa list check icons/bullet marks */
+.highlight-item i {
+    color: #002B5B;
     font-size: 18px;
+}
+
+body.dark-mode .highlight-item i {
+    color: #FFD447;
 }
 
 /* =========================================
    BUTTON (Katugma ng Vision Primary Button)
 ========================================= */
 
-.directory-btn{
+.directory-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 14px 26px;
     border-radius: 12px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #002B5B; /* Contrast Blue in Light Mode */
+    color: #ffffff;
     text-decoration: none;
     font-weight: 700;
     transition: 0.3s ease;
 }
 
-.directory-btn:hover{
+body.dark-mode .directory-btn {
     background: #FFD447;
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+    color: #002B5B;
+}
+
+.directory-btn:hover {
+    transform: translateY(-3px);
 }
 
 /* =========================================
    RIGHT SIDE CARDS
 ========================================= */
 
-.directory-cards{
+.directory-cards {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Itinugma sa gap spacing ng Vision cards list */
+    gap: 20px;
 }
 
-.directory-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+.directory-card {
+    /* DEFAULT: Polished light cards */
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
-    padding: 28px; /* Binago ang padding base sa Vision card standards */
+    padding: 28px;
     transition: 0.3s ease;
 }
 
-.directory-card:hover{
-    transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+body.dark-mode .directory-card {
     background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.directory-icon{
-    width: 65px;  /* Exact Vision sizing */
+.directory-card:hover {
+    transform: translateY(-5px);
+    border-color: #002B5B;
+}
+
+body.dark-mode .directory-card:hover {
+    border-color: #FFD447;
+}
+
+.directory-icon {
+    width: 65px;
     height: 65px;
     border-radius: 18px;
-    background: #FFD447; /* Swak sa Vision theme yellow background */
-    color: #002B5B;      /* Dark blue icon color placement */
+    background: #002B5B;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6977,17 +4880,30 @@ main {
     margin-bottom: 18px;
 }
 
-.directory-card h3{
-    color: #fff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+body.dark-mode .directory-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
+.directory-card h3 {
+    color: #002B5B;
+    font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
-.directory-card p{
-    color: rgba(255,255,255,0.80);
+body.dark-mode .directory-card h3 {
+    color: #ffffff;
+}
+
+.directory-card p {
+    color: #4a5568;
     line-height: 1.7;
     font-size: 15px;
+}
+
+body.dark-mode .directory-card p {
+    color: rgba(255,255,255,0.80);
 }
 
 /* =========================================
@@ -6995,43 +4911,30 @@ main {
 ========================================= */
 
 @media(max-width: 991px){
-    .directory-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet/mobile resolution */
-    }
-
-    .directory-content h2{
-        font-size: 38px;
-    }
+    .directory-wrapper { grid-template-columns: 1fr; }
+    .directory-content h2 { font-size: 38px; }
 }
 
 @media(max-width: 768px){
-    .directory-section{
-        padding: 80px 14px; /* Binago mula sa 600px breakpoint para pareho silang lahat ng kilos sa mobile phone nung ibang sections */
-    }
-
-    .directory-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
-    }
-
-    .directory-content p{
-        font-size: 15px;
-    }
-
-    .directory-card{
-        padding: 22px 18px;
-    }
-
-    .directory-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
+    .directory-section { padding: 80px 14px; }
+    .directory-content h2 { font-size: 30px; }
+    .directory-content p { font-size: 15px; }
+    .directory-card { padding: 22px 18px; }
+    .directory-btn { width: 100%; }
 }
+
 /* =========================================
    SERVICES SECTION (CSS ANIMATION CAROUSEL)
 ========================================= */
-.services-section{
+.services-section {
     position: relative;
     padding: 110px 20px;
     overflow: hidden;
+    background: #ffffff;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .services-section {
     background:
         linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
         url('/images/backgrounds/pdao-bg.jpg');
@@ -7039,48 +4942,63 @@ main {
     background-position: center;
 }
 
-.services-overlay{
+.services-overlay {
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(circle at top right,
-        rgba(255,193,7,0.15),
-        transparent 40%);
+    background: radial-gradient(circle at top right, rgba(0,40,85,0.03), transparent 40%);
 }
 
-.services-header{
+body.dark-mode .services-overlay {
+    background: radial-gradient(circle at top right, rgba(255,193,7,0.15), transparent 40%);
+}
+
+.services-header {
     text-align: left;
     margin-bottom: 45px;
     position: relative;
     z-index: 2;
 }
 
-.services-badge{
+.services-badge {
     display: inline-block;
-    background: rgba(255,255,255,0.12);
-    color: #FFD447; /* Vision Gold */
+    background: rgba(0, 40, 85, 0.06);
+    border: 1px solid rgba(0, 40, 85, 0.12);
+    color: #002B5B;
     padding: 10px 18px;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
-    border: 1px solid rgba(255,255,255,0.18);
 }
 
-.services-header h2{
-    color: #ffffff;
+body.dark-mode .services-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #FFD447;
+}
+
+.services-header h2 {
+    color: #002B5B;
     font-size: 52px;
     font-weight: 800;
     margin-bottom: 15px;
     line-height: 1.15;
 }
 
+body.dark-mode .services-header h2 {
+    color: #ffffff;
+}
+
 .services-header p {
-    color: #ffffff !important;
+    color: #4a5568 !important;
     font-size: 17px;
     line-height: 1.9;
     max-width: 750px;
     margin: 0;
+}
+
+body.dark-mode .services-header p {
+    color: #ffffff !important;
 }
 
 /* =========================================
@@ -7094,27 +5012,23 @@ main {
     padding: 15px 0;
 }
 
-.services-grid{
+.services-grid {
     display: flex;
     gap: 25px;
-    width: max-content; /* Kailangan ito para humaba nang walang limitasyon ang flex track */
-    /* Patatakbuhin ang animation: 25 segundo, linear, walang katapusan */
+    width: max-content;
     animation: scrollCarousel 25s linear infinite;
 }
 
-/* Hihinto ang buong ikot kapag hino-hover ng mouse */
 .services-carousel-container:hover .services-grid {
     animation-play-state: paused;
 }
 
-.service-card{
-    width: 360px; /* Eksaktong permanenteng lapad ng bawat card sa desktop */
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
+.service-card {
+    width: 360px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
     padding: 35px 28px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     transition: 0.3s ease;
     text-align: left;
     display: flex;
@@ -7122,12 +5036,23 @@ main {
     justify-content: space-between;
 }
 
-.service-card:hover{
+body.dark-mode .service-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.service-card:hover {
     transform: translateY(-5px);
+    border-color: #002B5B;
+}
+
+body.dark-mode .service-card:hover {
     border-color: #FFD447;
 }
 
-.service-icon{
+.service-icon {
     width: 65px;
     height: 65px;
     margin: 0 0 22px 0;
@@ -7135,32 +5060,45 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFD447;
-    color: #002B5B;
+    background: #002B5B;
+    color: #ffffff;
     font-size: 26px;
 }
 
-.service-card h3{
-    color: #ffffff;
+body.dark-mode .service-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
+.service-card h3 {
+    color: #002B5B;
     font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
-.service-card p{
-    color: rgba(255,255,255,0.85) !important;
+body.dark-mode .service-card h3 {
+    color: #ffffff;
+}
+
+.service-card p {
+    color: #4a5568 !important;
     font-size: 15px;
     line-height: 1.7;
     margin-bottom: 25px;
 }
 
-.service-btn{
+body.dark-mode .service-card p {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+.service-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 0;
     background: transparent;
-    color: #FFD447;
+    color: #002B5B;
     font-weight: 700;
     font-size: 15px;
     text-decoration: none;
@@ -7169,560 +5107,573 @@ main {
     margin-top: auto;
 }
 
-.service-btn i{
-    transition: 0.25s ease;
+body.dark-mode .service-btn {
+    color: #FFD447;
 }
 
-.service-btn:hover{
+.service-btn i { transition: 0.25s ease; }
+
+.service-btn:hover {
     background: transparent;
-    color: #ffffff;
+    color: #4a5568;
     transform: none;
 }
 
-.service-btn:hover i{
-    transform: translateX(5px);
+body.dark-mode .service-btn:hover {
+    color: #ffffff;
 }
 
-/* =========================================
-   KEYFRAMES AUTOMATIC INFINITE LOOP
-   (Uurong pakaliwa ang track ng eksaktong
-   kalahati ng kabuuang haba nito, sabay reset)
-========================================= */
+.service-btn:hover i { transform: translateX(5px); }
+
 @keyframes scrollCarousel {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        /* Gumagalaw pakaliwa para magmukhang umuusod pakanan ang mga card */
-        transform: translateX(calc(-50% - 12.5px));
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-50% - 12.5px)); }
 }
 
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
 @media (max-width: 991px){
-    .services-header h2{ font-size: 38px; }
-    .services-header p{ font-size: 16px; }
+    .services-header h2 { font-size: 38px; }
+    .services-header p { font-size: 16px; }
 }
 
 @media (max-width: 768px){
-    .services-section{ padding: 80px 14px; }
-    .services-header h2{ font-size: 30px; }
-    .services-header p{ font-size: 15px; }
-
-    .service-card{
-        width: 290px; /* Mas maliit na lapad para magkasya sa mobile screens */
-        padding: 22px 18px;
-    }
+    .services-section { padding: 80px 14px; }
+    .services-header h2 { font-size: 30px; }
+    .services-header p { font-size: 15px; }
+    .service-card { width: 290px; padding: 22px 18px; }
 }
 
 /* =========================================
    INQUIRY SECTION (VISION THEME)
 ========================================= */
-.inquiry-section{
+.inquiry-section {
     position: relative;
-    padding: 110px 20px; /* Standardized vision paddings */
+    padding: 110px 20px;
     overflow: hidden;
+    background: #ffffff;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .inquiry-section {
     background:
-        /* Eksaktong premium dark blue tint ng Vision Section */
         linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
         url('/images/backgrounds/pdao-bg.jpg');
     background-size: cover;
     background-position: center;
 }
 
-.inquiry-overlay{
+.inquiry-overlay {
     position: absolute;
     inset: 0;
-    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40%
-        );
+    background: radial-gradient(circle at top right, rgba(0,40,85,0.03), transparent 40%);
     z-index: 1;
 }
 
-.inquiry-wrapper{
+body.dark-mode .inquiry-overlay {
+    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+.inquiry-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    grid-template-columns: 1.1fr .9fr;
     gap: 60px;
     align-items: center;
 }
 
-/* =========================================
-   LEFT CONTENT
-========================================= */
-
-.inquiry-badge{
+.inquiry-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0, 40, 85, 0.06);
+    border: 1px solid rgba(0, 40, 85, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Exact Vision yellow text color */
+    color: #002B5B;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
 }
 
-.inquiry-content h2{
-    color: #ffffff;
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+body.dark-mode .inquiry-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447;
+}
+
+.inquiry-content h2 {
+    color: #002B5B;
+    font-size: 52px;
     line-height: 1.15;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-.inquiry-content p{
-    color: #ffffff !important; /* Pwersahang solid white text gaya ng Report Concern update */
+body.dark-mode .inquiry-content h2 {
+    color: #ffffff;
+}
+
+.inquiry-content p {
+    color: #4a5568 !important;
     font-size: 17px;
     line-height: 1.9;
     margin-bottom: 35px;
     max-width: 700px;
 }
 
-.inquiry-features{
+body.dark-mode .inquiry-content p {
+    color: #ffffff !important;
+}
+
+.inquiry-features {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 35px;
 }
 
-.inquiry-feature{
+.inquiry-feature {
     display: flex;
     align-items: center;
     gap: 14px;
-    color: #ffffff;
+    color: #2d3748;
     font-size: 16px;
     font-weight: 600;
 }
 
-.inquiry-feature i{
-    color: #FFD447;
+body.dark-mode .inquiry-feature {
+    color: #ffffff;
+}
+
+.inquiry-feature i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   BUTTON (Katugma ng Vision Primary Button)
-========================================= */
+body.dark-mode .inquiry-feature i {
+    color: #FFD447;
+}
 
-.inquiry-btn{
+.inquiry-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #002B5B;
+    color: #ffffff;
     padding: 14px 26px;
-    border-radius: 12px; /* Binago mula 50px para swak sa primary-btn format */
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
     transition: 0.3s ease;
 }
 
-.inquiry-btn:hover{
+body.dark-mode .inquiry-btn {
     background: #FFD447;
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+    color: #002B5B;
 }
 
-/* =========================================
-   RIGHT SIDE CARD & CONTACTS
-========================================= */
+.inquiry-btn:hover { transform: translateY(-3px); }
 
-.inquiry-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
+.inquiry-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
-    padding: 28px; /* Standardized card padding base sa Vision */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
-    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    padding: 28px;
+    text-align: left;
     transition: 0.3s ease;
 }
 
-.inquiry-card:hover{
-    transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+body.dark-mode .inquiry-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.inquiry-icon{
-    width: 65px;  /* Exact Vision icon frame sizing */
+.inquiry-card:hover {
+    border-color: #002B5B;
+    transform: translateY(-5px);
+}
+
+body.dark-mode .inquiry-card:hover {
+    border-color: #FFD447;
+}
+
+.inquiry-icon {
+    width: 65px;
     height: 65px;
-    margin: 0 0 18px 0; /* Inalis ang auto alignment */
+    margin: 0 0 18px 0;
     border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFD447;
-    color: #002B5B;
+    background: #002B5B;
+    color: #ffffff;
     font-size: 26px;
-    box-shadow: none;
 }
 
-.inquiry-card h3{
-    color: #ffffff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+body.dark-mode .inquiry-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
+.inquiry-card h3 {
+    color: #002B5B;
+    font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
-.inquiry-card p{
-    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text para laging malinaw */
+body.dark-mode .inquiry-card h3 {
+    color: #ffffff;
+}
+
+.inquiry-card p {
+    color: #4a5568 !important;
     line-height: 1.7;
     font-size: 15px;
     margin-bottom: 25px;
 }
 
-.inquiry-contact-box{
+body.dark-mode .inquiry-card p {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+.inquiry-contact-box {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.contact-item{
+.contact-item {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa contacts */
+    background: #ffffff;
     padding: 16px 18px;
     border-radius: 16px;
-    color: #ffffff;
+    color: #2d3748;
     text-align: left;
+    border: 1px solid #e2e8f0;
+}
+
+body.dark-mode .contact-item {
+    background: rgba(255,255,255,0.06);
+    color: #ffffff;
     border: 1px solid rgba(255,255,255,0.06);
 }
 
-.contact-item i{
-    color: #FFD447;
+.contact-item i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (MOBILE ADAPTATION)
-========================================= */
+body.dark-mode .contact-item i {
+    color: #FFD447;
+}
 
 @media (max-width: 991px){
-    .inquiry-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
-    }
-
-    .inquiry-content{
-        text-align: left; /* Sumusunod sa responsive flow ng Vision */
-    }
-
-    .inquiry-features{
-        align-items: flex-start;
-    }
-
-    .inquiry-content h2{
-        font-size: 38px;
-    }
+    .inquiry-wrapper { grid-template-columns: 1fr; }
+    .inquiry-features { align-items: flex-start; }
+    .inquiry-content h2 { font-size: 38px; }
 }
 
 @media (max-width: 768px){
-    .inquiry-section{
-        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
-    }
-
-    .inquiry-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
-    }
-
-    .inquiry-content p{
-        font-size: 15px;
-    }
-
-    .inquiry-card{
-        padding: 22px 18px;
-    }
-
-    .inquiry-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
+    .inquiry-section { padding: 80px 14px; }
+    .inquiry-content h2 { font-size: 30px; }
+    .inquiry-content p { font-size: 15px; }
+    .inquiry-card { padding: 22px 18px; }
+    .inquiry-btn { width: 100%; }
 }
 
 /* =========================================
    FEEDBACK SECTION (VISION THEME)
 ========================================= */
-.feedback-section{
+.feedback-section {
     position: relative;
-    padding: 110px 20px; /* Standardized vision paddings */
+    padding: 110px 20px;
     overflow: hidden;
+    background: #ffffff;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .feedback-section {
     background:
-        /* Eksaktong premium dark blue tint ng Vision Section */
         linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
         url('/images/backgrounds/pdao-bg.jpg');
     background-size: cover;
     background-position: center;
 }
 
-.feedback-overlay{
+.feedback-overlay {
     position: absolute;
     inset: 0;
-    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40%
-        );
+    background: radial-gradient(circle at top right, rgba(0,40,85,0.03), transparent 40%);
     z-index: 1;
 }
 
-.feedback-wrapper{
+body.dark-mode .feedback-overlay {
+    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+.feedback-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    grid-template-columns: 1.1fr .9fr;
     gap: 60px;
     align-items: center;
 }
 
-/* =========================================
-   LEFT CONTENT
-========================================= */
-
-.feedback-badge{
+.feedback-badge {
     display: inline-block;
     padding: 10px 18px;
-    background: rgba(255,255,255,.12); /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(0, 40, 85, 0.06);
+    border: 1px solid rgba(0, 40, 85, 0.12);
     border-radius: 50px;
-    color: #FFD447; /* Exact Vision yellow text color */
+    color: #002B5B;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
 }
 
-.feedback-content h2{
-    color: #ffffff;
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+body.dark-mode .feedback-badge {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #FFD447;
+}
+
+.feedback-content h2 {
+    color: #002B5B;
+    font-size: 52px;
     line-height: 1.15;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-.feedback-content p{
-    color: #ffffff !important; /* Pwersahang solid white text para laging madaling basahin */
+body.dark-mode .feedback-content h2 {
+    color: #ffffff;
+}
+
+.feedback-content p {
+    color: #4a5568 !important;
     font-size: 17px;
     line-height: 1.9;
     margin-bottom: 35px;
     max-width: 700px;
 }
 
-.feedback-features{
+body.dark-mode .feedback-content p {
+    color: #ffffff !important;
+}
+
+.feedback-features {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 35px;
 }
 
-.feedback-feature{
+.feedback-feature {
     display: flex;
     align-items: center;
     gap: 14px;
-    color: #ffffff;
+    color: #2d3748;
     font-size: 16px;
     font-weight: 600;
 }
 
-.feedback-feature i{
-    color: #FFD447;
+body.dark-mode .feedback-feature {
+    color: #ffffff;
+}
+
+.feedback-feature i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   BUTTON (Katugma ng Vision Primary Button)
-========================================= */
+body.dark-mode .feedback-feature i {
+    color: #FFD447;
+}
 
-.feedback-btn{
+.feedback-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #002B5B;
+    color: #ffffff;
     padding: 14px 26px;
-    border-radius: 12px; /* Binago mula 50px para sumunod sa primary-btn format */
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
     transition: 0.3s ease;
 }
 
-.feedback-btn:hover{
+body.dark-mode .feedback-btn {
     background: #FFD447;
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+    color: #002B5B;
 }
 
-/* =========================================
-   RIGHT SIDE CARD & FEEDBACK BOXES
-========================================= */
+.feedback-btn:hover { transform: translateY(-3px); }
 
-.feedback-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
+.feedback-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
-    padding: 28px; /* Standardized card padding base sa Vision */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
-    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    padding: 28px;
+    text-align: left;
     transition: 0.3s ease;
 }
 
-.feedback-card:hover{
-    transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+body.dark-mode .feedback-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.feedback-icon{
-    width: 65px;  /* Exact Vision icon frame sizing */
+.feedback-card:hover {
+    border-color: #002B5B;
+    transform: translateY(-5px);
+}
+
+body.dark-mode .feedback-card:hover {
+    border-color: #FFD447;
+}
+
+.feedback-icon {
+    width: 65px;
     height: 65px;
-    margin: 0 0 18px 0; /* Tinanggal ang auto alignment para pumunta sa kaliwa */
+    margin: 0 0 18px 0;
     border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFD447;
-    color: #002B5B;
+    background: #002B5B;
+    color: #ffffff;
     font-size: 26px;
-    box-shadow: none;
 }
 
-.feedback-card h3{
-    color: #ffffff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+body.dark-mode .feedback-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
+.feedback-card h3 {
+    color: #002B5B;
+    font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
-.feedback-card p{
-    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text sa loob ng card */
+body.dark-mode .feedback-card h3 {
+    color: #ffffff;
+}
+
+.feedback-card p {
+    color: #4a5568 !important;
     line-height: 1.7;
     font-size: 15px;
     margin-bottom: 25px;
 }
 
-.feedback-box{
+body.dark-mode .feedback-card p {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+.feedback-box {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.feedback-item{
+.feedback-item {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa list items */
+    background: #ffffff;
     padding: 16px 18px;
     border-radius: 16px;
-    color: #ffffff;
+    color: #2d3748;
     text-align: left;
+    border: 1px solid #e2e8f0;
+}
+
+body.dark-mode .feedback-item {
+    background: rgba(255,255,255,0.06);
+    color: #ffffff;
     border: 1px solid rgba(255,255,255,0.06);
 }
 
-.feedback-item i{
-    color: #FFD447;
+.feedback-item i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (MOBILE ADAPTATION)
-========================================= */
+body.dark-mode .feedback-item i {
+    color: #FFD447;
+}
 
 @media (max-width: 991px){
-    .feedback-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
-    }
-
-    .feedback-content{
-        text-align: left; /* Sumusunod sa responsive flow ng Vision */
-    }
-
-    .feedback-features{
-        align-items: flex-start;
-    }
-
-    .feedback-content h2{
-        font-size: 38px;
-    }
+    .feedback-wrapper { grid-template-columns: 1fr; }
+    .feedback-features { align-items: flex-start; }
+    .feedback-content h2 { font-size: 38px; }
 }
 
 @media (max-width: 768px){
-    .feedback-section{
-        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
-    }
-
-    .feedback-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
-    }
-
-    .feedback-content p{
-        font-size: 15px;
-    }
-
-    .feedback-card{
-        padding: 22px 18px;
-    }
-
-    .feedback-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
+    .feedback-section { padding: 80px 14px; }
+    .feedback-content h2 { font-size: 30px; }
+    .feedback-content p { font-size: 15px; }
+    .feedback-card { padding: 22px 18px; }
+    .feedback-btn { width: 100%; }
 }
 
 /* =========================================
    OFFICE LOCATION SECTION (VISION THEME)
 ========================================= */
-.office-section{
+.office-section {
     position: relative;
-    padding: 110px 20px; /* Standardized vision paddings */
+    padding: 110px 20px;
     overflow: hidden;
+    background: #ffffff;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .office-section {
     background:
-        /* Premium dark blue tint ng Vision Section */
         linear-gradient(rgba(0,40,85,.90), rgba(0,40,85,.90)),
         url('/images/backgrounds/pdao-bg.jpg');
     background-size: cover;
     background-position: center;
 }
 
-.office-overlay{
+.office-overlay {
     position: absolute;
     inset: 0;
-    /* Ang eksaktong gold radial glow sa top right mula sa Vision overlay */
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(255,193,7,.15),
-            transparent 40%
-        );
+    background: radial-gradient(circle at top right, rgba(0,40,85,0.03), transparent 40%);
     z-index: 1;
 }
 
-.office-wrapper{
+body.dark-mode .office-overlay {
+    background: radial-gradient(circle at top right, rgba(255,193,7,.15), transparent 40%);
+}
+
+.office-wrapper {
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.1fr .9fr; /* Itinugma sa layout grid ratio ng Vision */
+    grid-template-columns: 1.1fr .9fr;
     gap: 60px;
     align-items: center;
 }
-
-/* =========================================
-   LEFT CONTENT
-========================================= */
 
 .office-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, .12) !important; /* Glass effect ng Vision badge */
-    border: 1px solid rgba(255, 255, 255, .18) !important;
-    color: #FFD447 !important; /* Exact Vision yellow text color */
+    background: rgba(0, 40, 85, 0.06) !important;
+    border: 1px solid rgba(0, 40, 85, 0.12) !important;
+    color: #002B5B !important;
     padding: 10px 18px;
     border-radius: 50px;
     font-size: 14px;
@@ -7730,180 +5681,196 @@ main {
     margin-bottom: 20px;
 }
 
-.office-content h2{
-    color: #ffffff;
-    font-size: 52px; /* Itinugma sa laki ng Vision heading */
+body.dark-mode .office-badge {
+    background: rgba(255, 255, 255, .12) !important;
+    border: 1px solid rgba(255, 255, 255, .18) !important;
+    color: #FFD447 !important;
+}
+
+.office-content h2 {
+    color: #002B5B;
+    font-size: 52px;
     line-height: 1.15;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-.office-content p{
-    color: #ffffff !important; /* Pwersahang solid white text gaya ng Inquiry at Feedback update */
+body.dark-mode .office-content h2 {
+    color: #ffffff;
+}
+
+.office-content p {
+    color: #4a5568 !important;
     font-size: 17px;
     line-height: 1.9;
     margin-bottom: 35px;
     max-width: 700px;
 }
 
-.office-features{
+body.dark-mode .office-content p {
+    color: #ffffff !important;
+}
+
+.office-features {
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin-bottom: 35px;
 }
 
-.office-feature{
+.office-feature {
     display: flex;
     align-items: center;
     gap: 14px;
-    color: #ffffff;
+    color: #2d3748;
     font-size: 16px;
     font-weight: 600;
 }
 
-.office-feature i{
-    color: #FFD447;
+body.dark-mode .office-feature {
+    color: #ffffff;
+}
+
+.office-feature i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   BUTTON (Katugma ng Vision Primary Button)
-========================================= */
+body.dark-mode .office-feature i {
+    color: #FFD447;
+}
 
-.office-btn{
+.office-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background: #FFD447; /* Vision Yellow background */
-    color: #002B5B;      /* Dark Blue text */
+    background: #002B5B;
+    color: #ffffff;
     padding: 14px 26px;
-    border-radius: 12px; /* Binago mula 50px para sumunod sa primary-btn format */
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
     transition: 0.3s ease;
 }
 
-.office-btn:hover{
+body.dark-mode .office-btn {
     background: #FFD447;
-    transform: translateY(-3px); /* Umaangat nang kaunti gaya ng sa vision */
+    color: #002B5B;
 }
 
-/* =========================================
-   RIGHT SIDE CARD & LOCATION DETAILS
-========================================= */
+.office-btn:hover { transform: translateY(-3px); }
 
-.office-card{
-    background: rgba(255,255,255,0.08); /* Sakto sa card opacity ng vision */
-    border: 1px solid rgba(255,255,255,0.12);
+.office-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
-    padding: 28px; /* Standardized card padding base sa Vision */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    text-align: left; /* Ginawang left-aligned para mas pormal tingnan */
-    box-shadow: none; /* Tinanggal ang mabibigat na anino */
+    padding: 28px;
+    text-align: left;
     transition: 0.3s ease;
 }
 
-.office-card:hover{
-    transform: translateY(-5px);
-    border-color: #FFD447; /* Naggo-glow ng yellow ang border kapag hinover */
+body.dark-mode .office-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.office-icon{
-    width: 65px;  /* Exact Vision icon frame sizing */
+.office-card:hover {
+    border-color: #002B5B;
+    transform: translateY(-5px);
+}
+
+body.dark-mode .office-card:hover {
+    border-color: #FFD447;
+}
+
+.office-icon {
+    width: 65px;
     height: 65px;
-    margin: 0 0 18px 0; /* Tinanggal ang auto center para pumunta sa kaliwa */
+    margin: 0 0 18px 0;
     border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFD447;
-    color: #002B5B;
+    background: #002B5B;
+    color: #ffffff;
     font-size: 26px;
-    box-shadow: none;
 }
 
-.office-card h3{
-    color: #ffffff;
-    font-size: 22px; /* Itinugma sa card titles ng Vision */
+body.dark-mode .office-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
+.office-card h3 {
+    color: #002B5B;
+    font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
-.office-card p{
-    color: rgba(255,255,255,0.85) !important; /* Pwersahang White/Light text sa loob ng card */
+body.dark-mode .office-card h3 {
+    color: #ffffff;
+}
+
+.office-card p {
+    color: #4a5568 !important;
     line-height: 1.7;
     font-size: 15px;
     margin-bottom: 25px;
 }
 
-.office-box{
+body.dark-mode .office-card p {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+.office-box {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.office-item{
+.office-item {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: rgba(255,255,255,0.06); /* Mas pinong glass box para sa mga detalye */
+    background: #ffffff;
     padding: 16px 18px;
     border-radius: 16px;
-    color: #ffffff;
+    color: #2d3748;
     text-align: left;
+    border: 1px solid #e2e8f0;
+}
+
+body.dark-mode .office-item {
+    background: rgba(255,255,255,0.06);
+    color: #ffffff;
     border: 1px solid rgba(255,255,255,0.06);
 }
 
-.office-item i{
-    color: #FFD447;
+.office-item i {
+    color: #002B5B;
     font-size: 18px;
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (MOBILE ADAPTATION)
-========================================= */
+body.dark-mode .office-item i {
+    color: #FFD447;
+}
 
 @media (max-width: 991px){
-    .office-wrapper{
-        grid-template-columns: 1fr; /* Isang column na lang kapag tablet resolution */
-    }
-
-    .office-content{
-        text-align: left; /* Sumusunod sa responsive flow ng Vision */
-    }
-
-    .office-features{
-        align-items: flex-start;
-    }
-
-    .office-content h2{
-        font-size: 38px;
-    }
+    .office-wrapper { grid-template-columns: 1fr; }
+    .office-features { align-items: flex-start; }
+    .office-content h2 { font-size: 38px; }
 }
 
 @media (max-width: 768px){
-    .office-section{
-        padding: 80px 14px; /* Mas maliit na screen padding para sa phone view */
-    }
-
-    .office-content h2{
-        font-size: 30px; /* Swak na font size para sa screen ng cellphone */
-    }
-
-    .office-content p{
-        font-size: 15px;
-    }
-
-    .office-card{
-        padding: 22px 18px;
-    }
-
-    .office-btn{
-        width: 100%; /* Punuin ang lapad ng screen sa mobile */
-    }
+    .office-section { padding: 80px 14px; }
+    .office-content h2 { font-size: 30px; }
+    .office-content p { font-size: 15px; }
+    .office-card { padding: 22px 18px; }
+    .office-btn { width: 100%; }
 }
 
 /* ========================================================
@@ -7913,11 +5880,16 @@ main {
     position: relative;
     padding: 110px 20px;
     overflow: hidden;
+    background: #ffffff;
+    min-height: 100vh;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .goals-bg {
     background: linear-gradient(rgba(0, 40, 85, 0.90), rgba(0, 40, 85, 0.90)),
-                url('/images/update/SPED.jpg'); /* Siguraduhing tama ang local folder fallback mo rito kung hindi dadaan sa blade asset */
+                url('/images/update/SPED.jpg');
     background-size: cover;
     background-position: center;
-    min-height: 100vh;
 }
 
 .simple-container {
@@ -7925,7 +5897,6 @@ main {
     margin: auto;
 }
 
-/* HEADER STYLE */
 .goals-header {
     text-align: left;
     margin-bottom: 45px;
@@ -7935,30 +5906,44 @@ main {
 
 .goals-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.12);
-    color: #FFD447;
+    background: rgba(0, 40, 85, 0.06);
+    color: #002B5B;
     padding: 10px 18px;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
+    border: 1px solid rgba(0, 40, 85, 0.12);
+}
+
+body.dark-mode .goals-badge {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFD447;
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .section-title {
-    color: #ffffff;
+    color: #002B5B;
     font-size: 52px;
     font-weight: 800;
     margin-bottom: 15px;
     line-height: 1.15;
 }
 
+body.dark-mode .section-title {
+    color: #ffffff;
+}
+
 .goals-description {
-    color: #ffffff !important;
+    color: #4a5568 !important;
     font-size: 17px;
     line-height: 1.9;
     max-width: 750px;
     margin: 0;
+}
+
+body.dark-mode .goals-description {
+    color: #ffffff !important;
 }
 
 /* CAROUSEL TRACK FLOW */
@@ -7984,12 +5969,10 @@ main {
 /* GOAL CARD DESIGN (Kasing sukat ng e-PDAO Services) */
 .goal-card {
     width: 360px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 24px;
     padding: 35px 28px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     transition: 0.3s ease;
     text-align: left;
     display: flex;
@@ -7997,8 +5980,19 @@ main {
     justify-content: space-between;
 }
 
+body.dark-mode .goal-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
 .goal-card:hover {
     transform: translateY(-5px);
+    border-color: #002B5B;
+}
+
+body.dark-mode .goal-card:hover {
     border-color: #FFD447;
 }
 
@@ -8010,23 +6004,36 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFD447;
-    color: #002B5B;
+    background: #002B5B;
+    color: #ffffff;
     font-size: 26px;
 }
 
+body.dark-mode .goal-icon {
+    background: #FFD447;
+    color: #002B5B;
+}
+
 .goal-card h3 {
-    color: #ffffff;
+    color: #002B5B;
     font-size: 22px;
     margin-bottom: 12px;
     font-weight: 700;
 }
 
+body.dark-mode .goal-card h3 {
+    color: #ffffff;
+}
+
 .goal-text {
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: #4a5568 !important;
     font-size: 15px;
     line-height: 1.7;
     margin-bottom: 25px;
+}
+
+body.dark-mode .goal-text {
+    color: rgba(255, 255, 255, 0.85) !important;
 }
 
 /* CARD BUTTON */
@@ -8037,7 +6044,7 @@ main {
     padding: 0;
     background: transparent;
     border: none;
-    color: #FFD447;
+    color: #002B5B;
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
@@ -8046,17 +6053,15 @@ main {
     margin-top: auto;
 }
 
-.goal-btn i {
-    transition: 0.25s ease;
+body.dark-mode .goal-btn {
+    color: #FFD447;
 }
 
-.goal-btn:hover {
-    color: #ffffff;
-}
+.goal-btn i { transition: 0.25s ease; }
 
-.goal-btn:hover i {
-    transform: translateX(5px);
-}
+.goal-btn:hover { color: #4a5568; }
+body.dark-mode .goal-btn:hover { color: #ffffff; }
+.goal-btn:hover i { transform: translateX(5px); }
 
 /* ========================================================
    MODAL POPUP SYSTEM OVERLAYS
@@ -8064,7 +6069,7 @@ main {
 .goal-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 20, 40, 0.85);
+    background: rgba(0, 20, 40, 0.4); /* Pinagaan ang overlay para sa Light Mode */
     backdrop-filter: blur(8px);
     z-index: 9999;
     display: flex;
@@ -8073,6 +6078,10 @@ main {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
+}
+
+body.dark-mode .goal-modal-overlay {
+    background: rgba(0, 20, 40, 0.85);
 }
 
 .goal-modal-overlay.open {
@@ -8087,10 +6096,14 @@ main {
     padding: 45px 35px;
     border-radius: 28px;
     position: relative;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
     transform: translateY(30px);
     transition: transform 0.3s ease;
     text-align: left;
+}
+
+body.dark-mode .goal-modal-card {
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
 .goal-modal-overlay.open .goal-modal-card {
@@ -8109,21 +6122,23 @@ main {
     transition: 0.2s;
 }
 
-.goal-modal-close:hover {
-    color: #002B5B;
-}
+.goal-modal-close:hover { color: #002B5B; }
 
 .goal-modal-icon {
     width: 60px;
     height: 60px;
     border-radius: 16px;
     background: #002B5B;
-    color: #FFD447;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     margin-bottom: 20px;
+}
+
+body.dark-mode .goal-modal-icon {
+    color: #FFD447;
 }
 
 .goal-modal-card h3 {
@@ -8139,33 +6154,21 @@ main {
     line-height: 1.8;
 }
 
-/* KEYFRAMES FOR INFINITE CAROUSEL ENGINE */
+/* ========================================================
+   1. KEYFRAMES & GLOBAL MOTIONS
+======================================================== */
 @keyframes scrollGoals {
     0% { transform: translateX(0); }
     100% { transform: translateX(calc(-50% - 12.5px)); }
 }
 
-/* RESPONSIVE BREAKPOINTS */
-@media (max-width: 991px) {
-    .section-title { font-size: 38px; }
-    .goals-description { font-size: 16px; }
-}
-
-@media (max-width: 768px) {
-    .goals-bg { padding: 80px 14px; }
-    .section-title { font-size: 30px; }
-    .goal-card { width: 290px; padding: 22px 18px; }
-    .goal-modal-card { width: 90%; padding: 30px 20px; }
-}
-
 /* ========================================================
-   REPORT CONCERN SECTION STYLE (VISION ACCENT DARK THEME)
+   2. REPORT CONCERN SECTION (VISION ACCENT DARK THEME)
 ======================================================== */
 .report-vision-section {
     padding: 110px 20px;
-    /* Deep Corporate Navy Blue background gaya ng Vision at Goals area */
     background: linear-gradient(rgba(0, 40, 85, 0.93), rgba(0, 40, 85, 0.93)),
-                url('/images/update/SPED.jpg'); /* O kung anong default background image ng inyong app */
+                url('/images/update/SPED.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -8185,13 +6188,12 @@ main {
     flex-wrap: wrap;
 }
 
-/* LEFT COLUMN: TEXT & INFO AREA */
 .report-vision-info {
     flex: 1;
     min-width: 320px;
 }
 
-/* TRACKING MAP MODULE INDICATOR IN THE DARK THEME */
+/* TRACKING INDICATOR */
 .report-vision-indicator {
     display: flex;
     align-items: center;
@@ -8212,7 +6214,7 @@ main {
 
 .report-vision-indicator .track-parent-vision i {
     font-size: 15px;
-    color: #FFD447; /* Vision Gold Accent */
+    color: #FFD447;
 }
 
 .report-vision-indicator .track-divider-vision {
@@ -8221,8 +6223,8 @@ main {
 }
 
 .report-vision-indicator .track-current-vision {
-    color: #FFD447; /* Vision Gold Text */
-    background: rgba(255, 212, 71, 0.15); /* Translucent gold badge wrapper */
+    color: #FFD447;
+    background: rgba(255, 212, 71, 0.15);
     padding: 4px 12px;
     border-radius: 50px;
     border: 1px solid rgba(255, 212, 71, 0.2);
@@ -8231,7 +6233,7 @@ main {
 /* TYPOGRAPHY */
 .report-vision-title {
     font-size: 48px;
-    color: #ffffff; /* Puting pamagat para sa madilim na canvas */
+    color: #ffffff;
     font-weight: 800;
     line-height: 1.15;
     margin-bottom: 25px;
@@ -8239,12 +6241,11 @@ main {
 
 .report-vision-description {
     font-size: 16px;
-    color: rgba(255, 255, 255, 0.85) !important; /* Bahagyang malambot na puti */
+    color: rgba(255, 255, 255, 0.85) !important;
     line-height: 1.9;
     margin-bottom: 15px;
 }
 
-/* BOTTOM CONTACT META */
 .report-vision-meta {
     margin-top: 35px;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
@@ -8261,25 +6262,24 @@ main {
 }
 
 .meta-vision-item i {
-    color: #FFD447; /* Gold Icons */
+    color: #FFD447;
     font-size: 18px;
     width: 24px;
 }
 
-/* RIGHT COLUMN: GLASSMORPHISM CARD (Gaya ng malalapad na modern vision cards) */
+/* GLASSMORPHISM FORM CARD */
 .report-vision-form-card {
     flex: 1;
     min-width: 320px;
-    background: rgba(255, 255, 255, 0.07); /* Semi-transparent white card */
+    background: rgba(255, 255, 255, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     padding: 45px 35px;
-    backdrop-filter: blur(15px); /* Swabeng blur effect sa likod */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* INPUT FORM ELEMENTS CONTROL */
 .form-vision-group-row {
     display: flex;
     gap: 20px;
@@ -8300,7 +6300,7 @@ main {
 .form-vision-group label {
     font-size: 14px;
     font-weight: 600;
-    color: #ffffff; /* Puti ang labels para madaling basahin */
+    color: #ffffff;
     margin-bottom: 8px;
 }
 
@@ -8312,25 +6312,22 @@ main {
     border-radius: 12px;
     font-size: 15px;
     color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.05); /* Madilim na input boxes */
+    background-color: rgba(255, 255, 255, 0.05);
     transition: all 0.25s ease;
     outline: none;
     font-family: inherit;
 }
 
-/* Placeholder color custom filter */
 .form-vision-group input::placeholder,
 .form-vision-group textarea::placeholder {
     color: rgba(255, 255, 255, 0.4);
 }
 
-/* Kapag pumili sa dropdown select option tag */
 .form-vision-group select option {
-    background-color: #002855; /* Pinipigilan ang puting flash sa drop options */
+    background-color: #002855;
     color: #ffffff;
 }
 
-/* FOCUS ANIMATION EFFECT (Nagiging Vision Gold ang border kapag may tinatype) */
 .form-vision-group input:focus,
 .form-vision-group select:focus,
 .form-vision-group textarea:focus {
@@ -8339,12 +6336,11 @@ main {
     box-shadow: 0 0 0 3px rgba(255, 212, 71, 0.2);
 }
 
-/* SUBMIT BUTTON (Solid Gold na magiging White/Blue text layout) */
 .report-vision-submit-btn {
     width: 100%;
     padding: 16px;
-    background: #FFD447; /* Primary Gold theme clickers */
-    color: #002855; /* Navy Text core contrast */
+    background: #FFD447;
+    color: #002855;
     border: none;
     border-radius: 12px;
     font-weight: 700;
@@ -8358,39 +6354,12 @@ main {
 }
 
 .report-vision-submit-btn:hover {
-    background: #ffffff; /* Nagiging puti kapag hino-hover */
-    color: #002855;
+    background: #ffffff;
     transform: translateY(-2px);
 }
 
-/* RESPONSIVE RESPONSIVENESS MEDIA ADJUSTMENTS */
-@media (max-width: 991px) {
-    .report-vision-grid {
-        flex-direction: column;
-        gap: 45px;
-    }
-    .report-vision-title {
-        font-size: 36px;
-    }
-}
-
-@media (max-width: 576px) {
-    .report-vision-section {
-        padding: 70px 15px;
-    }
-    .report-vision-form-card {
-        padding: 30px 20px;
-    }
-    .form-vision-group-row {
-        gap: 0;
-    }
-}
-
 /* ========================================================
-   HISTORY PAGE STYLES (VISION ACCENT DARK GLASSMOPHISM THEME)
-======================================================== */
-/* ========================================================
-   HISTORY PAGE - DEFAULT LIGHT MODE (WHITE & BLUE)
+   3. HISTORY PAGE (DEFAULT LIGHT MODE)
 ======================================================== */
 .vision-theme-page {
     background: linear-gradient(135deg, #ffffff 0%, #e8f1fc 100%);
@@ -8400,7 +6369,6 @@ main {
     transition: background 0.3s ease;
 }
 
-/* HERO SECTION */
 .vision-theme-hero {
     text-align: center;
     margin-bottom: 70px;
@@ -8417,7 +6385,6 @@ main {
     letter-spacing: 0.5px;
     margin-bottom: 20px;
     border: 1px solid #d2e3f7;
-    text-transform: none;
 }
 
 .vision-theme-title {
@@ -8433,14 +6400,13 @@ main {
     margin-top: 10px;
 }
 
-/* ABOUT BOX CARD */
 .vision-theme-card {
     max-width: 850px;
     margin: 0 auto 60px auto;
     background: #ffffff;
     border: 1px solid #d2e3f7;
     padding: 40px;
-    border-left: 8px solid #0057B8; /* Blue accent bar */
+    border-left: 8px solid #0057B8;
     border-radius: 24px;
     box-shadow: 0 15px 35px rgba(0, 43, 91, 0.06);
 }
@@ -8458,7 +6424,7 @@ main {
     font-size: 16px;
 }
 
-/* TIMELINE CONTAINER STYLING */
+/* TIMELINE BUILDER */
 .smooth-vision-timeline {
     max-width: 850px;
     margin: 60px auto;
@@ -8494,15 +6460,18 @@ main {
 
 .marker-line {
     width: 3px;
-    flex-grow: 1;
     background: #d2e3f7;
     position: absolute;
     top: 24px;
-    bottom: -50px;
+    bottom: -40px; /* Connects nicely to the next card dot */
     z-index: 1;
 }
 
-/* TIMELINE CONTENT CARDS */
+/* Removes the dangling overflow line from the final timeline card */
+.smooth-timeline-item:last-child .marker-line {
+    display: none;
+}
+
 .smooth-timeline-card {
     background: #ffffff;
     border: 1px solid #d2e3f7;
@@ -8540,7 +6509,6 @@ main {
     margin: 0;
 }
 
-/* TIMELINE OFFICER BADGE ELEMENT */
 .smooth-officer-badge {
     display: inline-flex;
     align-items: center;
@@ -8576,7 +6544,7 @@ main {
 }
 
 /* ========================================================
-   ⚫ OVERRIDE SYSTEM FOR DARK MODE (VISION CARD STYLE)
+   4. DARK MODE INVERSION SYSTEM
 ======================================================== */
 body.dark-mode .vision-theme-page {
     background: linear-gradient(rgba(0, 40, 85, 0.95), rgba(0, 40, 85, 0.95)),
@@ -8596,7 +6564,7 @@ body.dark-mode .vision-theme-sub { color: rgba(255, 255, 255, 0.7); }
 body.dark-mode .vision-theme-card {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-left: 8px solid #FFD447; /* Gold Highlight */
+    border-left: 8px solid #FFD447;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
@@ -8632,12 +6600,21 @@ body.dark-mode .smooth-officer-badge span { color: #ffffff; }
 body.dark-mode .vision-theme-footer { color: rgba(255, 255, 255, 0.4); }
 
 /* ========================================================
-   RESPONSIVE VIEWPORTS
+   5. COMPACT & UNIFIED RESPONSIVE MEDIA QUERIES
 ======================================================== */
-@media(max-width: 991px) {
+@media (max-width: 991px) {
+    .section-title { font-size: 38px; }
+    .goals-description { font-size: 16px; }
+    .report-vision-grid { flex-direction: column; gap: 45px; }
+    .report-vision-title { font-size: 36px; }
     .vision-theme-title { font-size: 3rem; }
 }
-@media(max-width: 768px){
+
+@media (max-width: 768px) {
+    .goals-bg { padding: 80px 14px; }
+    .section-title { font-size: 30px; }
+    .goal-card { width: 290px; padding: 22px 18px; }
+    .goal-modal-card { width: 90%; padding: 30px 20px; }
     .vision-theme-page { padding: 60px 15px; }
     .vision-theme-title { font-size: 2.3rem; }
     .vision-theme-card { padding: 25px; margin-bottom: 50px; }
@@ -8646,4 +6623,10 @@ body.dark-mode .vision-theme-footer { color: rgba(255, 255, 255, 0.4); }
     .smooth-timeline-card { padding: 20px; }
     .smooth-timeline-year { font-size: 1.8rem; }
     .smooth-officer-badge { border-radius: 14px; padding: 8px; }
+}
+
+@media (max-width: 576px) {
+    .report-vision-section { padding: 70px 15px; }
+    .report-vision-form-card { padding: 30px 20px; }
+    .form-vision-group-row { gap: 15px 0; } /* Retains structural padding when fields wrap */
 }
