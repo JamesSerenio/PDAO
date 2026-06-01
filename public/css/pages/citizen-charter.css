@@ -1,0 +1,152 @@
+/* =========================================
+   CITIZEN CHARTER MAIN PAGE STYLES
+========================================= */
+
+.charter-page-wrapper {
+    padding: 60px 20px;
+    background-color: #f4f8fb; /* Banayad na background para lumutang ang white cards */
+    transition: background-color 0.3s ease;
+}
+
+/* Left-Aligned Header Track */
+.charter-left-header {
+    max-width: 1200px;
+    margin: 0 auto 35px auto;
+    text-align: left;
+}
+
+.charter-left-header .charter-badge {
+    color: #0b3d91;
+    font-weight: 700;
+    text-transform: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    background: rgba(11, 61, 145, 0.08);
+    padding: 6px 14px;
+    border-radius: 30px;
+}
+
+.charter-left-header h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 12px;
+    line-height: 1.2;
+}
+
+.charter-left-header p {
+    color: #475569;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 850px;
+    margin: 0;
+}
+
+/* Solid White Box Framework */
+.charter-solid-card {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.charter-solid-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+}
+
+.charter-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0b3d91;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.charter-body-text {
+    color: #334155;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    text-align: justify;
+}
+
+.charter-link-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 650px;
+}
+
+.charter-link-box a {
+    color: #0b3d91;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.charter-link-box a:hover {
+    color: #1456b8;
+    text-decoration: underline;
+}
+
+/* =========================================
+   DARK MODE CONFIGURATION
+========================================= */
+body.dark-mode .charter-page-wrapper {
+    background-color: #0f172a;
+}
+
+body.dark-mode .charter-left-header .charter-badge {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.15);
+}
+
+body.dark-mode .charter-left-header h2 {
+    color: #f8fafc;
+}
+
+body.dark-mode .charter-left-header p {
+    color: #cbd5e1;
+}
+
+body.dark-mode .charter-solid-card {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode .charter-card-title {
+    color: #fbbf24;
+}
+
+body.dark-mode .charter-body-text {
+    color: #cbd5e1;
+}
+
+body.dark-mode .charter-link-box {
+    background: #0f172a;
+    border-color: #334155;
+}
+
+body.dark-mode .charter-link-box a {
+    color: #fbbf24;
+}
+
+body.dark-mode .charter-link-box a:hover {
+    color: #f59e0b;
+}
