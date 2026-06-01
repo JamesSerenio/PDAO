@@ -1,0 +1,232 @@
+/* =========================================
+   SET OF OFFICERS - MAIN STYLES
+========================================= */
+
+.setofficers-section {
+    padding: 110px 20px 80px;
+    background: linear-gradient(rgba(11,61,145,0.92), rgba(6,36,95,0.97));
+    min-height: 100vh;
+    color: #fff;
+}
+
+.setofficers-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* HEADER */
+.setofficers-hero {
+    text-align: center;
+    margin-bottom: 42px;
+    animation: fadeUp 0.8s ease;
+}
+
+.setofficers-header-top {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    align-items: center;
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto 12px;
+}
+
+.setofficers-header-logo {
+    width: 70px;
+    height: 70px;
+    display: block;
+    object-fit: contain;
+    object-position: center center;
+    border-radius: 50%;
+    background: transparent;
+    padding: 0;
+    border: 2px solid #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    overflow: hidden;
+    box-sizing: border-box;
+    animation: logoGlow 4s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+    0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 rgba(255,255,255,0); }
+    50% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 18px rgba(255,255,255,0.35); }
+}
+
+.setofficers-header-text { text-align: center; }
+.setofficers-header-line1 { font-size: 1.4rem; font-weight: 700; text-transform: uppercase; }
+.setofficers-header-line2 { font-size: 1rem; color: #dbeafe; }
+.setofficers-title { font-size: 3rem; font-weight: 800; margin: 10px 0 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* BLOCKS & WATERMARKS */
+.so-block {
+    position: relative;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    padding: 30px 24px;
+    margin-bottom: 34px;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+}
+
+.so-block::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.10;
+    pointer-events: none;
+}
+
+.so-block > * { position: relative; z-index: 1; }
+.so-watermark-pdao::before { background-image: url('/images/Logo.png'); }
+.so-watermark-dapa::before { background-image: url('/images/dapa/Logo_PDAO.png'); }
+.so-watermark-pmag::before { background-image: url('/images/pmag/Logo_PDAO.png'); }
+
+.so-block-header { text-align: center; margin-bottom: 28px; }
+.so-block-header h2 { font-size: 1.8rem; margin-bottom: 8px; }
+.so-block-header p { color: #fbbf24; font-weight: 700; }
+
+/* CARDS STRUCTURAL */
+.so-card {
+    padding: 20px 16px;
+    border-radius: 22px;
+    text-align: center;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+    transition: all 0.35s ease;
+    cursor: pointer;
+}
+
+.so-card:hover { transform: translateY(-6px) scale(1.025); }
+.so-card h3 { font-size: 1rem; margin-bottom: 8px; color: #fff; line-height: 1.35; }
+.so-card p { color: #dbeafe; font-weight: 600; line-height: 1.5; }
+.so-card.featured { min-height: 235px; max-width: 320px; margin: 0 auto; }
+.so-card.mini { min-height: 200px; }
+
+.so-photo-wrap {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 12px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.12);
+    border: 3px solid rgba(255,255,255,0.18);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+}
+.so-photo-wrap.small-photo { width: 90px; height: 90px; }
+.so-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* BRANDING COLORS */
+.so-card.pdao { background: linear-gradient(180deg, rgba(251,191,36,0.20), rgba(255,255,255,0.10)); border: 2px solid rgba(251,191,36,0.35); }
+.so-card.pdao:hover { background: #fbbf24; }
+.so-card.pdao:hover h3, .so-card.pdao:hover p { color: #0f172a; }
+
+.so-card.dapa { background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(251,191,36,0.16)); border: 1px solid rgba(251,191,36,0.40); }
+.so-card.dapa:hover { background: #fbbf24; }
+.so-card.dapa:hover h3, .so-card.dapa:hover p { color: #0f172a; }
+
+.so-card.pmag { border: 1px solid #60a5fa; background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(96,165,250,0.15)); }
+.so-card.pmag:hover { background: #fbbf24; color: #0f172a; }
+
+/* CHARTS & CONNECTOR LINES */
+.so-chart, .so-pmag-chart, .so-tree { max-width: 980px; margin: 0 auto; position: relative; }
+.so-node.center { display: flex; justify-content: center; margin-bottom: 4px; }
+
+.so-line {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 6px rgba(255,255,255,0.65), 0 0 12px rgba(59,130,246,0.55), 0 0 20px rgba(37,99,235,0.45);
+    animation: soGlowPulse 2.5s ease-in-out infinite;
+    border-radius: 999px;
+}
+.so-line.vertical { width: 3px; height: 42px; }
+.so-line.vertical.small { height: 26px; }
+.so-line.horizontal { width: 42%; height: 3px; margin-top: 12px; margin-bottom: 16px; }
+
+.so-line::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.95) 50%, transparent 100%);
+    opacity: 0.65; animation: soFlowLight 2.2s linear infinite;
+}
+
+@keyframes soGlowPulse {
+    0%, 100% { opacity: 0.7; box-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(59,130,246,0.5), 0 0 18px rgba(37,99,235,0.4); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(255,255,255,1), 0 0 22px rgba(59,130,246,0.9), 0 0 36px rgba(37,99,235,0.8); }
+}
+@keyframes soFlowLight { 0% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+
+/* GRID LAYOUTS CONTROL */
+.so-grid { display: grid; gap: 20px; margin-top: 15px; }
+.two-cols { grid-template-columns: repeat(2,1fr); }
+.three-cols { grid-template-columns: repeat(3,1fr); }
+.four-cols { grid-template-columns: repeat(4,1fr); }
+
+.so-chart .so-grid.two-cols, .so-pmag-chart .so-grid.two-cols { max-width: 760px; margin: 0 auto; gap: 24px 80px; }
+.so-chart .so-grid.four-cols, .so-pmag-chart .so-grid.four-cols { max-width: 1040px; margin: 0 auto; gap: 18px; }
+.so-chart .so-grid.two-cols:last-child, .so-pmag-chart .so-grid.two-cols:last-child { max-width: 620px; margin: 0 auto; gap: 22px; }
+
+@media (max-width: 768px) {
+    .two-cols, .three-cols, .four-cols { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   DARK MODE CONTROL - WHITE & BLUE THEME
+========================================= */
+body.dark-mode .so-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%) !important;
+    border: 2px solid #2563eb !important;
+    box-shadow: 0 14px 32px rgba(37, 99, 235, 0.16);
+}
+
+body.dark-mode .so-card h3 {
+    color: #1e3a8a !important;
+}
+
+body.dark-mode .so-card p {
+    color: #3b82f6 !important;
+}
+
+/* Photo Wrapper border enhancement in darkmode */
+body.dark-mode .so-photo-wrap {
+    border-color: rgba(37, 99, 235, 0.25) !important;
+    background: #f8fafc;
+}
+
+/* Hover effect under Dark Mode (White & Blue) */
+body.dark-mode .so-card:hover {
+    background: #2563eb !important;
+    transform: translateY(-6px) scale(1.025);
+}
+
+body.dark-mode .so-card:hover h3,
+body.dark-mode .so-card:hover p {
+    color: #ffffff !important;
+}
+
+/* Active Touch Event */
+body.dark-mode .so-card:active {
+    background: #1d4ed8 !important;
+}
+
+/* Flow Connector Lines to Blue Glow */
+body.dark-mode .so-line {
+    background: #3b82f6 !important;
+    box-shadow:
+        0 0 6px rgba(59, 130, 246, 0.7),
+        0 0 14px rgba(37, 99, 235, 0.6),
+        0 0 24px rgba(29, 78, 216, 0.5) !important;
+}
