@@ -1,323 +1,342 @@
 /* ========================================================
-    PWD DIRECTORY PORTAL - LIGHT MODE BASE
+   PWD REGISTRATION SUMMARY - LIGHT MODE BASE
 ======================================================== */
-:root {
-    --yellow: #FFD600;
-    --blue: #0B4DA2;
-    --dark: #111827;
-    --white: #ffffff;
-    --gray: #f3f4f6;
-}
-
 body {
-    background: #f5f7fb;
+    background: #f5f8ff;
     font-family: 'Poppins', sans-serif;
     transition: background 0.3s ease;
 }
 
 /* HERO SECTION */
-.pwd-directory-hero {
+.summary-hero {
     position: relative;
-    min-height: 330px;
-    background: linear-gradient(rgba(11, 77, 162, 0.82), rgba(11, 77, 162, 0.88)),
-                url('/images/pwd-directory-bg.jpg') no-repeat center center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    padding: 70px 0;
+    padding: 90px 0 70px;
     overflow: hidden;
+    background: linear-gradient(rgba(0, 47, 134, 0.85), rgba(0, 47, 134, 0.9)),
+                url('/images/update/PARAGAMES.jpg') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
-.hero-overlay {
+.summary-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255, 214, 0, 0.18), transparent 60%);
+    background: linear-gradient(135deg, rgba(255, 212, 71, 0.15), transparent);
 }
 
-.hero-content {
+.summary-hero-content {
     position: relative;
     z-index: 2;
     max-width: 760px;
-    color: white;
+    color: #fff;
 }
 
-/* EKSAKTONG DISENYO KATULAD SA VISION */
-.pwd-directory-hero .hero-badge {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: max-content !important;
+/* ========================================================
+   PWD REGISTRATION SUMMARY - LIGHT MODE BASE
+======================================================== */
+
+/* ========================================================
+   PWD REGISTRATION SUMMARY - LIGHT MODE BASE (NORMAL)
+======================================================== */
+
+.summary-hero .summary-badge {
+    display: inline-block !important;
+
+    /* Ginamitang malinis na translucent background para litaw ang text sa ibabaw ng asul na background */
     background: rgba(255, 255, 255, 0.12) !important;
-    color: #ffffff !important;
-    padding: 8px 16px !important;
+    color: #ffffff !important; /* Ginawang puti ang text para kitang-kita sa madilim na banner */
+
+    padding: 8px 20px !important;
     border-radius: 50px !important;
     font-size: 13.5px !important;
     font-weight: 600 !important;
-    margin-bottom: 22px !important;
+    margin-bottom: 20px !important;
     letter-spacing: .8px !important;
     text-transform: none !important;
+
+    /* Manipis na puting border na medyo transparent gaya ng sa vision style */
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-    backdrop-filter: blur(4px) !important;
+    backdrop-filter: blur(4px) !important; /* Swabeng blur effect sa likod ng badge */
+    transition: all 0.3s ease !important;
 }
 
-.hero-content h1 {
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1.15;
-    margin-bottom: 18px;
+/* Kung gusto mo na may kaunting glow kapag tinapatan ng mouse */
+.summary-hero .summary-badge:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
-.hero-content p {
-    font-size: 17px;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.92);
-    max-width: 650px;
-}
-
-/* LAYOUT STRUCTURE */
-.directory-main-section { padding: 80px 0; }
-.directory-wrapper { display: grid; grid-template-columns: 1.6fr .9fr; gap: 35px; }
-.directory-right { display: flex; flex-direction: column; gap: 25px; }
-
-/* LEFT PORTAL CARD */
-.directory-search-card {
-    background: white;
-    border-radius: 28px;
-    padding: 50px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.05);
-    border: 1px solid #e2ecf7;
-}
-
-.card-top-accent {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 8px;
-    background: linear-gradient(90deg, var(--yellow), var(--blue));
-}
-
-.small-title {
-    display: inline-block;
-    background: #eef4ff;
-    color: var(--blue);
-    padding: 8px 18px;
-    border-radius: 50px;
-    font-weight: 700;
-    margin-bottom: 18px;
-    font-size: 13px;
-}
-
-.directory-search-card h2 { font-size: 34px; font-weight: 800; color: var(--dark); margin-bottom: 15px; }
-.search-description { color: #6b7280; line-height: 1.7; margin-bottom: 35px; font-size: 15px; }
 
 /* ========================================================
-    🆕 NEW ADDITION: SEARCH NAVIGATION TABS
+   ⚫ INTACT OVERRIDE SYSTEM FOR VISION DARK MODE (GABI)
 ======================================================== */
-.search-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 22px;
-    border-bottom: 2px solid #f1f5f9;
-    padding-bottom: 12px;
-}
 
-.search-tab-btn {
-    background: none;
-    border: none;
-    padding: 10px 20px;
-    font-size: 14.5px;
-    font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-}
-
-.search-tab-btn i {
-    font-size: 16px;
-}
-
-.search-tab-btn:hover {
-    background: #f1f5f9;
-    color: var(--dark);
-}
-
-.search-tab-btn.active {
-    background: #eef4ff;
-    color: var(--blue);
-}
-
-/* ========================================================
-    DYNAMIC INPUT HANDLING WITH THE SEARCH BOX
-======================================================== */
-.search-box {
-    display: flex;
-    gap: 15px;
-}
-
-.search-input-group {
-    display: none !important; /* Nakatago ang field kapag hindi active */
-}
-
-.search-input-group.active {
-    display: flex !important; /* Lumilitaw kapag tinawag ng JavaScript */
-}
-
-.search-input-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: #f9fafb;
-    border: 2px solid #e5e7eb;
-    border-radius: 18px;
-    padding: 0 18px;
-    transition: 0.3s;
-}
-
-.search-input-wrapper:focus-within {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 4px rgba(11,77,162,0.10);
-    background: #fff;
-}
-
-.search-input-wrapper i { color: var(--blue); font-size: 20px; margin-right: 12px; }
-.search-input-wrapper input { width: 100%; height: 65px; border: none; outline: none; background: transparent; font-size: 17px; color: var(--dark); }
-
-/* VERIFY BUTTON */
-.verify-btn {
-    background: linear-gradient(135deg, var(--yellow), #ffbf00);
-    border: none; padding: 0 35px; border-radius: 18px;
-    font-weight: 800; color: #000; font-size: 16px;
-    cursor: pointer; transition: 0.3s ease;
-    display: flex; align-items: center; gap: 10px;
-}
-.verify-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 214, 0, 0.3); }
-
-/* RESULT CONTAINER */
-.result-container {
-    margin-top: 35px; background: #f9fafb; border-radius: 22px;
-    padding: 40px; text-align: center; border: 2px dashed #d1d5db;
-}
-.default-result i { font-size: 48px; color: var(--blue); margin-bottom: 18px; }
-.default-result i.fa-spin { color: var(--blue); }
-.default-result h3 { font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
-.default-result p { color: #6b7280; font-size: 15px; }
-
-/* INFO SIDEBAR CARDS */
-.info-card { border-radius: 28px; padding: 35px; box-shadow: 0 10px 35px rgba(0,0,0,0.04); border: 1px solid transparent; }
-.yellow-card { background: linear-gradient(135deg, var(--yellow) 0%, #fcd34d 100%); color: #1e3a8a; }
-.yellow-card h3 { color: #1e3a8a; }
-.blue-card { background: linear-gradient(135deg, var(--blue) 0%, #1e40af 100%); color: white; }
-.white-card { background: white; border-color: #e2ecf7; }
-.white-card h3 { color: var(--dark); }
-.white-card p { color: #6b7280; }
-
-.card-icon {
-    width: 60px; height: 60px; border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px; margin-bottom: 20px; background: rgba(255,255,255,0.20);
-}
-.white-card .card-icon { background: #eef4ff; color: var(--blue); }
-.info-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-.info-card p { line-height: 1.7; font-size: 14.5px; }
-.blue-card ul { padding-left: 20px; margin: 0; }
-.blue-card li { margin-bottom: 10px; font-size: 14.5px; }
-
-.visit-btn {
-    display: inline-block; margin-top: 20px; background: var(--blue);
-    color: white; padding: 14px 25px; border-radius: 14px;
-    text-decoration: none; font-weight: 700; transition: 0.3s; font-size: 14.5px;
-}
-.visit-btn:hover { background: #083a7a; transform: translateY(-2px); }
-
-/* ========================================================
-    ⚫ INTACT OVERRIDE SYSTEM FOR VISION DARK MODE
-======================================================== */
-body.dark-mode { background: #0a192f; }
-
-body.dark-mode .pwd-directory-hero {
-    background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.95)),
-                url('/images/pwd-directory-bg.jpg') no-repeat center center;
-    background-size: cover;
-}
-
-body.dark-mode .pwd-directory-hero .hero-badge {
-    background: rgba(255, 212, 71, 0.15) !important;
-    color: #ffd400 !important;
+body.dark-mode .summary-hero .summary-badge {
+    background: rgba(255, 212, 71, 0.15) !important; /* Kakulay ng ginto sa dark mode niyo */
+    color: #ffd400 !important;                       /* Glowing gold text */
     border: 1px solid rgba(255, 212, 71, 0.35) !important;
     box-shadow: 0 4px 20px rgba(255, 212, 71, 0.15) !important;
 }
 
-body.dark-mode .directory-search-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+.summary-hero-content h1 {
+    font-size: 52px;
+    line-height: 1.15;
+    font-weight: 900;
+    margin-bottom: 22px;
+    letter-spacing: -0.5px;
 }
 
-body.dark-mode .directory-search-card h2 { color: #ffffff; }
-body.dark-mode .search-description { color: rgba(255, 255, 255, 0.6); }
-body.dark-mode .small-title { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
-
-/* New Tab Adjustment for Dark Mode */
-body.dark-mode .search-tabs { border-color: rgba(255, 255, 255, 0.08); }
-body.dark-mode .search-tab-btn { color: rgba(255, 255, 255, 0.5); }
-body.dark-mode .search-tab-btn:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
-body.dark-mode .search-tab-btn.active { background: rgba(255, 212, 71, 0.12); color: #ffd400; }
-
-body.dark-mode .search-input-wrapper {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.1);
+.summary-hero-content p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(230, 236, 255, 0.9);
 }
-body.dark-mode .search-input-wrapper input { color: #ffffff; }
-body.dark-mode .search-input-wrapper i { color: #ffd400; }
 
-body.dark-mode .result-container {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.15);
+/* DASHBOARD GRID STRUCTURE */
+.summary-dashboard { padding: 60px 0 90px; }
+.summary-layout { display: grid; grid-template-columns: 1.6fr .9fr; gap: 35px; }
+.summary-main { display: flex; flex-direction: column; gap: 30px; }
+.summary-sidebar { display: flex; flex-direction: column; gap: 30px; }
+
+/* STATS CARDS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: -130px;
+    position: relative;
+    z-index: 10;
+    margin-bottom: 50px;
 }
-body.dark-mode .default-result h3 { color: #ffffff; }
-body.dark-mode .default-result p { color: rgba(255, 255, 255, 0.5); }
-body.dark-mode .default-result i { color: #ffd400; }
 
-body.dark-mode .white-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
+.stat-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 35px 25px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 43, 91, 0.06);
+    border: 1px solid #e2ecf7;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
-body.dark-mode .white-card h3 { color: #ffffff; }
-body.dark-mode .white-card p { color: rgba(255, 255, 255, 0.6); }
-body.dark-mode .white-card .card-icon { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
-body.dark-mode .white-card .visit-btn { background: #ffd400; color: #0a192f; }
 
-body.dark-mode .yellow-card { background: linear-gradient(135deg, rgba(255, 214, 0, 0.15) 0%, rgba(255, 214, 0, 0.05) 100%); border: 1px solid rgba(255, 214, 0, 0.2); color: #ffd400; }
-body.dark-mode .yellow-card h3 { color: #ffffff; }
-body.dark-mode .yellow-card .card-icon { color: #ffd400; background: rgba(255,214,0,0.1); }
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 43, 91, 0.12);
+}
 
-body.dark-mode .blue-card { background: linear-gradient(135deg, rgba(11, 77, 162, 0.3) 0%, rgba(11, 77, 162, 0.1) 100%); border: 1px solid rgba(11, 77, 162, 0.3); }
+.stat-icon {
+    width: 65px;
+    height: 65px;
+    background: rgba(0, 47, 134, 0.06);
+    color: #002f86;
+    margin: 0 auto 20px auto;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    transition: all 0.3s;
+}
+
+.stat-card:hover .stat-icon {
+    background: #002f86;
+    color: #ffd400;
+}
+
+.stat-card h2 {
+    font-size: 38px;
+    color: #002f86;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+}
+
+.stat-card p { color: #5d6785; font-size: 14px; font-weight: 500; }
+.stat-card.highlight-card { border-top: 5px solid #002f86; }
+
+/* REUSABLE CARDS */
+.dashboard-card, .sidebar-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0, 43, 91, 0.05);
+    border: 1px solid #e2ecf7;
+    transition: all 0.3s;
+}
+
+.card-title { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; }
+
+.title-icon {
+    width: 54px;
+    height: 54px;
+    background: rgba(0, 47, 134, 0.07);
+    color: #002f86;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.card-title h2 { font-size: 26px; color: #002f86; font-weight: 800; }
+.dashboard-card p { color: #5d6785; line-height: 1.8; margin-bottom: 18px; font-size: 15.5px; }
+
+/* INTERNAL CONTENT GRIDS */
+.disability-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+.disability-item {
+    background: #f5f8ff;
+    border: 1px solid #e2ecf7;
+    padding: 16px 20px;
+    border-radius: 16px;
+    color: #002f86;
+    font-weight: 600;
+    font-size: 14.5px;
+    transition: all 0.25s ease;
+}
+
+.disability-item:hover {
+    background: #002f86;
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.requirements-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+.requirement-box {
+    background: #fffbe6;
+    border: 1px solid #fef0b3;
+    border-left: 5px solid #ffd400;
+    padding: 18px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #002f86;
+    font-weight: 600;
+    font-size: 14.5px;
+}
+
+.requirement-box i { color: #f2b400; font-size: 18px; }
+
+/* SIDEBAR CARD MODIFIERS */
+.sidebar-card h3 { font-size: 22px; color: #002f86; margin-bottom: 14px; font-weight: 800; }
+.sidebar-card p { color: #5d6785; line-height: 1.7; font-size: 14.5px; }
+
+.sidebar-card .sidebar-icon {
+    width: 54px;
+    height: 54px;
+    background: rgba(0, 47, 134, 0.07);
+    color: #002f86;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar-card .yellow-icon { background: rgba(255, 212, 71, 0.2); color: #b38600; }
+
+.doh-card {
+    background: linear-gradient(135deg, #002f86 0%, #004ec2 100%);
+    border: none;
+    box-shadow: 0 15px 30px rgba(0, 47, 134, 0.2);
+}
+.doh-card h3, .doh-card p { color: #ffffff; }
+.doh-card .sidebar-icon { background: rgba(255, 255, 255, 0.15); color: #ffd400; }
+
+.classification-box { padding: 18px; border-radius: 16px; margin-top: 15px; }
+.classification-box strong { display: block; margin-bottom: 6px; color: #002f86; font-size: 15px; }
+.classification-box p { margin: 0; font-size: 13.5px; }
+.apparent { background: #eef5ff; border-left: 5px solid #002f86; }
+.non-apparent { background: #fff7d8; border-left: 5px solid #ffd400; }
+
 
 /* ========================================================
-    RESPONSIVE LAYOUTS
+   ⚫ INTACT OVERRIDE SYSTEM FOR VISION DARK MODE
 ======================================================== */
-@media(max-width: 991px) {
-    .directory-wrapper { grid-template-columns: 1fr; }
-    .hero-content h1 { font-size: 42px; }
-    .directory-search-card { padding: 35px; }
+body.dark-mode { background: #0a192f; }
+
+body.dark-mode .summary-hero {
+    background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.95)),
+                url('/images/update/PARAGAMES.jpg') no-repeat center center fixed;
 }
 
-@media(max-width: 768px) {
-    .pwd-directory-hero { min-height: 280px; padding: 55px 0; }
-    .hero-content h1 { font-size: 34px; }
-    .hero-content p { font-size: 15px; }
+body.dark-mode .summary-badge { background: rgba(255, 212, 71, 0.15); color: #ffd400; border: 1px solid rgba(255, 212, 71, 0.3); }
+body.dark-mode .summary-hero-content h1 { color: #ffffff; }
+body.dark-mode .summary-hero-content p { color: rgba(255, 255, 255, 0.7); }
+
+body.dark-mode .stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+body.dark-mode .stat-card.highlight-card { border-top: 5px solid #ffd400; }
+body.dark-mode .stat-card h2 { color: #ffffff; }
+body.dark-mode .stat-card p { color: rgba(255, 255, 255, 0.6); }
+body.dark-mode .stat-icon { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
+
+body.dark-mode .dashboard-card, body.dark-mode .sidebar-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
 }
 
-@media(max-width: 576px) {
-    .hero-content h1 { font-size: 28px; line-height: 1.25; }
-    .search-box { flex-direction: column; }
-    .verify-btn { height: 60px; justify-content: center; }
-    .search-tabs { overflow-x: auto; padding-bottom: 5px; } /* Swipable tabs sa cellphone */
-    .search-tab-btn { padding: 8px 14px; font-size: 13px; white-space: nowrap; }
+body.dark-mode .card-title h2, body.dark-mode .sidebar-card h3 { color: #ffffff; }
+body.dark-mode .dashboard-card p, body.dark-mode .sidebar-card p { color: rgba(255, 255, 255, 0.75); }
+body.dark-mode .title-icon, body.dark-mode .sidebar-card .sidebar-icon { background: rgba(255, 255, 255, 0.08); color: #ffd400; }
+
+body.dark-mode .disability-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.9);
+}
+body.dark-mode .disability-item:hover { background: #ffd400; color: #0a192f; border-color: #ffd400; }
+
+body.dark-mode .requirement-box {
+    background: rgba(255, 212, 71, 0.08);
+    border-color: rgba(255, 212, 71, 0.15);
+    border-left: 5px solid #ffd400;
+    color: #ffffff;
+}
+body.dark-mode .requirement-box i { color: #ffd400; }
+
+body.dark-mode .doh-card {
+    background: linear-gradient(135deg, #0f2b5c 0%, #06193a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .apparent { background: rgba(0, 47, 134, 0.25); border-left: 5px solid #0057b8; }
+body.dark-mode .non-apparent { background: rgba(255, 212, 71, 0.1); border-left: 5px solid #ffd400; }
+body.dark-mode .classification-box strong { color: #ffffff; }
+
+
+/* ========================================================
+   RESPONSIVE LAYOUTS
+======================================================== */
+@media(max-width: 1199px) {
+    .stats-grid { gap: 15px; }
+    .stat-card { padding: 25px 15px; }
+    .stat-card h2 { font-size: 32px; }
+}
+
+@media(max-width: 991px){
+    .stats-grid { grid-template-columns: repeat(2, 1fr); margin-top: -100px; gap: 20px; }
+    .summary-layout { grid-template-columns: 1fr; gap: 30px; }
+    .summary-hero-content h1 { font-size: 42px; }
+}
+
+@media(max-width: 768px){
+    .stats-grid { grid-template-columns: 1fr; margin-top: -60px; }
+    .disability-grid, .requirements-grid { grid-template-columns: 1fr; }
+    .dashboard-card, .sidebar-card { padding: 25px; }
+    .summary-hero { padding: 60px 0 50px; }
+    .summary-hero-content h1 { font-size: 32px; }
+    .summary-hero-content p { font-size: 15px; }
 }
