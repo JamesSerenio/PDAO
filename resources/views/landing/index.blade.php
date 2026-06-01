@@ -583,8 +583,91 @@
 </section>
 
 <!-- =========================
-   TRACKING MAP
+   TRACKING MAP REPORT CONCERN
 ========================= -->
+
+<section class="report-vision-section">
+    <div class="report-vision-container">
+
+        <div class="report-vision-grid">
+
+            <div class="report-vision-info">
+
+                <div class="report-vision-indicator">
+                    <span class="track-parent-vision"><i class="fa-solid fa-map-location-dot"></i> Tracking Map Pages</span>
+                    <i class="fa-solid fa-chevron-right track-divider-vision"></i>
+                    <span class="track-current-vision">Report Concern Portal</span>
+                </div>
+
+                <h2 class="report-vision-title">Report a Concern or Accessibility Issue</h2>
+
+                <p class="report-vision-description">
+                    Mayroon ka bang nais isangguni o iulat tungkol sa mga pasilidad, diskriminasyon, o tulong na kinakailangan ng ating mga Persons with Disabilities sa Manolo Fortich?
+                </p>
+
+                <p class="report-vision-description">
+                    Ang e-PDAO ay laging nakahandang makinig at umaksyon upang masigurong ligtas, inklusibo, at may pantay na oportunidad ang bawat isa sa ating komunidad.
+                </p>
+
+                <div class="report-vision-meta">
+                    <div class="meta-vision-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>PDAO Hotline: <strong>(088) 123-4567</strong></span>
+                    </div>
+                    <div class="meta-vision-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Email: <strong>pdao@manolofortich.gov.ph</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-vision-form-card portal-gateway-card">
+
+                <div class="gateway-header">
+                    <div class="gateway-icon">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h3>e-PDAO Public Assistance Portal</h3>
+                    <p>Mabilis, ligtas, at direktang pag-uulat sa pamahalaan ng Manolo Fortich.</p>
+                </div>
+
+                <div class="gateway-features">
+                    <div class="g-feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>Accessibility Barriers</strong>
+                            <p>Mga sirang rampa, harang sa PWD lane, o kawalan ng access.</p>
+                        </div>
+                    </div>
+
+                    <div class="g-feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>Discrimination & Rights</strong>
+                            <p>Paglabag sa karapatan, diskriminasyon, o hindi pagtanggap ng discounts.</p>
+                        </div>
+                    </div>
+
+                    <div class="g-feature-item">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <div>
+                            <strong>General Assistance</strong>
+                            <p>Kahilingan para sa ayuda, suporta sa pamilya, o PWD ID verification.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{{ route('report-concern') }}" class="report-vision-submit-btn gateway-btn">
+                   Proceed to Reporting Form <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
 <!-- =========================
    PWD REGISTRATION SECTION
 ========================= -->

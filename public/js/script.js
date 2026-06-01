@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let isPinned = false;
 
     /* =========================
-       NAVBAR FUNCTIONS
+        NAVBAR FUNCTIONS
     ========================= */
     function showNavbar() {
         if (!navbar) return;
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-       DARK MODE
+        DARK MODE
     ========================= */
     function applyTheme(theme) {
         if (theme === "dark") {
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-       SEARCH MODAL
+        SEARCH MODAL
     ========================= */
     function openSearchModal() {
         if (!searchModal) return;
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* =========================
-       SEARCH CHIPS
+        SEARCH CHIPS
     ========================= */
     document.querySelectorAll(".search-chip[data-url]").forEach((chip) => {
         chip.addEventListener("click", function () {
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* =========================
-       NAVBAR BEHAVIOR
+        NAVBAR BEHAVIOR
     ========================= */
     if (navbar) {
         hideNavbar();
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* =========================
-       BRAND TITLE + TAGLINE ANIMATION
+        BRAND TITLE + TAGLINE ANIMATION
     ========================= */
     if (brandTitle && brandTagline) {
         function animateSequence(element, className, delayOffset) {
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-       PHILIPPINE STANDARD TIME
+        PHILIPPINE STANDARD TIME
     ========================= */
     const pstClock = document.getElementById("pstClock");
 
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(updatePhilippineTime, 1000);
 
     /* =========================
-       HERO BACKGROUND CAROUSEL
+        HERO BACKGROUND CAROUSEL
     ========================= */
     const hero = document.querySelector('.hero');
     const heroBackgrounds = [
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-       SCROLL TO TOP BUTTON
+        SCROLL TO TOP BUTTON
     ========================= */
     const scrollTopBtn = document.getElementById("scrollTopBtn");
 
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /* =========================
-       MOBILE HAMBURGER MENU
+        MOBILE HAMBURGER MENU
     ========================= */
     const hamburgerBtn = document.getElementById("hamburgerBtn");
     const mobileNavMenu = document.getElementById("mobileNavMenu");
@@ -315,69 +315,40 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     /* =========================================
-       NEWS SEARCH
+        NEWS SEARCH (Sidebar Input)
     ========================================= */
-
     const newsSearchInput = document.querySelector('.sidebar-search input');
     const newsItems = document.querySelectorAll('.news-item');
 
     if (newsSearchInput) {
-
         newsSearchInput.addEventListener('keyup', function () {
-
             const value = this.value.toLowerCase();
-
             newsItems.forEach(item => {
-
                 const text = item.innerText.toLowerCase();
-
-                if (text.includes(value)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-
+                item.style.display = text.includes(value) ? 'block' : 'none';
             });
-
         });
-
     }
 
-
     /* =========================================
-       CATEGORY FILTER
+        CATEGORY FILTER (Sidebar Links)
     ========================================= */
-
     const categoryButtons = document.querySelectorAll('.category-list a[data-category]');
 
     categoryButtons.forEach(button => {
-
         button.addEventListener('click', function (e) {
-
             e.preventDefault();
-
             const category = this.dataset.category;
-
             newsItems.forEach(item => {
-
-                if (item.dataset.category === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-
+                item.style.display = (item.dataset.category === category) ? 'block' : 'none';
             });
-
         });
-
     });
 
     /* =========================================
-       ALL UPDATES TOGGLE
+        ALL UPDATES TOGGLE (Show More / Less)
     ========================================= */
-
     const allUpdatesToggle = document.getElementById('allUpdatesToggle');
     const extraUpdateCards = document.querySelectorAll('.all-update-card.extra-update-card');
 
@@ -393,124 +364,74 @@ document.addEventListener("DOMContentLoaded", function () {
             this.textContent = expanded ? 'Show More Updates' : 'Show Less Updates';
         });
     }
-});
 
-/* =========================================
-   NEWS SEARCH FILTER
-========================================= */
+    /* =========================================
+        NEWS SEARCH FILTER (Main Page Global Input)
+    ========================================= */
+    const newsSearch = document.getElementById("newsSearch");
 
-const newsSearch = document.getElementById("newsSearch");
+    if (newsSearch) {
+        newsSearch.addEventListener("keyup", function () {
+            let value = this.value.toLowerCase();
+            let mainNewsItems = document.querySelectorAll(".news-item");
 
-if (newsSearch) {
-
-    newsSearch.addEventListener("keyup", function () {
-
-        let value = this.value.toLowerCase();
-
-        let newsItems = document.querySelectorAll(".news-item");
-
-        newsItems.forEach(item => {
-
-            let text = item.innerText.toLowerCase();
-
-            if (text.includes(value)) {
-                item.style.display = "block";
-            } else {
-                item.style.display = "none";
-            }
-
+            mainNewsItems.forEach(item => {
+                let text = item.innerText.toLowerCase();
+                item.style.display = text.includes(value) ? "block" : "none";
+            });
         });
+    }
 
+    /* =========================================
+        NEWS CATEGORY FILTER (Main Page Selection)
+    ========================================= */
+    const mainCategoryButtons = document.querySelectorAll(".category-list a[data-category]");
+
+    mainCategoryButtons.forEach(button => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            const category = this.dataset.category;
+            if (!category) return;
+
+            let mainNewsItems = document.querySelectorAll(".news-item");
+            mainNewsItems.forEach(item => {
+                item.style.display = (item.dataset.category === category) ? "block" : "none";
+            });
+        });
     });
 
-}
+    /* =========================================
+        UPDATES CATEGORY FILTER (Tab Buttons with Scroll)
+    ========================================= */
+    const updateButtons = document.querySelectorAll(".updates-category-btn");
+    const updateCards = document.querySelectorAll(".news-card");
 
+    updateButtons.forEach(button => {
+        button.addEventListener("click", function(e){
+            e.preventDefault();
+            const filter = this.dataset.filter;
 
+            updateButtons.forEach(btn => {
+                btn.classList.remove("active-update-category");
+            });
+            this.classList.add("active-update-category");
 
-/* =========================================
-   NEWS CATEGORY FILTER
-========================================= */
+            updateCards.forEach(card => {
+                if (card.dataset.type === filter) {
+                    card.style.display = "flex";
+                    card.classList.add("show-update-card");
+                } else {
+                    card.style.display = "none";
+                }
+            });
 
-const categoryButtons = document.querySelectorAll(".category-list a[data-category]");
-
-categoryButtons.forEach(button => {
-
-    button.addEventListener("click", function (e) {
-
-        e.preventDefault();
-
-        const category = this.dataset.category;
-        if (!category) {
-            return;
-        }
-
-        const newsItems = document.querySelectorAll(".news-item");
-
-        newsItems.forEach(item => {
-
-            if (item.dataset.category === category) {
-
-                item.style.display = "block";
-
-            } else {
-
-                item.style.display = "none";
-
+            const targetYear = document.querySelector(".news-year");
+            if (targetYear) {
+                window.scrollTo({
+                    top: targetYear.offsetTop - 120,
+                    behavior: "smooth"
+                });
             }
-
         });
-
     });
-
-});
-
-/* =========================================
-   UPDATES CATEGORY FILTER
-========================================= */
-
-const updateButtons =
-document.querySelectorAll(".updates-category-btn");
-
-const updateCards =
-document.querySelectorAll(".news-card");
-
-updateButtons.forEach(button => {
-
-    button.addEventListener("click", function(e){
-
-        e.preventDefault();
-
-        const filter =
-        this.dataset.filter;
-
-        updateButtons.forEach(btn=>{
-            btn.classList.remove("active-update-category");
-        });
-
-        this.classList.add("active-update-category");
-
-        updateCards.forEach(card=>{
-
-            if(card.dataset.type === filter){
-
-                card.style.display = "flex";
-
-                card.classList.add("show-update-card");
-
-            }else{
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-        window.scrollTo({
-            top: document.querySelector(".news-year")
-                    .offsetTop - 120,
-            behavior: "smooth"
-        });
-
-    });
-
 });
