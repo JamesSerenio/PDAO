@@ -43,7 +43,7 @@
                 <div class="stat-icon">
                     <i class="fa-solid fa-building"></i>
                 </div>
-                <h2>{{ number_format($total_barangays ?? 0) }}</h2>
+                <h2>22</h2>
                 <p>Covered Barangays</p>
             </div>
 
@@ -79,9 +79,7 @@
                         As of today, the Person with Disability Affairs Office (PDAO) of the Municipality of
                         Manolo Fortich has officially recorded
                         {{ number_format($total_pwd ?? 0) }}
-                        registered constituents across
-                        {{ number_format($total_barangays ?? 0) }}
-                        barangays.
+                        registered constituents across twenty-two (22) barangays.
                     </p>
                     <p>
                         Registration and consolidation of records officially started in January 2022,
@@ -146,7 +144,7 @@
                     </div>
                     <p>
                         The PDAO coordinates with Federation of Differently-Abled Persons Association Presidents
-                        and Parent Mobilization Action Group Presidents across the barangays of Manolo Fortich to
+                        and Parent Mobilization Action Group Presidents across the 22 barangays of Manolo Fortich to
                         strengthen monitoring, implementation, and delivery of inclusive programs and services.
                     </p>
                 </div>
