@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/about-us/set-of-officers.css') }}">
 
 <section class="setofficers-section">
     <div class="setofficers-container">
