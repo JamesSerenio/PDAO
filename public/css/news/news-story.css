@@ -1,0 +1,309 @@
+/* ========================================================
+   DISABILITY RIGHTS WEEK / PREMIUM SMOOTH STORY DESIGN
+   Path: public/css/news/news-story.css
+======================================================== */
+
+/* --- HERO MODULE CONFIG --- */
+.story-hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(rgba(11, 61, 145, 0.85), rgba(6, 36, 95, 0.92)),
+                url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    overflow: hidden;
+    padding: 60px 0;
+}
+
+.story-overlay {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(2px);
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), transparent);
+}
+
+.story-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 40px;
+}
+
+.story-badge {
+    display: inline-block;
+    background: rgba(251, 191, 36, 0.18);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: #fbbf24;
+    padding: 8px 18px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.story-hero-content h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 18px;
+    color: #ffffff;
+}
+
+/* --- BREADCRUMB SMOOTH --- */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+}
+
+.breadcrumb a {
+    color: #fbbf24;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.story-hero-content p {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 1.15rem;
+    max-width: 750px;
+}
+
+/* --- MAIN CONTAINER & GRID --- */
+.story-main-section {
+    padding: 60px 40px;
+    background: #f4f8fb;
+}
+
+.story-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: 36px;
+}
+
+.story-content {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 38px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* --- METADATA & CONTENT ELEMENTS --- */
+.story-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.story-meta span {
+    background: #eff6ff;
+    color: #0b3d91;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.story-main-image img {
+    width: 100%;
+    max-height: 460px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.story-text p {
+    line-height: 1.9;
+    color: #334155;
+    font-size: 1.05rem;
+    margin-bottom: 22px;
+}
+
+.story-text blockquote {
+    background: linear-gradient(90deg, #0b3d91, #1456b8);
+    color: #ffffff;
+    padding: 26px 32px;
+    border-radius: 18px;
+    margin: 35px 0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    font-style: italic;
+    border-left: 6px solid #fbbf24;
+}
+
+/* --- SYSTEM ANTI-DAMBANA GALLERY --- */
+.story-gallery {
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.story-gallery-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.05);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.story-gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px rgba(15,23,42,0.1);
+}
+
+.story-gallery-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    display: block;
+}
+
+.story-gallery-card-body {
+    padding: 18px;
+}
+
+.story-gallery-card-body h4 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    color: #0b3d91;
+    font-weight: 700;
+}
+
+.story-gallery-card-body p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+/* --- BUTTON & NAVIGATION --- */
+.story-back-wrap {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.story-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #0b3d91, #1456b8);
+    color: #ffffff !important;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.story-back-btn:hover {
+    transform: translateX(-4px);
+    box-shadow: 0 6px 15px rgba(11, 61, 145, 0.2);
+}
+
+/* --- SIDEBAR COMPONENTS --- */
+.story-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.story-side-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.03);
+    border: 1px solid #f0f4f8;
+}
+
+.story-side-card h3 {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 14px;
+    color: #0b3d91;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.story-side-card h3::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 4px;
+    height: 20px;
+    background: #fbbf24;
+    border-radius: 10px;
+}
+
+.story-side-card a {
+    display: block;
+    padding: 12px 0;
+    color: #334155;
+    text-decoration: none;
+    border-bottom: 1px dashed #e2e8f0;
+    transition: 0.25s ease;
+    font-weight: 500;
+}
+
+.story-side-card a:last-of-type {
+    border-bottom: none;
+}
+
+.story-side-card a:hover {
+    color: #0b3d91;
+    transform: translateX(4px);
+}
+
+.story-side-card span {
+    display: block;
+    padding: 10px 14px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 991px) {
+    .story-layout {
+        grid-template-columns: 1fr;
+    }
+    .story-hero-content h1 {
+        font-size: 2.3rem;
+    }
+    .story-hero-content {
+        padding: 0 24px;
+    }
+    .story-main-section {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 700px) {
+    .story-gallery {
+        grid-template-columns: 1fr;
+    }
+}
